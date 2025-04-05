@@ -1,39 +1,97 @@
-# TreasureHunter
+# 🎮 TreasureHunter
 
-A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
+2D platform oyunu - LibGDX ve Kotlin ile geliştirilmiştir.
 
-This project was generated with a Kotlin project template that includes Kotlin application launchers and [KTX](https://libktx.github.io/) utilities.
+## 🚀 Özellikler
 
-## Platforms
+- Modern ECS (Entity Component System) mimarisi
+- Box2D fizik motoru entegrasyonu
+- Çok katmanlı parallax arka planlar
+- Tiled Map Editor ile level tasarımı
+- Event-driven mimari
+- Profesyonel asset yönetimi
 
-- `core`: Main module with the application logic shared by all platforms.
-- `lwjgl3`: Primary desktop platform using LWJGL3.
-- `android`: Android mobile platform. Needs Android SDK.
-- `ios`: iOS mobile platform using RoboVM.
-- `html`: Web platform using GWT and WebGL. Supports only Java projects.
+## 🛠️ Teknolojiler & Araçlar
 
-## Gradle
+- **Dil:** Kotlin
+- **Game Framework:** LibGDX
+- **Fizik Motoru:** Box2D
+- **Level Editor:** Tiled Map Editor
+- **Asset Management:** TexturePacker
+- **Build Tool:** Gradle
+- **IDE:** Android Studio
 
-This project uses [Gradle](https://gradle.org/) to manage dependencies.
-The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
-Useful Gradle tasks and flags:
+## 📋 Gereksinimler
 
-- `--continue`: when using this flag, errors will not stop the tasks from running.
-- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
-- `--offline`: when using this flag, cached dependency archives will be used.
-- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
-- `android:lint`: performs Android project validation.
-- `build`: builds sources and archives of every project.
-- `cleanEclipse`: removes Eclipse project data.
-- `cleanIdea`: removes IntelliJ project data.
-- `clean`: removes `build` folders, which store compiled classes and built archives.
-- `eclipse`: generates Eclipse project data.
-- `html:dist`: compiles GWT sources. The compiled application can be found at `html/build/dist`: you can use any HTTP server to deploy it.
-- `html:superDev`: compiles GWT sources and runs the application in SuperDev mode. It will be available at [localhost:8080/html](http://localhost:8080/html). Use only during development.
-- `idea`: generates IntelliJ project data.
-- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/lib`.
-- `lwjgl3:run`: starts the application.
-- `test`: runs unit tests (if any).
+- JDK 8 veya üzeri
+- Android Studio / IntelliJ IDEA
+- Gradle 7.0 veya üzeri
 
-Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
-For example, `core:clean` removes `build` folder only from the `core` project.
+## 🔧 Kurulum
+
+1. Repoyu klonlayın:
+```bash
+git clone https://github.com/barmex61/TreasureHunter.git
+```
+
+2. Android Studio veya IntelliJ IDEA ile projeyi açın
+
+3. Gradle sync işlemini tamamlayın
+
+4. Projeyi çalıştırın:
+   - Desktop versiyonu için: `lwjgl3` konfigürasyonunu seçin
+   - Android versiyonu için: `android` konfigürasyonunu seçin
+
+## 🎯 Proje Yapısı
+
+```
+TreasureHunter/
+├── core/                  # Ana oyun kodları
+│   └── src/
+│       └── main/
+│           └── kotlin/
+│               └── com/libgdx/treasurehunter/
+│                   ├── ai/         # AI sistemleri
+│                   ├── ecs/        # Entity Component System
+│                   ├── event/      # Event sistemi
+│                   ├── game/       # Oyun mantığı
+│                   ├── input/      # Input işlemleri
+│                   ├── tiled/      # Tiled Map entegrasyonu
+│                   └── utils/      # Yardımcı sınıflar
+├── android/               # Android platformu için kodlar
+├── lwjgl3/               # Desktop platformu için kodlar
+└── assets/               # Oyun assetleri
+```
+
+## 🎮 Kontroller
+
+- **A/D veya ←/→:** Hareket
+- **SPACE veya W veya ↑:** Zıplama
+- **ESC:** Pause Menu
+
+## 🔜 Gelecek Özellikler
+
+- [ ] Düşman AI sistemi
+- [ ] Ses efektleri ve müzik
+- [ ] Kaydetme sistemi
+- [ ] Yeni level'lar
+- [ ] Karakter animasyonları
+- [ ] UI/UX geliştirmeleri
+
+## 🤝 Katkıda Bulunma
+
+1. Fork'layın
+2. Feature branch oluşturun (`git checkout -b feature/AmazingFeature`)
+3. Değişikliklerinizi commit edin (`git commit -m 'Add some AmazingFeature'`)
+4. Branch'inizi push edin (`git push origin feature/AmazingFeature`)
+5. Pull Request oluşturun
+
+## 📝 Lisans
+
+Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için [LICENSE](LICENSE) dosyasına bakın.
+
+## 📞 İletişim
+
+Fatih - [@barmex61](https://github.com/barmex61)
+
+Proje Linki: [https://github.com/barmex61/TreasureHunter](https://github.com/barmex61/TreasureHunter)
