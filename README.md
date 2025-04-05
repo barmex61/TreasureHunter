@@ -65,12 +65,18 @@ TreasureHunter/
 
 ## 🎮 Kontroller
 
+**Not:** Aşağıdaki kontroller şu an için sadece desktop (PC) platformunda geçerlidir.
+
 - **A/D veya ←/→:** Hareket
-- **SPACE veya W veya ↑:** Zıplama
+- **SPACE:** Zıplama
+- **1:** Hafif Saldırı
+- **2:** Orta Saldırı
+- **3:** Güçlü Saldırı
 - **ESC:** Pause Menu
 
 ## 🔜 Gelecek Özellikler
 
+- [x] Kılıç Dövüş Sistemi
 - [ ] Düşman AI sistemi
 - [ ] Ses efektleri ve müzik
 - [ ] Kaydetme sistemi
