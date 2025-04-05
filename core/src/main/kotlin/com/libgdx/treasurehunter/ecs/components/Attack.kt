@@ -12,12 +12,20 @@ enum class AttackState {
     DONE,
 }
 
+enum class AttackType {
+    ATTACK_1,
+    ATTACK_2,
+    ATTACK_3
+}
+
 data class Attack(
     val attackDamage: Float = 0f,
     var wantsToAttack : Boolean = false,
     var attackState : AttackState = AttackState.READY,
     var attackBody : Body? = null,
-    var attackDuration : Float = 1f
+    var attackDuration : Float = 1f,
+    var attackType : AttackType = AttackType.ATTACK_1
+
 ) : Component <Attack> {
 
 
