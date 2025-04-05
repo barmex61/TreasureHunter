@@ -17,12 +17,10 @@ import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.utils.Constants
-import ktx.graphics.use
+import ktx.app.gdxError
 import ktx.tiled.height
 import ktx.tiled.use
 import ktx.tiled.width
-import kotlin.comparisons.maxOf
-import kotlin.ranges.coerceIn
 
 class RenderSystem (
     private val spriteBatch: SpriteBatch = inject(),
@@ -36,7 +34,7 @@ class RenderSystem (
     private val entityComparator = compareEntityBy(Graphic)
     private val entities = family{all(Graphic)}
 
-    // Parallax katmanları için referanslar
+    private var bgCloseLayer : TiledMapTileLayer? = null
     private var bgFarLayer: TiledMapTileLayer? = null
     private var bgMidLayer: TiledMapTileLayer? = null
     private var ground: TiledMapTileLayer? = null
@@ -55,21 +53,10 @@ class RenderSystem (
 
         orthogonalTiledMapRenderer.setView(gameCamera)
         orthogonalTiledMapRenderer.use {
-            orthogonalTiledMapRenderer.map?.layers?.forEach { layer ->
-                if (layer is TiledMapTileLayer) {
-                    val parallaxX = layer.properties.get("parallaxX", Float::class.java) ?: 1f
-                    val parallaxY = layer.properties.get("parallaxY", Float::class.java) ?: 1f
-
-                    val newX = originalX * parallaxX
-                    val newY = originalY * parallaxY
-
-                    gameCamera.position.set(newX, newY, 0f)
-                    gameCamera.update()
-                    orthogonalTiledMapRenderer.setView(gameCamera)
-                    orthogonalTiledMapRenderer.renderTileLayer(layer)
-                }
-            }
-
+            renderParallaxLayer(bgFarLayer, originalX, originalY)
+            renderParallaxLayer(bgMidLayer, originalX, originalY)
+            renderParallaxLayer(bgCloseLayer, originalX, originalY)
+            renderParallaxLayer(ground, originalX, originalY)
             gameCamera.position.set(originalX, originalY, 0f)
             gameCamera.update()
             orthogonalTiledMapRenderer.setView(gameCamera)
@@ -85,17 +72,45 @@ class RenderSystem (
         }
     }
 
+    private fun renderParallaxLayer(layer: TiledMapTileLayer?, originalX: Float, originalY: Float) {
+        layer?:return
+        val parallaxX = layer.parallaxX
+        val parallaxY = layer.parallaxY
+
+        val newX = originalX * parallaxX
+        val newY = originalY * parallaxY
+
+        gameCamera.position.set(newX, newY, 0f)
+        gameCamera.update()
+        orthogonalTiledMapRenderer.setView(gameCamera)
+        orthogonalTiledMapRenderer.renderTileLayer(layer)
+    }
+
     override fun onEvent(event: GameEvent) {
         when(event) {
             is GameEvent.MapChangeEvent -> {
-                orthogonalTiledMapRenderer.map = event.tiledMap
-                bgFarLayer = event.tiledMap.layers.get("background_far") as? TiledMapTileLayer
-                bgMidLayer = event.tiledMap.layers.get("background_mid") as? TiledMapTileLayer
-                ground = event.tiledMap.layers.get("ground") as? TiledMapTileLayer
+                try {
+                    bgFarLayer = event.tiledMap.layers.get(LayerNames.BACKGROUND_FAR.toString()) as? TiledMapTileLayer
+                    bgMidLayer = event.tiledMap.layers.get(LayerNames.BACKGROUND_MID.toString()) as? TiledMapTileLayer
+                    bgCloseLayer = event.tiledMap.layers.get(LayerNames.BACKGROUND_CLOSE.toString()) as? TiledMapTileLayer
+                    ground = event.tiledMap.layers.get(LayerNames.GROUND.toString()) as? TiledMapTileLayer
+                }catch (e: Exception){
+                    gdxError("There is no layer name registerede for $e in tiledMap ${event.tiledMap}")
+                }
+
                 mapBoundaries.set(
                     event.tiledMap.width.toFloat(), event.tiledMap.height.toFloat()
                 )
             }
         }
+    }
+
+    enum class LayerNames{
+        BACKGROUND_FAR(),
+        BACKGROUND_MID(),
+        BACKGROUND_CLOSE(),
+        GROUND();
+
+        override fun toString() = this.name.lowercase()
     }
 }

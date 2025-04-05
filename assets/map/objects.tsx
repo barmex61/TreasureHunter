@@ -8,10 +8,10 @@
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN_SWORD"/>
    <property name="gravityScale" type="float" value="1"/>
-   <property name="jumpHeight" type="float" value="1.5"/>
-   <property name="speed" type="float" value="2"/>
+   <property name="jumpHeight" type="float" value="5"/>
+   <property name="speed" type="float" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
-   <property name="timeToMax" type="float" value="4"/>
+   <property name="timeToMax" type="float" value="1"/>
   </properties>
   <image width="64" height="40" source="idle_sword_01.png"/>
   <objectgroup draworder="index" id="3">
