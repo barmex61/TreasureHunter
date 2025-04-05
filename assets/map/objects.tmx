@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="5" height="5" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+  <tileset firstgid="1" source="objects.tsx"/>
+ <layer id="1" name="Desen Katmanı 1" width="5" height="5">
+  <data encoding="base64" compression="zlib">
+   eJxjYKA9AAAAZAAB
+  </data>
+ </layer>
+</map>

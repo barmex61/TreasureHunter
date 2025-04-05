@@ -1,0 +1,41 @@
+islandBackground.png
+size:1024,2048
+repeat:none
+Additional Sky
+bounds:0,0,32,32
+Additional Water
+bounds:448,0,32,32
+BG Image
+bounds:0,128,384,128
+Big Clouds
+bounds:448,128,448,101
+Small Cloud 1
+bounds:0,256,74,24
+Small Cloud 2
+bounds:448,256,133,35
+Small Cloud 3
+bounds:0,384,140,39
+Water Reflect Big 01
+bounds:448,384,170,10
+Water Reflect Big 02
+bounds:0,512,170,10
+Water Reflect Big 03
+bounds:448,512,170,10
+Water Reflect Big 04
+bounds:0,640,170,10
+Water Reflect Medium 01
+bounds:448,640,53,3
+Water Reflect Medium 02
+bounds:0,768,53,3
+Water Reflect Medium 03
+bounds:448,768,53,3
+Water Reflect Medium 04
+bounds:0,896,53,3
+Water Reflect Small 01
+bounds:448,896,35,3
+Water Reflect Small 02
+bounds:0,1024,35,3
+Water Reflect Small 03
+bounds:448,1024,35,3
+Water Reflect Small 04
+bounds:0,1152,35,3

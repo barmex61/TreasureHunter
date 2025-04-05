@@ -1,0 +1,60 @@
+{
+    "automappingRulesFile": "",
+    "commands": [
+    ],
+    "compatibilityVersion": 1100,
+    "extensionsPath": "extensions",
+    "folders": [
+        "."
+    ],
+    "properties": [
+    ],
+    "propertyTypes": [
+        {
+            "id": 2,
+            "name": "BodyType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "StaticBody",
+                "DynamicBody"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 1,
+            "name": "EntityTags",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "PLAYER"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 3,
+            "name": "GameObject",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "GROUND",
+                "CAPTAIN_CLOWN",
+                "CAPTAIN_CLOWN_SWORD"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 4,
+            "name": "StartAnimType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "NONE",
+                "IDLE",
+                "IDLE_SWORD",
+                "JUMP_SWORD"
+            ],
+            "valuesAsFlags": false
+        }
+    ]
+}

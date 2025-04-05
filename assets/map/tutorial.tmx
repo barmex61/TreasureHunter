@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="6">
+ <tileset firstgid="1" source="terrainTileset.tsx"/>
+ <tileset firstgid="86" source="objects.tsx"/>
+ <tileset firstgid="87" name="islandBackground" tilewidth="32" tileheight="32" tilecount="2048" columns="32">
+  <image source="../graphics/islandBackground.png" width="1024" height="2048"/>
+ </tileset>
+ <layer id="5" name="background_far" width="64" height="20" parallaxx="0.1" parallaxy="0.05">
+  <data encoding="base64" compression="zlib">
+   eJzt0lkOgjAUQNHiNpzdhDgL+//HedqG4/2QREmK9lESIy/h/JA2vEubGGMWWGKFNTbYYoc9DjjihOTP1v/6fNqv/dqv/dqv/dqv/dqv/drvb/0ZF1xxwx0m4EGtAupooIkW2uigi14F9C1CDDDECGNMMMUMc0SIn173RgXY5nH17fy2tS7fknTGwfu/S9+7zO3j7PLWFzlHieydcpGemeTeZvfk3c3QU+unHkmLhOQ7eV1lzVmWB/W+KTs=
+  </data>
+ </layer>
+ <layer id="6" name="background_mid" width="64" height="20" parallaxx="0.3" parallaxy="0.1">
+  <data encoding="base64" compression="zlib">
+   eJzt1VlOwlAUgOHeB+ZJ2QPKIIruQUYH8M0luBQWojthBkX2gIKACivgf+DBh8bcC2mAcP7ke2l6ktM2bS1Lkg6vZ7xonvuknNzk/zrooodXvKGPdwxQQx0NNNFC22BOp6oy32Od7O7zBFPM8I0f/GKOBYb4wCdGGOPLYE430z2s1R4mVW2uP8CxIEIII4IjHCMKF9zwwAsf/Ep/Trd199j03Ukxf4Y0znGBDC5xhRhOcIo4Ekgq/Tmn97B7piaVmL/BLe5wjzIqeMA1ssghjwKKSn/O6T0k6W/b/JfuQpt+D6T96lGetyRJkrSDLQENDlgx
+  </data>
+ </layer>
+ <layer id="7" name="background_close" width="64" height="20" parallaxx="0.5" parallaxy="0.2">
+  <data encoding="base64" compression="zlib">
+   eJzt1FsKwCAMRNG42L4W0teuO/9FSCGxCvfAfFbSOGgGvE3FbFYWZVW28vdEfhGz7/rmUE7lUu6E/8/acYvZI4wyJ74b+f2IQLfz0bGcjkXs1XNGr/cXsVfPGbwRdb12oxW6AQDI9AC3niox
+  </data>
+ </layer>
+ <layer id="1" name="ground" width="64" height="20">
+  <data encoding="base64" compression="zlib">
+   eJztl28KgCAMxftDF6huUN3/iq0PgyETJ25NxR88EBJz7vmiaRoM8phBC2j13ogTO+gAnYK5PZ7VBbpBj2BuzlnVhFbfcs6qJlrtmxat9q0lJHesx/xEJB4bPixHy0N0ndjYG24vWh6i34TYWIuwjo2Ie45Y3he6dmycC1dn+K7UXkrA96P+8DDto3e+oXdRWh62yAeLnLGq3yIfLLwS1v9Jch9SvdDKB2u4+iV+6OX/AHsTk3X+evMC0DIM0A==
+  </data>
+ </layer>
+ <objectgroup id="3" name="objects">
+  <object id="4" gid="86" x="369" y="360" width="64" height="40"/>
+ </objectgroup>
+</map>
