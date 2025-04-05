@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.configureWorld
 import com.libgdx.treasurehunter.ecs.systems.AnimationSystem
+import com.libgdx.treasurehunter.ecs.systems.AttackSystem
 import com.libgdx.treasurehunter.ecs.systems.CameraSystem
 import com.libgdx.treasurehunter.ecs.systems.DebugSystem
 import com.libgdx.treasurehunter.ecs.systems.GlProfilerSystem
@@ -25,9 +26,6 @@ import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.game.inputMultiplexer
 import com.libgdx.treasurehunter.input.KeyboardInputProcessor
 import com.libgdx.treasurehunter.tiled.TiledMapService
-import com.libgdx.treasurehunter.tiled.TiledMapService.Companion.fixtureDefinitionOf
-import com.libgdx.treasurehunter.utils.Constants
-import com.libgdx.treasurehunter.utils.Constants.OBJECT_FIXTURES
 import com.libgdx.treasurehunter.utils.GameObject
 import ktx.app.KtxScreen
 import ktx.app.gdxError
@@ -58,6 +56,7 @@ class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,p
         systems {
             add(StateSystem())
             add(MoveSystem())
+            add(AttackSystem())
             add(JumpSystem())
             add(PhysicSystem())
             add(AnimationSystem())

@@ -2,6 +2,8 @@ package com.libgdx.treasurehunter.input
 
 import com.badlogic.gdx.Input
 import com.github.quillraven.fleks.World
+import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.AttackState
 import ktx.app.KtxInputAdapter
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Jump
@@ -15,7 +17,7 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
         family { all(EntityTag.PLAYER) }
     }
     var stopMovement : Boolean = false
-
+    var wantsAttack : Boolean = false
 
     fun updatePlayerMovement(moveValue : Int,reset : Boolean = false){
         if (stopMovement) {
@@ -45,12 +47,22 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
         playerEntities.forEach { it[Jump].wantsJump = jump}
     }
 
+    private fun updatePlayerAttack(attack : Boolean){
+        playerEntities.forEach { playerEntity ->
+            val attackComp = playerEntity[Attack]
+            if (attackComp.attackState == AttackState.READY){
+                attackComp.wantsToAttack = true
+            }
+        }
+    }
+
 
     override fun keyDown(keycode: Int): Boolean {
         when(keycode){
             Input.Keys.D -> updatePlayerMovement(1)
             Input.Keys.A -> updatePlayerMovement(-1)
-            Input.Keys.SPACE -> updatePlayerJump(true)
+            Input.Keys.W -> updatePlayerJump(true)
+            Input.Keys.SPACE -> updatePlayerAttack(true)
         }
 
         return false
@@ -60,7 +72,8 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
         when(keycode){
             Input.Keys.D -> updatePlayerMovement(-1)
             Input.Keys.A -> updatePlayerMovement(1)
-            Input.Keys.SPACE -> updatePlayerJump(false)
+            Input.Keys.W -> updatePlayerJump(false)
+            Input.Keys.SPACE -> updatePlayerAttack(false)
         }
         return false
     }

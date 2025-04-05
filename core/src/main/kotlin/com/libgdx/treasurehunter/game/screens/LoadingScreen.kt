@@ -8,9 +8,9 @@ import com.badlogic.gdx.physics.box2d.World
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.MapAssets
 import com.libgdx.treasurehunter.game.TreasureHunter
-import com.libgdx.treasurehunter.tiled.TiledMapService.Companion.fixtureDefinitionOf
 import com.libgdx.treasurehunter.utils.Constants.OBJECT_FIXTURES
 import com.libgdx.treasurehunter.utils.GameObject
+import com.libgdx.treasurehunter.utils.fixtureDefinitionOf
 import ktx.app.KtxScreen
 import ktx.app.gdxError
 import ktx.tiled.propertyOrNull

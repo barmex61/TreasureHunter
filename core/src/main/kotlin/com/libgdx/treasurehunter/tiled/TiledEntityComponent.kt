@@ -24,6 +24,8 @@ import com.libgdx.treasurehunter.utils.Constants.UNIT_SCALE
 import com.libgdx.treasurehunter.utils.GameObject
 import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.ai.EntityState
+import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.Life
 import ktx.app.gdxError
 import ktx.tiled.property
 import ktx.tiled.propertyOrNull
@@ -95,6 +97,20 @@ fun EntityCreateContext.configureEntityTags(
     if (entityTags.isNotBlank()){
         val tags = entityTags.split(",").map { splitEntityTag -> EntityTag.valueOf(splitEntityTag)}
         entity += tags
+    }
+}
+
+fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile){
+    val damage = tile.property<Float>("attackDamage",0f)
+    if (damage > 0f){
+        entity += Attack(attackDamage= damage)
+    }
+}
+
+fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){
+    val life = tile.property<Float>("life",0f)
+    if (life > 0f){
+        entity += Life(maxLife = life,)
     }
 }
 

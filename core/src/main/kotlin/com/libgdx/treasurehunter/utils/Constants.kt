@@ -1,7 +1,6 @@
 package com.libgdx.treasurehunter.utils
 
 import com.badlogic.gdx.math.Vector2
-import com.libgdx.treasurehunter.tiled.TiledMapService.Companion.FixtureDefUserData
 
 object Constants {
 

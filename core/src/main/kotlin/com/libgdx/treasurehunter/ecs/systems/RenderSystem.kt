@@ -18,7 +18,10 @@ import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.utils.Constants
 import ktx.app.gdxError
+import ktx.graphics.use
+import ktx.math.random
 import ktx.tiled.height
+import ktx.tiled.layer
 import ktx.tiled.use
 import ktx.tiled.width
 
@@ -34,35 +37,16 @@ class RenderSystem (
     private val entityComparator = compareEntityBy(Graphic)
     private val entities = family{all(Graphic)}
 
-    private var bgCloseLayer : TiledMapTileLayer? = null
-    private var bgFarLayer: TiledMapTileLayer? = null
-    private var bgMidLayer: TiledMapTileLayer? = null
-    private var ground: TiledMapTileLayer? = null
-
-    private val mapBoundaries = Vector2(0f, 0f)
-    private var viewportW = gameCamera.viewportWidth * 0.5f
-    private var viewportH = gameCamera.viewportHeight * 0.5f
 
     override fun onTick() {
         gameViewPort.apply()
 
-        val originalX = gameCamera.position.x
-        val originalY = gameCamera.position.y
-        viewportW = gameCamera.viewportWidth * 0.5f
-        viewportH = gameCamera.viewportHeight * 0.5f
-
         orthogonalTiledMapRenderer.setView(gameCamera)
-        orthogonalTiledMapRenderer.use {
-            renderParallaxLayer(bgFarLayer, originalX, originalY)
-            renderParallaxLayer(bgMidLayer, originalX, originalY)
-            renderParallaxLayer(bgCloseLayer, originalX, originalY)
-            renderParallaxLayer(ground, originalX, originalY)
-            gameCamera.position.set(originalX, originalY, 0f)
-            gameCamera.update()
-            orthogonalTiledMapRenderer.setView(gameCamera)
-
+        orthogonalTiledMapRenderer.render()
+        spriteBatch.use {
             entities.renderEntities()
         }
+
     }
 
     private fun Family.renderEntities() {
@@ -72,45 +56,17 @@ class RenderSystem (
         }
     }
 
-    private fun renderParallaxLayer(layer: TiledMapTileLayer?, originalX: Float, originalY: Float) {
-        layer?:return
-        val parallaxX = layer.parallaxX
-        val parallaxY = layer.parallaxY
-
-        val newX = originalX * parallaxX
-        val newY = originalY * parallaxY
-
-        gameCamera.position.set(newX, newY, 0f)
-        gameCamera.update()
-        orthogonalTiledMapRenderer.setView(gameCamera)
-        orthogonalTiledMapRenderer.renderTileLayer(layer)
-    }
-
     override fun onEvent(event: GameEvent) {
         when(event) {
             is GameEvent.MapChangeEvent -> {
                 try {
-                    bgFarLayer = event.tiledMap.layers.get(LayerNames.BACKGROUND_FAR.toString()) as? TiledMapTileLayer
-                    bgMidLayer = event.tiledMap.layers.get(LayerNames.BACKGROUND_MID.toString()) as? TiledMapTileLayer
-                    bgCloseLayer = event.tiledMap.layers.get(LayerNames.BACKGROUND_CLOSE.toString()) as? TiledMapTileLayer
-                    ground = event.tiledMap.layers.get(LayerNames.GROUND.toString()) as? TiledMapTileLayer
+                    orthogonalTiledMapRenderer.map = event.tiledMap
                 }catch (e: Exception){
                     gdxError("There is no layer name registerede for $e in tiledMap ${event.tiledMap}")
                 }
 
-                mapBoundaries.set(
-                    event.tiledMap.width.toFloat(), event.tiledMap.height.toFloat()
-                )
             }
         }
     }
 
-    enum class LayerNames{
-        BACKGROUND_FAR(),
-        BACKGROUND_MID(),
-        BACKGROUND_CLOSE(),
-        GROUND();
-
-        override fun toString() = this.name.lowercase()
-    }
 }

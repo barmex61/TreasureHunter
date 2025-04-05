@@ -4,11 +4,13 @@
  <tile id="0">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="attackDamage" type="float" value="1"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN_SWORD"/>
    <property name="gravityScale" type="float" value="1"/>
    <property name="jumpHeight" type="float" value="5"/>
+   <property name="life" type="float" value="3"/>
    <property name="speed" type="float" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
    <property name="timeToMax" type="float" value="1"/>

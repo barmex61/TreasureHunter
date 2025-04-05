@@ -2,6 +2,7 @@ package com.libgdx.treasurehunter.ecs.systems
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
@@ -32,10 +33,8 @@ class CameraSystem(
         var camY = sprite.y + sprite.height * 0.5f
 
         if (!mapBoundaries.isZero) {
-
-
-            camX = camX.coerceIn(viewportW, maxOf(mapBoundaries.x - viewportW, viewportW))
-            camY = camY.coerceIn(viewportH, maxOf(mapBoundaries.y - viewportH, viewportH))
+            camX = MathUtils.lerp(gameCamera.position.x,camX.coerceIn(viewportW, maxOf(mapBoundaries.x - viewportW, viewportW)),deltaTime * 4)
+            camY = MathUtils.lerp(gameCamera.position.y,camY.coerceIn(viewportH, maxOf(mapBoundaries.y - viewportH, viewportH)),deltaTime * 4)
         }
 
         gameCamera.position.set(camX, camY, 0f)
