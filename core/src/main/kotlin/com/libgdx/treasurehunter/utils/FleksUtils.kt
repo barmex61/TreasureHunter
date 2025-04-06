@@ -6,7 +6,7 @@ import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.systems.AnimationSystem
 
-fun World.animation(entity: Entity,animationType: AnimationType,playMode : PlayMode = PlayMode.LOOP) {
+fun World.animation(entity: Entity,animationType: AnimationType,playMode : PlayMode = PlayMode.LOOP,frameDuration : Float? = null) {
     val animationSystem = this.system<AnimationSystem>()
-    animationSystem.entityAnimation(entity,animationType,playMode)
+    animationSystem.entityAnimation(entity,animationType,playMode,frameDuration)
 }

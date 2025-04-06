@@ -9,11 +9,11 @@
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN_SWORD"/>
    <property name="gravityScale" type="float" value="1"/>
-   <property name="jumpHeight" type="float" value="5"/>
+   <property name="jumpHeight" type="float" value="3"/>
    <property name="life" type="float" value="3"/>
-   <property name="speed" type="float" value="5"/>
+   <property name="speed" type="float" value="2.5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
-   <property name="timeToMax" type="float" value="1"/>
+   <property name="timeToMax" type="float" value="2"/>
   </properties>
   <image width="64" height="40" source="idle_sword_01.png"/>
   <objectgroup draworder="index" id="3">
@@ -23,16 +23,17 @@
      <property name="userData" value="hitboxFixture"/>
     </properties>
    </object>
-   <object id="7" x="26" y="19" width="11" height="12">
-    <properties>
-     <property name="userData" value="bodyFixture"/>
-    </properties>
-   </object>
-   <object id="8" x="25" y="33">
+   <object id="12" x="-40" y="31">
     <properties>
      <property name="userData" value="footFixture"/>
     </properties>
-    <polyline points="0,0 13,0 13,-2 0,-2 0,0"/>
+    <polygon points="66,0 77,0 77,-1 66,-1"/>
+   </object>
+   <object id="13" x="26" y="30">
+    <properties>
+     <property name="userData" value="bodyFixture"/>
+    </properties>
+    <polygon points="0,0 0,-12 11,-12 11,0"/>
    </object>
   </objectgroup>
  </tile>

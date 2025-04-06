@@ -5,7 +5,7 @@
  <tileset firstgid="87" source="islandBackground.tsx"/>
  <layer id="5" name="background_far" width="64" height="20" parallaxx="0" parallaxy="0">
   <data encoding="base64" compression="zlib">
-   eJzt0lkOgjAUQNHiNpzdhDgL+//HedqG4/2QREmK9lESIy/h/JA2vEubGGMWWGKFNTbYYoc9DjjihOTP1v/6fNqv/dqv/dqv/dqv/dqv/drvb/0ZF1xxwx0m4EGtAupooIkW2uigi14F9C1CDDDECGNMMMUMc0SIn173RgXY5nH17fy2tS7fknTGwfu/S9+7zO3j7PLWFzlHieydcpGemeTeZvfk3c3QU+unHkmLhOQ7eV1lzVmWB/W+KTs=
+   eJztz0kOglAQRdGPq3Andtix/zkqYLcJFezuACeE9iPG6Es4YUCRqusbY1ZYY4MAISJsscMeBxzh/9j8t9+nfvWrX/3qV7/61a9+9au/3XwgkjrhjAtiJLjihjseMA4Pek777012ZWeb3lpnpv/nBhhihDEmcDHF8sMW6duz4Fa0zDDP2ZH3T9F9r9l3tFb12LTYsNlT1tXVnV15Aly5nb4=
   </data>
  </layer>
  <layer id="6" name="background_mid" width="64" height="20" opacity="0.8" parallaxx="0.2" parallaxy="0.2">

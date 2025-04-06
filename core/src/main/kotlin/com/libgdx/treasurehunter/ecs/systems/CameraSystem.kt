@@ -1,9 +1,7 @@
 package com.libgdx.treasurehunter.ecs.systems
 
 import com.badlogic.gdx.graphics.OrthographicCamera
-import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
@@ -14,10 +12,8 @@ import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEvent.MapChangeEvent
 import com.libgdx.treasurehunter.event.GameEventListener
-import com.libgdx.treasurehunter.utils.Constants
 import ktx.tiled.height
 import ktx.tiled.width
-import kotlin.math.max
 
 class CameraSystem(
     private val gameCamera: OrthographicCamera = World.inject()
@@ -26,6 +22,11 @@ class CameraSystem(
     private val mapBoundaries = Vector2(0f, 0f)
     val viewportW = gameCamera.viewportWidth * 0.5f
     val viewportH = gameCamera.viewportHeight * 0.5f
+    init {
+        gameCamera.apply {
+            zoom = 0.65f
+        }
+    }
 
     override fun onTickEntity(entity: Entity) {
         val (sprite) = entity[Graphic]

@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.ChainShape
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityCreateContext
 import com.github.quillraven.fleks.World
@@ -26,7 +27,9 @@ import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.ai.EntityState
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.Life
+import com.libgdx.treasurehunter.ecs.components.Physic
 import ktx.app.gdxError
+import ktx.math.vec2
 import ktx.tiled.property
 import ktx.tiled.propertyOrNull
 
@@ -58,7 +61,7 @@ fun EntityCreateContext.configureEntityGraphic(entity: Entity,tile: TiledMapTile
 fun EntityCreateContext.configureAnimation(entity: Entity, tile: TiledMapTile, world: World,startAnimType : AnimationType,gameObject: GameObject) {
     if (tile.property<Float>("animFrameDuration") == 0f) return
     entity += Animation(frameDuration = tile.property<Float>("animFrameDuration"), gameObject = gameObject)
-    world.animation(entity,startAnimType)
+    world.animation(entity,startAnimType,)
 }
 
 fun EntityCreateContext.configureMove(entity: Entity, tile: TiledMapTile){
@@ -73,7 +76,24 @@ fun EntityCreateContext.configureJump(entity: Entity, tile: TiledMapTile){
     val jumpHeight = tile.property<Float>("jumpHeight",0f)
 
     if (jumpHeight > 0f){
-        entity += Jump(jumpHeight)
+        val (body) = entity[Physic]
+        val feetFixture = body.fixtureList.first { it.userData == "footFixture" }
+        val chainShape = feetFixture.shape as ChainShape
+        val lowerXY = vec2(100f,100f)
+        val upperXY = vec2(-100f,-100f)
+        val vertex = vec2()
+        for (i in 0 until chainShape.vertexCount){
+            chainShape.getVertex(i,vertex)
+            if (vertex.y <= lowerXY.y && vertex.x <= lowerXY.x){
+                lowerXY.set(vertex)
+            }else if (vertex.y >= upperXY.y && vertex.x >= upperXY.x){
+                upperXY.set(vertex)
+            }
+        }
+        if ((lowerXY.x == 100f && lowerXY.y == 100f) || (upperXY.x == 100f && upperXY.y == 100f)){
+            gdxError("Couldnt calculate feet fixture size of entity $entity and tile $tile")
+        }
+        entity += Jump(jumpHeight,lowerXY ,upperXY )
     }
 }
 

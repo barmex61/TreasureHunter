@@ -57,9 +57,7 @@ class AttackSystem(
         attackComp.wantsToAttack = false
         attackComp.attackDuration = 1f
     }
-    companion object{
-        val DEBUG_RECT = Rectangle(0f,0f,1f,1f)
-    }
+
     private fun createAttackBody(attackerEntity: Entity, attackType: AttackType): Body {
         val physicComp = attackerEntity[Physic]
         val graphicComp = attackerEntity[Graphic]
@@ -71,7 +69,6 @@ class AttackSystem(
             gravityScale = 0f
 
         }).apply { userData =  attackerEntity }
-        DEBUG_RECT.set(centerPosition.x,centerPosition.y,0.1f,0.1f)
         var shape = ChainShape()
         val fixtureDef = FixtureDef().apply {
             isSensor = true

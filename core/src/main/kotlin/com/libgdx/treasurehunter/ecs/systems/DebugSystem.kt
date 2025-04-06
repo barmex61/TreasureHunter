@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.World
 import com.github.quillraven.fleks.Fixed
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.World.Companion.inject
-import com.libgdx.treasurehunter.ecs.systems.AttackSystem.Companion.DEBUG_RECT
 import ktx.graphics.use
 
 class DebugSystem(
@@ -29,12 +28,18 @@ class DebugSystem(
         box2DDebugRenderer.render(physicWorld, gameCamera.combined)
         shapeRenderer.use(ShapeRenderer.ShapeType.Line,gameCamera.combined){
             it.color = Color.RED
-            it.rect(DEBUG_RECT.x, DEBUG_RECT.y, DEBUG_RECT.width, DEBUG_RECT.height)
+            it.rect(JUMP_DEBUG_RECT.x, JUMP_DEBUG_RECT.y, JUMP_DEBUG_RECT.width, JUMP_DEBUG_RECT.height)
+            if (JUMP_FOOT_DEBUG_VECTOR.isNotEmpty()) it.polyline(JUMP_FOOT_DEBUG_VECTOR)
         }
     }
 
     override fun onDispose() {
         box2DDebugRenderer.dispose()
+    }
+
+    companion object{
+        val JUMP_DEBUG_RECT = Rectangle()
+        var JUMP_FOOT_DEBUG_VECTOR = floatArrayOf()
     }
 
 

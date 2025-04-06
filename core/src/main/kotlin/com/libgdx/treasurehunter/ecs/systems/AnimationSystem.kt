@@ -44,7 +44,7 @@ class AnimationSystem (
 
     }
 
-    fun entityAnimation(entity: Entity, animationType: AnimationType,playMode: PlayMode) {
+    fun entityAnimation(entity: Entity, animationType: AnimationType,playMode: PlayMode,frameDuration: Float? = null) {
 
         val (_,_,_,_,_,gameObject) = entity[Animation]
         val animationAtlasKey = "${gameObject.atlasKey}/${animationType.atlasKey}"
@@ -55,6 +55,9 @@ class AnimationSystem (
                 gdxError("There are no regions for the animation $animationAtlasKey")
             }
             GdxAnimation(entity[Animation].frameDuration,regions,playMode)
+        }.apply {
+            this.playMode = playMode
+            this.frameDuration = frameDuration ?: entity[Animation].frameDuration
         }
         if (gdxAnimationCache.size > 100){
             log.info { "Animation cache is larger than 100" }

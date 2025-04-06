@@ -12,10 +12,11 @@ enum class AttackState {
     DONE,
 }
 
-enum class AttackType {
-    ATTACK_1,
-    ATTACK_2,
-    ATTACK_3
+//NEED TO IMPROVE ATTACK NAMES I DIDNT KNOW WHAT TO PUT.NEED TO CHECK WHAT KIND OF ANIMATIONS THEY ARE
+enum class AttackType(val animType : AnimationType) {
+    FIRST_ATTACK(AnimationType.ATTACK_1),
+    SECONDARY_ATTACK(AnimationType.ATTACK_2),
+    THIRD_ATTACK(AnimationType.ATTACK_3)
 }
 
 data class Attack(
@@ -24,7 +25,7 @@ data class Attack(
     var attackState : AttackState = AttackState.READY,
     var attackBody : Body? = null,
     var attackDuration : Float = 1f,
-    var attackType : AttackType = AttackType.ATTACK_1
+    var attackType : AttackType = AttackType.FIRST_ATTACK
 
 ) : Component <Attack> {
 

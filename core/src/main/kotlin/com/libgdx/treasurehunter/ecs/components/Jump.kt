@@ -7,8 +7,9 @@ import com.libgdx.treasurehunter.utils.Constants
 
 data class Jump(
     var maxHeight : Float,
+    val lowerXY : Vector2,
+    val upperXY : Vector2,
     var wantsJump : Boolean = false,
-    var canJump : Boolean = true,
     var doubleJump : Boolean = false,
     val yImpulse : Float = kotlin.math.sqrt(2 * kotlin.math.abs(Constants.GRAVITY.y) * maxHeight)
 ) : Component <Jump> {

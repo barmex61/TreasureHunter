@@ -65,11 +65,15 @@ class PhysicSystem (
         )
     }
 
-    private val Fixture.isPlayerFoot : Boolean
-        get() = this.userData == "footFixture"
+    companion object{
+        val Fixture.isPlayerFoot : Boolean
+            get() = this.userData == "footFixture"
 
-    private val Fixture.isGround : Boolean
-        get() = this.userData == "ground"
+        val Fixture.isGround : Boolean
+            get() = this.userData == "ground"
+    }
+
+
 
     private val Fixture.entity : Entity?
         get() {
@@ -77,33 +81,14 @@ class PhysicSystem (
             return userData as? Entity
         }
 
-    private fun isPlayerFootAndGroundCollision(fixtureA: Fixture,fixtureB: Fixture ) : Boolean {
-        return fixtureA.isPlayerFoot && fixtureB.isGround
-    }
-
-    private fun handlePlayerFootAndGroundContact(normalY : Float,playerEntity: Entity){
-        if (abs(normalY) <= 0.5f) return
-        playerEntity[Jump].canJump = true
-    }
-
 
     override fun beginContact(contact: Contact) {
-        val fixtureA = contact.fixtureA
-        val fixtureB = contact.fixtureB
-        val entityA = fixtureA.entity
-        val entityB = fixtureB.entity
 
-        if (entityA == null || entityB == null){
-            when{
-                isPlayerFootAndGroundCollision(fixtureA,fixtureB) && entityA != null -> handlePlayerFootAndGroundContact(contact.worldManifold.normal.y,entityA)
-                isPlayerFootAndGroundCollision(fixtureB,fixtureA) && entityB != null-> handlePlayerFootAndGroundContact(contact.worldManifold.normal.y,entityB)
-            }
-            return
-        }
 
     }
 
     override fun endContact(contact: Contact) {
+
     }
 
     override fun preSolve(contact: Contact, oldManifold: Manifold) {

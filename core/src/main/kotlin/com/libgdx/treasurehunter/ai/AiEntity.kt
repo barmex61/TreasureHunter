@@ -3,6 +3,7 @@ package com.libgdx.treasurehunter.ai
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
@@ -10,8 +11,11 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
+import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.AttackState
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
+import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.ecs.components.State
@@ -24,7 +28,14 @@ data class AiEntity(
     val world: World,
     val physicWorld: PhysicWorld,
 ) {
+    // ------ CAN BE REMOVED FOR NOW IT IS ONLY FOR PLAYER ENTITY ------
+    val body : Body
+        get() = this[Physic].body
 
+    val wantsToAttack : Boolean
+        get() = this[Attack].wantsToAttack && this[Attack].attackState == AttackState.READY
+
+    // ------ CAN BE REMOVED -------
 
     var currentAnimType = AnimationType.IDLE
     var frameDuration = 1f
@@ -41,10 +52,14 @@ data class AiEntity(
         entity.remove()
     }
 
-    fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP) = world.animation(entity,animationType,playMode)
+    fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float = this[Animation].frameDuration){
+        world.animation(entity,animationType,playMode,frameDuration)
+    }
 
-    fun state(state : EntityState){
-        with(world){entity[State]}.stateMachine.changeState(state)
+    fun state(state : EntityState,toPreviousState : Boolean = false){
+        val stateComp = this[State]
+        val nextState= if (toPreviousState) stateComp.stateMachine.previousState else state
+        this[State].stateMachine.changeState(nextState)
     }
 
     fun inRange(range: Float, targetEntity: Entity): Boolean = with(world){
@@ -74,20 +89,7 @@ data class AiEntity(
     }
 
 
-    fun isPathBlocked(targetEntity: Entity) : Boolean = with(world){
-        val start = entity[Graphic].center
-        val end = targetEntity[Graphic].center
-        var blocked = false
-        physicWorld.rayCast(start,end){fixture, point, normal, fraction ->
-            if (fixture.body.type == BodyDef.BodyType.StaticBody && !fixture.isSensor){
-                blocked = true
-                return@rayCast 0f
-            }
-            return@rayCast -1f
-        }
 
-        return@with blocked
-    }
 
     fun remove(){
         with(world){

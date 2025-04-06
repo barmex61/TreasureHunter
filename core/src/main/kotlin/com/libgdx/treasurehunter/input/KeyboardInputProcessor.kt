@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input
 import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackState
+import com.libgdx.treasurehunter.ecs.components.AttackType
 import ktx.app.KtxInputAdapter
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Jump
@@ -47,11 +48,12 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
         playerEntities.forEach { it[Jump].wantsJump = jump}
     }
 
-    private fun updatePlayerAttack(attack : Boolean){
+    private fun updatePlayerAttack(attackType: AttackType,attack : Boolean){
         playerEntities.forEach { playerEntity ->
             val attackComp = playerEntity[Attack]
             if (attackComp.attackState == AttackState.READY){
                 attackComp.wantsToAttack = true
+                attackComp.attackType = attackType
             }
         }
     }
@@ -61,8 +63,10 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
         when(keycode){
             Input.Keys.D -> updatePlayerMovement(1)
             Input.Keys.A -> updatePlayerMovement(-1)
-            Input.Keys.W -> updatePlayerJump(true)
-            Input.Keys.SPACE -> updatePlayerAttack(true)
+            Input.Keys.SPACE -> updatePlayerJump(true)
+            Input.Keys.NUMPAD_3 -> updatePlayerAttack(AttackType.THIRD_ATTACK,true)
+            Input.Keys.NUMPAD_2 -> updatePlayerAttack(AttackType.SECONDARY_ATTACK,true)
+            Input.Keys.NUMPAD_1 -> updatePlayerAttack(AttackType.FIRST_ATTACK,true)
         }
 
         return false
@@ -72,8 +76,10 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
         when(keycode){
             Input.Keys.D -> updatePlayerMovement(-1)
             Input.Keys.A -> updatePlayerMovement(1)
-            Input.Keys.W -> updatePlayerJump(false)
-            Input.Keys.SPACE -> updatePlayerAttack(false)
+            Input.Keys.SPACE -> updatePlayerJump(false)
+            Input.Keys.NUMPAD_3 -> updatePlayerAttack(AttackType.THIRD_ATTACK,false)
+            Input.Keys.NUMPAD_2 -> updatePlayerAttack(AttackType.SECONDARY_ATTACK,false)
+            Input.Keys.NUMPAD_1 -> updatePlayerAttack(AttackType.FIRST_ATTACK,false)
         }
         return false
     }
