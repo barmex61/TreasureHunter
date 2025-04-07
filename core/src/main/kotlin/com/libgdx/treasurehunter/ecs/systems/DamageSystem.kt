@@ -28,7 +28,7 @@ class DamageSystem : IteratingSystem(family = family{all(Life,DamageTaken).none(
             entity.configure {
                 it += Invulnarable(1f)
                 it += Blink(1f,0.075f)
-                it += Flash(color = Color.RED, flashAmount = 2, flashDuration = 0.1f, flashInterval = 0.2f)
+                it += Flash(color = Color.RED, flashAmount = 1, flashDuration = 0.08f, flashInterval = 0.15f)
                 entity[State].stateMachine.changeState(PlayerState.HIT)
             }
         }

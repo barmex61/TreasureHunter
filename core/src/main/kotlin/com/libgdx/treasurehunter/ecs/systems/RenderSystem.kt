@@ -23,6 +23,7 @@ import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.ShaderAsset
 import com.libgdx.treasurehunter.enums.ShaderEffect
 import com.libgdx.treasurehunter.shaders.ShaderManager
+import ktx.graphics.copy
 
 class RenderSystem (
     private val spriteBatch: SpriteBatch = inject(),
@@ -40,7 +41,9 @@ class RenderSystem (
     private var backgroundFar : TiledMapTileLayer? = null
     private var backgroundMid : TiledMapTileLayer? = null
     private var currentColorSettings: ColorSettings = ColorSettings.DAY
-    private val shaderManager: ShaderManager = ShaderManager(assetHelper[ShaderAsset.FLASH])
+    private val shaderManager: ShaderManager = ShaderManager(assetHelper[ShaderAsset.FLASH], onShaderEffectChange = { shaderProgram ->
+        spriteBatch.shader = shaderProgram
+    })
     private val mapRenderer: OrthogonalTiledMapRenderer = OrthogonalTiledMapRenderer(null, Constants.UNIT_SCALE, spriteBatch).apply {
         setView(gameCamera)
     }
@@ -48,8 +51,6 @@ class RenderSystem (
     override fun onTick() {
         gameViewPort.apply()
         mapRenderer.setView(gameCamera)
-
-        spriteBatch.shader = shaderManager.shader
         spriteBatch.use {
             mapRenderer.renderTileLayer(backgroundFar)
             mapRenderer.renderTileLayer(backgroundMid)
@@ -59,29 +60,17 @@ class RenderSystem (
             entities.renderEntities()
             foregroundEntities.renderEntities()
         }
-        spriteBatch.shader = null
     }
 
     private fun Family.renderEntities() {
         sort(entityComparator)
-
-        val previousShaderEffect = shaderManager.currentShaderEffect
-
         forEach { entity ->
             val sprite = entity[Graphic].sprite
-            sprite.color = currentColorSettings.entityColor
-
+            sprite.color = currentColorSettings.entityColor.copy(alpha = sprite.color.a)
             val flashCmp = entity.getOrNull(Flash)
             if (flashCmp != null && flashCmp.doFlash) {
-                println("APPPLY")
                 sprite.color = flashCmp.color
-                //shaderManager.applyShaderEffect(ShaderEffect.BURN_EFFECT)
-            } else {
-                previousShaderEffect?.let {
-                    //shaderManager.applyShaderEffect(it)
-                }
             }
-            spriteBatch.shader = shaderManager.shader
             entity[Graphic].sprite.draw(spriteBatch)
         }
     }

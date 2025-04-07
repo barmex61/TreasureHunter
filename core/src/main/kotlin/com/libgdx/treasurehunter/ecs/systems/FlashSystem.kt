@@ -22,7 +22,6 @@ class FlashSystem : IteratingSystem(family { all(Flash, Graphic) }) {
             doFlash = flashDurationTimer >= 0f
         }else{
             if (flashIntervalTimer >= 0f){
-                doFlash = false
                 flashIntervalTimer -= deltaTime
             }else{
                 doFlash = true

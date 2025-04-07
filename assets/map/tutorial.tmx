@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="46">
  <properties>
-  <property name="mapDisplayMode" propertytype="MapDisplayMode" value="FOREST"/>
+  <property name="mapDisplayMode" propertytype="MapDisplayMode" value="NIGHT"/>
  </properties>
  <tileset firstgid="1" source="terrainTileset.tsx"/>
  <tileset firstgid="86" source="objects.tsx"/>
  <tileset firstgid="119" source="islandBackground.tsx"/>
- <layer id="5" name="background_far" width="64" height="20" parallaxx="0" parallaxy="0">
+ <layer id="5" name="background_far" width="64" height="20">
   <data encoding="base64" compression="zlib">
    eJzt0kkOgkAURdGSTaDYuwp3Yoei7n8OWnZ3ABODIgUYoi/hhEF9Uv8mxMaYBCecYXHBFTfcYTo88BD/2Hzb91O/+tWvfvWrX/3qV7/61V9t3oqkfP6JLnoI0McAQ4wwxgRTzGo4L3PX82zZXT+Zmf+5BZZYYY0NQmxx+LJ9+j46CAtadohy7sj75tV+2WwdrUU9Li0uXO5519XUnk15ANavTa8=
   </data>

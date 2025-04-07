@@ -92,21 +92,30 @@ class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,p
     }
 
     override fun render(delta: Float) {
+        // --- FOR DEBUG PURPOSES ---
         if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_5)) {
+            println("Numpad 5 pressed")
             world.system<RenderSystem>().setShaderEffect(ShaderEffect.BURN_EFFECT)
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_6)) {
+            println("Numpad 6 pressed")
             world.system<RenderSystem>().setShaderEffect(ShaderEffect.HEAL_EFFECT)
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_7)) {
+            println("Numpad 7 pressed")
             world.system<RenderSystem>().setShaderEffect(ShaderEffect.FREEZE_EFFECT)
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_8)) {
+            println("Numpad 8 pressed")
             world.system<RenderSystem>().setShaderEffect(ShaderEffect.POISON_EFFECT)
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_9)) {
+            println("Numpad 9 pressed")
             world.system<RenderSystem>().setShaderEffect(ShaderEffect.NORMAL)
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_4)) {
+            println("Numpad 4 pressed")
             world.system<RenderSystem>().setShaderEffect(ShaderEffect.INVISIBLE_EFFECT)
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_0)) {
+            println("Numpad 0 pressed")
             world.system<RenderSystem>().setShaderEffectFromColorSettings()
         }
+        // ------------------
         world.update(delta)
     }
 
