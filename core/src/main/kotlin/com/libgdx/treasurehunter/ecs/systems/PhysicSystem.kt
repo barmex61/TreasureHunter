@@ -11,8 +11,12 @@ import com.github.quillraven.fleks.Fixed
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
+import com.libgdx.treasurehunter.ecs.components.Damage
+import com.libgdx.treasurehunter.ecs.components.DamageTaken
+import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Jump
+import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.game.PhysicWorld
@@ -77,17 +81,56 @@ class PhysicSystem (
             get() = this.userData == "ground"
         val Fixture.isPlatform : Boolean
             get() = this.userData == "platform"
+        val Fixture.isFlag : Boolean
+            get() = this.userData == "flag"
+        val Fixture.isShipHelm : Boolean
+            get() = this.userData == "shipHelm"
+        val Fixture.isChest : Boolean
+            get() = this.userData == "chest"
 
     }
     private val Fixture.isPlayerFoot : Boolean
         get() = this.userData == "footFixture"
+
+    private val Fixture.isHitbox : Boolean
+        get() = this.userData == "hitbox"
+
+    private val Entity.isPlayer : Boolean
+        get() = this.has(EntityTag.PLAYER)
+
+
+    private fun handleDamageBeginContact(damageSource: Entity, damageTarget: Entity) = with(world){
+        val (damageAmount) = damageSource[Damage]
+        damageTarget.configure {
+            val damageTakenComp = it.getOrAdd(DamageTaken){ DamageTaken(0) }
+            damageTakenComp.damageAmount = (damageTakenComp.damageAmount + damageAmount).coerceAtMost(damageAmount)
+        }
+    }
+
+    private fun handleDamageEndContact(damageSource: Entity, damageTarget: Entity) = with(world){
+        damageTarget.getOrNull(DamageTaken)?.let {
+            val (damageAmount) = damageSource[Damage]
+            it.damageAmount -= damageAmount
+            if (it.damageAmount <= 0){
+                damageTarget.configure { it -= DamageTaken }
+            }
+        }
+    }
+
+    private fun isDamageCollision(entityA: Entity,entityB: Entity,fixtureA: Fixture,fixtureB:Fixture) : Boolean{
+        return  entityA has Damage && entityB has Life && fixtureB.isSensor && fixtureA.isHitbox && fixtureB.isHitbox
+    }
 
     override fun beginContact(contact: Contact) {
         val fixtureA = contact.fixtureA
         val fixtureB = contact.fixtureB
         val entityA = fixtureA.entity
         val entityB = fixtureB.entity
-
+        if (entityA == null || entityB == null) return
+        when {
+            isDamageCollision(entityA,entityB,fixtureA,fixtureB) -> handleDamageBeginContact(entityA,entityB)
+            isDamageCollision(entityB,entityA,fixtureB,fixtureA) -> handleDamageBeginContact(entityB,entityA)
+        }
 
     }
 
@@ -96,7 +139,13 @@ class PhysicSystem (
         val fixtureB = contact.fixtureB
         val entityA = fixtureA.entity
         val entityB = fixtureB.entity
-
+        if (entityA == null || entityB == null){
+            return
+        }
+        when {
+            isDamageCollision(entityA,entityB,fixtureA,fixtureB) ->  handleDamageEndContact(entityA,entityB)
+            isDamageCollision(entityB,entityA,fixtureB,fixtureA) -> handleDamageEndContact(entityB,entityA)
+        }
     }
 
     override fun preSolve(contact: Contact, oldManifold: Manifold) {

@@ -31,11 +31,12 @@ class AttackSystem(
     override fun onTickEntity(entity: Entity) {
         val attackComp = entity[Attack]
         val animComp = entity[Animation]
+        val (_,_,center) = entity[Graphic]
         val (attackDamage, wantsToAttack, attackState,attackBody,attackDuration,attackType,currentAttackKeyFrameIx) = attackComp
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
-                    attackComp.attackBody = createAttackBody(entity)
+                    attackComp.attackBody = createAttackBody(center,entity)
                     attackComp.attackState = AttackState.ATTACKING
                 }
             }
@@ -49,8 +50,7 @@ class AttackSystem(
                         attackComp.currentAttackAnimKeyFrameIx = keyFrameIndex
                     }
                     // --- Sync attack body position with graphic component ----
-                    val centerPosition = entityCenterPosition(entity)
-                    attackBody.setTransform(centerPosition, attackBody.angle)
+                    attackBody.setTransform(center, attackBody.angle)
                 }
                 attackComp.attackDuration -= deltaTime
                 if (attackComp.attackDuration <= 0f) {
@@ -60,11 +60,6 @@ class AttackSystem(
             AttackState.DONE -> {
                 resetAttackComp(attackComp)
             }}
-        }
-
-    private fun entityCenterPosition(entity: Entity): Vector2 {
-        val graphicComp = entity[Graphic]
-        return vec2(graphicComp.sprite.x + graphicComp.sprite.width / 2f, graphicComp.sprite.y + graphicComp.sprite.height / 2f)
     }
 
     private fun resetAttackComp(attackComp: Attack) {
@@ -77,8 +72,7 @@ class AttackSystem(
         attackComp.attackDuration = 1f
     }
 
-    private fun createAttackBody(attackerEntity: Entity): Body {
-        val centerPosition = entityCenterPosition(attackerEntity)
+    private fun createAttackBody(centerPosition : Vector2,attackerEntity: Entity): Body {
         val attackBody = physicWorld.createBody(BodyDef().apply {
             type = BodyDef.BodyType.StaticBody
             position.set(centerPosition.x,centerPosition.y )

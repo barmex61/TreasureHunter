@@ -4,9 +4,10 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 
 data class Life(
-    val maxLife : Float ,
-    val currentLife : Float  = maxLife,
-    var damageTaken : Float = 0f,
+    val maxLife : Int,
+    var currentLife : Int  = maxLife,
+    var damageTaken : Int = 0,
+    var isDead : Boolean = false
 ) : Component <Life> {
 
     override fun type() = Life

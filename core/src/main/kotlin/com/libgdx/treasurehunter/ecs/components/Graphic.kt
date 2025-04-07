@@ -4,9 +4,10 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
+import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.vec2
 
-data class Graphic(val sprite : Sprite) : Component <Graphic> , Comparable<Graphic> {
+data class Graphic(val sprite : Sprite,val gameObject: GameObject) : Component <Graphic> , Comparable<Graphic> {
 
     val center  = vec2()
         get(){
@@ -15,7 +16,7 @@ data class Graphic(val sprite : Sprite) : Component <Graphic> , Comparable<Graph
             return field
         }
 
-    operator fun component2() = center
+    operator fun component3() = center
 
     override fun type() = Graphic
 

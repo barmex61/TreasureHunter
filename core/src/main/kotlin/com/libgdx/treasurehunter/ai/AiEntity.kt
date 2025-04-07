@@ -13,6 +13,7 @@ import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackState
+import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
@@ -35,6 +36,10 @@ data class AiEntity(
     val wantsToAttack : Boolean
         get() = this[Attack].wantsToAttack && this[Attack].attackState == AttackState.READY
 
+    val hit : Boolean
+        get() = this.getOrNull(DamageTaken) != null
+
+
     // ------ CAN BE REMOVED -------
 
     var currentAnimType = AnimationType.IDLE
@@ -48,9 +53,15 @@ data class AiEntity(
         return entity[type]
     }
 
+    inline fun <reified T: Component<*>> getOrNull(type: ComponentType<T>) : T? = with(world){
+        return entity.getOrNull(type)
+    }
+
+
     fun destroy() = with(world){
         entity.remove()
     }
+
 
     fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float = this[Animation].frameDuration){
         world.animation(entity,animationType,playMode,frameDuration)
@@ -63,20 +74,20 @@ data class AiEntity(
     }
 
     fun inRange(range: Float, targetEntity: Entity): Boolean = with(world){
-        val (_,targetCenter) = targetEntity[Graphic]
+        val (_,_,targetCenter) = targetEntity[Graphic]
         return@with inRange(targetCenter,range)
     }
 
     fun inRange(location:Vector2,tolerance:Float) : Boolean = with(world){
-        val (_,center) = entity[Graphic]
+        val (_,_,center) = entity[Graphic]
         val diffX = (center.x - location.x)
         val diffY = (center.y - location.y)
         return@with diffX.pow(2) + diffY.pow(2) < tolerance.pow(2)
     }
 
     fun move(targetEntity: Entity) = with(world) {
-        val (_,center) = entity[Graphic]
-        val (_,targetCenter) = targetEntity[Graphic]
+        val (_,_,center) = entity[Graphic]
+        val (_,_,targetCenter) = targetEntity[Graphic]
 
         val diffX = (center.x - targetCenter.x)
         val diffY = (center.y - targetCenter.y)

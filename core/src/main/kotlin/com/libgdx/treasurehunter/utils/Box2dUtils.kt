@@ -59,6 +59,7 @@ fun fixtureDefinitionOf(mapObject: MapObject): FixtureDefUserData {
         friction = mapObject.property("friction",0f)
         restitution = mapObject.property("restitution",0f)
         isSensor = mapObject.property("isSensor",false)
+
         density = mapObject.property("density",0f)
     }
     return FixtureDefUserData(fixtureDef,userData)

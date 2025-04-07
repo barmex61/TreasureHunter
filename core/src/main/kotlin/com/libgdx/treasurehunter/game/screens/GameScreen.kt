@@ -9,9 +9,12 @@ import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.configureWorld
 import com.libgdx.treasurehunter.ecs.systems.AnimationSystem
 import com.libgdx.treasurehunter.ecs.systems.AttackSystem
+import com.libgdx.treasurehunter.ecs.systems.BlinkSystem
 import com.libgdx.treasurehunter.ecs.systems.CameraSystem
+import com.libgdx.treasurehunter.ecs.systems.DamageSystem
 import com.libgdx.treasurehunter.ecs.systems.DebugSystem
 import com.libgdx.treasurehunter.ecs.systems.GlProfilerSystem
+import com.libgdx.treasurehunter.ecs.systems.InvulnarableSystem
 import com.libgdx.treasurehunter.ecs.systems.JumpSystem
 import com.libgdx.treasurehunter.ecs.systems.MoveSystem
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem
@@ -56,6 +59,9 @@ class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,p
         systems {
             add(StateSystem())
             add(MoveSystem())
+            add(DamageSystem())
+            add(BlinkSystem())
+            add(InvulnarableSystem())
             add(AttackSystem())
             add(JumpSystem())
             add(PhysicSystem())
@@ -64,6 +70,7 @@ class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,p
             add(GlProfilerSystem())
             add(RenderSystem())
             add(DebugSystem())
+
         }
     }
 

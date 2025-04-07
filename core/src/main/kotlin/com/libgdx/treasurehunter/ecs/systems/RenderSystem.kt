@@ -13,7 +13,6 @@ import com.github.quillraven.fleks.World.Companion.inject
 import com.github.quillraven.fleks.collection.compareEntityBy
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
-import com.libgdx.treasurehunter.ecs.systems.CameraSystem.Companion.cameraPos
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.utils.Constants
@@ -64,9 +63,7 @@ class RenderSystem (
         when(event) {
             is GameEvent.MapChangeEvent -> {
                 try {
-                    event.tiledMap.layers.forEach {
-                        println(it.name)
-                    }
+
                     groundLayer = event.tiledMap.layers.get("ground") as TiledMapTileLayer
                     backgroundClose = event.tiledMap.layers.get("background_close") as TiledMapTileLayer
                     backgroundFar = event.tiledMap.layers.get("background_far") as TiledMapTileLayer
@@ -75,8 +72,8 @@ class RenderSystem (
                 }catch (e: Exception){
                     gdxError("There is no layer name registerede for $e in tiledMap ${event.tiledMap}")
                 }
-
             }
+            else -> Unit
         }
     }
 

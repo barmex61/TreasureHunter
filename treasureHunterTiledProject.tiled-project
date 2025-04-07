@@ -31,7 +31,7 @@
                 "BACKGROUND",
                 "FOREGROUND"
             ],
-            "valuesAsFlags": false
+            "valuesAsFlags": true
         },
         {
             "id": 3,
@@ -44,7 +44,15 @@
                 "CAPTAIN_CLOWN_SWORD",
                 "BACK_PALM_TREE_LEFT",
                 "BACK_PALM_TREE_RIGHT",
-                "BACK_PALM_TREE_REGULAR"
+                "BACK_PALM_TREE_REGULAR",
+                "FRONT_PALM_TREE",
+                "PALM_TREE_BOTTOM_LEFT",
+                "PALM_TREE_BOTTOM_RIGHT",
+                "PALM_TREE_BOTTOM_REGULAR",
+                "CHEST",
+                "SPIKES",
+                "FLAG",
+                "SHIP_HELM"
             ],
             "valuesAsFlags": false
         },
@@ -56,8 +64,7 @@
             "values": [
                 "NONE",
                 "IDLE",
-                "IDLE_SWORD",
-                "JUMP_SWORD"
+                "IDLE_SWORD"
             ],
             "valuesAsFlags": false
         }

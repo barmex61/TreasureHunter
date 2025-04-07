@@ -11,6 +11,11 @@ import com.badlogic.gdx.physics.box2d.World
 import com.github.quillraven.fleks.Fixed
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.World.Companion.inject
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.Entity
+import com.libgdx.treasurehunter.ecs.components.Move
+import com.github.quillraven.fleks.EntityComponentContext
+import com.libgdx.treasurehunter.ecs.components.Physic
 import ktx.graphics.use
 
 class DebugSystem(
@@ -40,8 +45,7 @@ class DebugSystem(
     companion object{
         val JUMP_DEBUG_RECT = Rectangle()
         var JUMP_DEBUG_VECTOR_NORM = floatArrayOf()
+
     }
-
-
 }
 

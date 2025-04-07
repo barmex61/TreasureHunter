@@ -1,11 +1,13 @@
 package com.libgdx.treasurehunter.tiled
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
@@ -25,7 +27,15 @@ import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.CircleShape
+import com.github.quillraven.fleks.Entity
+import com.libgdx.treasurehunter.ecs.components.Animation
+import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.Damage
+import com.libgdx.treasurehunter.ecs.components.Graphic
+import com.libgdx.treasurehunter.ecs.components.Jump
+import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.utils.Constants.OBJECT_FIXTURES
 import com.libgdx.treasurehunter.utils.GameObject
@@ -54,6 +64,7 @@ class TiledMapService (
             is GameEvent.MapChangeEvent -> {
                 spawnEntities(event.tiledMap)
             }
+            else -> Unit
         }
     }
 
@@ -86,6 +97,7 @@ class TiledMapService (
                 spawnEntity(mapObject)
             }
         }
+        logEntities()
     }
 
     private fun spawnEntity(mapObject: MapObject){
@@ -93,13 +105,17 @@ class TiledMapService (
             gdxError("mapObject of type $mapObject is not supported")
         }
         val tile = mapObject.tile
+        val gameObjectStr = tile.property<String>("gameObject")
+        val gameObject = GameObject.valueOf(gameObjectStr)
+        val fixtureDefUserData = OBJECT_FIXTURES[gameObject]
+        if (fixtureDefUserData == null){
+            spawnBodilessEntities(mapObject,tile,gameObject)
+            return
+        }
+
         val bodyType = tile.property<String>("bodyType","StaticBody")
         val gravityScale = tile.property<Float>("gravityScale",1f)
-        val gameObjectStr = tile.property<String>("gameObject")
         val rotation = mapObject.rotation
-        val gameObject = GameObject.valueOf(gameObjectStr)
-        val fixtureDefUserData = OBJECT_FIXTURES[gameObject]?: gdxError("No fixture definitions for ${gameObject.atlasKey}")
-
         val x = mapObject.x * UNIT_SCALE
         val y = mapObject.y * UNIT_SCALE
         val body = physicWorld.createBody(BodyType.valueOf(bodyType), vec2(x,y),rotation).apply {
@@ -110,11 +126,12 @@ class TiledMapService (
         world.entity {
             body.userData = it
             it += Physic(body)
-            configureEntityGraphic(it,tile,body,gameObject, assetHelper,world,rotation)
+            configureEntityGraphic(it,tile,body.position,gameObject, assetHelper,world,rotation)
             configureEntityTags(it,mapObject,tile)
             configureMove(it,tile)
             configureJump(it,tile)
             configureState(it,tile,world,physicWorld)
+            configureDamage(it,tile)
             configureAttack(it,tile)
             configureLife(it,tile)
         }
@@ -127,6 +144,34 @@ class TiledMapService (
         body.createFixtures(listOf(fixtureDefUserData))
     }
 
+    private fun spawnBodilessEntities(mapObject: TiledMapTileMapObject,tile : TiledMapTile,gameObject: GameObject){
+        world.entity {
+            val position = vec2(mapObject.x * UNIT_SCALE , mapObject.y * UNIT_SCALE)
+            configureEntityGraphic(it,tile,position,gameObject, assetHelper,world,0f)
+            configureEntityTags(it,mapObject,tile)
+        }
+    }
+
+    private fun logEntities(){
+        world.forEach {
+            val components = mutableListOf<String>()
+            if (it.has(Graphic)) {
+                components.add(it[Graphic].gameObject.toString())
+                components.add("Graphic")
+            }
+            if (it.has(Animation)) components.add("Animation")
+            if (it.has(Move)) components.add("Move")
+            if (it.has(Physic)) {
+                components.add("Physic ${it[Physic].body.userData}")
+            }
+            if (it.has(Jump)) components.add("Jump")
+            if (it.has(Attack)) components.add("Attack")
+            if (it.has(State)) components.add("State")
+            if (it.has(Damage)) components.add("Damage")
+
+            Gdx.app.log("EntityDebug", "Entity ${it.id} components: ${components.joinToString(", ")}")
+        }
+    }
 
     fun dispose() {
         OBJECT_FIXTURES.values.forEach { fixture ->

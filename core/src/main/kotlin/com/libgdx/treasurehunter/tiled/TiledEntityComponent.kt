@@ -25,8 +25,8 @@ import com.libgdx.treasurehunter.utils.Constants.UNIT_SCALE
 import com.libgdx.treasurehunter.utils.GameObject
 import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.ai.EntityState
-import com.libgdx.treasurehunter.ai.PalmTreeState
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Physic
 import ktx.app.gdxError
@@ -36,11 +36,10 @@ import ktx.tiled.propertyOrNull
 
 
 fun sprite(gameObject: GameObject, animationType: AnimationType, startPosition : Vector2,assetHelper: AssetHelper, rotation : Float = 0f): Sprite {
-    val animationPath = "${gameObject.atlasKey}/${animationType.atlasKey}"
+    val regionPath = "${gameObject.atlasKey}/${animationType.atlasKey}"
     val atlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
-    val regions = atlas.findRegions(animationPath) ?:
+    val regions = atlas.findRegions(regionPath) ?:
     gdxError("There are no regions for $gameObject and $animationType")
-    println(animationPath)
     val firstFrame = regions.first()
     val w = firstFrame.regionWidth * UNIT_SCALE
     val h = firstFrame.regionHeight * UNIT_SCALE
@@ -52,16 +51,16 @@ fun sprite(gameObject: GameObject, animationType: AnimationType, startPosition :
     }
 }
 
-fun EntityCreateContext.configureEntityGraphic(entity: Entity,tile: TiledMapTile,body: Body,gameObject: GameObject,assetHelper: AssetHelper,world: World,rotation : Float ){
+fun EntityCreateContext.configureEntityGraphic(entity: Entity,tile: TiledMapTile,position : Vector2,gameObject: GameObject,assetHelper: AssetHelper,world: World,rotation : Float ){
     val startAnimType = AnimationType.valueOf(tile.property("startAnimType","NONE"))
+    entity += Graphic(sprite(gameObject,startAnimType,position,assetHelper,rotation),gameObject)
     if (startAnimType != AnimationType.NONE){
-        entity += Graphic(sprite(gameObject,startAnimType,body.position,assetHelper,rotation))
         configureAnimation(entity,tile,world,startAnimType,gameObject)
     }
 }
 
 fun EntityCreateContext.configureAnimation(entity: Entity, tile: TiledMapTile, world: World,startAnimType : AnimationType,gameObject: GameObject) {
-    if (tile.property<Float>("animFrameDuration") == 0f) return
+    if (tile.property<Float>("animFrameDuration",0f) == 0f) return
     entity += Animation(frameDuration = tile.property<Float>("animFrameDuration"), gameObject = gameObject)
     world.animation(entity,startAnimType,)
 }
@@ -122,6 +121,13 @@ fun EntityCreateContext.configureEntityTags(
     }
 }
 
+fun EntityCreateContext.configureDamage(entity: Entity, tile: TiledMapTile){
+    val damage = tile.property<Int>("bodyDamage",0)
+    if (damage > 0f){
+        entity += Damage(damage = damage)
+    }
+}
+
 fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile){
     val damage = tile.property<Float>("attackDamage",0f)
     if (damage > 0f){
@@ -130,9 +136,9 @@ fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile){
 }
 
 fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){
-    val life = tile.property<Float>("life",0f)
+    val life = tile.property<Int>("life",0)
     if (life > 0f){
-        entity += Life(maxLife = life,)
+        entity += Life(maxLife = life)
     }
 }
 

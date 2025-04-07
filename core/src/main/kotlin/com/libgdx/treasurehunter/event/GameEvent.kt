@@ -4,6 +4,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap
 
 sealed class GameEvent {
     data class MapChangeEvent(val tiledMap : TiledMap) : GameEvent()
+    data class EntityLifeChangeEvent(val entityLife : Int) : GameEvent()
 }
 
 interface GameEventListener {

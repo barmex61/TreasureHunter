@@ -42,9 +42,9 @@ class LoadingScreen(
         val tileset = tiledMap.tileSets.getTileSet(0) ?: gdxError("There is no tileset in the ${MapAssets.OBJECT} tiledMap")
         tileset.forEach{ tile ->
             tile?:return@forEach
-            val gameObjectStr : String = tile.propertyOrNull("gameObject") ?: gdxError("Missing property 'GameObject' on tile ${tile.id} ")
+            val gameObjectStr : String = tile.propertyOrNull("gameObject") ?: return@forEach
             val objectFixtureDefinitions = tile.objects.map { fixtureDefinitionOf(it) }
-            if (objectFixtureDefinitions.isEmpty()) gdxError("No collision shapes defined for tile ${tile.id}")
+            if (objectFixtureDefinitions.isEmpty()) return@forEach
             OBJECT_FIXTURES[GameObject.valueOf(gameObjectStr)] = objectFixtureDefinitions
         }
     }
