@@ -2,38 +2,62 @@ package com.libgdx.treasurehunter.utils
 
 import com.libgdx.treasurehunter.ecs.components.AttackType
 
-val playerAttackVertices: Map<AttackType, FloatArray> = mapOf(
-    AttackType.FIRST_ATTACK to floatArrayOf(
-        0.25f,-0.3f,
-        0.25f,-0.15f,
-        0.8f,-0.15f,
-        0.8f,-0.3f,
+val playerAttackVertices: Map<AttackType, Map<Int,FloatArray> > = mapOf(
+
+    AttackType.FIRST_ATTACK to mapOf(
+        0 to floatArrayOf(
+            0.25f,-0.25f,
+            0.25f,-0.1f,
+            0.65f,-0.1f,
+            0.5f,-0.25f,
+        ),
+        1 to floatArrayOf(
+            0.6f,-0.25f,
+            0.6f,-0.1f,
+            1f,-0.1f,
+            0.85f,-0.25f,
+        )
     ),
 
-    AttackType.SECONDARY_ATTACK to floatArrayOf(
-        0.1f, 0.2f,
-        0.2f, 0.3f,
-        0.3f, 0.2f,
-        0.5f, 0.4f,
-        0.8f, 0.1f,
-        1.0f, -0.2f,
-        0.9f, -0.3f,
-        0.7f, -0.1f,
-        0.4f, 0.1f,
-        0.3f, 0.2f
+    AttackType.SECONDARY_ATTACK to mapOf(
+        0 to floatArrayOf(
+            0.4f, 0.18f,
+            0.25f, 0.18f,
+            0.25f, 0.58f,
+            0.4f, 0.43f
+        ),
+        1 to floatArrayOf(
+            0.63f, 0.25f,
+            0.83f, -0.1f,
+            0.88f,-0.25f,
+            0.79f, -0.62f,
+            0.43f, -0.4f,
+        )
     ),
 
-    AttackType.THIRD_ATTACK to floatArrayOf(
-        -0.1f, -0.1f,
-        0.0f, 0.1f,
-        0.1f, 0.2f,
-        0.4f, 0.3f,
-        0.7f, 0.2f,
-        1.0f, -0.1f,
-        0.7f, -0.4f,
-        0.4f, -0.5f,
-        0.1f, -0.4f,
-        0.0f, -0.3f,
-
+    AttackType.THIRD_ATTACK to mapOf(
+        0 to floatArrayOf(
+            -0.1f, -0.25f,
+            -0.1f, -0.1f,
+            -0.5f, -0.1f,
+            -0.35f, -0.25f
+        ),
+        1 to floatArrayOf(
+            0.35f, -0.3f,
+            0.7f,-0.1f,
+            0.83f, 0.1f,
+            0.88f, 0.25f,
+            0.79f, 0.62f,
+            0.43f, 0.4f
+        )
     )
 )
+
+fun FloatArray.mirrorVertices(): FloatArray {
+    val mirroredVertices = FloatArray(this.size)
+    for (i in this.indices step 2) {
+        mirroredVertices[i] = -this[i]
+        mirroredVertices[i + 1] = this[i + 1]
+    }
+    return mirroredVertices
+}

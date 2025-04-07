@@ -18,6 +18,7 @@ import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.game.PhysicWorld
 import ktx.math.component1
 import ktx.math.component2
+import kotlin.compareTo
 import kotlin.math.abs
 
 class PhysicSystem (
@@ -65,33 +66,50 @@ class PhysicSystem (
         )
     }
 
-    companion object{
-        val Fixture.isPlayerFoot : Boolean
-            get() = this.userData == "footFixture"
-
-        val Fixture.isGround : Boolean
-            get() = this.userData == "ground"
-    }
-
-
-
     private val Fixture.entity : Entity?
         get() {
             val userData = this.body.userData
             return userData as? Entity
         }
 
+    companion object{
+        val Fixture.isGround : Boolean
+            get() = this.userData == "ground"
+        val Fixture.isPlatform : Boolean
+            get() = this.userData == "platform"
+
+    }
+    private val Fixture.isPlayerFoot : Boolean
+        get() = this.userData == "footFixture"
 
     override fun beginContact(contact: Contact) {
+        val fixtureA = contact.fixtureA
+        val fixtureB = contact.fixtureB
+        val entityA = fixtureA.entity
+        val entityB = fixtureB.entity
 
 
     }
 
     override fun endContact(contact: Contact) {
+        val fixtureA = contact.fixtureA
+        val fixtureB = contact.fixtureB
+        val entityA = fixtureA.entity
+        val entityB = fixtureB.entity
 
     }
 
     override fun preSolve(contact: Contact, oldManifold: Manifold) {
+        val fixtureA = contact.fixtureA
+        val fixtureB = contact.fixtureB
+        val entityA = fixtureA.entity
+        val entityB = fixtureB.entity
+        if (fixtureA.isPlatform && entityB != null){
+            contact.isEnabled = entityB[Physic].body.linearVelocity.y <= 0.0001f
+        }
+        if (fixtureB.isPlatform && entityA != null){
+            contact.isEnabled = entityA[Physic].body.linearVelocity.y <= 0.0001f
+        }
     }
 
     override fun postSolve(contact: Contact, impulse: ContactImpulse) {

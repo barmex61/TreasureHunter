@@ -45,6 +45,11 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
     }
 
     fun updatePlayerJump(jump : Boolean){
+        if (jump) {
+            println("Space pressed")
+        }else{
+            println("Space released")
+        }
         playerEntities.forEach { it[Jump].wantsJump = jump}
     }
 

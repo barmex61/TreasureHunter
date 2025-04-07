@@ -4,26 +4,21 @@ import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
-import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile
 import com.badlogic.gdx.utils.viewport.StretchViewport
-import com.github.quillraven.fleks.EachFrame
-import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.Family
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import com.github.quillraven.fleks.collection.compareEntityBy
+import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
+import com.libgdx.treasurehunter.ecs.systems.CameraSystem.Companion.cameraPos
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.utils.Constants
 import ktx.app.gdxError
 import ktx.graphics.use
-import ktx.math.random
-import ktx.tiled.height
-import ktx.tiled.layer
-import ktx.tiled.use
-import ktx.tiled.width
 
 class RenderSystem (
     private val spriteBatch: SpriteBatch = inject(),
@@ -35,18 +30,27 @@ class RenderSystem (
         OrthogonalTiledMapRenderer(null, Constants.UNIT_SCALE, spriteBatch)
     }
     private val entityComparator = compareEntityBy(Graphic)
-    private val entities = family{all(Graphic)}
-
+    private val entities = family{all(Graphic).none(EntityTag.BACKGROUND,EntityTag.FOREGROUND)}
+    private val backgroundEntities = family { all(Graphic,EntityTag.BACKGROUND) }
+    private val foregroundEntities = family { all(Graphic,EntityTag.FOREGROUND) }
+    private var groundLayer : TiledMapTileLayer? = null
+    private var backgroundClose : TiledMapTileLayer? = null
+    private var backgroundFar : TiledMapTileLayer? = null
+    private var backgroundMid : TiledMapTileLayer? = null
 
     override fun onTick() {
         gameViewPort.apply()
-
         orthogonalTiledMapRenderer.setView(gameCamera)
-        orthogonalTiledMapRenderer.render()
         spriteBatch.use {
-            entities.renderEntities()
-        }
 
+            orthogonalTiledMapRenderer.renderTileLayer(backgroundFar)
+            orthogonalTiledMapRenderer.renderTileLayer(backgroundMid)
+            orthogonalTiledMapRenderer.renderTileLayer(backgroundClose)
+            backgroundEntities.renderEntities()
+            orthogonalTiledMapRenderer.renderTileLayer(groundLayer)
+            entities.renderEntities()
+            foregroundEntities.renderEntities()
+        }
     }
 
     private fun Family.renderEntities() {
@@ -60,7 +64,14 @@ class RenderSystem (
         when(event) {
             is GameEvent.MapChangeEvent -> {
                 try {
-                    orthogonalTiledMapRenderer.map = event.tiledMap
+                    event.tiledMap.layers.forEach {
+                        println(it.name)
+                    }
+                    groundLayer = event.tiledMap.layers.get("ground") as TiledMapTileLayer
+                    backgroundClose = event.tiledMap.layers.get("background_close") as TiledMapTileLayer
+                    backgroundFar = event.tiledMap.layers.get("background_far") as TiledMapTileLayer
+                    backgroundMid = event.tiledMap.layers.get("background_mid") as TiledMapTileLayer
+
                 }catch (e: Exception){
                     gdxError("There is no layer name registerede for $e in tiledMap ${event.tiledMap}")
                 }

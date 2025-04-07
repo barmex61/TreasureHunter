@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="6">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="27">
  <tileset firstgid="1" source="terrainTileset.tsx"/>
  <tileset firstgid="86" source="objects.tsx"/>
- <tileset firstgid="87" source="islandBackground.tsx"/>
+ <tileset firstgid="111" source="islandBackground.tsx"/>
  <layer id="5" name="background_far" width="64" height="20" parallaxx="0" parallaxy="0">
   <data encoding="base64" compression="zlib">
-   eJztz0kOglAQRdGPq3Andtix/zkqYLcJFezuACeE9iPG6Es4YUCRqusbY1ZYY4MAISJsscMeBxzh/9j8t9+nfvWrX/3qV7/61a9+9au/3XwgkjrhjAtiJLjihjseMA4Pek777012ZWeb3lpnpv/nBhhihDEmcDHF8sMW6duz4Fa0zDDP2ZH3T9F9r9l3tFb12LTYsNlT1tXVnV15Aly5nb4=
+   eJztzzkSglAQRdF2Bc7jKtyJE4q6/xwV58gbYGKhwBcoC19wioD+1X0DM9thjwNCHHHCGRdcccMdQcXmf/0+9atf/epXv/rVr371q1/9382HIpF6zayBJlpoo4MueuhjgCFGOfzPsut1NuutaWbGf26CKWaYYwEPS2xKto6+WwdeQssKfsyOuDfv7nvO5tGa1OPS4sJlz6euou4sygMu8efs
   </data>
  </layer>
- <layer id="6" name="background_mid" width="64" height="20" opacity="0.8" parallaxx="0.2" parallaxy="0.2">
+ <layer id="6" name="background_mid" width="64" height="20" parallaxx="0.2" parallaxy="0.2">
   <data encoding="base64" compression="zlib">
-   eJzt1VlOwlAUgOHeB+ZJ2QPKIIruQUYH8M0luBQWojthBkX2gIKACivgf+DBh8bcC2mAcP7ke2l6ktM2bS1Lkg6vZ7xonvuknNzk/zrooodXvKGPdwxQQx0NNNFC22BOp6oy32Od7O7zBFPM8I0f/GKOBYb4wCdGGOPLYE430z2s1R4mVW2uP8CxIEIII4IjHCMKF9zwwAsf/Ep/Trd199j03Ukxf4Y0znGBDC5xhRhOcIo4Ekgq/Tmn97B7piaVmL/BLe5wjzIqeMA1ssghjwKKSn/O6T0k6W/b/JfuQpt+D6T96lGetyRJkrSDLQENDlgx
+   eJzt1UlOAkEUgGEKEcQ7MAgIwh1EBhnvADIpw84jeBQOojdhkFG5g8LPjkXHVEE6YHh/8i3o1EteaLpxOCTp/HrHh+bZN2XnJn83xQxzLLDEF76xwgBDjDDGJyYGczr1lfke+2T1PV9wzYVLuOHBFby4xg9nfrHeHuazglPpz+lmusc2p+Hvpm9xPsy1CG4RRQx3iCMBH/wIIIgbhJT+nG777nHos5Nl/hE55FFAESWUcY8kHpBCGhmlP2f3Hlb31KQm8y084wVtdNBFDxVU8YQa6mgo/Tm795Ck3Y75X3oKHfo+kP5Xr3K/JUmSpBNsA5HRTd4=
   </data>
  </layer>
  <layer id="7" name="background_close" width="64" height="20" parallaxx="0.5" parallaxy="0.5">
   <data encoding="base64" compression="zlib">
-   eJzt1FsKwCAMRNG42L4W0teuO/9FSCGxCvfAfFbSOGgGvE3FbFYWZVW28vdEfhGz7/rmUE7lUu6E/8/acYvZI4wyJ74b+f2IQLfz0bGcjkXs1XNGr/cXsVfPGbwRdb12oxW6AQDI9AC3niox
+   eJzt1FsKwCAMRNG48L4W0tdOO/9FSCGxCvfAfFbSOGgGvE3FbFYWZVW28vdEfhGz7/rmUE7lUu6E/8/acYvZI4wyJ74b+f2IQLfz0bGcjkXs1XNGr/cXsVfPGbwRdb12oxW6AQDI9AA12DKh
   </data>
  </layer>
  <layer id="1" name="ground" width="64" height="20">
@@ -25,5 +25,21 @@
  </layer>
  <objectgroup id="3" name="objects">
   <object id="4" gid="86" x="369" y="360" width="64" height="40"/>
+  <object id="23" gid="102" x="480" y="352" width="51" height="53">
+   <properties>
+    <property name="entityTags" propertytype="EntityTags" value="FOREGROUND"/>
+   </properties>
+  </object>
+  <object id="25" gid="108" x="416" y="352" width="52" height="53">
+   <properties>
+    <property name="entityTags" propertytype="EntityTags" value="FOREGROUND"/>
+    <property name="gameObject" propertytype="GameObject" value="BACK_PALM_TREE_RIGHT"/>
+   </properties>
+  </object>
+  <object id="26" gid="105" x="553" y="382" width="64" height="64">
+   <properties>
+    <property name="entityTags" propertytype="EntityTags" value="BACKGROUND"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

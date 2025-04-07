@@ -9,8 +9,8 @@ import com.libgdx.treasurehunter.utils.GameObject
 
 typealias GdxAnimation = com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>
 
-enum class AnimationType{
-    NONE,AIR_ATTACK_1, AIR_ATTACK_2, ATTACK_1, ATTACK_2, ATTACK_3, FALL, GROUND, HIT, IDLE, JUMP, RUN, THROW, DEAD_GROUND, DEAD_HIT,;
+enum class AnimationType(val isAttackAnimation : Boolean = false){
+    NONE,AIR_ATTACK_1(true), AIR_ATTACK_2(true), ATTACK_1(true), ATTACK_2(true), ATTACK_3(true), FALL, GROUND, HIT, IDLE, JUMP, RUN, THROW, DEAD_GROUND, DEAD_HIT,;
     val atlasKey : String = this.name.lowercase()
 }
 
@@ -22,7 +22,13 @@ data class Animation(
     var animationType: AnimationType = AnimationType.IDLE,
     val gameObject: GameObject
 ) : Component<Animation> {
-
+    fun getAttackAnimKeyFrameIx() : Int{
+        return if (animationType.isAttackAnimation){
+            gdxAnimation?.getKeyFrameIndex(timer) ?: 0
+        }else{
+            -1
+        }
+    }
     override fun type() : ComponentType<Animation> = Animation
     companion object : ComponentType<Animation>()
 }

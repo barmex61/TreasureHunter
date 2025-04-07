@@ -27,7 +27,9 @@
             "storageType": "string",
             "type": "enum",
             "values": [
-                "PLAYER"
+                "PLAYER",
+                "BACKGROUND",
+                "FOREGROUND"
             ],
             "valuesAsFlags": false
         },
@@ -39,7 +41,10 @@
             "values": [
                 "GROUND",
                 "CAPTAIN_CLOWN",
-                "CAPTAIN_CLOWN_SWORD"
+                "CAPTAIN_CLOWN_SWORD",
+                "BACK_PALM_TREE_LEFT",
+                "BACK_PALM_TREE_RIGHT",
+                "BACK_PALM_TREE_REGULAR"
             ],
             "valuesAsFlags": false
         },

@@ -25,7 +25,8 @@ data class Attack(
     var attackState : AttackState = AttackState.READY,
     var attackBody : Body? = null,
     var attackDuration : Float = 1f,
-    var attackType : AttackType = AttackType.FIRST_ATTACK
+    var attackType : AttackType = AttackType.FIRST_ATTACK,
+    var currentAttackAnimKeyFrameIx : Int = -1
 
 ) : Component <Attack> {
 

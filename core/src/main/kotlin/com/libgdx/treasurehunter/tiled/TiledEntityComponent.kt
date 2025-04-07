@@ -25,6 +25,7 @@ import com.libgdx.treasurehunter.utils.Constants.UNIT_SCALE
 import com.libgdx.treasurehunter.utils.GameObject
 import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.ai.EntityState
+import com.libgdx.treasurehunter.ai.PalmTreeState
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Physic
@@ -39,6 +40,7 @@ fun sprite(gameObject: GameObject, animationType: AnimationType, startPosition :
     val atlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
     val regions = atlas.findRegions(animationPath) ?:
     gdxError("There are no regions for $gameObject and $animationType")
+    println(animationPath)
     val firstFrame = regions.first()
     val w = firstFrame.regionWidth * UNIT_SCALE
     val h = firstFrame.regionHeight * UNIT_SCALE
@@ -102,8 +104,8 @@ fun EntityCreateContext.configureState(entity: Entity, tile: TiledMapTile,world:
     val state : EntityState = when(gameObjectStr){
         GameObject.CAPTAIN_CLOWN.name -> PlayerState.IDLE
         GameObject.CAPTAIN_CLOWN_SWORD.name -> PlayerState.IDLE
-        "" -> return
-        else -> gdxError("gameObject $gameObjectStr doesn't support ")
+
+        else -> return
     }
     entity += State(AiEntity(entity, world, physicWorld),state)
 }

@@ -37,7 +37,6 @@ class CameraSystem(
             camX = MathUtils.lerp(gameCamera.position.x,camX.coerceIn(viewportW, maxOf(mapBoundaries.x - viewportW, viewportW)),deltaTime * 4)
             camY = MathUtils.lerp(gameCamera.position.y,camY.coerceIn(viewportH, maxOf(mapBoundaries.y - viewportH, viewportH)),deltaTime * 4)
         }
-
         gameCamera.position.set(camX, camY, 0f)
         gameCamera.update()
 

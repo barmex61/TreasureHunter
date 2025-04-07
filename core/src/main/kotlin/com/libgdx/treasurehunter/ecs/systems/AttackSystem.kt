@@ -1,6 +1,5 @@
 package com.libgdx.treasurehunter.ecs.systems
 
-import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
@@ -10,12 +9,15 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
+import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackState
 import com.libgdx.treasurehunter.ecs.components.AttackType
 import com.libgdx.treasurehunter.ecs.components.Graphic
+import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.game.PhysicWorld
+import com.libgdx.treasurehunter.utils.mirrorVertices
 import com.libgdx.treasurehunter.utils.playerAttackVertices
 
 import ktx.math.vec2
@@ -28,16 +30,28 @@ class AttackSystem(
 
     override fun onTickEntity(entity: Entity) {
         val attackComp = entity[Attack]
-
-        val (attackDamage, wantsToAttack, attackState,attackBody,attackDuration,attackType) = attackComp
+        val animComp = entity[Animation]
+        val (attackDamage, wantsToAttack, attackState,attackBody,attackDuration,attackType,currentAttackKeyFrameIx) = attackComp
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
-                    attackComp.attackBody = createAttackBody(entity,attackType)
+                    attackComp.attackBody = createAttackBody(entity)
                     attackComp.attackState = AttackState.ATTACKING
                 }
             }
             AttackState.ATTACKING -> {
+                attackBody?.let {
+                    // ---- Current attack fixture set up -----
+                    val keyFrameIndex = animComp.getAttackAnimKeyFrameIx()
+                    if (keyFrameIndex != currentAttackKeyFrameIx){
+                        val flipX = entity.getOrNull(Move)?.flipX == true
+                        createAttackFixture(keyFrameIndex,attackBody,attackType,flipX)
+                        attackComp.currentAttackAnimKeyFrameIx = keyFrameIndex
+                    }
+                    // --- Sync attack body position with graphic component ----
+                    val centerPosition = entityCenterPosition(entity)
+                    attackBody.setTransform(centerPosition, attackBody.angle)
+                }
                 attackComp.attackDuration -= deltaTime
                 if (attackComp.attackDuration <= 0f) {
                     attackComp.attackState = AttackState.DONE
@@ -47,6 +61,11 @@ class AttackSystem(
                 resetAttackComp(attackComp)
             }}
         }
+
+    private fun entityCenterPosition(entity: Entity): Vector2 {
+        val graphicComp = entity[Graphic]
+        return vec2(graphicComp.sprite.x + graphicComp.sprite.width / 2f, graphicComp.sprite.y + graphicComp.sprite.height / 2f)
+    }
 
     private fun resetAttackComp(attackComp: Attack) {
         attackComp.attackBody?.let { body ->
@@ -58,29 +77,35 @@ class AttackSystem(
         attackComp.attackDuration = 1f
     }
 
-    private fun createAttackBody(attackerEntity: Entity, attackType: AttackType): Body {
-        val physicComp = attackerEntity[Physic]
-        val graphicComp = attackerEntity[Graphic]
-        val centerPosition = vec2(physicComp.body.position.x + graphicComp.sprite.width/2f,physicComp.body.position.y + graphicComp.sprite.height/2f)
+    private fun createAttackBody(attackerEntity: Entity): Body {
+        val centerPosition = entityCenterPosition(attackerEntity)
         val attackBody = physicWorld.createBody(BodyDef().apply {
-            type = BodyDef.BodyType.DynamicBody
+            type = BodyDef.BodyType.StaticBody
             position.set(centerPosition.x,centerPosition.y )
             fixedRotation = true
             gravityScale = 0f
 
         }).apply { userData =  attackerEntity }
-        var shape = ChainShape()
-        val fixtureDef = FixtureDef().apply {
+        return attackBody
+    }
+
+    private fun createAttackFixture(keyFrameIndex : Int,attackBody : Body,attackType: AttackType,flipX : Boolean = false){
+        attackBody.fixtureList.forEach {
+            attackBody.destroyFixture(it)
+        }
+        if (keyFrameIndex == -1) return
+        val fixtureVertices = playerAttackVertices[attackType]?.get(keyFrameIndex)?:return
+        val mirroredVertices = if (flipX) fixtureVertices.mirrorVertices() else fixtureVertices
+        val attackFixtureDef = FixtureDef().apply {
             isSensor = true
-            this.shape = shape.apply {
-                this.createLoop(
-                    playerAttackVertices[attackType]
-                )
+            density = 0f
+            friction = 0f
+            restitution = 0f
+            shape = ChainShape().apply {
+                createLoop(mirroredVertices)
             }
         }
-        attackBody.createFixture(fixtureDef)
-        shape.dispose()
-        return attackBody
+        attackBody.createFixture(attackFixtureDef)
     }
 }
 
