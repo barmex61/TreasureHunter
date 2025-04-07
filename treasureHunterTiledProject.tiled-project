@@ -67,6 +67,23 @@
                 "IDLE_SWORD"
             ],
             "valuesAsFlags": false
+        },
+        {
+            "id": 5,
+            "name": "MapDisplayMode",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "DAY",
+                "NIGHT",
+                "CAVE",
+                "EVENING",
+                "DESERT",
+                "SNOW",
+                "FOREST",
+                "UNDERWATER"
+            ],
+            "valuesAsFlags": false
         }
     ]
 }

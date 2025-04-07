@@ -26,7 +26,8 @@ data class Attack(
     var attackBody : Body? = null,
     var attackDuration : Float = 1f,
     var attackType : AttackType = AttackType.FIRST_ATTACK,
-    var currentAttackAnimKeyFrameIx : Int = -1
+    var currentAttackAnimKeyFrameIx : Int = -1,
+    var isAttackFixtureMirrored : Boolean = false
 
 ) : Component <Attack> {
 

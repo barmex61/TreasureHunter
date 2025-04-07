@@ -9,7 +9,7 @@
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN_SWORD"/>
    <property name="gravityScale" type="float" value="1"/>
-   <property name="jumpHeight" type="float" value="2"/>
+   <property name="jumpHeight" type="float" value="3"/>
    <property name="life" type="int" value="3"/>
    <property name="speed" type="float" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>

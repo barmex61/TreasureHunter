@@ -1,6 +1,7 @@
 package com.libgdx.treasurehunter.game.screens
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TiledMap
@@ -13,6 +14,7 @@ import com.libgdx.treasurehunter.ecs.systems.BlinkSystem
 import com.libgdx.treasurehunter.ecs.systems.CameraSystem
 import com.libgdx.treasurehunter.ecs.systems.DamageSystem
 import com.libgdx.treasurehunter.ecs.systems.DebugSystem
+import com.libgdx.treasurehunter.ecs.systems.FlashSystem
 import com.libgdx.treasurehunter.ecs.systems.GlProfilerSystem
 import com.libgdx.treasurehunter.ecs.systems.InvulnarableSystem
 import com.libgdx.treasurehunter.ecs.systems.JumpSystem
@@ -22,6 +24,7 @@ import com.libgdx.treasurehunter.ecs.systems.RenderSystem
 import com.libgdx.treasurehunter.ecs.systems.StateSystem
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.MapAssets
+import com.libgdx.treasurehunter.enums.ShaderEffect
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.event.GameEventDispatcher.fireEvent
@@ -60,6 +63,7 @@ class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,p
             add(StateSystem())
             add(MoveSystem())
             add(DamageSystem())
+            add(FlashSystem())
             add(BlinkSystem())
             add(InvulnarableSystem())
             add(AttackSystem())
@@ -88,6 +92,21 @@ class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,p
     }
 
     override fun render(delta: Float) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_5)) {
+            world.system<RenderSystem>().setShaderEffect(ShaderEffect.BURN_EFFECT)
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_6)) {
+            world.system<RenderSystem>().setShaderEffect(ShaderEffect.HEAL_EFFECT)
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_7)) {
+            world.system<RenderSystem>().setShaderEffect(ShaderEffect.FREEZE_EFFECT)
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_8)) {
+            world.system<RenderSystem>().setShaderEffect(ShaderEffect.POISON_EFFECT)
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_9)) {
+            world.system<RenderSystem>().setShaderEffect(ShaderEffect.NORMAL)
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_4)) {
+            world.system<RenderSystem>().setShaderEffect(ShaderEffect.INVISIBLE_EFFECT)
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_0)) {
+            world.system<RenderSystem>().setShaderEffectFromColorSettings()
+        }
         world.update(delta)
     }
 

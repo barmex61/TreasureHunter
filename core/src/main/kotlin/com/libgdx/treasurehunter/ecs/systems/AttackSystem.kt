@@ -44,11 +44,13 @@ class AttackSystem(
                 attackBody?.let {
                     // ---- Current attack fixture set up -----
                     val keyFrameIndex = animComp.getAttackAnimKeyFrameIx()
-                    if (keyFrameIndex != currentAttackKeyFrameIx){
-                        val flipX = entity.getOrNull(Move)?.flipX == true
+                    val flipX = entity.getOrNull(Move)?.flipX == true
+                    if ((keyFrameIndex != currentAttackKeyFrameIx) || (flipX != attackComp.isAttackFixtureMirrored)) {
                         createAttackFixture(keyFrameIndex,attackBody,attackType,flipX)
                         attackComp.currentAttackAnimKeyFrameIx = keyFrameIndex
+                        attackComp.isAttackFixtureMirrored = flipX
                     }
+
                     // --- Sync attack body position with graphic component ----
                     attackBody.setTransform(center, attackBody.angle)
                 }
@@ -101,5 +103,6 @@ class AttackSystem(
         }
         attackBody.createFixture(attackFixtureDef)
     }
+
 }
 

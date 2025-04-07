@@ -41,7 +41,6 @@ enum class PlayerState : EntityState {
             val (linX,linY) = entity.body.linearVelocity
             when{
                 entity.wantsToAttack -> entity.state(ATTACK)
-                entity.hit -> entity.state(HIT)
                 linY > TOLERANCE_Y -> entity.state(JUMP)
                 linY < -TOLERANCE_Y -> entity.state(FALL)
                 !MathUtils.isEqual(linX, ZERO, TOLERANCE_X) -> entity.state(RUN)
@@ -58,7 +57,6 @@ enum class PlayerState : EntityState {
             val (linX,linY) = entity.body.linearVelocity
             when{
                 entity.wantsToAttack -> entity.state(ATTACK)
-                entity.hit -> entity.state(HIT)
                 linY > TOLERANCE_Y -> entity.state(JUMP)
                 linY < -TOLERANCE_Y -> entity.state(FALL)
                 MathUtils.isEqual(linX, ZERO, TOLERANCE_X) -> entity.state(IDLE)
@@ -75,7 +73,6 @@ enum class PlayerState : EntityState {
             val (linX,linY) = entity.body.linearVelocity
             when{
                 entity.wantsToAttack -> entity.state(ATTACK)
-                entity.hit -> entity.state(HIT)
                 linY < -TOLERANCE_Y -> entity.state(FALL)
                 MathUtils.isEqual(linY, ZERO, TOLERANCE_Y) ->{
                     if (MathUtils.isEqual(linX, ZERO, TOLERANCE_X)){
@@ -97,7 +94,6 @@ enum class PlayerState : EntityState {
             val (linX,linY) = entity.body.linearVelocity
             when{
                 entity.wantsToAttack -> entity.state(ATTACK)
-                entity.hit -> entity.state(HIT)
                 linY > TOLERANCE_Y -> entity.state(JUMP)
                 MathUtils.isEqual(linY, ZERO, TOLERANCE_Y) ->{
                     if (MathUtils.isEqual(linX, ZERO, TOLERANCE_X)){
