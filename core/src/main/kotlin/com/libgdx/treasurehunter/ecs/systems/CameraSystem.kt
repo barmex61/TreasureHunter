@@ -9,6 +9,7 @@ import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.World.Companion.family
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
+import com.libgdx.treasurehunter.ecs.components.MoveDirection
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEvent.MapChangeEvent
 import com.libgdx.treasurehunter.event.GameEventListener
@@ -22,17 +23,24 @@ class CameraSystem(
     private val mapBoundaries = Vector2(0f, 0f)
     val viewportW = gameCamera.viewportWidth * 0.5f
     val viewportH = gameCamera.viewportHeight * 0.5f
-    init {
-        gameCamera.apply {
-            zoom = 0.65f
-        }
-    }
+    var cameraMovement : CameraMovement = CameraMovement(0,0)
+    var zoom : Float = 0f
+
 
     override fun onTickEntity(entity: Entity) {
         val (sprite) = entity[Graphic]
         var camX = sprite.x + sprite.width * 0.5f
         var camY = sprite.y + sprite.height * 0.5f
-
+        if (zoom != 0f){
+            gameCamera.zoom += zoom * 0.01f
+        }
+        if (cameraMovement.valueX != 0 || cameraMovement.valueY != 0) {
+            val currentPosition = gameCamera.position
+            currentPosition.x += cameraMovement.valueX * 0.01f
+            currentPosition.y += cameraMovement.valueY * 0.01f
+            gameCamera.update()
+            return
+        }
         if (!mapBoundaries.isZero) {
             camX = MathUtils.lerp(gameCamera.position.x,camX.coerceIn(viewportW, maxOf(mapBoundaries.x - viewportW, viewportW)),deltaTime * 4)
             camY = MathUtils.lerp(gameCamera.position.y,camY.coerceIn(viewportH, maxOf(mapBoundaries.y - viewportH, viewportH)),deltaTime * 4)
@@ -53,3 +61,18 @@ class CameraSystem(
         }
     }
 }
+
+data class CameraMovement(
+    var valueX : Int,
+    var valueY : Int
+){
+    operator fun plusAssign(other: MoveDirection){
+        valueX += other.valueX
+        valueY += other.valueY
+    }
+    operator fun minusAssign(other: MoveDirection){
+        valueX -= other.valueX
+        valueY -= other.valueY
+    }
+}
+

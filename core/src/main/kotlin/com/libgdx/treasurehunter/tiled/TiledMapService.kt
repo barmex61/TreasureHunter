@@ -30,6 +30,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape
 import com.github.quillraven.fleks.Entity
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Jump
@@ -97,7 +98,7 @@ class TiledMapService (
                 spawnEntity(mapObject)
             }
         }
-        logEntities()
+        logEntities(world)
     }
 
     private fun spawnEntity(mapObject: MapObject){
@@ -130,7 +131,7 @@ class TiledMapService (
             configureEntityTags(it,mapObject,tile)
             configureMove(it,tile)
             configureJump(it,tile)
-            configureState(it,tile,world,physicWorld)
+            configureState(it,tile,world,physicWorld,assetHelper)
             configureDamage(it,tile)
             configureAttack(it,tile)
             configureLife(it,tile)
@@ -151,27 +152,49 @@ class TiledMapService (
             configureEntityTags(it,mapObject,tile)
         }
     }
+    companion object{
+        fun logEntities(world: com.github.quillraven.fleks.World){
+            world.forEach {
+                val components = mutableListOf<String>()
+                if (it.has(Graphic)) {
+                    components.add(it[Graphic].gameObject.toString())
+                    components.add("Graphic")
+                }
+                if (it.has(Animation)) components.add("Animation")
+                if (it.has(Move)) components.add("Move")
+                if (it.has(Physic)) {
+                    components.add("Physic ${it[Physic].body.userData}")
+                }
+                if (it.has(Jump)) components.add("Jump")
+                if (it.has(Attack)) components.add("Attack")
+                if (it.has(State)) components.add("State")
+                if (it.has(Damage)) components.add("Damage")
 
-    private fun logEntities(){
-        world.forEach {
+                Gdx.app.log("EntityDebug", "Entity ${it.id} components: ${components.joinToString(", ")}")
+            }
+        }
+
+        fun logEntity(entity: Entity,world: com.github.quillraven.fleks.World)=with(world){
             val components = mutableListOf<String>()
-            if (it.has(Graphic)) {
-                components.add(it[Graphic].gameObject.toString())
+            if (entity.has(Graphic)) {
+                components.add(entity[Graphic].gameObject.toString())
                 components.add("Graphic")
             }
-            if (it.has(Animation)) components.add("Animation")
-            if (it.has(Move)) components.add("Move")
-            if (it.has(Physic)) {
-                components.add("Physic ${it[Physic].body.userData}")
+            if (entity.has(Animation)) components.add("Animation")
+            if (entity.has(Move)) components.add("Move")
+            if (entity.has(Physic)) {
+                components.add("Physic ${entity[Physic].body.userData}")
             }
-            if (it.has(Jump)) components.add("Jump")
-            if (it.has(Attack)) components.add("Attack")
-            if (it.has(State)) components.add("State")
-            if (it.has(Damage)) components.add("Damage")
+            if (entity.has(Jump)) components.add("Jump")
+            if (entity.has(Attack)) components.add("Attack")
+            if (entity.has(State)) components.add("State")
+            if (entity.has(Damage)) components.add("Damage")
+            if (entity.has(AttackMeta)) components.add("AttackMeta")
 
-            Gdx.app.log("EntityDebug", "Entity ${it.id} components: ${components.joinToString(", ")}")
+            Gdx.app.log("EntityDebug", "Entity ${entity.id} components: ${components.joinToString(", ")}")
         }
     }
+
 
     fun dispose() {
         OBJECT_FIXTURES.values.forEach { fixture ->

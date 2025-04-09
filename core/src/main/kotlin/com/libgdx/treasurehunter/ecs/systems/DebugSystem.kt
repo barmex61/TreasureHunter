@@ -1,21 +1,12 @@
 package com.libgdx.treasurehunter.ecs.systems
-
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.graphics.profiling.GLProfiler
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
-import com.github.quillraven.fleks.Fixed
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.World.Companion.inject
-import com.github.quillraven.fleks.Component
-import com.github.quillraven.fleks.Entity
-import com.libgdx.treasurehunter.ecs.components.Move
-import com.github.quillraven.fleks.EntityComponentContext
-import com.libgdx.treasurehunter.ecs.components.Physic
 import ktx.graphics.use
 
 class DebugSystem(
@@ -30,7 +21,7 @@ class DebugSystem(
     private val shapeRenderer = ShapeRenderer()
 
     override fun onTick() {
-        //box2DDebugRenderer.render(physicWorld, gameCamera.combined)
+        box2DDebugRenderer.render(physicWorld, gameCamera.combined)
         shapeRenderer.use(ShapeRenderer.ShapeType.Line,gameCamera.combined){
             it.color = Color.RED
             it.rect(JUMP_DEBUG_RECT.x, JUMP_DEBUG_RECT.y, JUMP_DEBUG_RECT.width, JUMP_DEBUG_RECT.height)

@@ -3,27 +3,32 @@ package com.libgdx.treasurehunter.ecs.systems
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
-import com.badlogic.gdx.physics.box2d.ChainShape
-import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
+import com.libgdx.treasurehunter.ai.AiEntity
 import com.libgdx.treasurehunter.ecs.components.Animation
+import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.AttackItem.Companion.toGameObject
+import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.AttackState
-import com.libgdx.treasurehunter.ecs.components.AttackType
+import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.Graphic
-import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.State
+import com.libgdx.treasurehunter.enums.AssetHelper
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.game.PhysicWorld
-import com.libgdx.treasurehunter.utils.mirrorVertices
-import com.libgdx.treasurehunter.utils.playerAttackVertices
-
-import ktx.math.vec2
+import com.libgdx.treasurehunter.tiled.sprite
+import com.libgdx.treasurehunter.ai.SwordState
+import com.libgdx.treasurehunter.ecs.components.Move
 
 class AttackSystem(
-    private val physicWorld : PhysicWorld = inject()
+    private val physicWorld : PhysicWorld = inject(),
+    private val assetHelper: AssetHelper = inject()
 ) : IteratingSystem(
     family = family { all(Attack, Physic, Graphic) }
 ) {
@@ -32,77 +37,84 @@ class AttackSystem(
         val attackComp = entity[Attack]
         val animComp = entity[Animation]
         val (_,_,center) = entity[Graphic]
-        val (attackDamage, wantsToAttack, attackState,attackBody,attackDuration,attackType,currentAttackKeyFrameIx) = attackComp
+        var (attackItem,wantsToAttack, attackState,attackType,attackCooldown) = attackComp
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
-                    attackComp.attackBody = createAttackBody(center,entity)
+                    val center = entity[Graphic].center
+                    if (attackComp.isMeleeAttack) {
+                        world.entity {
+                            it += AttackMeta(
+                                isMelee = true,
+                                owner = entity,
+                                attackType = attackType,
+                                isFixtureMirrored = false
+                            )
+                            it += Damage(damage = attackComp.attackDamage, sourceEntity = entity)
+                            it += Physic(createAttackBody(center, it, BodyDef.BodyType.StaticBody))
+                        }
+                    } else {
+                        val gameObject = attackItem.toGameObject() ?: return
+                        world.entity {
+                            it += AttackMeta(
+                                isMelee = false,
+                                owner = entity,
+                                attackType = attackType,
+                                isFixtureMirrored = false,
+                            )
+                            it += Damage(damage = attackComp.attackDamage, sourceEntity = entity)
+                            it += Physic(createAttackBody(center, it, BodyDef.BodyType.DynamicBody))
+                            it += Graphic(
+                                sprite(
+                                    gameObject,
+                                    AnimationType.SPINNING,
+                                    center,
+                                    assetHelper,
+                                    0f
+                                ).also {
+                                    it.setAlpha(0f)
+                                }, gameObject
+                            )
+                            it += Animation(frameDuration = 0.1f, gameObject = gameObject)
+                            it += State(
+                                AiEntity(it, world, physicWorld, assetHelper),
+                                SwordState.SPINNING
+                            )
+                        }
+                    }
                     attackComp.attackState = AttackState.ATTACKING
                 }
             }
             AttackState.ATTACKING -> {
-                attackBody?.let {
-                    // ---- Current attack fixture set up -----
-                    val keyFrameIndex = animComp.getAttackAnimKeyFrameIx()
-                    val flipX = entity.getOrNull(Move)?.flipX == true
-                    if ((keyFrameIndex != currentAttackKeyFrameIx) || (flipX != attackComp.isAttackFixtureMirrored)) {
-                        createAttackFixture(keyFrameIndex,attackBody,attackType,flipX)
-                        attackComp.currentAttackAnimKeyFrameIx = keyFrameIndex
-                        attackComp.isAttackFixtureMirrored = flipX
-                    }
-
-                    // --- Sync attack body position with graphic component ----
-                    attackBody.setTransform(center, attackBody.angle)
-                }
-                attackComp.attackDuration -= deltaTime
-                if (attackComp.attackDuration <= 0f) {
+                attackCooldown -= deltaTime
+                attackComp.attackCooldown = attackCooldown
+                if (attackCooldown <= 0f){
                     attackComp.attackState = AttackState.DONE
                 }
             }
             AttackState.DONE -> {
                 resetAttackComp(attackComp)
-            }}
+            }
+        }
     }
 
     private fun resetAttackComp(attackComp: Attack) {
-        attackComp.attackBody?.let { body ->
-            physicWorld.destroyBody(body)
-            attackComp.attackBody = null
-        }
+        attackComp.attackCooldown = 1f
         attackComp.attackState = AttackState.READY
         attackComp.wantsToAttack = false
-        attackComp.attackDuration = 1f
     }
 
-    private fun createAttackBody(centerPosition : Vector2,attackerEntity: Entity): Body {
+    private fun createAttackBody(centerPosition : Vector2,activeAttackEntity: Entity,bodyType: BodyDef.BodyType): Body {
         val attackBody = physicWorld.createBody(BodyDef().apply {
-            type = BodyDef.BodyType.StaticBody
+            type = bodyType
             position.set(centerPosition.x,centerPosition.y )
             fixedRotation = true
             gravityScale = 0f
 
-        }).apply { userData =  attackerEntity }
+        }).apply { userData =  activeAttackEntity }
         return attackBody
     }
 
-    private fun createAttackFixture(keyFrameIndex : Int,attackBody : Body,attackType: AttackType,flipX : Boolean = false){
-        attackBody.fixtureList.forEach {
-            attackBody.destroyFixture(it)
-        }
-        if (keyFrameIndex == -1) return
-        val fixtureVertices = playerAttackVertices[attackType]?.get(keyFrameIndex)?:return
-        val mirroredVertices = if (flipX) fixtureVertices.mirrorVertices() else fixtureVertices
-        val attackFixtureDef = FixtureDef().apply {
-            isSensor = true
-            density = 0f
-            friction = 0f
-            restitution = 0f
-            shape = ChainShape().apply {
-                createLoop(mirroredVertices)
-            }
-        }
-        attackBody.createFixture(attackFixtureDef)
-    }
 
 }
 

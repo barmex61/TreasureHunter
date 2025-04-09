@@ -11,6 +11,17 @@
     ],
     "propertyTypes": [
         {
+            "id": 6,
+            "name": "AttackItem",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "SWORD",
+                "NONE"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "id": 2,
             "name": "BodyType",
             "storageType": "string",
@@ -29,7 +40,8 @@
             "values": [
                 "PLAYER",
                 "BACKGROUND",
-                "FOREGROUND"
+                "FOREGROUND",
+                "COLLECTABLE"
             ],
             "valuesAsFlags": true
         },
@@ -52,19 +64,8 @@
                 "CHEST",
                 "SPIKES",
                 "FLAG",
-                "SHIP_HELM"
-            ],
-            "valuesAsFlags": false
-        },
-        {
-            "id": 4,
-            "name": "StartAnimType",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "NONE",
-                "IDLE",
-                "IDLE_SWORD"
+                "SHIP_HELM",
+                "SWORD"
             ],
             "valuesAsFlags": false
         },
@@ -82,6 +83,18 @@
                 "SNOW",
                 "FOREST",
                 "UNDERWATER"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 4,
+            "name": "StartAnimType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "NONE",
+                "IDLE",
+                "IDLE_SWORD"
             ],
             "valuesAsFlags": false
         }

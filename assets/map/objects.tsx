@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="64" tileheight="93" tilecount="12" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="64" tileheight="93" tilecount="14" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="attackDamage" type="float" value="1"/>
+   <property name="attackItem" propertytype="AttackItem" value="SWORD"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN_SWORD"/>
    <property name="gravityScale" type="float" value="1"/>
-   <property name="jumpHeight" type="float" value="3"/>
+   <property name="jumpHeight" type="float" value="2"/>
    <property name="life" type="int" value="3"/>
    <property name="speed" type="float" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
    <property name="timeToMax" type="float" value="3"/>
   </properties>
-  <image width="64" height="40" source="../graphics/captain_clown.png"/>
+  <image width="64" height="40" source="../graphics/captain_clown_sword.png"/>
   <objectgroup draworder="index" id="3">
    <object id="3" x="24" y="17" width="15" height="15">
     <properties>
@@ -155,7 +155,7 @@
  </tile>
  <tile id="32">
   <properties>
-   <property name="bodyDamage" type="int" value="1"/>
+   <property name="damage" type="int" value="1"/>
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="SPIKES"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -165,30 +165,81 @@
    <object id="9" x="8" y="16" width="7" height="9" rotation="1.4409">
     <properties>
      <property name="restitution" type="float" value="1"/>
-     <property name="userData" value="hitbox"/>
+     <property name="userData" value="spike"/>
     </properties>
     <ellipse/>
    </object>
    <object id="12" x="16" y="19" width="7" height="9" rotation="1.4409">
     <properties>
      <property name="restitution" type="float" value="1"/>
-     <property name="userData" value="hitbox"/>
+     <property name="userData" value="spike"/>
     </properties>
     <ellipse/>
    </object>
    <object id="13" x="24" y="17" width="7" height="9" rotation="1.4409">
     <properties>
-     <property name="restitution" type="float" value="1"/>
-     <property name="userData" value="hitbox"/>
+     <property name="restitution" type="float" value="0.4"/>
+     <property name="userData" value="spike"/>
     </properties>
     <ellipse/>
    </object>
    <object id="14" x="0" y="21" width="7" height="9" rotation="1.4409">
     <properties>
      <property name="restitution" type="float" value="1"/>
-     <property name="userData" value="hitbox"/>
+     <property name="userData" value="spike"/>
     </properties>
     <ellipse/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="34">
+  <properties>
+   <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
+   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="gameObject" propertytype="GameObject" value="SWORD"/>
+   <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+  </properties>
+  <image width="20" height="20" source="../graphics/sword.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="18" y="13">
+    <polygon points="0,0 2,-2 2,-5 -10,-5 -12,-6 -14,-6 -14,-4 -16,-4 -16,-3 -17,-3 -17,0 -14,0 -14,1 -12,1 -12,0 -11,0 -11,-1 -10,-1 -10,0"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="35">
+  <properties>
+   <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="attackItem" propertytype="AttackItem" value="NONE"/>
+   <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
+   <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN"/>
+   <property name="gravityScale" type="float" value="1"/>
+   <property name="jumpHeight" type="float" value="2"/>
+   <property name="life" type="int" value="3"/>
+   <property name="speed" type="float" value="2"/>
+   <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="timeToMax" type="float" value="3"/>
+  </properties>
+  <image width="64" height="40" source="../graphics/captain_clown.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="24" y="17" width="15" height="15">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="hitbox"/>
+    </properties>
+   </object>
+   <object id="2" x="12" y="30">
+    <properties>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="18,0 21,0 21,-1 18,-1"/>
+   </object>
+   <object id="3" x="26" y="19">
+    <properties>
+     <property name="userData" value="bodyFixture"/>
+    </properties>
+    <polygon points="0,0 0,11 11,11 11,0"/>
    </object>
   </objectgroup>
  </tile>

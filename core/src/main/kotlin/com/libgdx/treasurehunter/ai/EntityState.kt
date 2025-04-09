@@ -5,7 +5,7 @@ import com.badlogic.gdx.ai.msg.Telegram
 
 interface EntityState : State<AiEntity>{
     companion object{
-        const val TOLERANCE_X = 0.25f
+        const val TOLERANCE_X = 0.15f
         const val TOLERANCE_Y = 1f
         const val ZERO = 0f
     }

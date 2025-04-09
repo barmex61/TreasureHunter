@@ -10,8 +10,11 @@ import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Jump
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.MoveDirection
+import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.systems.CameraMovement
+import com.libgdx.treasurehunter.ecs.systems.CameraSystem
 
-class KeyboardInputProcessor(world: World) : KtxInputAdapter {
+class KeyboardInputProcessor(val world: World) : KtxInputAdapter {
 
     private var moveX = 0
     private var playerEntities = with(world) {
@@ -19,6 +22,22 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
     }
     var stopMovement : Boolean = false
     var wantsAttack : Boolean = false
+    var cameraDirection : CameraMovement = CameraMovement(0,0)
+
+
+    fun addCameraMovement(moveDirection: MoveDirection){
+        cameraDirection += moveDirection
+        world.system<CameraSystem>().cameraMovement = cameraDirection
+    }
+
+    fun removeCameraMovement(moveDirection: MoveDirection){
+        cameraDirection -= moveDirection
+        world.system<CameraSystem>().cameraMovement = cameraDirection
+    }
+
+    fun updateCameraZoom(zoomValue : Float){
+        world.system<CameraSystem>().zoom = zoomValue
+    }
 
     fun updatePlayerMovement(moveValue : Int,reset : Boolean = false){
         if (stopMovement) {
@@ -49,12 +68,20 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
         playerEntities.forEach { it[Jump].wantsJump = jump}
     }
 
-    private fun updatePlayerAttack(attackType: AttackType,attack : Boolean){
+    private fun updatePlayerAttack(attackType: AttackType){
         playerEntities.forEach { playerEntity ->
-            val attackComp = playerEntity[Attack]
+            val attackComp = playerEntity.getOrNull(Attack)?:return@forEach
             if (attackComp.attackState == AttackState.READY){
+                val onAir = playerEntity[Physic].body.linearVelocity.y !in (-0.1f..0.1f)
+                val updatedAttackType = when{
+                    attackType == AttackType.THROW_ATTACK -> AttackType.THROW_ATTACK
+                    !onAir -> attackType
+                    attackType == AttackType.ATTACK_1 && onAir -> AttackType.AIR_ATTACK_1
+                    attackType == AttackType.ATTACK_2 && onAir -> AttackType.AIR_ATTACK_2
+                    else -> return@forEach
+                }
                 attackComp.wantsToAttack = true
-                attackComp.attackType = attackType
+                attackComp.attackType = updatedAttackType
             }
         }
     }
@@ -65,9 +92,16 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
             Input.Keys.D -> updatePlayerMovement(1)
             Input.Keys.A -> updatePlayerMovement(-1)
             Input.Keys.SPACE -> updatePlayerJump(true)
-            Input.Keys.NUMPAD_3 -> updatePlayerAttack(AttackType.THIRD_ATTACK,true)
-            Input.Keys.NUMPAD_2 -> updatePlayerAttack(AttackType.SECONDARY_ATTACK,true)
-            Input.Keys.NUMPAD_1 -> updatePlayerAttack(AttackType.FIRST_ATTACK,true)
+            Input.Keys.NUMPAD_3 -> updatePlayerAttack(AttackType.ATTACK_3)
+            Input.Keys.NUMPAD_2 -> updatePlayerAttack(AttackType.ATTACK_2)
+            Input.Keys.NUMPAD_1 -> updatePlayerAttack(AttackType.ATTACK_1)
+            Input.Keys.LEFT -> addCameraMovement(MoveDirection.LEFT)
+            Input.Keys.RIGHT -> addCameraMovement(MoveDirection.RIGHT)
+            Input.Keys.UP -> addCameraMovement(MoveDirection.UP)
+            Input.Keys.DOWN -> addCameraMovement(MoveDirection.DOWN)
+            Input.Keys.NUMPAD_8 -> updateCameraZoom(0.1f)
+            Input.Keys.NUMPAD_5 -> updateCameraZoom(-0.1f)
+            Input.Keys.P -> updatePlayerAttack(AttackType.THROW_ATTACK)
         }
 
         return false
@@ -78,9 +112,16 @@ class KeyboardInputProcessor(world: World) : KtxInputAdapter {
             Input.Keys.D -> updatePlayerMovement(-1)
             Input.Keys.A -> updatePlayerMovement(1)
             Input.Keys.SPACE -> updatePlayerJump(false)
-            Input.Keys.NUMPAD_3 -> updatePlayerAttack(AttackType.THIRD_ATTACK,false)
-            Input.Keys.NUMPAD_2 -> updatePlayerAttack(AttackType.SECONDARY_ATTACK,false)
-            Input.Keys.NUMPAD_1 -> updatePlayerAttack(AttackType.FIRST_ATTACK,false)
+            Input.Keys.NUMPAD_3 -> updatePlayerAttack(AttackType.ATTACK_3)
+            Input.Keys.NUMPAD_2 -> updatePlayerAttack(AttackType.ATTACK_2)
+            Input.Keys.NUMPAD_1 -> updatePlayerAttack(AttackType.ATTACK_1)
+            Input.Keys.LEFT -> removeCameraMovement(MoveDirection.LEFT)
+            Input.Keys.RIGHT -> removeCameraMovement(MoveDirection.RIGHT)
+            Input.Keys.UP -> removeCameraMovement(MoveDirection.UP)
+            Input.Keys.DOWN -> removeCameraMovement(MoveDirection.DOWN)
+            Input.Keys.NUMPAD_8 -> updateCameraZoom(0f)
+            Input.Keys.NUMPAD_5 -> updateCameraZoom(0f)
+            Input.Keys.P -> updatePlayerAttack(AttackType.THROW_ATTACK)
         }
         return false
     }

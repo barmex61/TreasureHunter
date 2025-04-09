@@ -7,12 +7,14 @@ import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
+import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.GdxAnimation
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.TextureAtlasAssets
+import com.libgdx.treasurehunter.utils.GameObject
 import ktx.app.gdxError
 import ktx.log.logger
 import kotlin.collections.plusAssign
@@ -31,16 +33,25 @@ class AnimationSystem (
         val animationComp = entity[Animation]
         if (animationComp.gdxAnimation == null) return
         val (gdxAnimation,timer,_,_) = animationComp
-        val (sprite) = entity[Graphic]
-        sprite.setRegion(gdxAnimation!!.getKeyFrame(timer).apply {
+        val graphic = entity[Graphic]
+        val (sprite) = graphic
+
+        sprite.apply {
+            setRegion(gdxAnimation!!.getKeyFrame(timer))
             entity.getOrNull(Move)?.let { moveComp ->
                 if (moveComp.flipX != isFlipX){
-                    flip(true,false)
+                    setFlip(true,false)
                 }
             }
-        })
+        }
+        if (entity has AttackMeta){
+            if (entity[AttackMeta].isFixtureMirrored != sprite.isFlipX){
+                sprite.setFlip(true,false)
+            }
+        }
+
         val velocityMultiplier = if (entity has Physic) abs(entity[Physic].body.linearVelocity.x / 4f) else 1f
-        animationComp.timer += deltaTime * max(1f,velocityMultiplier)
+        animationComp.timer += (deltaTime * max(1f,velocityMultiplier))
 
     }
 
@@ -48,9 +59,9 @@ class AnimationSystem (
 
         val (_,_,_,_,_,gameObject) = entity[Animation]
         val animationAtlasKey = "${gameObject.atlasKey}/${animationType.atlasKey}"
+
         val gdxAnimation = gdxAnimationCache.getOrPut(animationAtlasKey){
             val regions = gameObjectAtlas.findRegions(animationAtlasKey)
-
             if (regions.isEmpty){
                 gdxError("There are no regions for the animation $animationAtlasKey")
             }
@@ -67,13 +78,15 @@ class AnimationSystem (
         animationComp.gdxAnimation = gdxAnimation
         animationComp.playMode = playMode
         animationComp.animationType = animationType
-        entity[Graphic].sprite.setRegion(gdxAnimation.getKeyFrame(0f).apply {
+
+        entity[Graphic].sprite.apply {
+            setRegion(gdxAnimation.getKeyFrame(0f))
             entity.getOrNull(Move)?.let { moveComp ->
                 if (moveComp.flipX != isFlipX){
-                    flip(true,false)
+                    setFlip(true,false)
                 }
             }
-        })
+        }
     }
 
     companion object{

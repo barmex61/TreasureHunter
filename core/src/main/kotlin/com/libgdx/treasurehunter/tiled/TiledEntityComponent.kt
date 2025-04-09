@@ -1,6 +1,7 @@
 package com.libgdx.treasurehunter.tiled
 
 import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.Vector2
@@ -25,7 +26,10 @@ import com.libgdx.treasurehunter.utils.Constants.UNIT_SCALE
 import com.libgdx.treasurehunter.utils.GameObject
 import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.ai.EntityState
+import com.libgdx.treasurehunter.ai.SwordState
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.AttackItem
+import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Physic
@@ -62,7 +66,7 @@ fun EntityCreateContext.configureEntityGraphic(entity: Entity,tile: TiledMapTile
 fun EntityCreateContext.configureAnimation(entity: Entity, tile: TiledMapTile, world: World,startAnimType : AnimationType,gameObject: GameObject) {
     if (tile.property<Float>("animFrameDuration",0f) == 0f) return
     entity += Animation(frameDuration = tile.property<Float>("animFrameDuration"), gameObject = gameObject)
-    world.animation(entity,startAnimType,)
+    world.animation(entity,startAnimType)
 }
 
 fun EntityCreateContext.configureMove(entity: Entity, tile: TiledMapTile){
@@ -98,15 +102,15 @@ fun EntityCreateContext.configureJump(entity: Entity, tile: TiledMapTile){
     }
 }
 
-fun EntityCreateContext.configureState(entity: Entity, tile: TiledMapTile,world: World,physicWorld : PhysicWorld){
+fun EntityCreateContext.configureState(entity: Entity, tile: TiledMapTile,world: World,physicWorld : PhysicWorld,assetHelper: AssetHelper){
     val gameObjectStr = tile.property<String>("gameObject","")
     val state : EntityState = when(gameObjectStr){
         GameObject.CAPTAIN_CLOWN.name -> PlayerState.IDLE
         GameObject.CAPTAIN_CLOWN_SWORD.name -> PlayerState.IDLE
-
+        GameObject.SWORD.name -> SwordState.IDLE
         else -> return
     }
-    entity += State(AiEntity(entity, world, physicWorld),state)
+    entity += State(AiEntity(entity, world, physicWorld,assetHelper),state)
 }
 
 fun EntityCreateContext.configureEntityTags(
@@ -119,19 +123,24 @@ fun EntityCreateContext.configureEntityTags(
         val tags = entityTags.split(",").map { splitEntityTag -> EntityTag.valueOf(splitEntityTag)}
         entity += tags
     }
+    if (entity has EntityTag.COLLECTABLE){
+        val gameObject = GameObject.valueOf(tile.propertyOrNull<String>("gameObject")?: gdxError("gameObject is null $tile"))
+        entity += Collectable(gameObject)
+    }
+
 }
 
 fun EntityCreateContext.configureDamage(entity: Entity, tile: TiledMapTile){
-    val damage = tile.property<Int>("bodyDamage",0)
+    val damage = tile.property<Int>("damage",0)
     if (damage > 0f){
-        entity += Damage(damage = damage)
+        entity += Damage(damage = damage, sourceEntity = entity)
     }
 }
 
 fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile){
-    val damage = tile.property<Float>("attackDamage",0f)
-    if (damage > 0f){
-        entity += Attack(attackDamage= damage)
+    val attackItem = AttackItem.valueOf(tile.property<String>("attackItem","NONE"))
+    if (attackItem != AttackItem.NONE){
+        entity += Attack(attackItem = attackItem)
     }
 }
 
@@ -140,5 +149,8 @@ fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){
     if (life > 0f){
         entity += Life(maxLife = life)
     }
+
 }
+
+
 

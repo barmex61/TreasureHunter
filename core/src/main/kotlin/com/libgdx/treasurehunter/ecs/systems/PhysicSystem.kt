@@ -11,30 +11,43 @@ import com.github.quillraven.fleks.Fixed
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
+import com.libgdx.treasurehunter.ai.PlayerState
+import com.libgdx.treasurehunter.ecs.components.Animation
+import com.libgdx.treasurehunter.ecs.components.AnimationType
+import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.AttackItem
+import com.libgdx.treasurehunter.ecs.components.AttackMeta
+import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
-import com.libgdx.treasurehunter.ecs.components.Jump
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.State
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher
+import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.game.PhysicWorld
+import com.libgdx.treasurehunter.tiled.TiledMapService.Companion.logEntity
+import com.libgdx.treasurehunter.utils.GameObject
+import com.libgdx.treasurehunter.utils.animation
 import ktx.math.component1
 import ktx.math.component2
-import kotlin.compareTo
-import kotlin.math.abs
 
 class PhysicSystem (
     private val physicWorld : PhysicWorld = inject()
 ): IteratingSystem(
     family = family{all(Physic, Graphic)},
     interval = Fixed(1/300f)
-) , ContactListener{
+) , ContactListener, GameEventListener{
 
     init {
         physicWorld.setContactListener(this)
     }
+
+    private var removeEntityList = mutableSetOf<Entity>()
 
     override fun onUpdate() {
         if (physicWorld.autoClearForces){
@@ -56,6 +69,12 @@ class PhysicSystem (
         previousPosition.set(body.position)
         entity.getOrNull(Move)?.let {moveComp ->
             body.setLinearVelocity(moveComp.currentSpeed , body.linearVelocity.y)
+        }
+        if (removeEntityList.isNotEmpty()){
+            removeEntityList.forEach { entity ->
+                entity.remove()
+            }
+            removeEntityList.clear()
         }
     }
 
@@ -98,16 +117,20 @@ class PhysicSystem (
     private val Entity.isPlayer : Boolean
         get() = this.has(EntityTag.PLAYER)
 
+    private val Fixture.isRangeAttackFixture : Boolean
+        get() = this.userData == "rangeAttackFixture"
 
-    private fun handleDamageBeginContact(damageSource: Entity, damageTarget: Entity) = with(world){
-        val (damageAmount) = damageSource[Damage]
+    //----- HANDLE COLLISIONS -----
+    private fun handleDamageBeginContact(damageSource: Entity, damageTarget: Entity) {
+        val (damageAmount,sourceEntity) = damageSource[Damage]
+        if (sourceEntity == damageTarget) return
         damageTarget.configure {
             val damageTakenComp = it.getOrAdd(DamageTaken){ DamageTaken(0) }
             damageTakenComp.damageAmount = (damageTakenComp.damageAmount + damageAmount).coerceAtMost(damageAmount)
         }
     }
 
-    private fun handleDamageEndContact(damageSource: Entity, damageTarget: Entity) = with(world){
+    private fun handleDamageEndContact(damageSource: Entity, damageTarget: Entity) {
         damageTarget.getOrNull(DamageTaken)?.let {
             val (damageAmount) = damageSource[Damage]
             it.damageAmount -= damageAmount
@@ -117,19 +140,53 @@ class PhysicSystem (
         }
     }
 
-    private fun isDamageCollision(entityA: Entity,entityB: Entity,fixtureA: Fixture,fixtureB:Fixture) : Boolean{
-        return  entityA has Damage && entityB has Life && fixtureB.isSensor && fixtureA.isHitbox && fixtureB.isHitbox
+    private fun handleCollectableBeginContact(collectableEntity: Entity, playerEntity: Entity) {
+        GameEventDispatcher.fireEvent(GameEvent.CollectableItemEvent(collectableEntity,playerEntity))
     }
+
+    private fun handleSwordAndWallCollision(activeAttackEntity : Entity){
+        val attackMeta = activeAttackEntity[AttackMeta]
+        attackMeta.collidedWithWall = true
+    }
+
+    // ----- /HANDLE COLLISIONS -----
+
+    // ----- CHECK CONDITIONS -----
+    private fun isDamageCollision(entityA: Entity,entityB: Entity,fixtureB:Fixture) : Boolean{
+        return  entityA has Damage  && entityB has Life && fixtureB.isSensor && fixtureB.isHitbox
+    }
+
+    private fun isCollectableCollision(entityA: Entity,entityB: Entity,fixtureB:Fixture) : Boolean{
+        return  entityA has EntityTag.COLLECTABLE && entityB has EntityTag.PLAYER && fixtureB.isSensor
+    }
+
+    private fun isSwordAndWallCollision(entityA: Entity?,fixtureA : Fixture,fixtureB:Fixture) : Boolean{
+        return entityA != null && entityA has AttackMeta && fixtureA.isRangeAttackFixture && (fixtureB.isGround || fixtureB.isPlatform)
+    }
+
+
+    // -----/ CHECK CONDITIONS -----
 
     override fun beginContact(contact: Contact) {
         val fixtureA = contact.fixtureA
         val fixtureB = contact.fixtureB
         val entityA = fixtureA.entity
         val entityB = fixtureB.entity
-        if (entityA == null || entityB == null) return
+        if (entityA == null || entityB == null) {
+            when{
+                isSwordAndWallCollision(entityA,fixtureA,fixtureB) -> handleSwordAndWallCollision(entityA!!)
+                isSwordAndWallCollision(entityB,fixtureB,fixtureA) -> handleSwordAndWallCollision(entityB!!)
+                else -> Unit
+            }
+            return
+        }
         when {
-            isDamageCollision(entityA,entityB,fixtureA,fixtureB) -> handleDamageBeginContact(entityA,entityB)
-            isDamageCollision(entityB,entityA,fixtureB,fixtureA) -> handleDamageBeginContact(entityB,entityA)
+            isDamageCollision(entityA,entityB,fixtureB) -> handleDamageBeginContact(entityA,entityB)
+            isDamageCollision(entityB,entityA,fixtureA) -> handleDamageBeginContact(entityB,entityA)
+            isCollectableCollision(entityA,entityB,fixtureB) -> handleCollectableBeginContact(entityA,entityB)
+            isCollectableCollision(entityB,entityA,fixtureA) -> handleCollectableBeginContact(entityB,entityA)
+            isSwordAndWallCollision(entityA,fixtureA,fixtureB) -> handleSwordAndWallCollision(entityA)
+            isSwordAndWallCollision(entityB,fixtureB,fixtureA) -> handleSwordAndWallCollision(entityB)
         }
 
     }
@@ -143,8 +200,8 @@ class PhysicSystem (
             return
         }
         when {
-            isDamageCollision(entityA,entityB,fixtureA,fixtureB) ->  handleDamageEndContact(entityA,entityB)
-            isDamageCollision(entityB,entityA,fixtureB,fixtureA) -> handleDamageEndContact(entityB,entityA)
+            isDamageCollision(entityA,entityB,fixtureB) ->  handleDamageEndContact(entityA,entityB)
+            isDamageCollision(entityB,entityA,fixtureA) -> handleDamageEndContact(entityB,entityA)
         }
     }
 
@@ -163,5 +220,34 @@ class PhysicSystem (
 
     override fun postSolve(contact: Contact, impulse: ContactImpulse) {
 
+    }
+
+
+    override fun onEvent(event: GameEvent) {
+        when(event){
+            is GameEvent.RemoveEntityEvent -> {
+                removeEntityList.add(event.entity)
+            }
+            is GameEvent.CollectableItemEvent ->{
+                val collectableEntity = event.collectableEntity
+                val playerEntity = event.playerEntity
+                val (gameObject) = collectableEntity[Collectable]
+                when(gameObject){
+                    GameObject.SWORD ->{
+                        if (playerEntity has Attack && playerEntity[Attack].attackItem == AttackItem.SWORD){
+                            return
+                        }
+                        collectableEntity.configure {
+                            it -= EntityTag.COLLECTABLE
+                        }
+                        playerEntity.configure {
+                            it[State].stateMachine.changeState(PlayerState.SWORD_COLLECTED)
+                        }
+                    }
+                    else -> Unit
+                }
+            }
+            else -> Unit
+        }
     }
 }

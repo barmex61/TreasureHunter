@@ -7,8 +7,12 @@ import com.libgdx.treasurehunter.ai.EntityState.Companion.TOLERANCE_Y
 import com.libgdx.treasurehunter.ai.EntityState.Companion.ZERO
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.AttackItem
+import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
-import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.State
+import com.libgdx.treasurehunter.enums.MarkType
+import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.component1
 import ktx.math.component2
 
@@ -28,7 +32,6 @@ enum class PlayerState : EntityState {
     IDLE{
         override fun enter(entity: AiEntity) {
             val (linX,linY) = entity.body.linearVelocity
-            val TOLERANCE_X = 0.0f
             when{
                 linY > TOLERANCE_Y -> entity.state(JUMP)
                 linY < -TOLERANCE_Y -> entity.state(FALL)
@@ -109,6 +112,7 @@ enum class PlayerState : EntityState {
     HIT {
         override fun enter(entity: AiEntity) {
             entity.animation(AnimationType.HIT, Animation.PlayMode.NORMAL)
+            entity.createMarkEntity(MarkType.EXCLAMATION_MARK)
         }
 
         override fun update(entity: AiEntity) {
@@ -129,6 +133,42 @@ enum class PlayerState : EntityState {
             if (entity.isAnimationDone()) entity.state(IDLE)
         }
     },
+    SWORD_COLLECTED{
+        override fun enter(aiEntity: AiEntity) {
+            with(aiEntity.world){
+                if (aiEntity.entity hasNo Attack){
+                    aiEntity.entity.configure {
+                        it += Attack(attackItem = AttackItem.SWORD)
+                        it[Graphic].gameObject = GameObject.CAPTAIN_CLOWN_SWORD
+                        it[com.libgdx.treasurehunter.ecs.components.Animation].setNewGameObject(GameObject.CAPTAIN_CLOWN_SWORD)
+                    }
+                }
+            }
+        }
 
+        override fun update(aiEntity: AiEntity) {
+            with(aiEntity.world) {
+                aiEntity.entity[State].stateMachine.changeState(IDLE)
+            }
+        }
+    },
+    SWORD_THROWED{
+        override fun enter(aiEntity: AiEntity) {
+            with(aiEntity.world){
+                if (aiEntity.entity has Attack){
+                    aiEntity.entity.configure {
+                        it -= Attack
+                        it[Graphic].gameObject = GameObject.CAPTAIN_CLOWN
+                        it[com.libgdx.treasurehunter.ecs.components.Animation].setNewGameObject(GameObject.CAPTAIN_CLOWN)
+                    }
+                }
+            }
+        }
+        override fun update(aiEntity: AiEntity) {
+            with(aiEntity.world) {
+                aiEntity.entity[State].stateMachine.changeState(IDLE)
+            }
+        }
+    }
 
 }

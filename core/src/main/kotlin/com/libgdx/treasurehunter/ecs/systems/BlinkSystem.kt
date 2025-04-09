@@ -13,14 +13,10 @@ class BlinkSystem : IteratingSystem(family = family { all(Blink,Graphic) }) {
         val (sprite,_) = entity[Graphic]
         val(maxTime,blinksRatio,_) = blinkComp
         if (maxTime <= 0f){
-            println("hey")
             sprite.setAlpha(1f)
             entity.configure { it -= Blink }
             return
         }
-        println("maxTime: $maxTime")
-        println("blinksRatio: $blinksRatio")
-        println("timer: ${blinkComp.timer}")
         blinkComp.maxTime -= deltaTime
         blinkComp.timer += deltaTime
         if (blinkComp.timer >= blinksRatio){

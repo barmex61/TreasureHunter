@@ -2,9 +2,9 @@ package com.libgdx.treasurehunter.utils
 
 import com.libgdx.treasurehunter.ecs.components.AttackType
 
-val playerAttackVertices: Map<AttackType, Map<Int,FloatArray> > = mapOf(
+val playerMeleeAttackVertices: Map<AttackType, Map<Int,FloatArray> > = mapOf(
 
-    AttackType.FIRST_ATTACK to mapOf(
+    AttackType.ATTACK_1 to mapOf(
         0 to floatArrayOf(
             0.25f,-0.25f,
             0.25f,-0.1f,
@@ -19,7 +19,7 @@ val playerAttackVertices: Map<AttackType, Map<Int,FloatArray> > = mapOf(
         )
     ),
 
-    AttackType.SECONDARY_ATTACK to mapOf(
+    AttackType.ATTACK_2 to mapOf(
         0 to floatArrayOf(
             0.4f, 0.18f,
             0.25f, 0.18f,
@@ -35,7 +35,7 @@ val playerAttackVertices: Map<AttackType, Map<Int,FloatArray> > = mapOf(
         )
     ),
 
-    AttackType.THIRD_ATTACK to mapOf(
+    AttackType.ATTACK_3 to mapOf(
         0 to floatArrayOf(
             -0.1f, -0.25f,
             -0.1f, -0.1f,
@@ -51,6 +51,13 @@ val playerAttackVertices: Map<AttackType, Map<Int,FloatArray> > = mapOf(
             0.43f, 0.4f
         )
     )
+)
+
+val playerRangeAttackVertices = floatArrayOf(
+    0.25f,0.25f,
+    0.25f,0.5f,
+    0.65f,0.5f,
+    0.5f,0.25f,
 )
 
 fun FloatArray.mirrorVertices(): FloatArray {
