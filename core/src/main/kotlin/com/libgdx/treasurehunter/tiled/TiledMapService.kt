@@ -2,6 +2,7 @@ package com.libgdx.treasurehunter.tiled
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.MapObjects
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
@@ -128,7 +129,7 @@ class TiledMapService (
             body.userData = it
             it += Physic(body)
             configureEntityGraphic(it,tile,body.position,gameObject, assetHelper,world,rotation)
-            configureEntityTags(it,mapObject,tile)
+            configureEntityTags(it,mapObject,tile,assetHelper)
             configureMove(it,tile)
             configureJump(it,tile)
             configureState(it,tile,world,physicWorld,assetHelper)
@@ -141,7 +142,7 @@ class TiledMapService (
 
     private fun spawnStaticObject(mapObject: MapObject,x: Int,y : Int){
         val body = physicWorld.createBody(StaticBody,vec2(x.toFloat(),y.toFloat()))
-        val fixtureDefUserData = fixtureDefinitionOf(mapObject)
+        val fixtureDefUserData = fixtureDefinitionOf(mapObject,true)
         body.createFixtures(listOf(fixtureDefUserData))
     }
 
@@ -149,7 +150,7 @@ class TiledMapService (
         world.entity {
             val position = vec2(mapObject.x * UNIT_SCALE , mapObject.y * UNIT_SCALE)
             configureEntityGraphic(it,tile,position,gameObject, assetHelper,world,0f)
-            configureEntityTags(it,mapObject,tile)
+            configureEntityTags(it,mapObject,tile,assetHelper)
         }
     }
     companion object{

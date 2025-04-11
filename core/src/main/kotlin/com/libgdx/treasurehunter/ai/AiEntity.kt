@@ -169,8 +169,10 @@ data class AiEntity(
     }
 
     fun addCollectable() {
+
         entity.configure {
             it += EntityTag.COLLECTABLE
+            it += Collectable(GameObject.SWORD)
         }
     }
 

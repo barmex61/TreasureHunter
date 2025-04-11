@@ -14,6 +14,7 @@ import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Flash
 import com.libgdx.treasurehunter.ecs.components.Graphic
+import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.utils.Constants
@@ -67,12 +68,14 @@ class RenderSystem (
         sort(entityComparator)
         forEach { entity ->
             val sprite = entity[Graphic].sprite
+            val particleSprite = entity.getOrNull(Particle)?.sprite
             sprite.color = currentColorSettings.entityColor.copy(alpha = sprite.color.a)
             val flashCmp = entity.getOrNull(Flash)
             if (flashCmp != null && flashCmp.doFlash) {
                 sprite.color = flashCmp.color
             }
-            entity[Graphic].sprite.draw(spriteBatch)
+            sprite.draw(spriteBatch)
+            particleSprite?.draw(spriteBatch)
         }
     }
 

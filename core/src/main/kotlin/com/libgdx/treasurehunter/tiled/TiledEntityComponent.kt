@@ -32,6 +32,7 @@ import com.libgdx.treasurehunter.ecs.components.AttackItem
 import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.Life
+import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.ecs.components.Physic
 import ktx.app.gdxError
 import ktx.math.vec2
@@ -117,6 +118,7 @@ fun EntityCreateContext.configureEntityTags(
     entity: Entity,
     mapObject: TiledMapTileMapObject,
     tile: TiledMapTile,
+    assetHelper: AssetHelper
 ){
     val entityTags = mapObject.propertyOrNull<String>("entityTags")?:tile.property("entityTags","")
     if (entityTags.isNotBlank()){
@@ -126,6 +128,13 @@ fun EntityCreateContext.configureEntityTags(
     if (entity has EntityTag.COLLECTABLE){
         val gameObject = GameObject.valueOf(tile.propertyOrNull<String>("gameObject")?: gdxError("gameObject is null $tile"))
         entity += Collectable(gameObject)
+    }
+    if (entity has EntityTag.PLAYER){
+        entity += Particle(
+            sprite(GameObject.DUST_PARTICLES, AnimationType.RUN,entity[Physic].body.position,assetHelper,0f),
+            vec2(),
+            entity
+        )
     }
 
 }

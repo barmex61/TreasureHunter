@@ -32,7 +32,6 @@ enum class SwordState : EntityState{
         }
         override fun update(entity: AiEntity) {
             respawnTimer -= Gdx.graphics.deltaTime
-            println(respawnTimer)
             if (respawnTimer <= 0f){
                 entity.state(IDLE)
                 entity.alpha = 1f
@@ -51,19 +50,23 @@ enum class SwordState : EntityState{
             spinningDuration -= Gdx.graphics.deltaTime
             when{
                 entity.collidedWithWall -> entity.state(EMBEDDED)
-                spinningDuration <= 0f -> entity.attackDestroyCooldown = 0f
+                spinningDuration <= 0f -> {
+                    entity.attackDestroyCooldown = 0f
+                    entity.remove()
+                }
             }
         }
     },
     EMBEDDED{
         override fun enter(entity: AiEntity) {
+            entity.addCollectable()
             entity.animation(AnimationType.EMBEDDED)
         }
         override fun update(entity: AiEntity) {
             entity.attackDestroyCooldown -= entity.world.deltaTime
             when{
                 entity.attackDestroyCooldown <= 1f && entity.hasNoBlinkComp -> entity.addBlinkComp(1f,0.075f)
-                entity.attackDestroyCooldown <= 0f -> entity.remove()
+                entity.attackDestroyCooldown <= 0f || entity.isCollected -> entity.remove()
             }
         }
     }

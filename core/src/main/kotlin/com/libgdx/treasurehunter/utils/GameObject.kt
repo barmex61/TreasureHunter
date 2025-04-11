@@ -16,9 +16,11 @@ enum class GameObject() {
     SHIP_HELM,
     DEAD_MARK,
     SWORD,
+    SWORD_EMBEDDED,
     INTERROGATION_MARK,
     EXCLAMATION_MARK,
     SPIKES,
+    DUST_PARTICLES,
     GROUND;
     val atlasKey = this.name.lowercase()
 }

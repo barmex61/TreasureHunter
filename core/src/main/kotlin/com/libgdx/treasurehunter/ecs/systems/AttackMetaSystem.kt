@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.FixtureDef
+import com.badlogic.gdx.physics.box2d.Shape
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
@@ -15,12 +16,11 @@ import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.State
-import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.JUMP_DEBUG_RECT
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.utils.mirrorVertices
-import com.libgdx.treasurehunter.utils.playerMeleeAttackVertices
-import com.libgdx.treasurehunter.utils.playerRangeAttackVertices
+import com.libgdx.treasurehunter.utils.playerSwordMeleeAttackVertices
+import com.libgdx.treasurehunter.utils.playerSwordRangedAttackVertices
 import com.libgdx.treasurehunter.utils.plus
 import ktx.math.vec2
 
@@ -87,26 +87,45 @@ class AttackMetaSystem : IteratingSystem(
         body.applyLinearImpulse(Vector2(7f * multiplayer,0f)  ,body.position, true)
     }
 
-    companion object{
-        fun createAttackFixture(keyFrameIndex : Int,attackBody : Body,attackType: AttackType,flipX : Boolean = false,isMelee: Boolean ,isSensor : Boolean){
-            attackBody.fixtureList.forEach {
-                attackBody.destroyFixture(it)
-            }
-            val fixtureVertices =if (isMelee) playerMeleeAttackVertices[attackType]?.get(keyFrameIndex) else playerRangeAttackVertices
-            fixtureVertices?:return
-            val mirroredVertices = if (flipX) fixtureVertices.mirrorVertices() else fixtureVertices
-            val attackFixtureDef = FixtureDef().apply {
-                this.isSensor = isSensor
-                density = 0f
-                friction = 0f
-                restitution = 0f
-                shape = ChainShape().apply {
-                    createLoop(mirroredVertices)
-                }
-            }
-            attackBody.createFixture(attackFixtureDef).apply {
-                userData = if (isMelee) "meleeAttackFixture" else "rangeAttackFixture"
-            }
+    fun createAttackFixture(keyFrameIndex : Int,attackBody : Body,attackType: AttackType,flipX : Boolean = false,isMelee: Boolean ,isSensor : Boolean){
+        attackBody.fixtureList.forEach {
+            attackBody.destroyFixture(it)
+        }
+        val shape = if (isMelee) getMeleeAttackShape(attackType,keyFrameIndex,flipX) else getRangedAttackShape(flipX)
+        shape?:return
+        val attackFixtureDef = FixtureDef().apply {
+            this.isSensor = isSensor
+            density = 0f
+            restitution = 0f
+            this.shape = shape
+        }
+        attackBody.createFixture(attackFixtureDef).apply {
+            userData = if (isMelee) "meleeAttackFixture" else "rangeAttackFixture"
+        }
+    }
+
+    private fun getMeleeAttackShape(attackType: AttackType,keyFrameIndex: Int,flipX: Boolean) : Shape? {
+        val fixtureVertices =playerSwordMeleeAttackVertices[attackType]?.get(keyFrameIndex)
+        fixtureVertices?:return null
+        val mirroredVertices = if (flipX) fixtureVertices.mirrorVertices() else fixtureVertices
+        return ChainShape().apply {
+            createLoop(mirroredVertices)
+        }
+    }
+
+    private fun getRangedAttackShape(flipX: Boolean): ChainShape {
+        val originalShape = playerSwordRangedAttackVertices!!.first().fixtureDef.shape as ChainShape
+        val vertexCount = originalShape.vertexCount
+        val vertices = Array(vertexCount) { Vector2() }
+
+        for (i in 0 until vertexCount) {
+            val vertex = Vector2()
+            originalShape.getVertex(i, vertex)
+            vertices[i] = if (flipX) Vector2(-vertex.x + 0.65f, vertex.y) else Vector2(vertex.x , vertex.y)
+        }
+
+        return ChainShape().apply {
+            createChain(vertices)
         }
     }
 

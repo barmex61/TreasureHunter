@@ -18,6 +18,7 @@ import com.libgdx.treasurehunter.ecs.systems.InvulnarableSystem
 import com.libgdx.treasurehunter.ecs.systems.JumpSystem
 import com.libgdx.treasurehunter.ecs.systems.MarkSystem
 import com.libgdx.treasurehunter.ecs.systems.MoveSystem
+import com.libgdx.treasurehunter.ecs.systems.ParticleSystem
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem
 import com.libgdx.treasurehunter.ecs.systems.RenderSystem
 import com.libgdx.treasurehunter.ecs.systems.StateSystem
@@ -63,6 +64,7 @@ class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,p
             add(AttackMetaSystem())
             add(JumpSystem())
             add(PhysicSystem())
+            add(ParticleSystem())
             add(MarkSystem())
             add(AnimationSystem())
             add(CameraSystem())

@@ -1,8 +1,9 @@
 package com.libgdx.treasurehunter.utils
 
 import com.libgdx.treasurehunter.ecs.components.AttackType
+import com.libgdx.treasurehunter.utils.Constants.OBJECT_FIXTURES
 
-val playerMeleeAttackVertices: Map<AttackType, Map<Int,FloatArray> > = mapOf(
+val playerSwordMeleeAttackVertices: Map<AttackType, Map<Int,FloatArray> > = mapOf(
 
     AttackType.ATTACK_1 to mapOf(
         0 to floatArrayOf(
@@ -53,12 +54,7 @@ val playerMeleeAttackVertices: Map<AttackType, Map<Int,FloatArray> > = mapOf(
     )
 )
 
-val playerRangeAttackVertices = floatArrayOf(
-    0.25f,0.25f,
-    0.25f,0.5f,
-    0.65f,0.5f,
-    0.5f,0.25f,
-)
+val playerSwordRangedAttackVertices = OBJECT_FIXTURES[GameObject.SWORD_EMBEDDED]
 
 fun FloatArray.mirrorVertices(): FloatArray {
     val mirroredVertices = FloatArray(this.size)

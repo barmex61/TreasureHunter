@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="64" tileheight="93" tilecount="14" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="64" tileheight="93" tilecount="15" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -240,6 +240,17 @@
      <property name="userData" value="bodyFixture"/>
     </properties>
     <polygon points="0,0 0,11 11,11 11,0"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="36">
+  <properties>
+   <property name="gameObject" propertytype="GameObject" value="SWORD_EMBEDDED"/>
+  </properties>
+  <image width="20" height="20" source="../graphics/sword_embedded.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="14">
+    <polygon points="0,0 3,0 3,2 5,2 5,1 6,1 6,0 7,0 7,1 14,1 14,-4 7,-4 7,-3 6,-3 6,-4 5,-4 5,-5 3,-5 3,-3 1,-3 1,-2 0,-2"/>
    </object>
   </objectgroup>
  </tile>

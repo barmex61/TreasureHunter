@@ -46,7 +46,7 @@ fun Body.createFixtures(fixtureDefUserData: List<FixtureDefUserData>) {
 
 data class FixtureDefUserData(val fixtureDef: FixtureDef, val userData : String)
 
-fun fixtureDefinitionOf(mapObject: MapObject): FixtureDefUserData {
+fun fixtureDefinitionOf(mapObject: MapObject,isGround : Boolean = false): FixtureDefUserData {
     val fixtureDef = when(mapObject){
         is RectangleMapObject -> rectangleFixtureDef(mapObject)
         is EllipseMapObject -> ellipseFixtureDef(mapObject)
@@ -55,8 +55,9 @@ fun fixtureDefinitionOf(mapObject: MapObject): FixtureDefUserData {
         else -> gdxError("Unsupported mapObject $mapObject")
     }
     val userData = mapObject.property("userData","")
+    println(userData)
     fixtureDef.apply {
-        friction = mapObject.property("friction",0f)
+        friction = mapObject.property("friction",if (isGround) 0.2f else 0f)
         restitution = mapObject.property("restitution",0f)
         isSensor = mapObject.property("isSensor",false)
         density = mapObject.property("density",0f)

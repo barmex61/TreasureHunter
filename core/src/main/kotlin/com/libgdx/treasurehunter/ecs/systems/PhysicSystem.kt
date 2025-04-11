@@ -80,13 +80,16 @@ class PhysicSystem (
 
     override fun onAlphaEntity(entity: Entity, alpha: Float) {
         val (sprite) = entity[Graphic]
-        val (body,previousPosition) = entity[Physic]
+        val physic = entity[Physic]
+        val (body,previousPosition) = physic
         val (prevX,prevY) = previousPosition
         val (bodyX,bodyY) = body.position
+
         sprite.setPosition(
             MathUtils.lerp(prevX,bodyX,alpha),
             MathUtils.lerp(prevY,bodyY,alpha)
         )
+
     }
 
     private val Fixture.entity : Entity?
@@ -144,7 +147,7 @@ class PhysicSystem (
         GameEventDispatcher.fireEvent(GameEvent.CollectableItemEvent(collectableEntity,playerEntity))
     }
 
-    private fun handleSwordAndWallCollision(activeAttackEntity : Entity){
+    private fun handleSwordAndWallCollision(activeAttackEntity: Entity) {
         val attackMeta = activeAttackEntity[AttackMeta]
         attackMeta.collidedWithWall = true
     }
@@ -157,7 +160,8 @@ class PhysicSystem (
     }
 
     private fun isCollectableCollision(entityA: Entity,entityB: Entity,fixtureB:Fixture) : Boolean{
-        return  entityA has EntityTag.COLLECTABLE && entityB has EntityTag.PLAYER && fixtureB.isSensor
+        val collectable =  entityA has EntityTag.COLLECTABLE && entityB has EntityTag.PLAYER && fixtureB.isSensor
+        return collectable
     }
 
     private fun isSwordAndWallCollision(entityA: Entity?,fixtureA : Fixture,fixtureB:Fixture) : Boolean{
@@ -172,6 +176,7 @@ class PhysicSystem (
         val fixtureB = contact.fixtureB
         val entityA = fixtureA.entity
         val entityB = fixtureB.entity
+
         if (entityA == null || entityB == null) {
             when{
                 isSwordAndWallCollision(entityA,fixtureA,fixtureB) -> handleSwordAndWallCollision(entityA!!)
@@ -181,12 +186,12 @@ class PhysicSystem (
             return
         }
         when {
-            isDamageCollision(entityA,entityB,fixtureB) -> handleDamageBeginContact(entityA,entityB)
-            isDamageCollision(entityB,entityA,fixtureA) -> handleDamageBeginContact(entityB,entityA)
             isCollectableCollision(entityA,entityB,fixtureB) -> handleCollectableBeginContact(entityA,entityB)
             isCollectableCollision(entityB,entityA,fixtureA) -> handleCollectableBeginContact(entityB,entityA)
             isSwordAndWallCollision(entityA,fixtureA,fixtureB) -> handleSwordAndWallCollision(entityA)
             isSwordAndWallCollision(entityB,fixtureB,fixtureA) -> handleSwordAndWallCollision(entityB)
+            isDamageCollision(entityA,entityB,fixtureB) -> handleDamageBeginContact(entityA,entityB)
+            isDamageCollision(entityB,entityA,fixtureA) -> handleDamageBeginContact(entityB,entityA)
         }
 
     }
