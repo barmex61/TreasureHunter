@@ -8,5 +8,6 @@ import com.libgdx.treasurehunter.ecs.systems.AnimationSystem
 
 fun World.animation(entity: Entity,animationType: AnimationType,playMode : PlayMode = PlayMode.LOOP,frameDuration : Float? = null) {
     val animationSystem = this.system<AnimationSystem>()
-    animationSystem.entityAnimation(entity,animationType,playMode,frameDuration)
+    animationSystem.setAnimation(entity,animationType,playMode,frameDuration)
 }
+

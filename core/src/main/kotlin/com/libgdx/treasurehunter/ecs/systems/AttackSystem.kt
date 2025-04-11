@@ -75,7 +75,7 @@ class AttackSystem(
                                     it.setAlpha(0f)
                                 }, gameObject
                             )
-                            it += Animation(frameDuration = 0.1f, gameObject = gameObject)
+                            it += Animation(gameObject)
                             it += State(
                                 AiEntity(it, world, physicWorld, assetHelper),
                                 SwordState.SPINNING

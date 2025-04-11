@@ -55,7 +55,6 @@ fun fixtureDefinitionOf(mapObject: MapObject,isGround : Boolean = false): Fixtur
         else -> gdxError("Unsupported mapObject $mapObject")
     }
     val userData = mapObject.property("userData","")
-    println(userData)
     fixtureDef.apply {
         friction = mapObject.property("friction",if (isGround) 0.2f else 0f)
         restitution = mapObject.property("restitution",0f)

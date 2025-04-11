@@ -1,10 +1,8 @@
 package com.libgdx.treasurehunter.ai
 
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.BodyDef
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
@@ -28,12 +26,11 @@ import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.MarkType
+import com.libgdx.treasurehunter.enums.ParticleType
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.utils.GameObject
-import ktx.box2d.rayCast
-import kotlin.math.abs
 import kotlin.math.pow
 
 data class AiEntity(
@@ -57,14 +54,8 @@ data class AiEntity(
     val onAir : Boolean
         get() = this[Physic].body.linearVelocity.y !in (-0.1f..0.1f)
 
-    // ------ CAN BE REMOVED -------
 
-    var currentAnimType = AnimationType.IDLE
-    var frameDuration = 1f
-    val animationType : AnimationType
-        get() = with(world){
-            entity[Animation].animationType
-        }
+    // ------ CAN BE REMOVED -------
 
     inline operator fun <reified T:Component<*>> get(type: ComponentType<T>) : T = with(world){
         return entity[type]
@@ -76,15 +67,14 @@ data class AiEntity(
 
     fun Entity.configure(configuration : EntityUpdateContext.(Entity) -> Unit) = with(world) { this@configure.configure(configuration) }
 
-    fun destroy() = with(world){
-        entity.remove()
+    fun fireParticleEvent() {
+        val particlePosition = this[Physic].body.position
+        GameEventDispatcher.fireEvent(GameEvent.ParticleEvent(entity,particlePosition, ParticleType.RUN))
     }
 
-
-    fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float = this[Animation].frameDuration) = with(world){
+    fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){
         animation(entity,animationType,playMode,frameDuration)
     }
-
 
     fun state(state : EntityState,toPreviousState : Boolean = false){
         val stateComp = this[State]
@@ -114,8 +104,8 @@ data class AiEntity(
     }
 
     fun isAnimationDone(): Boolean = with(world){
-        val animComp = entity[Animation]
-        animComp.gdxAnimation!!.isAnimationFinished(animComp.timer)
+        val mainAnimationData = entity[Animation].animationData
+        mainAnimationData.gdxAnimation!!.isAnimationFinished(mainAnimationData.timer)
     }
 
     fun createMarkEntity(markType : MarkType) {
@@ -126,7 +116,7 @@ data class AiEntity(
                 val gameObjectFromType = markType.toGameObject()
                 world.entity{ markEntity ->
                     markEntity += Graphic(sprite(gameObjectFromType, AnimationType.IN,markPosition,assetHelper,0f), gameObjectFromType)
-                    markEntity += Animation(null,0f,0.2f, PlayMode.NORMAL, AnimationType.IN, GameObject.EXCLAMATION_MARK)
+                    markEntity += Animation(gameObjectFromType)
                     world.animation(markEntity, AnimationType.IN, PlayMode.NORMAL,0.2f)
                     markEntity += Mark(1f,markType.offset,aiEntity)
                 }

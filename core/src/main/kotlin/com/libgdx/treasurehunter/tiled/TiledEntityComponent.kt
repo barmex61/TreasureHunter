@@ -1,11 +1,9 @@
 package com.libgdx.treasurehunter.tiled
 
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityCreateContext
@@ -27,12 +25,12 @@ import com.libgdx.treasurehunter.utils.GameObject
 import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.ai.EntityState
 import com.libgdx.treasurehunter.ai.SwordState
+import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackItem
 import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.Life
-import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.ecs.components.Physic
 import ktx.app.gdxError
 import ktx.math.vec2
@@ -45,6 +43,7 @@ fun sprite(gameObject: GameObject, animationType: AnimationType, startPosition :
     val atlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
     val regions = atlas.findRegions(regionPath) ?:
     gdxError("There are no regions for $gameObject and $animationType")
+    println(regionPath)
     val firstFrame = regions.first()
     val w = firstFrame.regionWidth * UNIT_SCALE
     val h = firstFrame.regionHeight * UNIT_SCALE
@@ -65,9 +64,12 @@ fun EntityCreateContext.configureEntityGraphic(entity: Entity,tile: TiledMapTile
 }
 
 fun EntityCreateContext.configureAnimation(entity: Entity, tile: TiledMapTile, world: World,startAnimType : AnimationType,gameObject: GameObject) {
-    if (tile.property<Float>("animFrameDuration",0f) == 0f) return
-    entity += Animation(frameDuration = tile.property<Float>("animFrameDuration"), gameObject = gameObject)
-    world.animation(entity,startAnimType)
+    val frameDuration = tile.property<Float>("animFrameDuration",0f)
+    if (frameDuration == 0f) return
+    entity += Animation(gameObject = gameObject, animationData = AnimationData().apply {
+        this.frameDuration = frameDuration
+        this.animationType = startAnimType
+    })
 }
 
 fun EntityCreateContext.configureMove(entity: Entity, tile: TiledMapTile){
@@ -129,14 +131,6 @@ fun EntityCreateContext.configureEntityTags(
         val gameObject = GameObject.valueOf(tile.propertyOrNull<String>("gameObject")?: gdxError("gameObject is null $tile"))
         entity += Collectable(gameObject)
     }
-    if (entity has EntityTag.PLAYER){
-        entity += Particle(
-            sprite(GameObject.DUST_PARTICLES, AnimationType.RUN,entity[Physic].body.position,assetHelper,0f),
-            vec2(),
-            entity
-        )
-    }
-
 }
 
 fun EntityCreateContext.configureDamage(entity: Entity, tile: TiledMapTile){
@@ -160,6 +154,8 @@ fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){
     }
 
 }
+
+
 
 
 

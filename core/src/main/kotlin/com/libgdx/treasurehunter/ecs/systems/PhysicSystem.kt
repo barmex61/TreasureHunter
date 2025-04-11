@@ -13,6 +13,7 @@ import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import com.libgdx.treasurehunter.ai.PlayerState
 import com.libgdx.treasurehunter.ecs.components.Animation
+import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackItem
@@ -24,20 +25,26 @@ import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Move
+import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.State
+import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.tiled.TiledMapService.Companion.logEntity
+import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.utils.GameObject
 import com.libgdx.treasurehunter.utils.animation
 import ktx.math.component1
 import ktx.math.component2
+import ktx.math.vec2
+import ktx.math.plus
 
 class PhysicSystem (
-    private val physicWorld : PhysicWorld = inject()
+    private val physicWorld : PhysicWorld = inject(),
+    private val assetHelper: AssetHelper = inject()
 ): IteratingSystem(
     family = family{all(Physic, Graphic)},
     interval = Fixed(1/300f)
@@ -250,6 +257,17 @@ class PhysicSystem (
                         }
                     }
                     else -> Unit
+                }
+            }
+            is GameEvent.ParticleEvent ->{
+                val position = event.particlePosition
+                world.entity{
+                    it += Particle(event.particleType,event.owner)
+                    it += Graphic(sprite(GameObject.DUST_PARTICLES, AnimationType.valueOf(event.particleType.name),position + vec2(0.2f,0.3f) , assetHelper ,0f), GameObject.DUST_PARTICLES)
+                    it += Animation(GameObject.DUST_PARTICLES, animationData = AnimationData().apply {
+                        this.animationType = AnimationType.valueOf(event.particleType.name)
+                        this.playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
+                    })
                 }
             }
             else -> Unit

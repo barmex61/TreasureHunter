@@ -1,5 +1,6 @@
 package com.libgdx.treasurehunter.ai
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.math.MathUtils
 import com.libgdx.treasurehunter.ai.EntityState.Companion.TOLERANCE_X
@@ -12,6 +13,8 @@ import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.enums.MarkType
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.component1
 import ktx.math.component2
@@ -54,6 +57,7 @@ enum class PlayerState : EntityState {
     RUN {
         override fun enter(entity: AiEntity) {
             entity.animation(AnimationType.RUN)
+            entity.fireParticleEvent()
         }
 
         override fun update(entity: AiEntity) {
@@ -80,8 +84,6 @@ enum class PlayerState : EntityState {
                 MathUtils.isEqual(linY, ZERO, TOLERANCE_Y) ->{
                     if (MathUtils.isEqual(linX, ZERO, TOLERANCE_X)){
                         entity.state(IDLE)
-                    }else{
-                        entity.state(RUN)
                     }
                 }
             }

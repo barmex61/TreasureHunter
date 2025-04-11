@@ -46,6 +46,8 @@ class AttackMetaSystem : IteratingSystem(
             if (keyFrameIx == 1 && !hasFixture){
                 setRangedAttackFixture(entity,owner,ownerFlipX,currentFrameIndex,attackMeta,body,attackType)
                 attackMeta.isFixtureMirrored = ownerFlipX
+            }
+            if (keyFrameIx == 2){
                 owner[State].stateMachine.changeState(PlayerState.SWORD_THROWED)
             }
         }

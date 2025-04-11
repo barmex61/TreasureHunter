@@ -21,7 +21,7 @@ class DebugSystem(
     private val shapeRenderer = ShapeRenderer()
 
     override fun onTick() {
-        box2DDebugRenderer.render(physicWorld, gameCamera.combined)
+        //box2DDebugRenderer.render(physicWorld, gameCamera.combined)
         shapeRenderer.use(ShapeRenderer.ShapeType.Line,gameCamera.combined){
             it.color = Color.RED
             it.rect(JUMP_DEBUG_RECT.x, JUMP_DEBUG_RECT.y, JUMP_DEBUG_RECT.width, JUMP_DEBUG_RECT.height)

@@ -170,7 +170,6 @@ class TiledMapService (
                 if (it.has(Attack)) components.add("Attack")
                 if (it.has(State)) components.add("State")
                 if (it.has(Damage)) components.add("Damage")
-
                 Gdx.app.log("EntityDebug", "Entity ${it.id} components: ${components.joinToString(", ")}")
             }
         }

@@ -14,24 +14,29 @@ enum class AnimationType(val isAttackAnimation : Boolean = false){
     val atlasKey : String = this.name.lowercase()
 }
 
-data class Animation(
-    var gdxAnimation : GdxAnimation? = null,
-    var timer : Float = 0f,
-    var frameDuration : Float,
+data class AnimationData(
+    var gdxAnimation: GdxAnimation? = null,
+    var timer: Float = 0f,
     var playMode: PlayMode = PlayMode.LOOP,
-    var animationType: AnimationType = AnimationType.IDLE,
-    var gameObject: GameObject
-) : Component<Animation> {
+    var animationType: AnimationType = AnimationType.NONE,
+    var frameDuration: Float = 0.1f
+)
+
+
+data class Animation(
+    var gameObject: GameObject,
+    val animationData: AnimationData = AnimationData(),
+)  : Component<Animation> {
     fun getAttackAnimKeyFrameIx() : Int{
-        return if (animationType.isAttackAnimation){
-            gdxAnimation?.getKeyFrameIndex(timer) ?: 0
+        return if (animationData.animationType.isAttackAnimation){
+            animationData.gdxAnimation?.getKeyFrameIndex(animationData.timer) ?: 0
         }else{
             -1
         }
     }
     fun setNewGameObject(newGameObject: GameObject){
         gameObject = newGameObject
-        timer = 0f
+        animationData.timer = 0f
     }
     override fun type() : ComponentType<Animation> = Animation
     companion object : ComponentType<Animation>()

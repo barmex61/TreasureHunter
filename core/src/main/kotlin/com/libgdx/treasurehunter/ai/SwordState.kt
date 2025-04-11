@@ -1,6 +1,7 @@
 package com.libgdx.treasurehunter.ai
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 
@@ -60,7 +61,7 @@ enum class SwordState : EntityState{
     EMBEDDED{
         override fun enter(entity: AiEntity) {
             entity.addCollectable()
-            entity.animation(AnimationType.EMBEDDED)
+            entity.animation(AnimationType.EMBEDDED, playMode = Animation.PlayMode.NORMAL)
         }
         override fun update(entity: AiEntity) {
             entity.attackDestroyCooldown -= entity.world.deltaTime

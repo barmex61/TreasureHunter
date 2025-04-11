@@ -14,7 +14,6 @@ import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Flash
 import com.libgdx.treasurehunter.ecs.components.Graphic
-import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.utils.Constants
@@ -51,6 +50,7 @@ class RenderSystem (
     }
 
     override fun onTick() {
+        backgroundClose?.offsetX -= deltaTime * 10f
         gameViewPort.apply()
         mapRenderer.setView(gameCamera)
         spriteBatch.use {
@@ -68,14 +68,12 @@ class RenderSystem (
         sort(entityComparator)
         forEach { entity ->
             val sprite = entity[Graphic].sprite
-            val particleSprite = entity.getOrNull(Particle)?.sprite
             sprite.color = currentColorSettings.entityColor.copy(alpha = sprite.color.a)
             val flashCmp = entity.getOrNull(Flash)
             if (flashCmp != null && flashCmp.doFlash) {
                 sprite.color = flashCmp.color
             }
             sprite.draw(spriteBatch)
-            particleSprite?.draw(spriteBatch)
         }
     }
 
@@ -106,9 +104,18 @@ class RenderSystem (
             is GameEvent.MapChangeEvent -> {
                 try {
                     groundLayer = event.tiledMap.layers.get("ground") as TiledMapTileLayer
-                    backgroundClose = event.tiledMap.layers.get("background_close") as TiledMapTileLayer
-                    backgroundFar = event.tiledMap.layers.get("background_far") as TiledMapTileLayer
-                    backgroundMid = event.tiledMap.layers.get("background_mid") as TiledMapTileLayer
+                    backgroundClose = (event.tiledMap.layers.get("background_close") as TiledMapTileLayer).apply {
+                        parallaxX = parallaxMap["background_close"]!!.first
+                        parallaxY = parallaxMap["background_close"]!!.second
+                    }
+                    backgroundFar = (event.tiledMap.layers.get("background_far") as TiledMapTileLayer).apply {
+                        parallaxX = parallaxMap["background_far"]!!.first
+                        parallaxY = parallaxMap["background_far"]!!.second
+                    }
+                    backgroundMid = (event.tiledMap.layers.get("background_mid") as TiledMapTileLayer).apply {
+                        parallaxX = parallaxMap["background_mid"]!!.first
+                        parallaxY = parallaxMap["background_mid"]!!.second
+                    }
                     val displayMode = event.tiledMap.properties.get("mapDisplayMode", ColorSettings.DAY.name, String::class.java)
                     setCurrentSettings(displayMode)
                 } catch (e: Exception) {
@@ -118,6 +125,12 @@ class RenderSystem (
             else -> Unit
         }
     }
+
+    private val parallaxMap = mapOf<String, Pair<Float, Float>>(
+        "background_close" to Pair(0.5f, 0.5f),
+        "background_mid" to Pair(0.3f, 0.3f),
+        "background_far" to Pair(0.1f, 0.05f)
+    )
 
     private fun setCurrentSettings(displayMode : String){
         currentColorSettings = ColorSettings.valueOf(displayMode)

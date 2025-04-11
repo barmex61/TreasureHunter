@@ -6,17 +6,17 @@
  <tileset firstgid="1" source="terrainTileset.tsx"/>
  <tileset firstgid="86" source="objects.tsx"/>
  <tileset firstgid="123" source="islandBackground.tsx"/>
- <layer id="5" name="background_far" width="64" height="20" parallaxx="0.1" parallaxy="0.05">
+ <layer id="5" name="background_far" width="64" height="20">
   <data encoding="base64" compression="zlib">
    eJzt0kkOgkAURdFS1E0AdoCrcCd22LH/OQreAU4MiJRgjL6EEwb1Sf2bkBpjLrgiQw7T40EfDgYYYoT0x+a/fT/1q1/96le/+tWvfvWrX/3vzeciBZd/woOPMSaYYoY5AoSIsGjhvMldj7NNd31lZvnnVlhjgy12iLHH+cNOxTuxENe0HHAsuaPsm6r97rNttNb12LTYsLnnWVdXe3blBuA6XqQ=
   </data>
  </layer>
- <layer id="6" name="background_mid" width="64" height="20" parallaxx="0.2" parallaxy="0.2">
+ <layer id="6" name="background_mid" width="64" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt1UlOAlEUQFH+kB6l2YMiiKDsAUUFBPaAoEjnzCWwFBaiO6ETQWTsZcagQv6HVIDwbnImlXrJS7UOhyQdX5/40jy3q+zcZH0T/GCKGX4xxx8W6GOAIUYY49tgTqeeMt9jk6yus59jAZzgFEGEEEYETrjghgde+JT+nG6meyzzGT43PYvzLzmWwBWSSOEaN0jjDOeI4gIxxJX+nG6b7rHtu/PIfA55FPCEIkooI4Nb3CGLezwo/Tm797C6pybVmX9DA0200EYH76jgGVXU8IJXpT9n9x6StNou/6X70LbfA+mw+pD7LUmSJO1h/+OLTy4=
+   eJzt1ElOAkEUgGFqCQKCCHcQmRHvwKCADHfAAZTBnUfwKB4EboJMgsLanx0JHaluO3QT6k++TSeVrnTnPYdDpTq++hhYfQmJZvjCHAt84wdLrDDEJ0YYY4KpjnN26l1sPzvlmQ9+nCGAcwQRghMunMAND7xC/pyd+tC4T5xnCSSRQhpXyOAaFwjjEhFEERPy53al9U/2WZH3l1DGHSqoooY6ssghjwJucCvkz+1q/U/0zqCZtXj/M17QRgdd9PCKBu7xgEc8oSnkz8mkdwbXeW02W//J6AxaPTtmZXQGtfbZIX4TozOo1eY3sXKv2KFj2Ctvf9xX7RXz9sohZuZeUalUKr39AjtkabY=
   </data>
  </layer>
- <layer id="7" name="background_close" width="64" height="20" parallaxx="0.5" parallaxy="0.5">
+ <layer id="7" name="background_close" width="64" height="20">
   <data encoding="base64" compression="zlib">
    eJzt1FsKwCAMRNG4/L4W0tceO/9FSCGxCvfAfFbSOGgGvE3FbFYWZVW28vdEfhGz7/rmUE7lUu6E/8/acYvZI4wyJ74b+f2IQLfz0bGcjkXs1XNGr/cXsVfPGbwRdb12oxW6AQDI9AD05jbZ
   </data>

@@ -1,14 +1,12 @@
 package com.libgdx.treasurehunter.ecs.components
 
-import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
+import com.libgdx.treasurehunter.enums.ParticleType
 
 data class Particle(
-    val sprite : Sprite,
-    val offset : Vector2,
+    val particleType : ParticleType,
     val owner : Entity
 ) : Component <Particle> {
 
