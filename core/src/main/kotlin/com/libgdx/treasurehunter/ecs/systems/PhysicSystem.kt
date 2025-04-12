@@ -133,6 +133,9 @@ class PhysicSystem (
     private val Fixture.isRangeAttackFixture : Boolean
         get() = this.userData == "rangeAttackFixture"
 
+    private val Fixture.isSensorFixture : Boolean
+        get() = this.userData == "sensorFixture"
+
     //----- HANDLE COLLISIONS -----
     private fun handleDamageBeginContact(damageSource: Entity, damageTarget: Entity) {
         val (damageAmount,sourceEntity) = damageSource[Damage]
@@ -170,8 +173,7 @@ class PhysicSystem (
     }
 
     private fun isCollectableCollision(entityA: Entity,entityB: Entity,fixtureB:Fixture) : Boolean{
-        val collectable =  entityA has EntityTag.COLLECTABLE && entityB has EntityTag.PLAYER && fixtureB.isSensor
-        return collectable
+        return entityA has EntityTag.COLLECTABLE && entityB has EntityTag.PLAYER && fixtureB.isSensor && !fixtureB.isSensorFixture
     }
 
     private fun isSwordAndWallCollision(entityA: Entity?,fixtureA : Fixture,fixtureB:Fixture) : Boolean{

@@ -1,5 +1,6 @@
 package com.libgdx.treasurehunter.game.screens
 
+import com.badlogic.gdx.ai.GdxAI
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.viewport.StretchViewport
@@ -91,7 +92,8 @@ class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,p
     }
 
     override fun render(delta: Float) {
-        world.update(delta)
+        world.update(delta.coerceAtMost(0.25f))
+        GdxAI.getTimepiece().update(delta.coerceAtMost(0.25f))
     }
 
     override fun resize(width: Int, height: Int) {

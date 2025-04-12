@@ -59,11 +59,11 @@ fun EntityCreateContext.configureEntityGraphic(entity: Entity,tile: TiledMapTile
     val startAnimType = AnimationType.valueOf(tile.property("startAnimType","NONE"))
     entity += Graphic(sprite(gameObject,startAnimType,position,assetHelper,rotation))
     if (startAnimType != AnimationType.NONE){
-        configureAnimation(entity,tile,world,startAnimType,gameObject)
+        configureAnimation(entity,tile,startAnimType,gameObject)
     }
 }
 
-fun EntityCreateContext.configureAnimation(entity: Entity, tile: TiledMapTile, world: World,startAnimType : AnimationType,gameObject: GameObject) {
+fun EntityCreateContext.configureAnimation(entity: Entity, tile: TiledMapTile,startAnimType : AnimationType,gameObject: GameObject) {
     val frameDuration = tile.property<Float>("animFrameDuration",0f)
     if (frameDuration == 0f) return
     entity += Animation(gameObject = gameObject, animationData = AnimationData(
@@ -74,9 +74,10 @@ fun EntityCreateContext.configureAnimation(entity: Entity, tile: TiledMapTile, w
 
 fun EntityCreateContext.configureMove(entity: Entity, tile: TiledMapTile){
     val speed = tile.property<Float>("speed",0f)
+    val initialFlipX = tile.property<Boolean>("isFlipped",false)
     if (speed > 0f ){
         val timeToMax = tile.property<Float>("timeToMax",0.1f)
-        entity += Move(timeToMax = timeToMax, maxSpeed = speed)
+        entity += Move(timeToMax = timeToMax, maxSpeed = speed, initialFlipX = initialFlipX)
     }
 }
 

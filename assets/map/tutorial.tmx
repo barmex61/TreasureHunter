@@ -23,7 +23,7 @@
  </layer>
  <layer id="1" name="ground" width="64" height="20">
   <data encoding="base64" compression="zlib">
-   eJztVwEKwzAI7Dbyga0/WPf/L87ABBFtdIszKT04SE3b5NRc6bKcOOHDBXgF3rI3koQ78AFcgaVx7xFz9QRuwNfnWstBjdNczQRv3aQc1BjP1SzgdeP6NL2te2aBVreWxrIzdyS0tFm0W87YaP5p0WWtu8UbRvEPq6YRe/4bL5eeoTFtnA1pL54ewvpJ320a08a9wHUUQmke8ct5ob0rvYfGtLEXkk5tfYpevoDrI//Rw7SO2f6GvYvs1cMR/hDhM1b93rUj/CGiV7j+Suk8cA2tfPTyh2hI+qV+4Bpm/a/jQF0ao/03G297qg6U
+   eJztVwsKwzAI7TZygW032HaY3v9CM1BBRBsdcSalDx7k0yZ5al7pspw44cMFeAXesg+ShDvwAXwCS+PZI8bqBXwDP1tfi0Edp7GaCd68STGoYzxWs4DnjevT9LaemQVa3loay87ckdDSZtFuuWOj+adFlzXvFm8YxT+smkas+V+8nL6zCuto7WxIZ9mroZX1MX/Sd5uOae1e4DoKoTSP8N4Xqp/WrrQOHdPaXkg6tf0pevkC7o/8Rw3TPGb7G9YuslcNR/hDhM9Y9Xv3jvCHiFrh+iul+8A1tOLRyx+iIemX6oFrmPW/jgN1aYz232x8AUnPD28=
   </data>
  </layer>
  <objectgroup id="3" name="objects">
@@ -45,7 +45,7 @@
   <object id="40" gid="115" x="480" y="352" width="64" height="35"/>
   <object id="41" gid="116" x="704" y="480" width="34" height="93"/>
   <object id="42" gid="117" x="768" y="480" width="31" height="32"/>
-  <object id="45" gid="118" x="556" y="352" width="32" height="32"/>
+  <object id="45" gid="118" x="196" y="161" width="32" height="32"/>
   <object id="46" gid="121" x="368" y="359" width="64" height="40"/>
   <object id="50" gid="120" x="420" y="339" width="20" height="20"/>
   <object id="51" gid="120" x="221" y="535" width="20" height="20"/>

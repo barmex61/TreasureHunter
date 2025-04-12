@@ -356,11 +356,12 @@
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="gameObject" propertytype="GameObject" value="CRABBY"/>
    <property name="gravityScale" type="float" value="1"/>
+   <property name="isFlipped" type="bool" value="true"/>
    <property name="jumpHeight" type="float" value="2"/>
    <property name="life" type="int" value="3"/>
    <property name="speed" type="int" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
-   <property name="timeToMax" type="float" value="1.5"/>
+   <property name="timeToMax" type="float" value="2.5"/>
   </properties>
   <image width="72" height="32" source="../graphics/crabby.png"/>
   <objectgroup draworder="index" id="2">

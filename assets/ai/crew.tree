@@ -1,6 +1,8 @@
 #Actions
 import idle:"com.libgdx.treasurehunter.ai.Idle"
-
+import wander:"com.libgdx.treasurehunter.ai.Wander"
+import dead:"com.libgdx.treasurehunter.ai.Dead"
+import hit:"com.libgdx.treasurehunter.ai.Hit"
 
 #Conditions
 import canAttack?:"com.libgdx.treasurehunter.ai.CanAttack"
@@ -12,4 +14,7 @@ import notInRange?:"com.libgdx.treasurehunter.ai.NotInRange"
 
 root
     selector
+        (isGetHit?) hit
+        (isDead?) dead
+        (random success:0.5)(canMove?)(notInRange?) wander
         idle

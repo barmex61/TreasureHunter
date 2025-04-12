@@ -15,8 +15,11 @@ class MoveSystem : IteratingSystem(
     override fun onTickEntity(entity: Entity) {
         val moveComp = entity[Move]
         val physic = entity[Physic]
-        var (isFlipX,direction,current,maxSpeed,timer,timeToMax,_,defaultMax,maxReduceTimer,stop) = moveComp
-        if (stop) return
+        var (isFlipX,direction,current,maxSpeed,timer,timeToMax,_,defaultMax,maxReduceTimer,stop,initialFlipX) = moveComp
+        if (stop) {
+            moveComp.currentSpeed = 0f
+            return
+        }
 
         if (direction != MoveDirection.NONE){
             moveComp.previousDirection = direction
@@ -26,7 +29,8 @@ class MoveSystem : IteratingSystem(
             timer = (timer + (deltaTime* (1f/timeToMax))).coerceAtMost(1f)
             current = pow50outInterpolation.apply(1f,maxSpeed,timer)
             current *= direction.valueX
-            isFlipX = direction == MoveDirection.LEFT
+            var moveFlip = direction == MoveDirection.LEFT
+            isFlipX = if (initialFlipX == false) moveFlip else !moveFlip
 
         }else{
             current = 0f
