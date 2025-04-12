@@ -24,13 +24,13 @@ private fun calculateShapeWidth(chainShape: ChainShape): Float {
     var minX = Float.MAX_VALUE
     var maxX = Float.MIN_VALUE
     val tempVertex = Vector2()
-    
+
     for (i in 0 until chainShape.vertexCount) {
         chainShape.getVertex(i, tempVertex)
         minX = minOf(minX, tempVertex.x)
         maxX = maxOf(maxX, tempVertex.x)
     }
-    
+
     return maxX - minX
 }
 

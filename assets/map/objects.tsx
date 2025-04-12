@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="64" tileheight="93" tilecount="20" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="72" tileheight="93" tilecount="21" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="attackItem" propertytype="AttackItem" value="SWORD"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN_SWORD"/>
    <property name="gravityScale" type="float" value="1"/>
+   <property name="item" propertytype="AttackItem" value="SWORD"/>
    <property name="jumpHeight" type="float" value="2"/>
    <property name="life" type="int" value="3"/>
    <property name="speed" type="float" value="2"/>
@@ -210,11 +210,11 @@
  <tile id="35">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="attackItem" propertytype="AttackItem" value="NONE"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN"/>
    <property name="gravityScale" type="float" value="1"/>
+   <property name="item" propertytype="AttackItem" value="NONE"/>
    <property name="jumpHeight" type="float" value="2"/>
    <property name="life" type="int" value="3"/>
    <property name="speed" type="float" value="2"/>
@@ -258,7 +258,7 @@
   <properties>
    <property name="gameObject" propertytype="GameObject" value="AIR_ATTACK_1"/>
   </properties>
-  <image width="22" height="26" source="../graphics/air_attack_1_01.png"/>
+  <image width="22" height="26" source="../graphics/air_attack_1.png"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="17">
     <polygon points="0,0 7,0 19,-8 21,-17 22,-17 21,-6 14,3 11,4 6,4 0,1"/>
@@ -272,7 +272,7 @@
   <properties>
    <property name="gameObject" propertytype="GameObject" value="AIR_ATTACK_2"/>
   </properties>
-  <image width="31" height="23" source="../graphics/air_attack_2_01.png"/>
+  <image width="31" height="23" source="../graphics/air_attack_2.png"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="19">
     <polygon points="0,0 8,0 21,-7 24,-19 25,-19 27,-13 27,-8 22,0 15,2 6,2 6,1 0,1"/>
@@ -286,7 +286,7 @@
   <properties>
    <property name="gameObject" propertytype="GameObject" value="ATTACK_1"/>
   </properties>
-  <image width="28" height="17" source="../graphics/attack_1_01.png"/>
+  <image width="28" height="17" source="../graphics/attack_1.png"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="16">
     <polygon points="0,0 3,-1 5,-3 5,-6 3,-8 2,-8 2,-7 3,-7 3,-3 2,-3 2,-2 1,-2 1,-1 0,-1"/>
@@ -303,7 +303,7 @@
   <properties>
    <property name="gameObject" propertytype="GameObject" value="ATTACK_2"/>
   </properties>
-  <image width="38" height="37" source="../graphics/attack_2_01.png"/>
+  <image width="38" height="37" source="../graphics/attack_2.png"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="3" y="10">
     <polygon points="0,0 2,-1 2,-6 1,-8 -2,-10 -3,-10 -3,-9 -1,-6 0,-6"/>
@@ -320,7 +320,7 @@
   <properties>
    <property name="gameObject" propertytype="GameObject" value="ATTACK_3"/>
   </properties>
-  <image width="42" height="36" source="../graphics/attack_3_01.png"/>
+  <image width="42" height="36" source="../graphics/attack_3.png"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="35">
     <polygon points="0,0 3,-4 4,-4 4,-9 3,-9 3,-10 6,-9 6,-4 3,0 1,1 0,1"/>
@@ -330,6 +330,34 @@
    </object>
    <object id="3" x="37" y="21">
     <polygon points="0,0 1,-3 2,-3 2,-11 -3,-18 -3,-19 -2,-19 4,-12 5,-10 5,-5 4,-3"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="48">
+  <properties>
+   <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="gameObject" propertytype="GameObject" value="CRABBY"/>
+   <property name="gravityScale" type="float" value="1"/>
+   <property name="jumpHeight" type="float" value="2"/>
+   <property name="life" type="int" value="3"/>
+   <property name="speed" type="int" value="2"/>
+   <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="timeToMax" type="float" value="1.5"/>
+  </properties>
+  <image width="72" height="32" source="../graphics/crabby.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="27" y="13" width="20" height="16">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="hitbox"/>
+    </properties>
+   </object>
+   <object id="2" x="29" y="15">
+    <properties>
+     <property name="userData" value="bodyFixture"/>
+    </properties>
+    <polygon points="0,0 0,13 16,13 16,0"/>
    </object>
   </objectgroup>
  </tile>

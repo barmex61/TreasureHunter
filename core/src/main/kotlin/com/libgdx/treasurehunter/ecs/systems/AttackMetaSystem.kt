@@ -1,24 +1,32 @@
 package com.libgdx.treasurehunter.ecs.systems
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.Shape
+import com.badlogic.gdx.utils.Array
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
+import com.github.quillraven.fleks.World.Companion.inject
 import com.libgdx.treasurehunter.ai.PlayerState
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.AttackType
+import com.libgdx.treasurehunter.ecs.components.GdxAnimation
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.State
+import com.libgdx.treasurehunter.ecs.systems.AnimationSystem.Companion.setFlipX
 import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.JUMP_DEBUG_RECT
+import com.libgdx.treasurehunter.enums.AssetHelper
+import com.libgdx.treasurehunter.enums.TextureAtlasAssets
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.utils.Constants.OBJECT_FIXTURES
@@ -35,11 +43,15 @@ import com.libgdx.treasurehunter.utils.playerSwordRangedAttackVertices
 import com.libgdx.treasurehunter.utils.plus
 import ktx.math.vec2
 import com.libgdx.treasurehunter.utils.calculateEffectPosition
-class AttackMetaSystem : IteratingSystem(
+import ktx.app.gdxError
+
+class AttackMetaSystem (
+    private val assetHelper: AssetHelper = inject()
+): IteratingSystem(
     family = family { all(AttackMeta, Physic) }
 ) {
+    private val gameObjectAtlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
 
-    var keyframes = -2
     override fun onTickEntity(entity: Entity) {
         val attackMeta = entity[AttackMeta]
         var (isMelee,owner, attackType, currentFrameIndex, isFixtureMirrored,hasFixture,attackCooldown) = attackMeta
@@ -143,11 +155,8 @@ class AttackMetaSystem : IteratingSystem(
                 } else {
                     originalShapeWithOffset
                 }
-                val effectPositionCenter = newShape.calculateEffectPosition()
-                val graphic = entity[Graphic]
-                println(effectPositionCenter)
-                JUMP_DEBUG_RECT.set(effectPositionCenter.x,effectPositionCenter.y,0.5f,0.5f)
-                graphic.effectOffset = vec2(effectPositionCenter.x - 0.3f - graphic.sprite.width/2f ,effectPositionCenter.y + 0.2f - graphic.sprite.height/2f)
+                setMeleeAttackSprite(entity, keyFrameIndex, newShape,attackType,flipX)
+
                 fixtureDefs.add(
                     FixtureDefUserData(
                         fixtureDef = originalFixtureData.fixtureDef.copy().apply { this.shape = newShape },
@@ -176,6 +185,29 @@ class AttackMetaSystem : IteratingSystem(
         return finalShape
     }
 
+    private fun setMeleeAttackSprite(entity: Entity, keyFrameIndex: Int, newShape: ChainShape,attackType: AttackType,flipX: Boolean) {
+        val effectPositionCenter = newShape.calculateEffectPosition()
+        val graphic = entity[Graphic]
+        val textureRegion = getTextureRegion(GameObject.ATTACK_EFFECT,attackType,keyFrameIndex)
+        graphic.sprite.setRegion(textureRegion)
+        setFlipX(entity[AttackMeta].owner.getOrNull(Move),graphic.sprite)
+        val newOffsetX = (if (flipX) effectPositionCenter.x - graphic.sprite.width/1.3f else effectPositionCenter.x - graphic.sprite.width/2f).coerceAtMost(0.6f)
+        val newOffsetY = (effectPositionCenter.y - graphic.sprite.height/3f).coerceAtMost(-0.3f)
+        graphic.effectOffset = vec2(newOffsetX,newOffsetY)
+    }
 
+    private val regionsCache = mutableMapOf<String, Array<TextureAtlas.AtlasRegion>>()
+
+    fun getTextureRegion(
+        gameObject: GameObject,
+        attackType: AttackType,
+        keyFrameIndex: Int
+    ): TextureRegion {
+        val atlasKey = "${gameObject.atlasKey}/${attackType.name.lowercase()}"
+        return regionsCache.getOrPut(atlasKey) {
+            val regions = gameObjectAtlas.findRegions(atlasKey) ?: gdxError("No regions for animation $atlasKey")
+            regions
+        }.get(keyFrameIndex)
+    }
 
 }

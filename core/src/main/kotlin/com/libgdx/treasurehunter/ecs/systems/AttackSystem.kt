@@ -19,15 +19,10 @@ import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.enums.AssetHelper
-import com.libgdx.treasurehunter.event.GameEvent
-import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.ai.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
-import com.libgdx.treasurehunter.ecs.components.Move
-import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.JUMP_DEBUG_RECT
-import com.libgdx.treasurehunter.event.GameEvent.AttackStartEvent
 import com.libgdx.treasurehunter.utils.GameObject
 
 class AttackSystem(
@@ -57,11 +52,8 @@ class AttackSystem(
                             )
                             it += Damage(damage = attackComp.attackDamage, sourceEntity = entity)
                             it += Physic(createAttackBody(center, it, BodyDef.BodyType.StaticBody))
-                            it += Graphic(sprite(GameObject.SWORD_EFFECT, AnimationType.valueOf(attackType.name),center,assetHelper,0f))
-                            it += Animation(GameObject.SWORD_EFFECT, animationData = AnimationData(
-                                animationType = AnimationType.valueOf(attackType.name),
-                                playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
-                            ))
+                            it += Graphic(sprite(GameObject.ATTACK_EFFECT, AnimationType.valueOf(attackType.name),center,assetHelper,0f))
+
                         }
                     } else {
                         val gameObject = attackItem.toGameObject() ?: return

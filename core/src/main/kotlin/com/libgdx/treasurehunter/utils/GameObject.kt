@@ -4,6 +4,7 @@ package com.libgdx.treasurehunter.utils
 enum class GameObject() {
     CAPTAIN_CLOWN,
     CAPTAIN_CLOWN_SWORD,
+    CRABBY,
     BACK_PALM_TREE_RIGHT,
     BACK_PALM_TREE_LEFT,
     BACK_PALM_TREE_REGULAR,
@@ -21,7 +22,7 @@ enum class GameObject() {
     AIR_ATTACK_1,
     AIR_ATTACK_2,
     SWORD,
-    SWORD_EFFECT,
+    ATTACK_EFFECT,
     SWORD_EMBEDDED,
     INTERROGATION_MARK,
     EXCLAMATION_MARK,

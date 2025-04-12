@@ -51,9 +51,6 @@ class AnimationSystem (
             }
             animationComp.flipInitialized = true
         }
-        if (entity has AttackMeta && entity[AttackMeta].attackType.isMelee){
-            setFlipX(entity[AttackMeta].owner.getOrNull(Move),sprite)
-        }
 
         updateSprite(sprite,entity,mainAnimationData)
 
@@ -73,15 +70,6 @@ class AnimationSystem (
             setFlip(flipX,false)
         }
         setFlipX(entity.getOrNull(Move),sprite)
-    }
-
-    private fun setFlipX (moveComp : Move?, sprite: Sprite){
-
-        moveComp?.let { moveComp ->
-            if (moveComp.flipX != sprite.isFlipX) {
-                sprite.setFlip(moveComp.flipX, false)
-            }
-        }
     }
 
     private fun createOrGetAnimation(
@@ -135,6 +123,13 @@ class AnimationSystem (
     }
 
     companion object{
+        fun setFlipX (moveComp : Move?, sprite: Sprite){
+            moveComp?.let { moveComp ->
+                if (moveComp.flipX != sprite.isFlipX) {
+                    sprite.setFlip(moveComp.flipX, false)
+                }
+            }
+        }
         private val log = logger<AnimationSystem>()
     }
 }
