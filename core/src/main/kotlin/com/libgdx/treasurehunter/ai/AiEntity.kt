@@ -9,6 +9,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityUpdateContext
 import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.ecs.components.Animation
+import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
@@ -39,20 +40,30 @@ data class AiEntity(
     val physicWorld: PhysicWorld,
     val assetHelper: AssetHelper,
 ) {
+
+
     // ------ CAN BE REMOVED FOR NOW IT IS ONLY FOR PLAYER ENTITY ------
     val body : Body
         get() = this[Physic].body
 
-    val wantsToAttack : Boolean
-        get() = this.getOrNull(Attack)?.let {
-            this[Attack].wantsToAttack && this[Attack].attackState == AttackState.READY
-        } == true
+    val doAttack : Boolean
+        get() {
+            var doAttack = this.getOrNull(Attack)?.doAttack?:return false
+            return if (doAttack){
+                this[Attack].doAttack = false
+                true
+            }else false
+        }
+
+    var startAttackEventTriggered : Boolean = false
 
     val hit : Boolean
         get() = this.getOrNull(DamageTaken) != null
 
     val onAir : Boolean
         get() = this[Physic].body.linearVelocity.y !in (-0.1f..0.1f)
+
+    var runParticleTimer : Float = 0.5f
 
 
     // ------ CAN BE REMOVED -------
@@ -67,9 +78,9 @@ data class AiEntity(
 
     fun Entity.configure(configuration : EntityUpdateContext.(Entity) -> Unit) = with(world) { this@configure.configure(configuration) }
 
-    fun fireParticleEvent() {
+    fun fireParticleEvent(particleType: ParticleType) {
         val particlePosition = this[Physic].body.position
-        GameEventDispatcher.fireEvent(GameEvent.ParticleEvent(entity,particlePosition, ParticleType.RUN))
+        GameEventDispatcher.fireEvent(GameEvent.ParticleEvent(entity,particlePosition, particleType))
     }
 
     fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){
@@ -83,20 +94,20 @@ data class AiEntity(
     }
 
     fun inRange(range: Float, targetEntity: Entity): Boolean = with(world){
-        val (_,_,targetCenter) = targetEntity[Graphic]
+        val (_,targetCenter) = targetEntity[Graphic]
         return@with inRange(targetCenter,range)
     }
 
     fun inRange(location:Vector2,tolerance:Float) : Boolean = with(world){
-        val (_,_,center) = entity[Graphic]
+        val (_,center) = entity[Graphic]
         val diffX = (center.x - location.x)
         val diffY = (center.y - location.y)
         return@with diffX.pow(2) + diffY.pow(2) < tolerance.pow(2)
     }
 
     fun move(targetEntity: Entity) = with(world) {
-        val (_,_,center) = entity[Graphic]
-        val (_,_,targetCenter) = targetEntity[Graphic]
+        val (_,center) = entity[Graphic]
+        val (_,targetCenter) = targetEntity[Graphic]
 
         val diffX = (center.x - targetCenter.x)
         val diffY = (center.y - targetCenter.y)
@@ -115,9 +126,12 @@ data class AiEntity(
                 val markPosition = entity[Graphic].center
                 val gameObjectFromType = markType.toGameObject()
                 world.entity{ markEntity ->
-                    markEntity += Graphic(sprite(gameObjectFromType, AnimationType.IN,markPosition,assetHelper,0f), gameObjectFromType)
-                    markEntity += Animation(gameObjectFromType)
-                    world.animation(markEntity, AnimationType.IN, PlayMode.NORMAL,0.2f)
+                    markEntity += Graphic(sprite(gameObjectFromType, AnimationType.IN,markPosition,assetHelper,0f))
+                    markEntity += Animation(gameObjectFromType, AnimationData(
+                        animationType = AnimationType.IN,
+                        playMode = PlayMode.NORMAL,
+                        frameDuration = 0.2f
+                    ))
                     markEntity += Mark(1f,markType.offset,aiEntity)
                 }
             }

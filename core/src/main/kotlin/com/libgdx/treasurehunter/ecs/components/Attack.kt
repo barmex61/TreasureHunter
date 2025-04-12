@@ -14,13 +14,13 @@ enum class AttackState {
 }
 
 //NEED TO IMPROVE ATTACK NAMES I DIDNT KNOW WHAT TO PUT.NEED TO CHECK WHAT KIND OF ANIMATIONS THEY ARE
-enum class AttackType(val animType : AnimationType,val attackDestroyCooldown : Float) {
-    ATTACK_1(AnimationType.ATTACK_1,1f),
-    ATTACK_2(AnimationType.ATTACK_2,1f),
-    ATTACK_3(AnimationType.ATTACK_3,1f),
-    AIR_ATTACK_1(AnimationType.AIR_ATTACK_1,1f),
-    AIR_ATTACK_2(AnimationType.AIR_ATTACK_2,1f),
-    THROW_ATTACK(AnimationType.THROW,3f);
+enum class AttackType(val animType : AnimationType,val attackDestroyCooldown : Float,val isMelee : Boolean) {
+    ATTACK_1(AnimationType.ATTACK_1,1f,true),
+    ATTACK_2(AnimationType.ATTACK_2,1f,true),
+    ATTACK_3(AnimationType.ATTACK_3,1f,true),
+    AIR_ATTACK_1(AnimationType.AIR_ATTACK_1,1f,true),
+    AIR_ATTACK_2(AnimationType.AIR_ATTACK_2,1f,true),
+    THROW_ATTACK(AnimationType.THROW,3f,false),;
 
 }
 
@@ -42,7 +42,8 @@ data class Attack(
     var wantsToAttack : Boolean = false,
     var attackState : AttackState = AttackState.READY,
     var attackType : AttackType = AttackType.ATTACK_1,
-    var attackCooldown : Float = 1f
+    var attackCooldown : Float = 1f,
+    var doAttack : Boolean = false
     ) : Component <Attack> {
 
     val isMeleeAttack : Boolean

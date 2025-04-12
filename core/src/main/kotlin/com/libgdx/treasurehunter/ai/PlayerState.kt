@@ -13,8 +13,7 @@ import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.enums.MarkType
-import com.libgdx.treasurehunter.event.GameEvent
-import com.libgdx.treasurehunter.event.GameEventDispatcher
+import com.libgdx.treasurehunter.enums.ParticleType
 import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.component1
 import ktx.math.component2
@@ -36,6 +35,7 @@ enum class PlayerState : EntityState {
         override fun enter(entity: AiEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
+                entity.doAttack -> entity.state(ATTACK)
                 linY > TOLERANCE_Y -> entity.state(JUMP)
                 linY < -TOLERANCE_Y -> entity.state(FALL)
                 !MathUtils.isEqual(linX, ZERO, TOLERANCE_X) -> entity.state(RUN)
@@ -46,7 +46,7 @@ enum class PlayerState : EntityState {
         override fun update(entity: AiEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
-                entity.wantsToAttack -> entity.state(ATTACK)
+                entity.doAttack -> entity.state(ATTACK)
                 linY > TOLERANCE_Y -> entity.state(JUMP)
                 linY < -TOLERANCE_Y -> entity.state(FALL)
                 !MathUtils.isEqual(linX, ZERO, TOLERANCE_X) -> entity.state(RUN)
@@ -57,13 +57,19 @@ enum class PlayerState : EntityState {
     RUN {
         override fun enter(entity: AiEntity) {
             entity.animation(AnimationType.RUN)
-            entity.fireParticleEvent()
+            entity.fireParticleEvent(ParticleType.RUN)
+            entity.runParticleTimer = 0.5f
         }
 
         override fun update(entity: AiEntity) {
+            entity.runParticleTimer -= Gdx.graphics.deltaTime
+            if (entity.runParticleTimer <= 0f){
+                entity.runParticleTimer = 0.5f
+                entity.fireParticleEvent(ParticleType.RUN)
+            }
             val (linX,linY) = entity.body.linearVelocity
             when{
-                entity.wantsToAttack -> entity.state(ATTACK)
+                entity.doAttack -> entity.state(ATTACK)
                 linY > TOLERANCE_Y -> entity.state(JUMP)
                 linY < -TOLERANCE_Y -> entity.state(FALL)
                 MathUtils.isEqual(linX, ZERO, TOLERANCE_X) -> entity.state(IDLE)
@@ -79,7 +85,7 @@ enum class PlayerState : EntityState {
         override fun update(entity: AiEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
-                entity.wantsToAttack -> entity.state(ATTACK)
+                entity.doAttack -> entity.state(ATTACK)
                 linY < -TOLERANCE_Y -> entity.state(FALL)
                 MathUtils.isEqual(linY, ZERO, TOLERANCE_Y) ->{
                     if (MathUtils.isEqual(linX, ZERO, TOLERANCE_X)){
@@ -98,14 +104,30 @@ enum class PlayerState : EntityState {
         override fun update(entity: AiEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
-                entity.wantsToAttack -> entity.state(ATTACK)
+                entity.doAttack -> entity.state(ATTACK)
                 linY > TOLERANCE_Y -> entity.state(JUMP)
                 MathUtils.isEqual(linY, ZERO, TOLERANCE_Y) ->{
-                    if (MathUtils.isEqual(linX, ZERO, TOLERANCE_X)){
-                        entity.state(IDLE)
-                    }else{
-                        entity.state(RUN)
-                    }
+                    entity.state(GROUND)
+                }
+            }
+        }
+    },
+
+    GROUND{
+        override fun enter(entity: AiEntity) {
+            entity.animation(AnimationType.GROUND, playMode = Animation.PlayMode.NORMAL)
+            entity.fireParticleEvent(ParticleType.FALL)
+        }
+
+        override fun update(entity: AiEntity) {
+            if (entity.isAnimationDone()){
+                val (linX,linY) = entity.body.linearVelocity
+                when{
+                    entity.doAttack -> entity.state(ATTACK)
+                    linY > TOLERANCE_Y -> entity.state(JUMP)
+                    linY < -TOLERANCE_Y -> entity.state(FALL)
+                    !MathUtils.isEqual(linX, ZERO, TOLERANCE_X) -> entity.state(RUN)
+                    else -> entity.state(IDLE)
                 }
             }
         }
@@ -119,7 +141,7 @@ enum class PlayerState : EntityState {
 
         override fun update(entity: AiEntity) {
             when{
-                entity.wantsToAttack -> entity.state(ATTACK)
+                entity.doAttack -> entity.state(ATTACK)
                 entity.isAnimationDone() -> entity.state(IDLE)
             }
         }
@@ -141,7 +163,6 @@ enum class PlayerState : EntityState {
                 if (aiEntity.entity hasNo Attack){
                     aiEntity.entity.configure {
                         it += Attack(attackItem = AttackItem.SWORD)
-                        it[Graphic].gameObject = GameObject.CAPTAIN_CLOWN_SWORD
                         it[com.libgdx.treasurehunter.ecs.components.Animation].setNewGameObject(GameObject.CAPTAIN_CLOWN_SWORD)
                     }
                 }
@@ -160,7 +181,6 @@ enum class PlayerState : EntityState {
                 if (aiEntity.entity has Attack){
                     aiEntity.entity.configure {
                         it -= Attack
-                        it[Graphic].gameObject = GameObject.CAPTAIN_CLOWN
                         it[com.libgdx.treasurehunter.ecs.components.Animation].setNewGameObject(GameObject.CAPTAIN_CLOWN)
                     }
                 }

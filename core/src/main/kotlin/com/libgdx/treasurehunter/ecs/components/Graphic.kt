@@ -9,7 +9,7 @@ import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.vec2
 
-data class Graphic(val sprite : Sprite, var gameObject: GameObject) : Component <Graphic> , Comparable<Graphic> {
+data class Graphic(val sprite : Sprite) : Component <Graphic> , Comparable<Graphic> {
 
     val center  = vec2()
         get(){
@@ -24,13 +24,13 @@ data class Graphic(val sprite : Sprite, var gameObject: GameObject) : Component 
             return field
         }
 
-    var flipIt : Boolean = false
+    var effectOffset = vec2()
 
     override fun World.onRemove(entity: Entity) {
         sprite.texture = null
     }
 
-    operator fun component3() = center
+    operator fun component2() = center
 
     override fun type() = Graphic
 

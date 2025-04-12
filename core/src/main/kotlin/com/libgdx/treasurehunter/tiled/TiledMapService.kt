@@ -158,7 +158,6 @@ class TiledMapService (
             world.forEach {
                 val components = mutableListOf<String>()
                 if (it.has(Graphic)) {
-                    components.add(it[Graphic].gameObject.toString())
                     components.add("Graphic")
                 }
                 if (it.has(Animation)) components.add("Animation")
@@ -177,7 +176,6 @@ class TiledMapService (
         fun logEntity(entity: Entity,world: com.github.quillraven.fleks.World)=with(world){
             val components = mutableListOf<String>()
             if (entity.has(Graphic)) {
-                components.add(entity[Graphic].gameObject.toString())
                 components.add("Graphic")
             }
             if (entity.has(Animation)) components.add("Animation")

@@ -24,7 +24,11 @@ import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.ai.SwordState
+import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.Move
+import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.JUMP_DEBUG_RECT
+import com.libgdx.treasurehunter.event.GameEvent.AttackStartEvent
+import com.libgdx.treasurehunter.utils.GameObject
 
 class AttackSystem(
     private val physicWorld : PhysicWorld = inject(),
@@ -36,11 +40,12 @@ class AttackSystem(
     override fun onTickEntity(entity: Entity) {
         val attackComp = entity[Attack]
         val animComp = entity[Animation]
-        val (_,_,center) = entity[Graphic]
+        val (_,center) = entity[Graphic]
         var (attackItem,wantsToAttack, attackState,attackType,attackCooldown) = attackComp
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
+                    attackComp.doAttack = true
                     val center = entity[Graphic].center
                     if (attackComp.isMeleeAttack) {
                         world.entity {
@@ -52,6 +57,11 @@ class AttackSystem(
                             )
                             it += Damage(damage = attackComp.attackDamage, sourceEntity = entity)
                             it += Physic(createAttackBody(center, it, BodyDef.BodyType.StaticBody))
+                            it += Graphic(sprite(GameObject.SWORD_EFFECT, AnimationType.valueOf(attackType.name),center,assetHelper,0f))
+                            it += Animation(GameObject.SWORD_EFFECT, animationData = AnimationData(
+                                animationType = AnimationType.valueOf(attackType.name),
+                                playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
+                            ))
                         }
                     } else {
                         val gameObject = attackItem.toGameObject() ?: return
@@ -73,9 +83,12 @@ class AttackSystem(
                                     0f
                                 ).also {
                                     it.setAlpha(0f)
-                                }, gameObject
+                                }
                             )
-                            it += Animation(gameObject)
+                            it += Animation(gameObject, animationData = AnimationData(
+                                animationType = AnimationType.SPINNING,
+                                playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP
+                            ))
                             it += State(
                                 AiEntity(it, world, physicWorld, assetHelper),
                                 SwordState.SPINNING

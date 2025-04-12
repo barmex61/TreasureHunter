@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="64" tileheight="93" tilecount="15" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="64" tileheight="93" tilecount="20" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -251,6 +251,85 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="14">
     <polygon points="0,0 3,0 3,2 5,2 5,1 6,1 6,0 7,0 7,1 14,1 14,-4 7,-4 7,-3 6,-3 6,-4 5,-4 5,-5 3,-5 3,-3 1,-3 1,-2 0,-2"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="37">
+  <properties>
+   <property name="gameObject" propertytype="GameObject" value="AIR_ATTACK_1"/>
+  </properties>
+  <image width="22" height="26" source="../graphics/air_attack_1_01.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="17">
+    <polygon points="0,0 7,0 19,-8 21,-17 22,-17 21,-6 14,3 11,4 6,4 0,1"/>
+   </object>
+   <object id="2" x="9" y="23">
+    <polygon points="0,0 6,0 11,-6 12,-6 10,0 6,3 3,3 0,1"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="39">
+  <properties>
+   <property name="gameObject" propertytype="GameObject" value="AIR_ATTACK_2"/>
+  </properties>
+  <image width="31" height="23" source="../graphics/air_attack_2_01.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="19">
+    <polygon points="0,0 8,0 21,-7 24,-19 25,-19 27,-13 27,-8 22,0 15,2 6,2 6,1 0,1"/>
+   </object>
+   <object id="2" x="20" y="22">
+    <polygon points="0,0 3,0 8,-7 9,-10 10,-10 11,-8 11,-4 10,-2 7,0 5,1 0,1"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="41">
+  <properties>
+   <property name="gameObject" propertytype="GameObject" value="ATTACK_1"/>
+  </properties>
+  <image width="28" height="17" source="../graphics/attack_1_01.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="16">
+    <polygon points="0,0 3,-1 5,-3 5,-6 3,-8 2,-8 2,-7 3,-7 3,-3 2,-3 2,-2 1,-2 1,-1 0,-1"/>
+   </object>
+   <object id="2" x="11" y="17">
+    <polygon points="0,0 0,-1 7,-8 7,-9 8,-9 8,-11 7,-11 7,-13 3,-16 3,-17 5,-17 11,-14 14,-11 14,-10 12,-8 6,-2 4,-2 2,0"/>
+   </object>
+   <object id="3" x="22" y="11">
+    <polygon points="0,0 3,-3 4,-3 4,-5 2,-6 2,-7 4,-7 6,-5 6,-3 5,-3 4,-1 3,0 1,0 1,1 0,1"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="44">
+  <properties>
+   <property name="gameObject" propertytype="GameObject" value="ATTACK_2"/>
+  </properties>
+  <image width="38" height="37" source="../graphics/attack_2_01.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="3" y="10">
+    <polygon points="0,0 2,-1 2,-6 1,-8 -2,-10 -3,-10 -3,-9 -1,-6 0,-6"/>
+   </object>
+   <object id="3" x="7" y="5">
+    <polygon points="0,0 8,5 12,10 16,18 17,18 17,28 14,31 14,32 15,32 20,28 22,24 22,16 19,9 13,3 6,0 1,-1 -1,-1"/>
+   </object>
+   <object id="5" x="33" y="18">
+    <polygon points="0,0 2,5 3,5 3,13 2,13 2,15 3,15 5,12 5,5 1,-1 -1,-1"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="47">
+  <properties>
+   <property name="gameObject" propertytype="GameObject" value="ATTACK_3"/>
+  </properties>
+  <image width="42" height="36" source="../graphics/attack_3_01.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="0" y="35">
+    <polygon points="0,0 3,-4 4,-4 4,-9 3,-9 3,-10 6,-9 6,-4 3,0 1,1 0,1"/>
+   </object>
+   <object id="2" x="14" y="31">
+    <polygon points="0,0 4,-2 9,-7 12,-14 13,-14 13,-22 7,-30 7,-31 8,-31 17,-23 19,-18 19,-11 18,-8 11,-2 6,0 2,1 0,1"/>
+   </object>
+   <object id="3" x="37" y="21">
+    <polygon points="0,0 1,-3 2,-3 2,-11 -3,-18 -3,-19 -2,-19 4,-12 5,-10 5,-5 4,-3"/>
    </object>
   </objectgroup>
  </tile>

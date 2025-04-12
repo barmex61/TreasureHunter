@@ -33,25 +33,29 @@ class AnimationSystem (
 
     override fun onTickEntity(entity: Entity) {
         val animationComp = entity[Animation]
-        val (gameObject, mainAnimationData) = animationComp
+        val (gameObject, mainAnimationData,flipInit) = animationComp
         val graphic = entity[Graphic]
         val (sprite) = graphic
         val (mainAnimation,timer,mainPlayMode,mainAnimationType,mainFrameDuration) = mainAnimationData
-        val velocityMultiplier = if (entity has Physic) abs(entity[Physic].body.linearVelocity.x / 4f) else 1f
+        val velocityMultiplier = if (entity has Physic) abs(entity[Physic].body.linearVelocity.x / 3f) else 1f
         mainAnimationData.timer += (deltaTime * max(1f,velocityMultiplier))
         if (mainAnimation == null){
             setAnimation(entity,mainAnimationType,mainPlayMode,mainFrameDuration)
+        }
+        if (!flipInit){
             if (entity has Particle){
                 setFlipX(entity[Particle].owner.getOrNull(Move),sprite)
             }
-        }
-        updateSprite(sprite,entity,mainAnimationData)
-
-        if (entity has AttackMeta){
-            if (entity[AttackMeta].isFixtureMirrored != sprite.isFlipX){
-                sprite.setFlip(true,false)
+            if (entity has AttackMeta && !entity[AttackMeta].attackType.isMelee){
+                setFlipX(entity[AttackMeta].owner.getOrNull(Move),sprite)
             }
+            animationComp.flipInitialized = true
         }
+        if (entity has AttackMeta && entity[AttackMeta].attackType.isMelee){
+            setFlipX(entity[AttackMeta].owner.getOrNull(Move),sprite)
+        }
+
+        updateSprite(sprite,entity,mainAnimationData)
 
         if (gdxAnimationCache.size > 100) {
             gdxAnimationCache.clear()
@@ -119,7 +123,7 @@ class AnimationSystem (
         gameObject: GameObject,
         newAnimType: AnimationType,
         newPlayMode: PlayMode,
-        newFrameDuration: Float? = null
+        newFrameDuration: Float?= null
     ) {
         val finalFrameDuration = newFrameDuration ?: animData.frameDuration
         animData.apply {
@@ -127,7 +131,6 @@ class AnimationSystem (
             timer = 0f
             playMode = newPlayMode
             animationType = newAnimType
-            frameDuration = finalFrameDuration
         }
     }
 

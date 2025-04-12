@@ -18,14 +18,15 @@ data class AnimationData(
     var gdxAnimation: GdxAnimation? = null,
     var timer: Float = 0f,
     var playMode: PlayMode = PlayMode.LOOP,
-    var animationType: AnimationType = AnimationType.NONE,
+    var animationType: AnimationType ,
     var frameDuration: Float = 0.1f
 )
 
 
 data class Animation(
     var gameObject: GameObject,
-    val animationData: AnimationData = AnimationData(),
+    val animationData: AnimationData,
+    var flipInitialized : Boolean = false
 )  : Component<Animation> {
     fun getAttackAnimKeyFrameIx() : Int{
         return if (animationData.animationType.isAttackAnimation){

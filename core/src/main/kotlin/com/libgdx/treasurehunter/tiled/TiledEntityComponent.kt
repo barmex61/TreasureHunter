@@ -43,7 +43,6 @@ fun sprite(gameObject: GameObject, animationType: AnimationType, startPosition :
     val atlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
     val regions = atlas.findRegions(regionPath) ?:
     gdxError("There are no regions for $gameObject and $animationType")
-    println(regionPath)
     val firstFrame = regions.first()
     val w = firstFrame.regionWidth * UNIT_SCALE
     val h = firstFrame.regionHeight * UNIT_SCALE
@@ -57,7 +56,7 @@ fun sprite(gameObject: GameObject, animationType: AnimationType, startPosition :
 
 fun EntityCreateContext.configureEntityGraphic(entity: Entity,tile: TiledMapTile,position : Vector2,gameObject: GameObject,assetHelper: AssetHelper,world: World,rotation : Float ){
     val startAnimType = AnimationType.valueOf(tile.property("startAnimType","NONE"))
-    entity += Graphic(sprite(gameObject,startAnimType,position,assetHelper,rotation),gameObject)
+    entity += Graphic(sprite(gameObject,startAnimType,position,assetHelper,rotation))
     if (startAnimType != AnimationType.NONE){
         configureAnimation(entity,tile,world,startAnimType,gameObject)
     }
@@ -66,10 +65,10 @@ fun EntityCreateContext.configureEntityGraphic(entity: Entity,tile: TiledMapTile
 fun EntityCreateContext.configureAnimation(entity: Entity, tile: TiledMapTile, world: World,startAnimType : AnimationType,gameObject: GameObject) {
     val frameDuration = tile.property<Float>("animFrameDuration",0f)
     if (frameDuration == 0f) return
-    entity += Animation(gameObject = gameObject, animationData = AnimationData().apply {
-        this.frameDuration = frameDuration
-        this.animationType = startAnimType
-    })
+    entity += Animation(gameObject = gameObject, animationData = AnimationData(
+        frameDuration = frameDuration,
+        animationType = startAnimType
+    ))
 }
 
 fun EntityCreateContext.configureMove(entity: Entity, tile: TiledMapTile){

@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.CircleShape
+import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
 import com.libgdx.treasurehunter.game.PhysicWorld
@@ -133,6 +134,29 @@ fun ellipseFixtureDef(mapObject: EllipseMapObject) : FixtureDef {
             shape = ChainShape().apply {
                 createLoop(vertices)
             }
+        }
+    }
+}
+
+fun Body.destroyFixtures(){
+    val fixturesToDestroy = mutableListOf<Fixture>()
+    this.fixtureList.forEach {fixture ->
+        fixturesToDestroy.add(fixture)
+    }
+    fixturesToDestroy.forEach { fixture ->
+        this.destroyFixture(fixture)
+    }
+    fixturesToDestroy.clear()
+}
+
+fun FixtureDef.copy() : FixtureDef{
+   return FixtureDef().apply {
+        {
+            this.isSensor = this.isSensor
+            density = this.density
+            friction = this.friction
+            restitution = this.restitution
+            filter.set(this.filter)
         }
     }
 }

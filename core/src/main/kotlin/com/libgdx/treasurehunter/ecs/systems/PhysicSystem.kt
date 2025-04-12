@@ -33,7 +33,6 @@ import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.game.PhysicWorld
-import com.libgdx.treasurehunter.tiled.TiledMapService.Companion.logEntity
 import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.utils.GameObject
 import com.libgdx.treasurehunter.utils.animation
@@ -86,15 +85,17 @@ class PhysicSystem (
     }
 
     override fun onAlphaEntity(entity: Entity, alpha: Float) {
-        val (sprite) = entity[Graphic]
+        val graphic = entity[Graphic]
+        val (sprite) = graphic
+        val effectOffset = graphic.effectOffset
         val physic = entity[Physic]
         val (body,previousPosition) = physic
         val (prevX,prevY) = previousPosition
         val (bodyX,bodyY) = body.position
 
         sprite.setPosition(
-            MathUtils.lerp(prevX,bodyX,alpha),
-            MathUtils.lerp(prevY,bodyY,alpha)
+            MathUtils.lerp(prevX,bodyX,alpha) + effectOffset.x,
+            MathUtils.lerp(prevY,bodyY,alpha) + effectOffset.y
         )
 
     }
@@ -172,7 +173,7 @@ class PhysicSystem (
     }
 
     private fun isSwordAndWallCollision(entityA: Entity?,fixtureA : Fixture,fixtureB:Fixture) : Boolean{
-        return entityA != null && entityA has AttackMeta && fixtureA.isRangeAttackFixture && (fixtureB.isGround || fixtureB.isPlatform)
+        return entityA != null && entityA has AttackMeta && fixtureA.isRangeAttackFixture && !fixtureB.isSensor
     }
 
 
@@ -263,11 +264,11 @@ class PhysicSystem (
                 val position = event.particlePosition
                 world.entity{
                     it += Particle(event.particleType,event.owner)
-                    it += Graphic(sprite(GameObject.DUST_PARTICLES, AnimationType.valueOf(event.particleType.name),position + vec2(0.2f,0.3f) , assetHelper ,0f), GameObject.DUST_PARTICLES)
-                    it += Animation(GameObject.DUST_PARTICLES, animationData = AnimationData().apply {
-                        this.animationType = AnimationType.valueOf(event.particleType.name)
-                        this.playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
-                    })
+                    it += Graphic(sprite(GameObject.DUST_PARTICLES, AnimationType.valueOf(event.particleType.name),position + vec2(0.2f,0.3f) , assetHelper ,0f))
+                    it += Animation(GameObject.DUST_PARTICLES, animationData = AnimationData(
+                        animationType = AnimationType.valueOf(event.particleType.name),
+                        playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
+                    ))
                 }
             }
             else -> Unit

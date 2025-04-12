@@ -12,7 +12,8 @@ data class AttackMeta(
     var isFixtureMirrored : Boolean,
     var hasFixture : Boolean = false,
     var attackDestroyCooldown : Float = attackType.attackDestroyCooldown,
-    var collidedWithWall : Boolean = false
+    var collidedWithWall : Boolean = false,
+
 ) : Component<AttackMeta> {
     override fun type() = AttackMeta
     companion object : ComponentType<AttackMeta>()

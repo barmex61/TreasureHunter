@@ -56,6 +56,7 @@ val playerSwordMeleeAttackVertices: Map<AttackType, Map<Int,FloatArray> > = mapO
 
 val playerSwordRangedAttackVertices = OBJECT_FIXTURES[GameObject.SWORD_EMBEDDED]
 
+
 fun FloatArray.mirrorVertices(): FloatArray {
     val mirroredVertices = FloatArray(this.size)
     for (i in this.indices step 2) {

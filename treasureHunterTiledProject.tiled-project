@@ -65,7 +65,13 @@
                 "SPIKES",
                 "FLAG",
                 "SHIP_HELM",
-                "SWORD"
+                "SWORD",
+                "SWORD_EMBEDDED",
+                "AIR_ATTACK_1",
+                "AIR_ATTACK_2",
+                "ATTACK_1",
+                "ATTACK_2",
+                "ATTACK_3"
             ],
             "valuesAsFlags": false
         },
