@@ -1,4 +1,4 @@
-package com.libgdx.treasurehunter.ai
+package com.libgdx.treasurehunter.state
 
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.Vector2
@@ -13,7 +13,6 @@ import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
-import com.libgdx.treasurehunter.ecs.components.AttackState
 import com.libgdx.treasurehunter.ecs.components.Blink
 import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
@@ -34,7 +33,7 @@ import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.utils.GameObject
 import kotlin.math.pow
 
-data class AiEntity(
+data class StateEntity(
     val entity: Entity,
     val world: World,
     val physicWorld: PhysicWorld,
@@ -55,13 +54,6 @@ data class AiEntity(
             }else false
         }
 
-    var startAttackEventTriggered : Boolean = false
-
-    val hit : Boolean
-        get() = this.getOrNull(DamageTaken) != null
-
-    val onAir : Boolean
-        get() = this[Physic].body.linearVelocity.y !in (-0.1f..0.1f)
 
     var runParticleTimer : Float = 0.5f
 
@@ -144,7 +136,7 @@ data class AiEntity(
     val isCollected : Boolean
         get() {
             with(world) {
-                return this@AiEntity.entity hasNo EntityTag.COLLECTABLE
+                return this@StateEntity.entity hasNo EntityTag.COLLECTABLE
             }
         }
 
@@ -154,10 +146,10 @@ data class AiEntity(
             this.getOrNull(Graphic)?.sprite?.setAlpha(value)
         }
 
-    var attackDestroyCooldown : Float
-        get() = this[AttackMeta].attackDestroyCooldown
+    var attackDestroyTimer : Float
+        get() = this[AttackMeta].attackItem.attackDestroyTime
         set(value) {
-            this[AttackMeta].attackDestroyCooldown = value
+            this[AttackMeta].attackItem.attackDestroyTime = value
         }
 
     val collidedWithWall : Boolean

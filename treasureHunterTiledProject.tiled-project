@@ -11,17 +11,6 @@
     ],
     "propertyTypes": [
         {
-            "id": 6,
-            "name": "Item",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "SWORD",
-                "NONE"
-            ],
-            "valuesAsFlags": false
-        },
-        {
             "id": 2,
             "name": "BodyType",
             "storageType": "string",
@@ -73,6 +62,17 @@
                 "ATTACK_2",
                 "ATTACK_3",
                 "CRABBY"
+            ],
+            "valuesAsFlags": false
+        },
+        {
+            "id": 6,
+            "name": "Item",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "SWORD",
+                "NONE"
             ],
             "valuesAsFlags": false
         },

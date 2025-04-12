@@ -8,7 +8,7 @@
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN_SWORD"/>
    <property name="gravityScale" type="float" value="1"/>
-   <property name="item" propertytype="AttackItem" value="SWORD"/>
+   <property name="item" propertytype="Item" value="NONE"/>
    <property name="jumpHeight" type="float" value="2"/>
    <property name="life" type="int" value="3"/>
    <property name="speed" type="float" value="2"/>
@@ -34,6 +34,14 @@
      <property name="userData" value="bodyFixture"/>
     </properties>
     <polygon points="0,0 0,11 11,11 11,0"/>
+   </object>
+   <object id="16" x="21" y="12" width="22" height="22">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="radius" type="float" value="4"/>
+     <property name="userData" value="sensorFixture"/>
+    </properties>
+    <ellipse/>
    </object>
   </objectgroup>
  </tile>
@@ -214,7 +222,7 @@
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN"/>
    <property name="gravityScale" type="float" value="1"/>
-   <property name="item" propertytype="AttackItem" value="NONE"/>
+   <property name="item" propertytype="Item" value="NONE"/>
    <property name="jumpHeight" type="float" value="2"/>
    <property name="life" type="int" value="3"/>
    <property name="speed" type="float" value="2"/>
@@ -240,6 +248,14 @@
      <property name="userData" value="bodyFixture"/>
     </properties>
     <polygon points="0,0 0,11 11,11 11,0"/>
+   </object>
+   <object id="4" x="21" y="12" width="22" height="22">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="radius" type="float" value="4"/>
+     <property name="userData" value="sensorFixture"/>
+    </properties>
+    <ellipse/>
    </object>
   </objectgroup>
  </tile>
@@ -335,6 +351,7 @@
  </tile>
  <tile id="48">
   <properties>
+   <property name="aiTreePath" value="ai/crew.tree"/>
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="gameObject" propertytype="GameObject" value="CRABBY"/>
@@ -358,6 +375,20 @@
      <property name="userData" value="bodyFixture"/>
     </properties>
     <polygon points="0,0 0,13 16,13 16,0"/>
+   </object>
+   <object id="4" x="11" y="28">
+    <properties>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="24,0 28,0 28,-1 24,-1"/>
+   </object>
+   <object id="5" x="26" y="8" width="22" height="22">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="radius" type="float" value="4"/>
+     <property name="userData" value="sensorFixture"/>
+    </properties>
+    <ellipse/>
    </object>
   </objectgroup>
  </tile>

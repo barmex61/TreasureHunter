@@ -4,36 +4,63 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
 import com.libgdx.treasurehunter.utils.GameObject
+import ktx.app.gdxError
 
-enum class AttackType(val animType : AnimationType,val attackDestroyCooldown : Float,val isMelee : Boolean) {
-    ATTACK_1(AnimationType.ATTACK_1,1f,true),
-    ATTACK_2(AnimationType.ATTACK_2,1f,true),
-    ATTACK_3(AnimationType.ATTACK_3,1f,true),
-    AIR_ATTACK_1(AnimationType.AIR_ATTACK_1,1f,true),
-    AIR_ATTACK_2(AnimationType.AIR_ATTACK_2,1f,true),
-    THROW_ATTACK(AnimationType.THROW,3f,false),;
-
-}
-
-enum class AttackItem(val itemDamage : Int){
-    NONE(0),
-    SWORD(1);
-    companion object{
-        fun AttackItem.toGameObject() : GameObject?{
-            return when(this){
-                NONE -> null
-                SWORD -> GameObject.SWORD
-            }
-        }
-    }
+enum class AttackType(val isMelee: Boolean) {
+    ATTACK_1(true),
+    ATTACK_2(true),
+    ATTACK_3(true),
+    AIR_ATTACK_1(true),
+    AIR_ATTACK_2(true),
+    THROW(false),;
 }
 
 sealed interface ItemType{
-    data class Weapon(
-        val attackSpeed: Float,
-        val attackRange: Float,
-        val attackType: AttackType,
-        val attackItem: AttackItem
+    interface Damageable : ItemType {
+        val attackSpeed: Float
+        val attackRange: Float
+        var attackType: AttackType
+        val attackDamage : Int
+        var attackCooldown : Float
+        var attackDestroyTime : Float
+        val isMelee : Boolean
+
+        val attackAnimType : AnimationType
+            get() = AnimationType.valueOf(attackType.name)
+
+        fun toGameObject() : GameObject?{
+            return when(this){
+                is Sword -> GameObject.SWORD
+                else -> null
+            }
+        }
+    }
+
+    data class Sword(
+        override val attackSpeed: Float = 1f,
+        override val attackRange: Float = 0f,
+        override var attackType: AttackType = AttackType.ATTACK_1,
+        override val attackDamage: Int = 1,
+        override var attackCooldown: Float = 1.5f,
+        override var attackDestroyTime: Float = 1.5f,
+
+    ) : Damageable {
+        override val isMelee: Boolean
+            get() = attackType.isMelee
+    }
+
+    data class Bomb(
+        override val attackSpeed: Float,
+        override val attackRange: Float,
+        override var attackType: AttackType,
+        override val attackDamage: Int = 3,
+        override var attackCooldown: Float = 2f,
+        override var attackDestroyTime: Float = 2f,
+        override val isMelee: Boolean = false
+    ) : Damageable
+
+    data class Consumable(
+        val effect: String
     ) : ItemType
 }
 

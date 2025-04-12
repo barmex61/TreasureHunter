@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.configureWorld
+import com.libgdx.treasurehunter.ecs.systems.AiSystem
 import com.libgdx.treasurehunter.ecs.systems.AnimationSystem
 import com.libgdx.treasurehunter.ecs.systems.AttackMetaSystem
 import com.libgdx.treasurehunter.ecs.systems.AttackSystem
@@ -66,6 +67,7 @@ class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,p
             add(MarkSystem())
             add(JumpSystem())
             add(ParticleSystem())
+            add(AiSystem())
             add(PhysicSystem())
             add(CameraSystem())
             add(GlProfilerSystem())

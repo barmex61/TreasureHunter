@@ -11,18 +11,18 @@ import com.github.quillraven.fleks.Fixed
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
-import com.libgdx.treasurehunter.ai.PlayerState
+import com.libgdx.treasurehunter.state.PlayerState
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
-import com.libgdx.treasurehunter.ecs.components.AttackItem
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
+import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Particle
@@ -35,7 +35,6 @@ import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.utils.GameObject
-import com.libgdx.treasurehunter.utils.animation
 import ktx.math.component1
 import ktx.math.component2
 import ktx.math.vec2
@@ -250,7 +249,7 @@ class PhysicSystem (
                 val (gameObject) = collectableEntity[Collectable]
                 when(gameObject){
                     GameObject.SWORD ->{
-                        if (playerEntity has Attack && playerEntity[Attack].attackItem == AttackItem.SWORD){
+                        if (playerEntity has Attack && playerEntity[Attack].attackItem is ItemType.Sword){
                             return
                         }
                         collectableEntity.configure {

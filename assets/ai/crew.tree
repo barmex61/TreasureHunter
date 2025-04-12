@@ -1,0 +1,15 @@
+#Actions
+import idle:"com.libgdx.treasurehunter.ai.Idle"
+
+
+#Conditions
+import canAttack?:"com.libgdx.treasurehunter.ai.CanAttack"
+import isEnemyNearby?:"com.libgdx.treasurehunter.ai.IsEnemyNearby"
+import canMove?:"com.libgdx.treasurehunter.ai.CanMove"
+import isDead?:"com.libgdx.treasurehunter.ai.IsDead"
+import isGetHit?:"com.libgdx.treasurehunter.ai.IsGetHit"
+import notInRange?:"com.libgdx.treasurehunter.ai.NotInRange"
+
+root
+    selector
+        idle

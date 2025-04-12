@@ -15,7 +15,7 @@ class DebugSystem(
 ) : IntervalSystem() {
 
     private val box2DDebugRenderer = Box2DDebugRenderer().apply {
-        SHAPE_STATIC.set(Color.RED)
+        SHAPE_STATIC.set(Color.BLACK)
     }
 
     private val shapeRenderer = ShapeRenderer()

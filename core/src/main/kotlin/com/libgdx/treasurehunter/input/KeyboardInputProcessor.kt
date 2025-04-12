@@ -74,14 +74,14 @@ class KeyboardInputProcessor(val world: World) : KtxInputAdapter {
             if (attackComp.attackState == AttackState.READY){
                 val onAir = playerEntity[Physic].body.linearVelocity.y !in (-0.1f..0.1f)
                 val updatedAttackType = when{
-                    attackType == AttackType.THROW_ATTACK -> AttackType.THROW_ATTACK
+                    attackType == AttackType.THROW -> AttackType.THROW
                     !onAir -> attackType
                     attackType == AttackType.ATTACK_1 && onAir -> AttackType.AIR_ATTACK_1
                     attackType == AttackType.ATTACK_2 && onAir -> AttackType.AIR_ATTACK_2
                     else -> return@forEach
                 }
                 attackComp.wantsToAttack = true
-                attackComp.attackType = updatedAttackType
+                attackComp.attackItem.attackType = updatedAttackType
             }
         }
     }
@@ -101,7 +101,7 @@ class KeyboardInputProcessor(val world: World) : KtxInputAdapter {
             Input.Keys.DOWN -> addCameraMovement(MoveDirection.DOWN)
             Input.Keys.NUMPAD_8 -> updateCameraZoom(0.1f)
             Input.Keys.NUMPAD_5 -> updateCameraZoom(-0.1f)
-            Input.Keys.P -> updatePlayerAttack(AttackType.THROW_ATTACK)
+            Input.Keys.P -> updatePlayerAttack(AttackType.THROW)
         }
 
         return false
@@ -121,7 +121,7 @@ class KeyboardInputProcessor(val world: World) : KtxInputAdapter {
             Input.Keys.DOWN -> removeCameraMovement(MoveDirection.DOWN)
             Input.Keys.NUMPAD_8 -> updateCameraZoom(0f)
             Input.Keys.NUMPAD_5 -> updateCameraZoom(0f)
-            Input.Keys.P -> updatePlayerAttack(AttackType.THROW_ATTACK)
+            Input.Keys.P -> updatePlayerAttack(AttackType.THROW)
         }
         return false
     }

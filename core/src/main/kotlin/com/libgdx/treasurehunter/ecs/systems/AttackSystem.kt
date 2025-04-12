@@ -7,11 +7,10 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
-import com.libgdx.treasurehunter.ai.AiEntity
+import com.libgdx.treasurehunter.state.StateEntity
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
-import com.libgdx.treasurehunter.ecs.components.AttackItem.Companion.toGameObject
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.AttackState
 import com.libgdx.treasurehunter.ecs.components.Damage
@@ -21,8 +20,9 @@ import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.tiled.sprite
-import com.libgdx.treasurehunter.ai.SwordState
+import com.libgdx.treasurehunter.state.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
+import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.utils.GameObject
 
 class AttackSystem(
@@ -36,35 +36,33 @@ class AttackSystem(
         val attackComp = entity[Attack]
         val animComp = entity[Animation]
         val (_,center) = entity[Graphic]
-        var (attackItem,wantsToAttack, attackState,attackType,attackCooldown) = attackComp
+        var (attackItem,wantsToAttack, attackState,doAttack) = attackComp
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
                     attackComp.doAttack = true
                     val center = entity[Graphic].center
-                    if (attackComp.isMeleeAttack) {
+                    if (attackItem.isMelee) {
                         world.entity {
                             it += AttackMeta(
-                                isMelee = true,
                                 owner = entity,
-                                attackType = attackType,
-                                isFixtureMirrored = false
+                                isFixtureMirrored = false,
+                                attackItem = attackItem
                             )
-                            it += Damage(damage = attackComp.attackDamage, sourceEntity = entity)
+                            it += Damage(damage = attackItem.attackDamage, sourceEntity = entity)
                             it += Physic(createAttackBody(center, it, BodyDef.BodyType.StaticBody))
-                            it += Graphic(sprite(GameObject.ATTACK_EFFECT, AnimationType.valueOf(attackType.name),center,assetHelper,0f))
+                            it += Graphic(sprite(GameObject.ATTACK_EFFECT, attackItem.attackAnimType,center,assetHelper,0f))
 
                         }
                     } else {
                         val gameObject = attackItem.toGameObject() ?: return
                         world.entity {
                             it += AttackMeta(
-                                isMelee = false,
                                 owner = entity,
-                                attackType = attackType,
                                 isFixtureMirrored = false,
+                                attackItem = attackItem
                             )
-                            it += Damage(damage = attackComp.attackDamage, sourceEntity = entity)
+                            it += Damage(damage = attackItem.attackDamage, sourceEntity = entity)
                             it += Physic(createAttackBody(center, it, BodyDef.BodyType.DynamicBody))
                             it += Graphic(
                                 sprite(
@@ -82,7 +80,7 @@ class AttackSystem(
                                 playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP
                             ))
                             it += State(
-                                AiEntity(it, world, physicWorld, assetHelper),
+                                StateEntity(it, world, physicWorld, assetHelper),
                                 SwordState.SPINNING
                             )
                         }
@@ -91,9 +89,8 @@ class AttackSystem(
                 }
             }
             AttackState.ATTACKING -> {
-                attackCooldown -= deltaTime
-                attackComp.attackCooldown = attackCooldown
-                if (attackCooldown <= 0f){
+                attackItem.attackCooldown -= deltaTime
+                if (attackItem.attackCooldown <= 0f){
                     attackComp.attackState = AttackState.DONE
                 }
             }
@@ -104,7 +101,12 @@ class AttackSystem(
     }
 
     private fun resetAttackComp(attackComp: Attack) {
-        attackComp.attackCooldown = 1f
+        when(attackComp.attackItem){
+            is ItemType.Sword -> {
+                attackComp.attackItem = ItemType.Sword()
+            }
+            else -> {}
+        }
         attackComp.attackState = AttackState.READY
         attackComp.wantsToAttack = false
     }

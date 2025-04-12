@@ -8,8 +8,9 @@ import com.badlogic.gdx.physics.box2d.ChainShape
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityCreateContext
 import com.github.quillraven.fleks.World
-import com.libgdx.treasurehunter.ai.AiEntity
-import com.libgdx.treasurehunter.ai.PlayerState
+import com.libgdx.treasurehunter.ecs.components.AiComponent
+import com.libgdx.treasurehunter.state.StateEntity
+import com.libgdx.treasurehunter.state.PlayerState
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Graphic
@@ -22,14 +23,13 @@ import com.libgdx.treasurehunter.enums.TextureAtlasAssets
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.utils.Constants.UNIT_SCALE
 import com.libgdx.treasurehunter.utils.GameObject
-import com.libgdx.treasurehunter.utils.animation
-import com.libgdx.treasurehunter.ai.EntityState
-import com.libgdx.treasurehunter.ai.SwordState
+import com.libgdx.treasurehunter.state.EntityState
+import com.libgdx.treasurehunter.state.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.Attack
-import com.libgdx.treasurehunter.ecs.components.AttackItem
 import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.Damage
+import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Physic
 import ktx.app.gdxError
@@ -43,6 +43,7 @@ fun sprite(gameObject: GameObject, animationType: AnimationType, startPosition :
     val atlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
     val regions = atlas.findRegions(regionPath) ?:
     gdxError("There are no regions for $gameObject and $animationType")
+    println(regionPath)
     val firstFrame = regions.first()
     val w = firstFrame.regionWidth * UNIT_SCALE
     val h = firstFrame.regionHeight * UNIT_SCALE
@@ -112,14 +113,13 @@ fun EntityCreateContext.configureState(entity: Entity, tile: TiledMapTile,world:
         GameObject.SWORD.name -> SwordState.IDLE
         else -> return
     }
-    entity += State(AiEntity(entity, world, physicWorld,assetHelper),state)
+    entity += State(StateEntity(entity, world, physicWorld,assetHelper),state)
 }
 
 fun EntityCreateContext.configureEntityTags(
     entity: Entity,
     mapObject: TiledMapTileMapObject,
     tile: TiledMapTile,
-    assetHelper: AssetHelper
 ){
     val entityTags = mapObject.propertyOrNull<String>("entityTags")?:tile.property("entityTags","")
     if (entityTags.isNotBlank()){
@@ -140,9 +140,13 @@ fun EntityCreateContext.configureDamage(entity: Entity, tile: TiledMapTile){
 }
 
 fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile){
-    val attackItem = AttackItem.valueOf(tile.property<String>("attackItem","NONE"))
-    if (attackItem != AttackItem.NONE){
-        entity += Attack(attackItem = attackItem)
+    val attackItem = tile.property<String>("item","")
+    val item = when(attackItem){
+        "SWORD" -> ItemType.Sword()
+        else -> null
+    }
+    if (item != null){
+        entity += Attack(attackItem = item)
     }
 }
 
@@ -152,6 +156,14 @@ fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){
         entity += Life(maxLife = life)
     }
 
+}
+
+fun EntityCreateContext.configureAi(entity: Entity, tile: TiledMapTile){
+    val aiTreePath = tile.property<String>("aiTreePath","")
+    if (aiTreePath.isNotBlank()){
+        println(aiTreePath)
+        entity += AiComponent(treePath = aiTreePath)
+    }
 }
 
 

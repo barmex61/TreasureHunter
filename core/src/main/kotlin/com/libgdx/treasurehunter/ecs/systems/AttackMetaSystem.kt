@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.ChainShape
-import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.Shape
 import com.badlogic.gdx.utils.Array
@@ -13,18 +12,16 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
-import com.libgdx.treasurehunter.ai.PlayerState
+import com.libgdx.treasurehunter.state.PlayerState
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.AttackType
-import com.libgdx.treasurehunter.ecs.components.GdxAnimation
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.ecs.systems.AnimationSystem.Companion.setFlipX
-import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.JUMP_DEBUG_RECT
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.TextureAtlasAssets
 import com.libgdx.treasurehunter.event.GameEvent
@@ -54,15 +51,14 @@ class AttackMetaSystem (
 
     override fun onTickEntity(entity: Entity) {
         val attackMeta = entity[AttackMeta]
-        var (isMelee,owner, attackType, currentFrameIndex, isFixtureMirrored,hasFixture,attackCooldown) = attackMeta
+        var (owner, currentFrameIndex, isFixtureMirrored,hasFixture,collidedWithWall,attackItem) = attackMeta
         val (body,_) = entity[Physic]
         val ownerFlipX = owner[Move].flipX
         val graphic = entity[Graphic]
-        if (isMelee){
-            setMeleeAttackFixtures(entity,owner,ownerFlipX,currentFrameIndex,attackMeta,body,attackType)
-            attackCooldown -= deltaTime
-            attackMeta.attackDestroyCooldown = attackCooldown
-            if (attackCooldown <= 0f){
+        if (attackItem.isMelee){
+            setMeleeAttackFixtures(entity,owner,ownerFlipX,currentFrameIndex,attackMeta,body,attackItem.attackType)
+            attackItem.attackDestroyTime -= deltaTime
+            if (attackItem.attackDestroyTime <= 0f){
                 GameEventDispatcher.fireEvent(GameEvent.RemoveEntityEvent(entity))
             }
             if (body.fixtureList.size == 0) graphic.sprite.setAlpha(0f) else graphic.sprite.setAlpha(1f)
@@ -71,7 +67,7 @@ class AttackMetaSystem (
             val keyFrameIx = owner[Animation].getAttackAnimKeyFrameIx()
             val animType = owner[Animation].animationData.animationType
             if (keyFrameIx == 1 && !hasFixture){
-                setRangedAttackFixture(entity,owner,ownerFlipX,currentFrameIndex,attackMeta,body,attackType)
+                setRangedAttackFixture(entity,owner,ownerFlipX,currentFrameIndex,attackMeta,body,attackItem.attackType)
                 attackMeta.isFixtureMirrored = ownerFlipX
             }
             if (keyFrameIx == 2 && animType == AnimationType.THROW){

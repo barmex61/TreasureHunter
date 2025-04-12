@@ -1,10 +1,12 @@
 package com.libgdx.treasurehunter.utils
 
 import com.badlogic.gdx.maps.MapObject
+import com.badlogic.gdx.maps.objects.CircleMapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
+import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
@@ -21,6 +23,7 @@ import ktx.app.gdxError
 import ktx.box2d.body
 import ktx.math.vec2
 import ktx.tiled.property
+import ktx.tiled.shape
 import ktx.tiled.x
 import ktx.tiled.y
 import kotlin.collections.forEach
@@ -108,18 +111,21 @@ fun rectangleFixtureDef(mapObject: RectangleMapObject) : FixtureDef{
     }
 }
 
+
 fun ellipseFixtureDef(mapObject: EllipseMapObject) : FixtureDef {
+    val sensorCircleRadius = mapObject.property("radius",0f)
     val (x,y,w,h) = mapObject.ellipse
     val ellipseX = x * UNIT_SCALE
     val ellipseY = y * UNIT_SCALE
-    val ellipseW = w * UNIT_SCALE / 2f
-    val ellipseH = h * UNIT_SCALE / 2f
-    return if (MathUtils.isEqual(ellipseW, ellipseH, 0.1f)){
+    val ellipseW = if (sensorCircleRadius == 0f) w * UNIT_SCALE / 2f else sensorCircleRadius
+    val ellipseH = if (sensorCircleRadius == 0f) h * UNIT_SCALE / 2f else sensorCircleRadius
+    return if (MathUtils.isEqual(ellipseW, ellipseH, 0.1f) || sensorCircleRadius != 0f ){
         FixtureDef().apply {
             shape = CircleShape().apply {
-                position = vec2(ellipseX + ellipseW , ellipseY + ellipseH)
-                radius = ellipseW
+                position = vec2(ellipseX + 0.3f,ellipseY + 0.3f)
+                radius = sensorCircleRadius
             }
+            this.isSensor = isSensor
         }
     }else{
         val numVertices = 20

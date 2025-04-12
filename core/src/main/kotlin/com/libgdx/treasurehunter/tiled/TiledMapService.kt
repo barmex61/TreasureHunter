@@ -129,13 +129,14 @@ class TiledMapService (
             body.userData = it
             it += Physic(body)
             configureEntityGraphic(it,tile,body.position,gameObject, assetHelper,world,rotation)
-            configureEntityTags(it,mapObject,tile,assetHelper)
+            configureEntityTags(it,mapObject,tile)
             configureMove(it,tile)
             configureJump(it,tile)
             configureState(it,tile,world,physicWorld,assetHelper)
             configureDamage(it,tile)
             configureAttack(it,tile)
             configureLife(it,tile)
+            configureAi(it,tile)
         }
 
     }
@@ -150,7 +151,7 @@ class TiledMapService (
         world.entity {
             val position = vec2(mapObject.x * UNIT_SCALE , mapObject.y * UNIT_SCALE)
             configureEntityGraphic(it,tile,position,gameObject, assetHelper,world,0f)
-            configureEntityTags(it,mapObject,tile,assetHelper)
+            configureEntityTags(it,mapObject,tile)
         }
     }
     companion object{

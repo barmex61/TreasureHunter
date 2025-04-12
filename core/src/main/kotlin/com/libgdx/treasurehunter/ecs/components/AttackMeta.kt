@@ -5,14 +5,12 @@ import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
 
 data class AttackMeta(
-    val isMelee: Boolean,
     val owner: Entity,
-    val attackType: AttackType,
     var currentFrameIndex: Int = -1,
     var isFixtureMirrored : Boolean,
     var hasFixture : Boolean = false,
-    var attackDestroyCooldown : Float = attackType.attackDestroyCooldown,
     var collidedWithWall : Boolean = false,
+    var attackItem : ItemType.Damageable
 
 ) : Component<AttackMeta> {
     override fun type() = AttackMeta
