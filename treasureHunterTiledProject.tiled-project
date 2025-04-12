@@ -61,7 +61,9 @@
                 "ATTACK_1",
                 "ATTACK_2",
                 "ATTACK_3",
-                "CRABBY"
+                "CRABBY",
+                "FIERCE_TOOTH",
+                "PINK_STAR"
             ],
             "valuesAsFlags": false
         },

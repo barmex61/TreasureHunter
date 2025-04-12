@@ -18,8 +18,6 @@ import com.libgdx.treasurehunter.ecs.components.MoveDirection
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.utils.distance
-import kotlin.math.pow
-import kotlin.math.sqrt
 
 data class CrewEntity(
     val world: World,
@@ -61,12 +59,6 @@ data class CrewEntity(
         get() {
             val mainAnimationData = getOrNull(Animation)?.animationData ?: return false
             return mainAnimationData.gdxAnimation!!.isAnimationFinished(mainAnimationData.timer)
-        }
-
-    val moveCurrent : Float
-        get() {
-            val moveComp = getOrNull(Move) ?: return 0f
-            return moveComp.currentSpeed
         }
 
     val cantMoveForward : Boolean

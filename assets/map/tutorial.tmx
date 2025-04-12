@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="54">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="57">
  <properties>
   <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DAY"/>
  </properties>
  <tileset firstgid="1" source="terrainTileset.tsx"/>
  <tileset firstgid="86" source="objects.tsx"/>
- <tileset firstgid="135" source="islandBackground.tsx"/>
+ <tileset firstgid="137" source="islandBackground.tsx"/>
  <layer id="5" name="background_far" width="64" height="20">
   <data encoding="base64" compression="zlib">
-   eJztzzkSglAQRVGMQBCnTTihgqtwJ6LiuP+AG2BiocgXLEpecIqA/tV97Y5lOejChYcefPQxwBAjjGH/2XzT71O/+tWvfvWrX/3qV7/61f/dvCeSmWCKGeZYIMASK6wRIsKmgv9ldj3Plr31k5lty+0QY48Djkhwwu3Hrtn3biApaDnjkrMj782r+x6zVbQW9Zi0mDDZ866rrjvrkgIMG6N/
+   eJztz0kOglAQRVEcgiB2m7BDBVfhTkTFdv/hDnBiUOQLhsgbnDCgfqqu3bEsB1248NCDjz4GGGKEMew/m2/6fepXv/rVr371q1/96le/+r+b90QyE0wxwxwLBFhihTVCRNhU8L/MrufZsrd+MrNtuR1i7HHAEQlOuP3YNfveDSQFLWdccnbkvXl132O2itaiHpMWEyZ73nXVdWddUiX3rX8=
   </data>
  </layer>
  <layer id="6" name="background_mid" width="64" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt1FlOwkAcgPEOd1Cwsqh3EATZ9A7ghiDcAZUdfeMIHsWDyE1AZRG+vpnQwLQ0tA3zhd8DkwxM2vxH01Sq/esLQ7cPIdEUM8zxh4WxKPgggBFfx/jGD34xsbDPS32I1bVj1sKIIIoYTnCKMxzgEEGEcARdyO/zUp8m57lkLY0Mssghjytc4xxxJHCBJFJCft+mzN7JLnvg/0t4RBkVPKGKGgoo4ga3uMO9kN+3KeOdWJ1BJ2vx+2100EUPfbzhHXU84wWvaKAp5PfJZHUGjXSPzdY22Z1Bt2fHqezOoNl95sdnYncGzfr/TNy8V7zQPtwrgzXnVfeKc/eKH3PyXlGpVCqrLQGAtGpG
+   eJzt1FtOwkAYQGFG3QMqBUTdg4qCIOwBFQS57AGU++WNJbAUFiI7UUDA0zcTGzqtDS3pnPA9MMnApM0/gYBK5b8+MHP7EBKtsMZG/yL44ACHOMIny1+YY4Elvi3s81IT8XctzFoEUZwhhnNc4BJBHOMEpwhBE/L7vNTU4DwJ1pK4RwppPCCDLK5wjRvEcYs7Ib/PLKN3sste+P8iSnhFGRVUUUMOj3jCM/IoCPl9ZunvxOoMOlmb3++gix76GGCIEepo4A3vaKIl5PfJZHUG9TSPzdZ/sjuDbs+OU9mdQaP7bB+fid0ZNOr3M3HzXvFCfrhXxlvOq+4V5+6VfczJe0WlUqms9gPmyGRk
   </data>
  </layer>
  <layer id="7" name="background_close" width="64" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt1EsKwCAMhOF4/3VfB+nrdp19EVJIrML/wSwraRw0A96mYjYri7IqW/l7Ir+I2Xd9cyincil3wv9n7bjF7BFGmRPfjfx+RKDb+ehYTsci9uo5o9f7i9ir5wzeiLpeu9EK3QAAZHoAtAM7EQ==
+   eJzt1MkJwDAMRFG5/wKyFZKtucw9GBSQHBv+gznGKPJgM+BtKmazsiirspW/J/KLmH3XN4dyKpdyJ/x/1o5bzB5hlDnx3cjvRwS6nY+O5XQsYq+eM3q9v4i9es7gjajrtRut0A0AQKYHKTo7xQ==
   </data>
  </layer>
  <layer id="1" name="ground" width="64" height="20">
@@ -50,5 +50,8 @@
   <object id="50" gid="120" x="420" y="339" width="20" height="20"/>
   <object id="51" gid="120" x="221" y="535" width="20" height="20"/>
   <object id="53" gid="134" x="429" y="67" width="72" height="32"/>
+  <object id="54" gid="135" x="507" y="222" width="34" height="30"/>
+  <object id="55" gid="136" x="576" y="352" width="34" height="30"/>
+  <object id="56" gid="136" x="320" y="192" width="34" height="30"/>
  </objectgroup>
 </map>

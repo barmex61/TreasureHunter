@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="72" tileheight="93" tilecount="21" columns="0">
+<tileset version="1.10" tiledversion="1.10.2" name="objects" tilewidth="72" tileheight="93" tilecount="23" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -384,6 +384,94 @@
     <polygon points="24,0 28,0 28,-1 24,-1"/>
    </object>
    <object id="5" x="26" y="8" width="22" height="22">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="radius" type="float" value="4"/>
+     <property name="userData" value="sensorFixture"/>
+    </properties>
+    <ellipse/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="49">
+  <properties>
+   <property name="aiTreePath" value="ai/crew.tree"/>
+   <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="gameObject" propertytype="GameObject" value="FIERCE_TOOTH"/>
+   <property name="gravityScale" type="float" value="1"/>
+   <property name="isFlipped" type="bool" value="true"/>
+   <property name="jumpHeight" type="float" value="2"/>
+   <property name="life" type="int" value="3"/>
+   <property name="speed" type="int" value="2"/>
+   <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="timeToMax" type="float" value="2"/>
+  </properties>
+  <image width="34" height="30" source="../graphics/fierce_tooth.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="9" y="7" width="17" height="19">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="hitbox"/>
+    </properties>
+   </object>
+   <object id="2" x="11" y="9">
+    <properties>
+     <property name="userData" value="bodyFixture"/>
+    </properties>
+    <polygon points="0,0 0,16 13,16 13,0"/>
+   </object>
+   <object id="3" x="-8" y="25">
+    <properties>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="24,0 28,0 28,-1 24,-1"/>
+   </object>
+   <object id="4" x="6" y="5" width="22" height="22">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="radius" type="float" value="4"/>
+     <property name="userData" value="sensorFixture"/>
+    </properties>
+    <ellipse/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="50">
+  <properties>
+   <property name="aiTreePath" value="ai/crew.tree"/>
+   <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="gameObject" propertytype="GameObject" value="PINK_STAR"/>
+   <property name="gravityScale" type="float" value="1"/>
+   <property name="isFlipped" type="bool" value="true"/>
+   <property name="jumpHeight" type="float" value="2"/>
+   <property name="life" type="int" value="3"/>
+   <property name="speed" type="int" value="2"/>
+   <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="timeToMax" type="float" value="2"/>
+  </properties>
+  <image width="34" height="30" source="../graphics/pink_star.png"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="10" y="10" width="14" height="17">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="hitbox"/>
+    </properties>
+   </object>
+   <object id="2" x="11" y="12">
+    <properties>
+     <property name="userData" value="bodyFixture"/>
+    </properties>
+    <polygon points="0,0 0,14 12,14 12,0"/>
+   </object>
+   <object id="3" x="-8" y="26">
+    <properties>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="24,0 28,0 28,-1 24,-1"/>
+   </object>
+   <object id="4" x="6" y="7" width="22" height="22">
     <properties>
      <property name="isSensor" type="bool" value="true"/>
      <property name="radius" type="float" value="4"/>
