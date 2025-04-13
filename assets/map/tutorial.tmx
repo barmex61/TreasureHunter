@@ -49,9 +49,6 @@
   <object id="46" gid="121" x="368" y="359" width="64" height="40"/>
   <object id="50" gid="120" x="420" y="339" width="20" height="20"/>
   <object id="51" gid="120" x="221" y="535" width="20" height="20"/>
-  <object id="53" gid="134" x="429" y="67" width="72" height="32"/>
-  <object id="54" gid="135" x="507" y="222" width="34" height="30"/>
   <object id="55" gid="136" x="576" y="352" width="34" height="30"/>
-  <object id="56" gid="136" x="320" y="192" width="34" height="30"/>
  </objectgroup>
 </map>

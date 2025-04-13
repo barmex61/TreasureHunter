@@ -5,9 +5,11 @@ import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.math.MathUtils
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.State
+import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.enums.MarkType
 import com.libgdx.treasurehunter.enums.ParticleType
 import com.libgdx.treasurehunter.utils.GameObject
@@ -166,7 +168,7 @@ enum class PlayerState : EntityState {
 
     ATTACK{
         override fun enter(entity: StateEntity) {
-            val animType = entity[Attack].attackItem.attackAnimType
+            val animType = entity[Attack].attackMetaData.attackType.attackAnimType
             entity.animation(animType, Animation.PlayMode.NORMAL,0.16f)
         }
 
@@ -180,8 +182,10 @@ enum class PlayerState : EntityState {
             with(stateEntity.world){
                 if (stateEntity.entity hasNo Attack){
                     stateEntity.entity.configure {
-                        println("SWORD COLLECTED")
-                        it += Attack(attackItem = ItemType.Sword())
+                        it += Item(
+                            itemType = Sword(),
+                            owner = stateEntity.entity
+                        )
                         it[com.libgdx.treasurehunter.ecs.components.Animation].setNewGameObject(GameObject.CAPTAIN_CLOWN_SWORD)
                     }
                 }

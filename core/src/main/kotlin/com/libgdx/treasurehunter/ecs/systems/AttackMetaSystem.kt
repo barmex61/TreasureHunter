@@ -41,85 +41,118 @@ import com.libgdx.treasurehunter.utils.plus
 import ktx.math.vec2
 import com.libgdx.treasurehunter.utils.calculateEffectPosition
 import ktx.app.gdxError
+import ktx.collections.isNotEmpty
 
-class AttackMetaSystem (
-    private val assetHelper: AssetHelper = inject()
-): IteratingSystem(
+class AttackMetaSystem(
+    assetHelper: AssetHelper = inject()
+) : IteratingSystem(
     family = family { all(AttackMeta, Physic) }
 ) {
     private val gameObjectAtlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
 
     override fun onTickEntity(entity: Entity) {
         val attackMeta = entity[AttackMeta]
-        var (owner, currentFrameIndex, isFixtureMirrored,hasFixture,collidedWithWall,attackItem) = attackMeta
-        val (body,_) = entity[Physic]
+        val (owner, currentFrameIndex, _, _, _, attackItem) = attackMeta
+        val (body, _) = entity[Physic]
         val ownerFlipX = owner[Move].flipX
         val graphic = entity[Graphic]
-        if (attackItem.isMelee){
-            setMeleeAttackFixtures(entity,owner,ownerFlipX,currentFrameIndex,attackMeta,body,attackItem.attackType)
+
+        if (attackItem.isMelee) {
+            handleMeleeAttack(entity, owner, ownerFlipX, currentFrameIndex, attackMeta, body, attackItem.attackType)
             attackItem.attackDestroyTime -= deltaTime
-            if (attackItem.attackDestroyTime <= 0f){
+
+            if (attackItem.attackDestroyTime <= 0f) {
                 GameEventDispatcher.fireEvent(GameEvent.RemoveEntityEvent(entity))
             }
-            if (body.fixtureList.size == 0) graphic.sprite.setAlpha(0f) else graphic.sprite.setAlpha(1f)
-        }else{
-
-            val keyFrameIx = owner[Animation].getAttackAnimKeyFrameIx()
-            val animType = owner[Animation].animationData.animationType
-            if (keyFrameIx == 1 && !hasFixture){
-                setRangedAttackFixture(entity,owner,ownerFlipX,currentFrameIndex,attackMeta,body,attackItem.attackType)
-                attackMeta.isFixtureMirrored = ownerFlipX
-            }
-            if (keyFrameIx == 2 && animType == AnimationType.THROW){
-                owner[State].stateMachine.changeState(PlayerState.SWORD_THROWED)
-            }
+            graphic.sprite.setAlpha(if (body.fixtureList.isEmpty) 0f else 1f)
+        } else {
+            handleRangedAttack(entity, owner, ownerFlipX, currentFrameIndex, attackMeta, body, attackItem.attackType)
         }
-
     }
 
-
-    private fun applyForceToAttackBody(ownerFlipX: Boolean,ownerCenter : Vector2,body: Body){
-        val (multiplayer,offset) = when {
-            ownerFlipX == false -> {
-                1f to Vector2(0f,0f)
-            }
-            else -> {
-                -1f to vec2(-0.5f,0f)
-            }
-        }
-        val pos = ownerCenter + offset
-        body.setTransform(pos, body.angle)
-        body.applyLinearImpulse(Vector2(7f * multiplayer,0f)  ,body.position, true)
-    }
-
-
-    private fun setMeleeAttackFixtures(entity: Entity,owner: Entity,ownerFlipX: Boolean,currentFrameIndex: Int,attackMeta: AttackMeta,body: Body,attackType: AttackType){
+    private fun handleMeleeAttack(
+        entity: Entity,
+        owner: Entity,
+        ownerFlipX: Boolean,
+        currentFrameIndex: Int,
+        attackMeta: AttackMeta,
+        body: Body,
+        attackType: AttackType
+    ) {
         val ownerAnimComp = owner[Animation]
         val ownerCenter = owner[Graphic].center
         val keyFrameIndex = ownerAnimComp.getAttackAnimKeyFrameIx()
-        if (keyFrameIndex != -1 && ((keyFrameIndex != currentFrameIndex) || (ownerFlipX != attackMeta.isFixtureMirrored))) {
-            createAttackFixture(entity,keyFrameIndex,body,attackType,ownerFlipX,true,true)
+
+        if (keyFrameIndex != -1 && (keyFrameIndex != currentFrameIndex || ownerFlipX != attackMeta.isFixtureMirrored)) {
+            createAttackFixture(entity, keyFrameIndex, body, attackType, ownerFlipX, isMelee = true, isSensor = true)
             attackMeta.currentFrameIndex = keyFrameIndex
             attackMeta.isFixtureMirrored = ownerFlipX
         }
-        if (keyFrameIndex == -1 && body.fixtureList.size > 0){
+
+        if (keyFrameIndex == -1 && body.fixtureList.isNotEmpty()) {
             body.destroyFixtures()
         }
+
         body.setTransform(ownerCenter, body.angle)
     }
 
-    private fun setRangedAttackFixture(entity: Entity, owner: Entity, ownerFlipX: Boolean, currentFrameIndex: Int, attackMeta: AttackMeta, body: Body, attackType: AttackType){
-        val (sprite,_) = entity[Graphic]
-        val ownerCenter = owner[Graphic].center
-        sprite.setAlpha(1f)
-        createAttackFixture(entity,currentFrameIndex,body,attackType,ownerFlipX,false,false)
-        attackMeta.hasFixture = true
-        applyForceToAttackBody(ownerFlipX,ownerCenter,body)
+    private fun handleRangedAttack(
+        entity: Entity,
+        owner: Entity,
+        ownerFlipX: Boolean,
+        currentFrameIndex: Int,
+        attackMeta: AttackMeta,
+        body: Body,
+        attackType: AttackType
+    ) {
+        val keyFrameIx = owner[Animation].getAttackAnimKeyFrameIx()
+        val animType = owner[Animation].animationData.animationType
+
+        if (keyFrameIx == 1 && !attackMeta.hasFixture) {
+            setRangedAttackFixture(entity, owner, ownerFlipX, currentFrameIndex, attackMeta, body, attackType)
+            attackMeta.isFixtureMirrored = ownerFlipX
+        }
+
+        if (keyFrameIx == 2 && animType == AnimationType.THROW) {
+            owner[State].stateMachine.changeState(PlayerState.SWORD_THROWED)
+        }
     }
 
+    private fun applyForceToAttackBody(ownerFlipX: Boolean, ownerCenter: Vector2, body: Body) {
+        val (multiplier, offset) = if (!ownerFlipX) 1f to Vector2(0f, 0f) else -1f to vec2(-0.5f, 0f)
+        val pos = ownerCenter + offset
+        body.setTransform(pos, body.angle)
+        body.applyLinearImpulse(Vector2(7f * multiplier, 0f), body.position, true)
+    }
 
-    fun createAttackFixture(entity: Entity,keyFrameIndex: Int, attackBody: Body, attackType: AttackType, flipX: Boolean = false, isMelee: Boolean, isSensor: Boolean) {
+    private fun setRangedAttackFixture(
+        entity: Entity,
+        owner: Entity,
+        ownerFlipX: Boolean,
+        currentFrameIndex: Int,
+        attackMeta: AttackMeta,
+        body: Body,
+        attackType: AttackType
+    ) {
+        val (sprite, _) = entity[Graphic]
+        val ownerCenter = owner[Graphic].center
+        sprite.setAlpha(1f)
+        createAttackFixture(entity, currentFrameIndex, body, attackType, ownerFlipX, isMelee = false, isSensor = false)
+        attackMeta.hasFixture = true
+        applyForceToAttackBody(ownerFlipX, ownerCenter, body)
+    }
+
+    fun createAttackFixture(
+        entity: Entity,
+        keyFrameIndex: Int,
+        attackBody: Body,
+        attackType: AttackType,
+        flipX: Boolean = false,
+        isMelee: Boolean,
+        isSensor: Boolean
+    ) {
         attackBody.destroyFixtures()
+
         val shape = if (isMelee) {
             getMeleeAttackShape(attackType, keyFrameIndex, flipX)
         } else {
@@ -127,7 +160,7 @@ class AttackMetaSystem (
         }
 
         val fixtureDefs = mutableListOf<FixtureDefUserData>()
-        if (shape != null){
+        shape?.let {
             fixtureDefs.add(
                 FixtureDefUserData(
                     fixtureDef = FixtureDef().apply {
@@ -145,13 +178,9 @@ class AttackMetaSystem (
             val attackEffectFixture = OBJECT_FIXTURES[GameObject.valueOf(attackType.name)]
             attackEffectFixture?.getOrNull(keyFrameIndex)?.let { originalFixtureData ->
                 val originalShape = originalFixtureData.fixtureDef.shape as? ChainShape ?: return@let
-                val originalShapeWithOffset = originalShape.offset(vec2(0.5f,-0.5f))
-                val newShape = if (flipX) {
-                     mirrorChainShape(originalShapeWithOffset, vec2(0f,0f))
-                } else {
-                    originalShapeWithOffset
-                }
-                setMeleeAttackSprite(entity, keyFrameIndex, newShape,attackType,flipX)
+                val originalShapeWithOffset = originalShape.offset(vec2(0.5f, -0.5f))
+                val newShape = if (flipX) mirrorChainShape(originalShapeWithOffset, vec2(0f, 0f)) else originalShapeWithOffset
+                setMeleeAttackEffectSprite(entity, keyFrameIndex, newShape, attackType, flipX)
 
                 fixtureDefs.add(
                     FixtureDefUserData(
@@ -166,30 +195,33 @@ class AttackMetaSystem (
         fixtureDefs.clear()
     }
 
-    private fun getMeleeAttackShape(attackType: AttackType,keyFrameIndex: Int,flipX: Boolean) : Shape? {
-        val fixtureVertices =playerSwordMeleeAttackVertices[attackType]?.get(keyFrameIndex)
-        fixtureVertices?:return null
+    private fun getMeleeAttackShape(attackType: AttackType, keyFrameIndex: Int, flipX: Boolean): Shape? {
+        val fixtureVertices = playerSwordMeleeAttackVertices[attackType]?.get(keyFrameIndex) ?: return null
         val mirroredVertices = if (flipX) fixtureVertices.mirrorVertices() else fixtureVertices
-        return ChainShape().apply {
-            createLoop(mirroredVertices)
-        }
+        return ChainShape().apply { createLoop(mirroredVertices) }
     }
 
     private fun getRangedAttackShape(flipX: Boolean): ChainShape {
         val originalShape = playerSwordRangedAttackVertices!!.first().fixtureDef.shape as ChainShape
-        val finalShape = if (flipX) mirrorChainShape(originalShape,vec2(0.65f,0f)) else originalShape
-        return finalShape
+        return if (flipX) mirrorChainShape(originalShape, vec2(0.65f, 0f)) else originalShape
     }
 
-    private fun setMeleeAttackSprite(entity: Entity, keyFrameIndex: Int, newShape: ChainShape,attackType: AttackType,flipX: Boolean) {
+    private fun setMeleeAttackEffectSprite(
+        entity: Entity,
+        keyFrameIndex: Int,
+        newShape: ChainShape,
+        attackType: AttackType,
+        flipX: Boolean
+    ) {
         val effectPositionCenter = newShape.calculateEffectPosition()
         val graphic = entity[Graphic]
-        val textureRegion = getTextureRegion(GameObject.ATTACK_EFFECT,attackType,keyFrameIndex)
+        val textureRegion = getTextureRegion(GameObject.ATTACK_EFFECT, attackType, keyFrameIndex)
         graphic.sprite.setRegion(textureRegion)
-        setFlipX(entity[AttackMeta].owner.getOrNull(Move),graphic.sprite)
-        val newOffsetX = (if (flipX) effectPositionCenter.x - graphic.sprite.width/1.3f else effectPositionCenter.x - graphic.sprite.width/2f).coerceAtMost(0.6f)
-        val newOffsetY = (effectPositionCenter.y - graphic.sprite.height/3f).coerceAtMost(-0.3f)
-        graphic.effectOffset = vec2(newOffsetX,newOffsetY)
+        setFlipX(entity[AttackMeta].owner.getOrNull(Move), graphic.sprite)
+        graphic.effectOffset = vec2(0f, 0f)
+        val newOffsetX = (if (flipX) effectPositionCenter.x - graphic.sprite.width / 1.3f else effectPositionCenter.x - graphic.sprite.width / 2f).coerceAtMost(0.5f)
+        val newOffsetY = (effectPositionCenter.y - graphic.sprite.height / 2.5f).coerceAtMost(-0.3f)
+        graphic.effectOffset = vec2(newOffsetX, newOffsetY)
     }
 
     private val regionsCache = mutableMapOf<String, Array<TextureAtlas.AtlasRegion>>()
@@ -201,9 +233,7 @@ class AttackMetaSystem (
     ): TextureRegion {
         val atlasKey = "${gameObject.atlasKey}/${attackType.name.lowercase()}"
         return regionsCache.getOrPut(atlasKey) {
-            val regions = gameObjectAtlas.findRegions(atlasKey) ?: gdxError("No regions for animation $atlasKey")
-            regions
+            gameObjectAtlas.findRegions(atlasKey) ?: gdxError("No regions for animation $atlasKey")
         }.get(keyFrameIndex)
     }
-
 }

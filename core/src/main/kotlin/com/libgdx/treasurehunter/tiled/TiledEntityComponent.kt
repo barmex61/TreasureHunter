@@ -27,11 +27,15 @@ import com.libgdx.treasurehunter.state.EntityState
 import com.libgdx.treasurehunter.state.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.AttackData
 import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.Damage
+import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Life
+import com.libgdx.treasurehunter.ecs.components.Natural
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.Sword
 import ktx.app.gdxError
 import ktx.math.vec2
 import ktx.tiled.property
@@ -140,14 +144,19 @@ fun EntityCreateContext.configureDamage(entity: Entity, tile: TiledMapTile){
     }
 }
 
-fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile){
+fun EntityCreateContext.configureItem(entity: Entity, tile: TiledMapTile){
     val attackItem = tile.property<String>("item","")
     val item = when(attackItem){
-        "SWORD" -> ItemType.Sword()
+        "SWORD" -> Sword()
         else -> null
     }
     if (item != null){
-        entity += Attack(attackItem = item)
+        entity += Item(
+            item,
+            entity,
+            isPickedUp = true,
+            isUsed = false
+        )
     }
 }
 
@@ -159,11 +168,21 @@ fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){
 
 }
 
-fun EntityCreateContext.configureAi(entity: Entity, tile: TiledMapTile){
+fun EntityCreateContext.configureAi(entity: Entity, tile: TiledMapTile,physicWorld: PhysicWorld){
     val aiTreePath = tile.property<String>("aiTreePath","")
     if (aiTreePath.isNotBlank()){
-        println(aiTreePath)
-        entity += AiComponent(treePath = aiTreePath)
+        val aiWanderRadius = tile.property<Float>("aiWanderRadius")
+        entity += AiComponent(treePath = aiTreePath, physicWorld = physicWorld, aiWanderRadius = aiWanderRadius)
+    }
+}
+
+fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile){
+    val hasAttack = tile.property<Boolean>("hasAttack",false)
+    val gameObject = GameObject.valueOf(tile.propertyOrNull<String>("gameObject")?: gdxError("gameObject is null $tile"))
+    if (hasAttack){
+        entity += Attack(
+            attackMetaData = AttackData.valueOf(gameObject.name).attackMetaData
+        )
     }
 }
 

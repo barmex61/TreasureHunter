@@ -46,7 +46,7 @@ class AnimationSystem (
             if (entity has Particle){
                 setFlipX(entity[Particle].owner.getOrNull(Move),sprite)
             }
-            if (entity has AttackMeta && !entity[AttackMeta].attackItem.isMelee){
+            if (entity has AttackMeta && !entity[AttackMeta].attackMetaData.isMelee){
                 setFlipX(entity[AttackMeta].owner.getOrNull(Move),sprite)
             }
             animationComp.flipInitialized = true

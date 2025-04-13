@@ -2,32 +2,17 @@ package com.libgdx.treasurehunter.tiled
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.maps.MapObject
-import com.badlogic.gdx.maps.MapObjects
-import com.badlogic.gdx.maps.objects.EllipseMapObject
-import com.badlogic.gdx.maps.objects.PolygonMapObject
-import com.badlogic.gdx.maps.objects.PolylineMapObject
-import com.badlogic.gdx.maps.objects.RectangleMapObject
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType.StaticBody
-import com.badlogic.gdx.physics.box2d.FixtureDef
-import com.badlogic.gdx.physics.box2d.PolygonShape
-import com.libgdx.treasurehunter.utils.component1
-import com.libgdx.treasurehunter.utils.component2
-import com.libgdx.treasurehunter.utils.component3
-import com.libgdx.treasurehunter.utils.component4
 import com.badlogic.gdx.physics.box2d.World
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.utils.Constants.UNIT_SCALE
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.MathUtils
-import com.badlogic.gdx.physics.box2d.ChainShape
-import com.badlogic.gdx.physics.box2d.CircleShape
 import com.github.quillraven.fleks.Entity
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.Attack
@@ -46,12 +31,8 @@ import com.libgdx.treasurehunter.utils.createFixtures
 import com.libgdx.treasurehunter.utils.fixtureDefinitionOf
 import ktx.app.gdxError
 import ktx.assets.disposeSafely
-import ktx.box2d.body
 import ktx.math.vec2
 import ktx.tiled.property
-import ktx.tiled.x
-import ktx.tiled.y
-import kotlin.math.sin
 
 
 class TiledMapService (
@@ -134,9 +115,10 @@ class TiledMapService (
             configureJump(it,tile)
             configureState(it,tile,world,physicWorld,assetHelper)
             configureDamage(it,tile)
+            configureItem(it,tile)
             configureAttack(it,tile)
             configureLife(it,tile)
-            configureAi(it,tile)
+            configureAi(it,tile,physicWorld)
         }
 
     }

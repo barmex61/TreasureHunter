@@ -10,7 +10,7 @@ data class AttackMeta(
     var isFixtureMirrored : Boolean,
     var hasFixture : Boolean = false,
     var collidedWithWall : Boolean = false,
-    var attackItem : ItemType.Damageable
+    var attackMetaData : AttackMetaData
 
 ) : Component<AttackMeta> {
     override fun type() = AttackMeta

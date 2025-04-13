@@ -3,31 +3,27 @@ package com.libgdx.treasurehunter.ecs.components
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
+import com.libgdx.treasurehunter.ecs.components.ItemType.Damageable
 import com.libgdx.treasurehunter.utils.GameObject
 import ktx.app.gdxError
+import kotlin.Float
 
-enum class AttackType(val isMelee: Boolean) {
+enum class AttackType(val isMelee : Boolean) {
     ATTACK_1(true),
     ATTACK_2(true),
     ATTACK_3(true),
     AIR_ATTACK_1(true),
     AIR_ATTACK_2(true),
+    NATURAL(true),
     THROW(false),;
+
+    val attackAnimType : AnimationType
+        get() = AnimationType.valueOf(this.name)
 }
 
 sealed interface ItemType{
     interface Damageable : ItemType {
-        val attackSpeed: Float
-        val attackRange: Float
-        var attackType: AttackType
-        val attackDamage : Int
-        var attackCooldown : Float
-        var attackDestroyTime : Float
-        val isMelee : Boolean
-
-        val attackAnimType : AnimationType
-            get() = AnimationType.valueOf(attackType.name)
-
+        val attackMetaData : AttackMetaData
         fun toGameObject() : GameObject?{
             return when(this){
                 is Sword -> GameObject.SWORD
@@ -36,43 +32,56 @@ sealed interface ItemType{
         }
     }
 
-    data class Sword(
-        override val attackSpeed: Float = 1f,
-        override val attackRange: Float = 0f,
-        override var attackType: AttackType = AttackType.ATTACK_1,
-        override val attackDamage: Int = 1,
-        override var attackCooldown: Float = 1.5f,
-        override var attackDestroyTime: Float = 1.5f,
-
-    ) : Damageable {
-        override val isMelee: Boolean
-            get() = attackType.isMelee
-    }
-
-    data class Bomb(
-        override val attackSpeed: Float,
-        override val attackRange: Float,
-        override var attackType: AttackType,
-        override val attackDamage: Int = 3,
-        override var attackCooldown: Float = 2f,
-        override var attackDestroyTime: Float = 2f,
-        override val isMelee: Boolean = false
-    ) : Damageable
-
     data class Consumable(
         val effect: String
     ) : ItemType
 }
 
+data class Sword(
+    override val attackMetaData: AttackMetaData = AttackMetaData(
+        attackSpeed= 1f,
+        attackRange= 0f,
+        attackType= AttackType.ATTACK_1,
+        attackDamage= 1,
+        baseAttackCooldown= 1.5f,
+        baseAttackDestroyTime= 1.5f,
+    )
+
+    ) : Damageable
+
+// -------------- ILERIDE HER KARAKTER İÇİN FARKLI BİR ATTACK META DATA OLUŞTURULACAK -----------
+data class Natural(
+    override val attackMetaData: AttackMetaData = AttackMetaData(
+        attackSpeed= 1f,
+        attackRange= 1f,
+        attackType= AttackType.NATURAL,
+        attackDamage= 1,
+        baseAttackCooldown= 1.5f,
+        baseAttackDestroyTime= 1.5f,
+    )
+
+) : Damageable
+
+
+data class Bomb(
+    override val attackMetaData: AttackMetaData = AttackMetaData(
+        attackSpeed= 1f,
+        attackRange= 0f,
+        attackType= AttackType.ATTACK_1,
+        attackDamage= 3,
+        baseAttackCooldown=2f,
+        baseAttackDestroyTime= 2f,
+    )
+) : Damageable
+
+
 data class Item(
-    val itemType: ItemType,
+    var itemType: ItemType,
     val owner: Entity,
     val isPickedUp: Boolean = false,
     val isUsed: Boolean = false,
-    val isEquipped: Boolean = false,
-    val isDropped: Boolean = false,
-    val isInInventory: Boolean = false
-) : Component <Item> {
+
+    ) : Component <Item> {
 
     override fun type() = Item
 

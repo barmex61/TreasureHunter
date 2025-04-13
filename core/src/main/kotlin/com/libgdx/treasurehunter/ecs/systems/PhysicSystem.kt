@@ -11,6 +11,7 @@ import com.github.quillraven.fleks.Fixed
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
+import com.libgdx.treasurehunter.ecs.components.AiComponent
 import com.libgdx.treasurehunter.state.PlayerState
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationData
@@ -23,11 +24,13 @@ import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.ItemType
+import com.libgdx.treasurehunter.ecs.components.Jump
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.State
+import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
@@ -37,8 +40,8 @@ import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.component1
 import ktx.math.component2
-import ktx.math.vec2
 import ktx.math.plus
+import ktx.math.vec2
 
 class PhysicSystem (
     private val physicWorld : PhysicWorld = inject(),
@@ -119,7 +122,8 @@ class PhysicSystem (
             get() = this.userData == "shipHelm"
         val Fixture.isChest : Boolean
             get() = this.userData == "chest"
-
+        val Fixture.isBodyFixture : Boolean
+            get() = this.userData == "bodyFixture"
     }
     private val Fixture.isPlayerFoot : Boolean
         get() = this.userData == "footFixture"
@@ -165,6 +169,15 @@ class PhysicSystem (
         attackMeta.collidedWithWall = true
     }
 
+    private fun handleSensorAndPlayerCollision(playerEntity: Entity, aiEntity: Entity, isBeginContact : Boolean) {
+        val aiComponent = aiEntity.getOrNull(AiComponent)?:return
+        if (isBeginContact){
+            aiComponent.nearbyEntities.add(playerEntity)
+        }else{
+            aiComponent.nearbyEntities.remove(playerEntity)
+        }
+    }
+
     // ----- /HANDLE COLLISIONS -----
 
     // ----- CHECK CONDITIONS -----
@@ -178,6 +191,10 @@ class PhysicSystem (
 
     private fun isSwordAndWallCollision(entityA: Entity?,fixtureA : Fixture,fixtureB:Fixture) : Boolean{
         return entityA != null && entityA has AttackMeta && fixtureA.isRangeAttackFixture && !fixtureB.isSensor
+    }
+
+    private fun isSensorAndPlayerCollision(entityA: Entity,fixtureA : Fixture,fixtureB:Fixture) : Boolean{
+        return entityA has EntityTag.PLAYER && fixtureA.isHitbox && fixtureB.isSensorFixture
     }
 
 
@@ -198,6 +215,8 @@ class PhysicSystem (
             return
         }
         when {
+            isSensorAndPlayerCollision(entityA,fixtureA,fixtureB) -> handleSensorAndPlayerCollision(entityA, entityB ,true)
+            isSensorAndPlayerCollision(entityB,fixtureB,fixtureA) -> handleSensorAndPlayerCollision(entityB, entityA ,true)
             isCollectableCollision(entityA,entityB,fixtureB) -> handleCollectableBeginContact(entityA,entityB)
             isCollectableCollision(entityB,entityA,fixtureA) -> handleCollectableBeginContact(entityB,entityA)
             isSwordAndWallCollision(entityA,fixtureA,fixtureB) -> handleSwordAndWallCollision(entityA)
@@ -217,6 +236,8 @@ class PhysicSystem (
             return
         }
         when {
+            isSensorAndPlayerCollision(entityA,fixtureA,fixtureB) -> handleSensorAndPlayerCollision(entityA, entityB ,false)
+            isSensorAndPlayerCollision(entityB,fixtureB,fixtureA) -> handleSensorAndPlayerCollision(entityB, entityA ,false)
             isDamageCollision(entityA,entityB,fixtureB) ->  handleDamageEndContact(entityA,entityB)
             isDamageCollision(entityB,entityA,fixtureA) -> handleDamageEndContact(entityB,entityA)
         }
@@ -251,7 +272,7 @@ class PhysicSystem (
                 val (gameObject) = collectableEntity[Collectable]
                 when(gameObject){
                     GameObject.SWORD ->{
-                        if (playerEntity has Attack && playerEntity[Attack].attackItem is ItemType.Sword){
+                        if (playerEntity has Attack ){
                             return
                         }
                         collectableEntity.configure {
@@ -265,10 +286,13 @@ class PhysicSystem (
                 }
             }
             is GameEvent.ParticleEvent ->{
-                val position = event.particlePosition
+                val bodyPosition = event.owner[Physic].body.position
+                val lowerXY = event.owner[Jump].lowerXY
+                val jumpRectLowerXY = bodyPosition + lowerXY
+                val position = vec2(jumpRectLowerXY.x - 0.75f,jumpRectLowerXY.y)
                 world.entity{
                     it += Particle(event.particleType,event.owner)
-                    it += Graphic(sprite(GameObject.DUST_PARTICLES, AnimationType.valueOf(event.particleType.name),position + vec2(0.2f,0.3f) , assetHelper ,0f))
+                    it += Graphic(sprite(GameObject.DUST_PARTICLES, AnimationType.valueOf(event.particleType.name),position  , assetHelper ,0f))
                     it += Animation(GameObject.DUST_PARTICLES, animationData = AnimationData(
                         animationType = AnimationType.valueOf(event.particleType.name),
                         playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL

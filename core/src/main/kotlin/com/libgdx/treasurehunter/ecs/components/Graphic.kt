@@ -23,6 +23,12 @@ data class Graphic(val sprite : Sprite) : Component <Graphic> , Comparable<Graph
             field.y = sprite.y + sprite.height
             return field
         }
+    val bottomCenter = vec2()
+        get() {
+            field.x = sprite.x + sprite.width/2f
+            field.y = sprite.y
+            return field
+        }
 
     var effectOffset = vec2()
 

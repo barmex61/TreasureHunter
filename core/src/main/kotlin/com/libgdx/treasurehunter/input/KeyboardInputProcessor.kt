@@ -71,18 +71,8 @@ class KeyboardInputProcessor(val world: World) : KtxInputAdapter {
     private fun updatePlayerAttack(attackType: AttackType){
         playerEntities.forEach { playerEntity ->
             val attackComp = playerEntity.getOrNull(Attack)?:return@forEach
-            if (attackComp.attackState == AttackState.READY){
-                val onAir = playerEntity[Physic].body.linearVelocity.y !in (-0.1f..0.1f)
-                val updatedAttackType = when{
-                    attackType == AttackType.THROW -> AttackType.THROW
-                    !onAir -> attackType
-                    attackType == AttackType.ATTACK_1 && onAir -> AttackType.AIR_ATTACK_1
-                    attackType == AttackType.ATTACK_2 && onAir -> AttackType.AIR_ATTACK_2
-                    else -> return@forEach
-                }
-                attackComp.wantsToAttack = true
-                attackComp.attackItem.attackType = updatedAttackType
-            }
+            attackComp.queuedAttackType = attackType
+            attackComp.wantsToAttack = true
         }
     }
 

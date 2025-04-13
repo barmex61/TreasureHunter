@@ -71,8 +71,7 @@ data class StateEntity(
     fun Entity.configure(configuration : EntityUpdateContext.(Entity) -> Unit) = with(world) { this@configure.configure(configuration) }
 
     fun fireParticleEvent(particleType: ParticleType) {
-        val particlePosition = this[Physic].body.position
-        GameEventDispatcher.fireEvent(GameEvent.ParticleEvent(entity,particlePosition, particleType))
+        GameEventDispatcher.fireEvent(GameEvent.ParticleEvent(entity, particleType))
     }
 
     fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){
@@ -147,9 +146,9 @@ data class StateEntity(
         }
 
     var attackDestroyTimer : Float
-        get() = this[AttackMeta].attackItem.attackDestroyTime
+        get() = this[AttackMeta].attackMetaData.attackDestroyTime
         set(value) {
-            this[AttackMeta].attackItem.attackDestroyTime = value
+            this[AttackMeta].attackMetaData.attackDestroyTime = value
         }
 
     val collidedWithWall : Boolean

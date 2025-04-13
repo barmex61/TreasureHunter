@@ -3,14 +3,14 @@ package com.libgdx.treasurehunter.ai
 import com.badlogic.gdx.ai.GdxAI
 import com.badlogic.gdx.ai.btree.LeafTask
 import com.badlogic.gdx.ai.btree.Task
+import com.badlogic.gdx.ai.btree.annotation.TaskAttribute
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.libgdx.treasurehunter.ecs.components.AnimationType
+import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
-import com.libgdx.treasurehunter.utils.distance
 import ktx.math.random
 import ktx.math.vec2
-import kotlin.collections.remove
 
 abstract class Actions : LeafTask<CrewEntity>(){
 
@@ -19,36 +19,34 @@ abstract class Actions : LeafTask<CrewEntity>(){
 
     override fun copyTo(task: Task<CrewEntity>): Task<CrewEntity> = task
     override fun execute(): Status {
-        return if (entity.isGetHit){
-            Status.FAILED
-        }else if(entity.isDead){
-            Status.FAILED
-        }else{
-            Status.RUNNING
-        }
+        return if (entity.isGetHit || entity.isDead || entity.isJumping || entity.isFalling){
+            Status.SUCCEEDED
+        }else Status.RUNNING
     }
 }
 
 class Idle : Actions(){
 
-
-    private var currentDuration : Float = (1f..2f).random()
+    private var idleDuration : Float = (1f..3f).random()
 
     override fun execute(): Status {
-        println("ACTİON IDLE")
+
         if (status != Status.RUNNING){
-            entity.stop = true
-            currentDuration = (1f..2f).random()
-            entity.animation(AnimationType.IDLE)
+            if (entity.raycast(vec2(0f,-0.5f)) && !entity.isJumping){
+                entity.stop = true
+            }
+            idleDuration = (1f..3f).random()
+            if (entity.animationType != AnimationType.IDLE){
+                entity.animation(AnimationType.IDLE)
+            }
             return Status.RUNNING
         }
-        currentDuration -= GdxAI.getTimepiece().deltaTime
+        idleDuration -= GdxAI.getTimepiece().deltaTime
         if (entity.isEnemyNearby && entity.canAttack){
             entity.stop = false
             return Status.SUCCEEDED
         }
-        if (currentDuration <= 0f){
-            println("SUCCEDED")
+        if (idleDuration <= 0f){
             entity.stop = false
             return Status.SUCCEEDED
         }
@@ -56,45 +54,113 @@ class Idle : Actions(){
     }
 }
 
-class Wander : Actions(){
+class Wander: Actions(){
+    @JvmField
+    @TaskAttribute
+    var moveToPlayer: Boolean = false
     private val spawnPosition = vec2()
     private val targetPosition = vec2()
-    private var wanderTimer = 1.5f
-    override fun execute(): Status {
+    private var wanderTimer = 5f
+    private var raycastInterval = 0.5f
+    private var raycastTimer = 0f
 
+    override fun execute(): Status {
         if (status != Status.RUNNING){
-            wanderTimer = 1.5f
+            raycastInterval = 0.5f
+            raycastTimer = 0f
+            wanderTimer = entity.aiWanderRadius * 0.5f
+            entity.stop = false
             if (spawnPosition.isZero){
                 spawnPosition.set(entity.position)
             }
-            targetPosition.set(
-                spawnPosition.x + (-5f..5f).random(),
-                spawnPosition.y + (-5f..5f).random(),
-            )
+            if (moveToPlayer){
+                targetPosition.set(
+                    entity.playerPosition.x,
+                    entity.playerPosition.y,
+                )
+            }else{
+                targetPosition.set(
+                    spawnPosition.x + (-entity.aiWanderRadius..entity.aiWanderRadius).random(),
+                    spawnPosition.y + (-entity.aiWanderRadius..entity.aiWanderRadius).random(),
+                )
+            }
             entity.animation(AnimationType.RUN, frameDuration = 0.1f)
             entity.moveTo(targetPosition)
             return Status.RUNNING
         }
+        if (moveToPlayer){
+            if (!entity.isEnemyNearby){
+                return Status.FAILED
+            }
+            targetPosition.set(
+                entity.playerPosition.x,
+                entity.playerPosition.y,
+            )
+            entity.moveTo(targetPosition)
+        }
         if (entity.inRange(targetPosition)){
             return Status.SUCCEEDED
         }
-        if (wanderTimer <= 0f){
-            wanderTimer = 1.5f
+        if (wanderTimer <= 0f && !moveToPlayer){
             return Status.SUCCEEDED
         }
-        if (entity.cantMoveForward){
-            entity.jump()
+        if (raycastTimer >= raycastInterval){
+            if (entity.raycast(vec2(0.7f,0f))){
+                entity.jump()
+            }
+            raycastTimer = 0f
         }
-
         wanderTimer -= GdxAI.getTimepiece().deltaTime
+        raycastTimer += GdxAI.getTimepiece().deltaTime
         return super.execute()
+    }
+    override fun copyTo(task: Task<CrewEntity>): Task<CrewEntity> {
+        return (task as Wander).apply { task.moveToPlayer = this@Wander.moveToPlayer }
+    }
+}
+
+class Attack : Actions(){
+    override fun execute(): Status {
+        if (status != Status.RUNNING){
+            entity.animation(AnimationType.IDLE, PlayMode.NORMAL, 0.1f)
+            return Status.RUNNING
+        }
+        if (entity.animationDone){
+            return Status.SUCCEEDED
+        }
+        return Status.RUNNING
+    }
+}
+
+class Jump : Actions(){
+    override fun execute(): Status {
+        if (status != Status.RUNNING){
+            entity.animation(AnimationType.JUMP, PlayMode.NORMAL, 0.1f)
+            return Status.RUNNING
+        }
+        if (!entity.isJumping){
+            return Status.SUCCEEDED
+        }
+        return Status.RUNNING
+    }
+}
+
+class Fall : Actions(){
+    override fun execute(): Status {
+        if (status != Status.RUNNING){
+            entity.animation(AnimationType.FALL, PlayMode.NORMAL, 0.1f)
+            return Status.RUNNING
+        }
+        if (!entity.isFalling){
+            return Status.SUCCEEDED
+        }
+        return Status.RUNNING
     }
 }
 
 
 class Hit : Actions(){
     override fun execute(): Status {
-        println("ACTİON HIT")
 
         if (status != Status.RUNNING){
             entity.stop = true

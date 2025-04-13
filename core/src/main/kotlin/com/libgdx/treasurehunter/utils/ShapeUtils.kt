@@ -72,4 +72,15 @@ fun ChainShape.calculateEffectPosition(): Vector2 {
     return center
 }
 
+fun ChainShape.getCentroid(): Vector2 {
+    val vertexCount = this.vertexCount
+    val centroid = Vector2()
+    val temp = Vector2()
+    for (i in 0 until vertexCount) {
+        this.getVertex(i, temp)
+        centroid.add(temp)
+    }
+    return centroid.scl(1f / vertexCount.toFloat())
+}
+
 

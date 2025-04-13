@@ -6,11 +6,18 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import com.libgdx.treasurehunter.utils.plus
 import ktx.math.vec2
 
 data class Physic(
     val body : Body,
-    val previousPosition : Vector2 = vec2()) : Component <Physic> {
+    val previousPosition : Vector2 = vec2()
+    ) : Component <Physic> {
+
+    val onAir : Boolean
+        get() {
+            return body.linearVelocity.y !in (-0.1f..0.1f)
+        }
 
     override fun type() = Physic
 

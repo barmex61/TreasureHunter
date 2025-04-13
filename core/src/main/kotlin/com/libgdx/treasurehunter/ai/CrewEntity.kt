@@ -2,6 +2,7 @@ package com.libgdx.treasurehunter.ai
 
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.RayCastCallback
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
@@ -11,17 +12,28 @@ import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
+import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Jump
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.MoveDirection
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.BODY_POSITION_DEBUG_RECT
+import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.RAY_CAST_POLYLINE
+import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isBodyFixture
+import com.libgdx.treasurehunter.game.PhysicWorld
+import com.libgdx.treasurehunter.state.EntityState
 import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.utils.distance
+import ktx.math.component1
+import ktx.math.component2
+import ktx.math.vec2
+import ktx.math.plus
 
 data class CrewEntity(
     val world: World,
-    val entity: Entity
+    val entity: Entity,
+    val physicWorld: PhysicWorld
 ){
 
     val isGetHit: Boolean
@@ -33,8 +45,21 @@ data class CrewEntity(
             return lifeComp.isDead
         }
 
+    val isJumping : Boolean
+        get() {
+            val(_,linY) = get(Physic).body.linearVelocity
+            return linY > EntityState.Companion.TOLERANCE_Y
+        }
+
+    val isFalling : Boolean
+        get() {
+            val(_,linY) = get(Physic).body.linearVelocity
+            return linY < -EntityState.Companion.TOLERANCE_Y
+        }
+
     val isEnemyNearby : Boolean
-        get() = this[AiComponent].nearbyEntities.isNotEmpty()
+        get() = get(AiComponent).nearbyEntities.isNotEmpty()
+
 
     val canAttack : Boolean
         get() {
@@ -53,7 +78,13 @@ data class CrewEntity(
         }
 
     val position : Vector2
-        get() = this[Physic].body.position
+        get() = this[Graphic].center
+
+    val attackRange: Float
+        get() = this[Attack].attackMetaData.attackRange
+
+    val animationType : AnimationType
+        get() = this[Animation].animationData.animationType
 
     val animationDone : Boolean
         get() {
@@ -61,11 +92,13 @@ data class CrewEntity(
             return mainAnimationData.gdxAnimation!!.isAnimationFinished(mainAnimationData.timer)
         }
 
-    val cantMoveForward : Boolean
+    val aiWanderRadius : Float
+        get() = get(AiComponent).aiWanderRadius
+
+    val playerPosition : Vector2
         get() {
-            val physicComp = getOrNull(Physic) ?: return false
-            val moveComp = getOrNull(Move) ?: return false
-            return (physicComp.body.linearVelocity.x.compareTo(0f) == 0 && moveComp.currentSpeed != 0f)
+            val playerEntity = get(AiComponent).nearbyEntities.first()
+            return playerEntity[Graphic].center
         }
 
     inline operator fun <reified T:Component<*>> get(type: ComponentType<T>) : T = with(world){
@@ -74,6 +107,10 @@ data class CrewEntity(
 
     inline fun <reified T: Component<*>> getOrNull(type: ComponentType<T>) : T? = with(world){
         return entity.getOrNull(type)
+    }
+
+    inline operator fun <reified T: Component<*>> Entity.get(type: ComponentType<T>): T = with(world) {
+        return this@get[type]
     }
 
     fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){
@@ -86,9 +123,8 @@ data class CrewEntity(
     }
 
     fun inRange(targetPosition: Vector2) :Boolean {
-        val diff = distance(targetPosition,position)
-        val aiComponent = getOrNull(AiComponent) ?: return false
-        return aiComponent.nearbyEntities.isNotEmpty() || diff <= 1f
+        val diff = distance(targetPosition,position + attackRange)
+        return diff <= 1f
     }
 
     fun jump(){
@@ -96,7 +132,20 @@ data class CrewEntity(
         jumpComponent.wantsJump = true
     }
 
-
+    fun raycast(rayCastLength : Vector2) : Boolean{
+        val centerPosition = get(Graphic).center
+        val flipX = get(Move).flipX
+        val mirroredRayCast = if (flipX) rayCastLength else vec2(rayCastLength.x * -1f ,rayCastLength.y)
+        RAY_CAST_POLYLINE.vertices = floatArrayOf(centerPosition.x,centerPosition.y,centerPosition.x + mirroredRayCast.x,centerPosition.y + mirroredRayCast.y)
+        var isCollidedWithWall = false
+        physicWorld.rayCast({ fixture,vector1,vector2,value ->
+            if (!fixture.isSensor && !fixture.isBodyFixture){
+                isCollidedWithWall = true
+            }
+            return@rayCast -1f
+        },centerPosition.x,centerPosition.y,centerPosition.x + mirroredRayCast.x,centerPosition.y + mirroredRayCast.y)
+        return isCollidedWithWall
+    }
 
 
 }

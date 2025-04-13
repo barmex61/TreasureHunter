@@ -3,6 +3,10 @@ import idle:"com.libgdx.treasurehunter.ai.Idle"
 import wander:"com.libgdx.treasurehunter.ai.Wander"
 import dead:"com.libgdx.treasurehunter.ai.Dead"
 import hit:"com.libgdx.treasurehunter.ai.Hit"
+import jump:"com.libgdx.treasurehunter.ai.Jump"
+import fall:"com.libgdx.treasurehunter.ai.Fall"
+import moveAttackRange:"com.libgdx.treasurehunter.ai.MoveAttackRange"
+import attack:"com.libgdx.treasurehunter.ai.Attack"
 
 #Conditions
 import canAttack?:"com.libgdx.treasurehunter.ai.CanAttack"
@@ -11,10 +15,24 @@ import canMove?:"com.libgdx.treasurehunter.ai.CanMove"
 import isDead?:"com.libgdx.treasurehunter.ai.IsDead"
 import isGetHit?:"com.libgdx.treasurehunter.ai.IsGetHit"
 import notInRange?:"com.libgdx.treasurehunter.ai.NotInRange"
+import inRange?:"com.libgdx.treasurehunter.ai.InRange"
+import isJumping?:"com.libgdx.treasurehunter.ai.IsJumping"
+import isFalling?:"com.libgdx.treasurehunter.ai.IsFalling"
 
+subtree name : "standard"
+    randomSelector
+        (notInRange?) wander moveToPlayer:false
+        idle
+
+subtree name : "tryToAttack"
+    sequence
+        wander moveToPlayer:true
+        (canAttack?) attack
 root
     selector
+        (isJumping?) jump
+        (isFalling?) fall
         (isGetHit?) hit
         (isDead?) dead
-        (random success:0.5)(canMove?)(notInRange?) wander
-        idle
+        (inRange?) $tryToAttack
+        $standard
