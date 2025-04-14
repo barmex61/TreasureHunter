@@ -203,6 +203,7 @@ enum class PlayerState : EntityState {
             with(stateEntity.world){
                 if (stateEntity.entity has Attack){
                     stateEntity.entity.configure {
+                        it -= Item
                         it -= Attack
                         it[com.libgdx.treasurehunter.ecs.components.Animation].setNewGameObject(GameObject.CAPTAIN_CLOWN)
                     }

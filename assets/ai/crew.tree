@@ -7,6 +7,9 @@ import jump:"com.libgdx.treasurehunter.ai.Jump"
 import fall:"com.libgdx.treasurehunter.ai.Fall"
 import moveAttackRange:"com.libgdx.treasurehunter.ai.MoveAttackRange"
 import attack:"com.libgdx.treasurehunter.ai.Attack"
+import pinkStarAttack:"com.libgdx.treasurehunter.ai.PinkStarAttack"
+import fierceToothAttack:"com.libgdx.treasurehunter.ai.FierceToothAttack"
+import crabbyAttack:"com.libgdx.treasurehunter.ai.CrabbyAttack"
 
 #Conditions
 import canAttack?:"com.libgdx.treasurehunter.ai.CanAttack"
@@ -18,16 +21,25 @@ import notInRange?:"com.libgdx.treasurehunter.ai.NotInRange"
 import inRange?:"com.libgdx.treasurehunter.ai.InRange"
 import isJumping?:"com.libgdx.treasurehunter.ai.IsJumping"
 import isFalling?:"com.libgdx.treasurehunter.ai.IsFalling"
+import isPinkStarAttack?:"com.libgdx.treasurehunter.ai.IsPinkStarAttack"
+import isFierceToothAttack?:"com.libgdx.treasurehunter.ai.IsFierceToothAttack"
+import isCrabbyAttack?:"com.libgdx.treasurehunter.ai.IsCrabbyAttack"
 
 subtree name : "standard"
     randomSelector
         (notInRange?) wander moveToPlayer:false
         idle
 
+subtree name : "attackTypeSelector"
+     selector
+        (isPinkStarAttack?) pinkStarAttack
+        (isFierceToothAttack?) fierceToothAttack
+        (isCrabbyAttack?) crabbyAttack
+
 subtree name : "tryToAttack"
     sequence
         wander moveToPlayer:true
-        (canAttack?) attack
+        (canAttack?) $attackTypeSelector
 root
     selector
         (isJumping?) jump

@@ -99,14 +99,26 @@ class AttackSystem(
                 }
             }
             AttackState.ATTACKING -> {
-                attackMetaData.attackCooldown -= deltaTime
-                if (attackMetaData.attackCooldown <= 0f){
-                    attackComp.attackState = AttackState.DONE
+
+                if (attackMetaData.attackAnimPlayMode == com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL){
+                    if (animComp.isAnimationDone()){
+                        reduceAttackCooldown(attackMetaData,attackComp)
+                    }
+                }else{
+                    reduceAttackCooldown(attackMetaData,attackComp)
                 }
+
             }
             AttackState.DONE -> {
                 resetAttackComp(attackComp,attackMetaData)
             }
+        }
+    }
+
+    private fun reduceAttackCooldown(attackMetaData: AttackMetaData,attackComp: Attack) {
+        attackMetaData.attackCooldown -= deltaTime
+        if (attackMetaData.attackCooldown <= 0f){
+            attackComp.attackState = AttackState.DONE
         }
     }
 

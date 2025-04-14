@@ -1,10 +1,8 @@
 package com.libgdx.treasurehunter.ai
 
-import com.badlogic.gdx.ai.btree.Decorator
 import com.badlogic.gdx.ai.btree.LeafTask
 import com.badlogic.gdx.ai.btree.Task
-import com.badlogic.gdx.ai.btree.Task.Status
-import com.libgdx.treasurehunter.state.EntityState
+import com.libgdx.treasurehunter.ecs.components.AttackType
 
 abstract class Conditions : LeafTask<CrewEntity>(){
     val entity : CrewEntity
@@ -29,7 +27,7 @@ class IsEnemyNearby : Conditions(){
 }
 
 class CanAttack : Conditions(){
-    override fun condition(): Boolean = entity.canAttack
+    override fun condition(): Boolean = entity.doAttack
 }
 
 class CanMove : Conditions(){
@@ -54,5 +52,14 @@ class IsJumping : Conditions(){
 }
 class IsFalling : Conditions(){
     override fun condition()= entity.isFalling
+}
+class IsFierceToothAttack : Conditions(){
+    override fun condition() = entity.attackType == AttackType.FIERCE_TOOTH_ATTACK
+}
+class IsCrabbyAttack : Conditions(){
+    override fun condition() = entity.attackType == AttackType.CRABBY_ATTACK
+}
+class IsPinkStarAttack : Conditions(){
+    override fun condition() = entity.attackType == AttackType.PINK_STAR_ATTACK
 }
 

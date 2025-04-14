@@ -2,7 +2,6 @@ package com.libgdx.treasurehunter.ai
 
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.RayCastCallback
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
@@ -11,6 +10,7 @@ import com.libgdx.treasurehunter.ecs.components.AiComponent
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.AttackType
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Jump
@@ -18,7 +18,6 @@ import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.MoveDirection
 import com.libgdx.treasurehunter.ecs.components.Physic
-import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.BODY_POSITION_DEBUG_RECT
 import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.RAY_CAST_POLYLINE
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isBodyFixture
 import com.libgdx.treasurehunter.game.PhysicWorld
@@ -28,7 +27,6 @@ import com.libgdx.treasurehunter.utils.distance
 import ktx.math.component1
 import ktx.math.component2
 import ktx.math.vec2
-import ktx.math.plus
 
 data class CrewEntity(
     val world: World,
@@ -61,10 +59,15 @@ data class CrewEntity(
         get() = get(AiComponent).nearbyEntities.isNotEmpty()
 
 
-    val canAttack : Boolean
+    var doAttack : Boolean
         get() {
             val attackComp = getOrNull(Attack) ?: return false
-            return attackComp.doAttack
+            val doAttack = attackComp.doAttack
+            return doAttack
+        }
+        set(value) {
+            val attackComp = getOrNull(Attack) ?: return
+            attackComp.doAttack = value
         }
 
     var stop : Boolean
@@ -101,6 +104,16 @@ data class CrewEntity(
             return playerEntity[Graphic].center
         }
 
+    val attackType : AttackType
+        get() {
+            return get(Attack).attackMetaData.attackType
+        }
+
+    val attackAnimPlayMode : PlayMode
+        get() {
+            return get(Attack).attackMetaData.attackAnimPlayMode
+        }
+
     inline operator fun <reified T:Component<*>> get(type: ComponentType<T>) : T = with(world){
         return entity[type]
     }
@@ -123,8 +136,14 @@ data class CrewEntity(
     }
 
     fun inRange(targetPosition: Vector2) :Boolean {
-        val diff = distance(targetPosition,position + attackRange)
-        return diff <= 1f
+        val diff = distance(targetPosition,position)
+        val inRange = diff <= attackRange
+        if (inRange){
+            getOrNull(Attack)?.let { attack ->
+                attack.wantsToAttack = true
+            }
+        }
+        return inRange
     }
 
     fun jump(){

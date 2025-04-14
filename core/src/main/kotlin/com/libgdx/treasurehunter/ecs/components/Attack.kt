@@ -1,46 +1,15 @@
 package com.libgdx.treasurehunter.ecs.components
 
+import com.badlogic.gdx.graphics.g2d.Animation
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
+import com.libgdx.treasurehunter.utils.AttackFixtureVerticesFactory
 
 enum class AttackState {
     READY,
     ATTACKING,
     DONE,
-}
-
-enum class AttackData(val attackMetaData: AttackMetaData){
-    PINK_STAR(
-        AttackMetaData(
-            attackSpeed = 1f,
-            attackRange = 1f,
-            attackType = AttackType.NATURAL,
-            attackDamage = 1,
-            baseAttackCooldown = 1.5f,
-            baseAttackDestroyTime = 1.5f,
-        )
-    ),
-    FIERCE_TOOTH(
-        AttackMetaData(
-            attackSpeed = 1f,
-            attackRange = 1f,
-            attackType = AttackType.NATURAL,
-            attackDamage = 1,
-            baseAttackCooldown = 1.5f,
-            baseAttackDestroyTime = 1.5f,
-        )
-    ),
-    CRABBY(
-        AttackMetaData(
-            attackSpeed = 1f,
-            attackRange = 1f,
-            attackType = AttackType.NATURAL,
-            attackDamage = 1,
-            baseAttackCooldown = 1.5f,
-            baseAttackDestroyTime = 1.5f,
-        )
-    )
 }
 
 data class AttackMetaData(
@@ -52,6 +21,8 @@ data class AttackMetaData(
     var attackCooldown: Float = baseAttackCooldown,
     val baseAttackDestroyTime : Float,
     var attackDestroyTime: Float = baseAttackDestroyTime,
+
+    val attackAnimPlayMode : Animation.PlayMode
 ){
     val isMelee: Boolean
         get() = attackType.isMelee
@@ -63,6 +34,11 @@ data class AttackMetaData(
     fun resetAttackDestroyTime(){
         attackDestroyTime = baseAttackDestroyTime
     }
+
+    val meleeAttackFixtureVertices :  Map<Int,FloatArray>
+        get() = AttackFixtureVerticesFactory.getMeleeAttackVertices(attackType)
+    val rangeAttackFixtureVertices : Map<AttackType, Map<Int,FloatArray>>
+        get() = AttackFixtureVerticesFactory.getRangeAttackVertices(attackType)
 }
 
 data class Attack(

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.ChainShape
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.times
 
 fun mirrorChainShape(chainShape: ChainShape,offset : Vector2) : ChainShape{
     val vertexCount = chainShape.vertexCount
@@ -49,6 +50,20 @@ fun ChainShape.offset(offset: Vector2) : ChainShape {
     }
 }
 
+fun ChainShape.vertices(): FloatArray {
+    val vertexCount = this.vertexCount
+    val vertices = FloatArray(vertexCount * 2)
+
+    for (i in 0 until vertexCount) {
+        val vertex = Vector2()
+        this.getVertex(i, vertex)
+        vertices[i * 2] = vertex.x
+        vertices[i * 2 + 1] = vertex.y
+    }
+
+    return vertices
+}
+
 fun ChainShape.calculateEffectPosition(): Vector2 {
     val center = Vector2()
     var minX = Float.MAX_VALUE
@@ -82,5 +97,15 @@ fun ChainShape.getCentroid(): Vector2 {
     }
     return centroid.scl(1f / vertexCount.toFloat())
 }
+
+fun FloatArray.mirrorVertices(): FloatArray {
+    val mirroredVertices = FloatArray(this.size)
+    for (i in this.indices step 2) {
+        mirroredVertices[i] = -this[i]
+        mirroredVertices[i + 1] = this[i + 1]
+    }
+    return mirroredVertices
+}
+
 
 

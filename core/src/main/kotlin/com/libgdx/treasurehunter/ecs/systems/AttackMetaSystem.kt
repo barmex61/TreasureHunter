@@ -52,21 +52,21 @@ class AttackMetaSystem(
 
     override fun onTickEntity(entity: Entity) {
         val attackMeta = entity[AttackMeta]
-        val (owner, currentFrameIndex, _, _, _, attackItem) = attackMeta
+        val (owner, currentFrameIndex, _, _, _, attackMetaData) = attackMeta
         val (body, _) = entity[Physic]
         val ownerFlipX = owner[Move].flipX
         val graphic = entity[Graphic]
 
-        if (attackItem.isMelee) {
-            handleMeleeAttack(entity, owner, ownerFlipX, currentFrameIndex, attackMeta, body, attackItem.attackType)
-            attackItem.attackDestroyTime -= deltaTime
+        if (attackMetaData.isMelee) {
+            handleMeleeAttack(entity, owner, ownerFlipX, currentFrameIndex, attackMeta, body, attackMetaData.attackType)
+            attackMetaData.attackDestroyTime -= deltaTime
 
-            if (attackItem.attackDestroyTime <= 0f) {
+            if (attackMetaData.attackDestroyTime <= 0f) {
                 GameEventDispatcher.fireEvent(GameEvent.RemoveEntityEvent(entity))
             }
             graphic.sprite.setAlpha(if (body.fixtureList.isEmpty) 0f else 1f)
         } else {
-            handleRangedAttack(entity, owner, ownerFlipX, currentFrameIndex, attackMeta, body, attackItem.attackType)
+            handleRangedAttack(entity, owner, ownerFlipX, currentFrameIndex, attackMeta, body, attackMetaData.attackType)
         }
     }
 
@@ -82,7 +82,6 @@ class AttackMetaSystem(
         val ownerAnimComp = owner[Animation]
         val ownerCenter = owner[Graphic].center
         val keyFrameIndex = ownerAnimComp.getAttackAnimKeyFrameIx()
-
         if (keyFrameIndex != -1 && (keyFrameIndex != currentFrameIndex || ownerFlipX != attackMeta.isFixtureMirrored)) {
             createAttackFixture(entity, keyFrameIndex, body, attackType, ownerFlipX, isMelee = true, isSensor = true)
             attackMeta.currentFrameIndex = keyFrameIndex
@@ -235,5 +234,32 @@ class AttackMetaSystem(
         return regionsCache.getOrPut(atlasKey) {
             gameObjectAtlas.findRegions(atlasKey) ?: gdxError("No regions for animation $atlasKey")
         }.get(keyFrameIndex)
+    }
+}
+
+sealed interface AttackHandler {
+    fun handleAttackFixture()
+    fun handleAttackEffect()
+}
+
+class MeleeAttackHandler() : AttackHandler {
+
+    override fun handleAttackFixture() {
+
+    }
+
+    override fun handleAttackEffect() {
+
+    }
+}
+
+class RangeAttackHandler() : AttackHandler {
+
+    override fun handleAttackFixture() {
+
+    }
+
+    override fun handleAttackEffect() {
+
     }
 }

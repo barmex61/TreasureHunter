@@ -6,7 +6,6 @@ import com.badlogic.gdx.ai.btree.Task
 import com.badlogic.gdx.ai.btree.annotation.TaskAttribute
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.libgdx.treasurehunter.ecs.components.AnimationType
-import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import ktx.math.random
@@ -32,6 +31,7 @@ class Idle : Actions(){
     override fun execute(): Status {
 
         if (status != Status.RUNNING){
+            println("IDLE")
             if (entity.raycast(vec2(0f,-0.5f)) && !entity.isJumping){
                 entity.stop = true
             }
@@ -42,7 +42,7 @@ class Idle : Actions(){
             return Status.RUNNING
         }
         idleDuration -= GdxAI.getTimepiece().deltaTime
-        if (entity.isEnemyNearby && entity.canAttack){
+        if (entity.isEnemyNearby && entity.doAttack){
             entity.stop = false
             return Status.SUCCEEDED
         }
@@ -66,6 +66,7 @@ class Wander: Actions(){
 
     override fun execute(): Status {
         if (status != Status.RUNNING){
+            println("WANDER")
             raycastInterval = 0.5f
             raycastTimer = 0f
             wanderTimer = entity.aiWanderRadius * 0.5f
@@ -119,10 +120,36 @@ class Wander: Actions(){
     }
 }
 
-class Attack : Actions(){
+class PinkStarAttack : Actions(){
     override fun execute(): Status {
         if (status != Status.RUNNING){
-            entity.animation(AnimationType.IDLE, PlayMode.NORMAL, 0.1f)
+            entity.animation(entity.attackType.attackAnimType, entity.attackAnimPlayMode, 0.1f)
+            return Status.RUNNING
+        }
+        if (!entity.doAttack){
+            return Status.SUCCEEDED
+        }
+        return Status.RUNNING
+    }
+}
+class FierceToothAttack : Actions(){
+    override fun execute(): Status {
+        if (status != Status.RUNNING){
+            entity.doAttack = false
+            entity.animation(entity.attackType.attackAnimType, entity.attackAnimPlayMode, 0.1f)
+            return Status.RUNNING
+        }
+        if (entity.animationDone){
+            return Status.SUCCEEDED
+        }
+        return Status.RUNNING
+    }
+}
+class CrabbyAttack : Actions(){
+    override fun execute(): Status {
+        if (status != Status.RUNNING){
+            entity.doAttack = false
+            entity.animation(entity.attackType.attackAnimType, entity.attackAnimPlayMode, 0.1f)
             return Status.RUNNING
         }
         if (entity.animationDone){

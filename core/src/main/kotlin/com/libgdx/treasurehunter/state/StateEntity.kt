@@ -106,8 +106,7 @@ data class StateEntity(
     }
 
     fun isAnimationDone(): Boolean = with(world){
-        val mainAnimationData = entity[Animation].animationData
-        mainAnimationData.gdxAnimation!!.isAnimationFinished(mainAnimationData.timer)
+        return@with get(Animation).isAnimationDone()
     }
 
     fun createMarkEntity(markType : MarkType) {
