@@ -9,17 +9,22 @@ import com.libgdx.treasurehunter.ecs.systems.RangeAttackHandler
 
 data class AttackMeta(
     val owner: Entity,
-    var currentFrameIndex: Int = -1,
+    var currentFrameIndex: Int = 0,
     var isFixtureMirrored : Boolean,
     var hasFixture : Boolean = false,
     var collidedWithWall : Boolean = false,
     var attackMetaData : AttackMetaData,
 
 ) : Component<AttackMeta> {
-    val attackHandler : AttackHandler
+    var attackHandler : AttackHandler = if (attackMetaData.isMelee) MeleeAttackHandler() else RangeAttackHandler()
         get() {
-            return if (attackMetaData.isMelee)  MeleeAttackHandler() else RangeAttackHandler()
+            if ((attackMetaData.isMelee && field !is MeleeAttackHandler) || (!attackMetaData.isMelee && field !is RangeAttackHandler)) {
+                field = if (attackMetaData.isMelee) MeleeAttackHandler() else RangeAttackHandler()
+            }
+            return field
         }
+
+
     override fun type() = AttackMeta
     companion object : ComponentType<AttackMeta>()
 

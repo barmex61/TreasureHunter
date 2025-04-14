@@ -130,6 +130,11 @@ class AnimationSystem (
                 }
             }
         }
+        fun setFlipX(flipX : Boolean,sprite: Sprite){
+            if (flipX != sprite.isFlipX) {
+                sprite.setFlip(flipX, false)
+            }
+        }
         private val log = logger<AnimationSystem>()
     }
 }

@@ -31,7 +31,6 @@ class Idle : Actions(){
     override fun execute(): Status {
 
         if (status != Status.RUNNING){
-            println("IDLE")
             if (entity.raycast(vec2(0f,-0.5f)) && !entity.isJumping){
                 entity.stop = true
             }
@@ -66,7 +65,6 @@ class Wander: Actions(){
 
     override fun execute(): Status {
         if (status != Status.RUNNING){
-            println("WANDER")
             raycastInterval = 0.5f
             raycastTimer = 0f
             wanderTimer = entity.aiWanderRadius * 0.5f

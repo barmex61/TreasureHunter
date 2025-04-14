@@ -1,6 +1,8 @@
 package com.libgdx.treasurehunter.ecs.components
 
 import com.badlogic.gdx.graphics.g2d.Animation
+import com.badlogic.gdx.physics.box2d.ChainShape
+import com.badlogic.gdx.physics.box2d.Shape
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
@@ -21,7 +23,6 @@ data class AttackMetaData(
     var attackCooldown: Float = baseAttackCooldown,
     val baseAttackDestroyTime : Float,
     var attackDestroyTime: Float = baseAttackDestroyTime,
-
     val attackAnimPlayMode : Animation.PlayMode
 ){
     val isMelee: Boolean
@@ -37,8 +38,8 @@ data class AttackMetaData(
 
     val meleeAttackFixtureVertices :  Map<Int,FloatArray>
         get() = AttackFixtureVerticesFactory.getMeleeAttackVertices(attackType)
-    val rangeAttackFixtureVertices : Map<AttackType, Map<Int,FloatArray>>
-        get() = AttackFixtureVerticesFactory.getRangeAttackVertices(attackType)
+    val rangeAttackFixtureVertices : Map<Int, ChainShape>
+        get() = AttackFixtureVerticesFactory.getRangedAttackVertices(attackType)
 }
 
 data class Attack(

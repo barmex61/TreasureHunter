@@ -201,12 +201,10 @@ enum class PlayerState : EntityState {
     SWORD_THROWED{
         override fun enter(stateEntity: StateEntity) {
             with(stateEntity.world){
-                if (stateEntity.entity has Attack){
-                    stateEntity.entity.configure {
-                        it -= Item
-                        it -= Attack
-                        it[com.libgdx.treasurehunter.ecs.components.Animation].setNewGameObject(GameObject.CAPTAIN_CLOWN)
-                    }
+                stateEntity.entity.configure {
+                    it -= Item
+                    it -= Attack
+                    it[com.libgdx.treasurehunter.ecs.components.Animation].setNewGameObject(GameObject.CAPTAIN_CLOWN)
                 }
             }
         }

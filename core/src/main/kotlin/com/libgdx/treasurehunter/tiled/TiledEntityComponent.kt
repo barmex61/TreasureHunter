@@ -27,14 +27,13 @@ import com.libgdx.treasurehunter.state.EntityState
 import com.libgdx.treasurehunter.state.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.Attack
-import com.libgdx.treasurehunter.ecs.components.AttackData
 import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.Item
-import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.Sword
+import com.libgdx.treasurehunter.utils.AttackMetaDataFactory
 import ktx.app.gdxError
 import ktx.math.vec2
 import ktx.tiled.property
@@ -46,7 +45,6 @@ fun sprite(gameObject: GameObject, animationType: AnimationType, startPosition :
     val atlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
     val regions = atlas.findRegions(regionPath) ?:
     gdxError("There are no regions for $gameObject and $animationType")
-    println(regionPath)
     val firstFrame = regions.first()
     val w = firstFrame.regionWidth * UNIT_SCALE
     val h = firstFrame.regionHeight * UNIT_SCALE
@@ -180,7 +178,7 @@ fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile){
     val gameObject = GameObject.valueOf(tile.propertyOrNull<String>("gameObject")?: gdxError("gameObject is null $tile"))
     if (hasAttack){
         entity += Attack(
-            attackMetaData = AttackData.valueOf(gameObject.name).attackMetaData
+            attackMetaData = AttackMetaDataFactory.create(gameObject)
         )
     }
 }

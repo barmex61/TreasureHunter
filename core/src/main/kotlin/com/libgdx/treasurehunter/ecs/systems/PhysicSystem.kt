@@ -99,9 +99,7 @@ class PhysicSystem (
             MathUtils.lerp(prevX,bodyX,alpha) + effectOffset.x,
             MathUtils.lerp(prevY,bodyY,alpha) + effectOffset.y
         )
-        if (entity has AttackMeta){
-            sprite.setPosition(bodyX + effectOffset.x,bodyY + effectOffset.y)
-        }
+
 
     }
 

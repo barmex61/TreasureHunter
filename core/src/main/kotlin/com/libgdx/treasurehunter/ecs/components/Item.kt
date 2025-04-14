@@ -5,6 +5,7 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
 import com.libgdx.treasurehunter.ecs.components.ItemType.Damageable
+import com.libgdx.treasurehunter.ecs.components.ItemType.Throwable
 import com.libgdx.treasurehunter.utils.AttackMetaDataFactory
 import com.libgdx.treasurehunter.utils.GameObject
 
@@ -34,16 +35,18 @@ sealed interface ItemType{
             }
         }
     }
-
+    interface Throwable : ItemType{
+        var isThrown: Boolean
+    }
     data class Consumable(
         val effect: String
     ) : ItemType
 }
 
 data class Sword(
-    override val attackMetaData: AttackMetaData = AttackMetaDataFactory.create(GameObject.SWORD)
-
-    ) : Damageable
+    override val attackMetaData: AttackMetaData = AttackMetaDataFactory.create(GameObject.SWORD),
+    override var isThrown: Boolean = false
+) : Damageable,Throwable
 
 
 
@@ -65,7 +68,6 @@ data class Item(
     val owner: Entity,
     val isPickedUp: Boolean = false,
     val isUsed: Boolean = false,
-
     ) : Component <Item> {
 
     override fun type() = Item

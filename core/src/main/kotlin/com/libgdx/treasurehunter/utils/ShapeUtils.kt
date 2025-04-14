@@ -6,13 +6,13 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.times
 
-fun mirrorChainShape(chainShape: ChainShape,offset : Vector2) : ChainShape{
-    val vertexCount = chainShape.vertexCount
+fun ChainShape.mirror(offset : Vector2) : ChainShape{
+    val vertexCount = this.vertexCount
     val vertices = Array(vertexCount) { Vector2() }
 
     for (i in 0 until vertexCount) {
         val vertex = Vector2()
-        chainShape.getVertex(i, vertex)
+        this.getVertex(i, vertex)
         vertices[i] = Vector2(-vertex.x + offset.x, vertex.y + offset.y)
     }
 

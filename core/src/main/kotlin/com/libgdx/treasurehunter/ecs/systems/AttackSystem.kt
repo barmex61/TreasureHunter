@@ -24,6 +24,7 @@ import com.libgdx.treasurehunter.state.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AttackMetaData
 import com.libgdx.treasurehunter.ecs.components.AttackType
+import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.utils.GameObject
@@ -95,19 +96,17 @@ class AttackSystem(
                             )
                         }
                     }
+                    val animDuration = if (attackMetaData.attackAnimPlayMode == com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL){
+                        animComp.animationData.gdxAnimation?.animationDuration?:0f
+                    } else {
+                        0f
+                    }
+                    attackMetaData.attackCooldown += animDuration
                     attackComp.attackState = AttackState.ATTACKING
                 }
             }
             AttackState.ATTACKING -> {
-
-                if (attackMetaData.attackAnimPlayMode == com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL){
-                    if (animComp.isAnimationDone()){
-                        reduceAttackCooldown(attackMetaData,attackComp)
-                    }
-                }else{
-                    reduceAttackCooldown(attackMetaData,attackComp)
-                }
-
+                reduceAttackCooldown(attackMetaData,attackComp)
             }
             AttackState.DONE -> {
                 resetAttackComp(attackComp,attackMetaData)
