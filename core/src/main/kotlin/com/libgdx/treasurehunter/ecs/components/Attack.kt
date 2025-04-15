@@ -2,11 +2,8 @@ package com.libgdx.treasurehunter.ecs.components
 
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.physics.box2d.ChainShape
-import com.badlogic.gdx.physics.box2d.Shape
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
-import com.github.quillraven.fleks.Entity
-import com.libgdx.treasurehunter.utils.AttackFixtureVerticesFactory
 
 enum class AttackState {
     READY,
@@ -36,10 +33,6 @@ data class AttackMetaData(
         attackDestroyTime = baseAttackDestroyTime
     }
 
-    val meleeAttackFixtureVertices :  Map<Int,FloatArray>
-        get() = AttackFixtureVerticesFactory.getMeleeAttackVertices(attackType)
-    val rangeAttackFixtureVertices : Map<Int, ChainShape>
-        get() = AttackFixtureVerticesFactory.getRangedAttackVertices(attackType)
 }
 
 data class Attack(

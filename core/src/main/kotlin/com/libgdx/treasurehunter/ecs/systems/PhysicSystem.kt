@@ -290,8 +290,8 @@ class PhysicSystem (
                 val position = vec2(jumpRectLowerXY.x - 0.75f,jumpRectLowerXY.y)
                 world.entity{
                     it += Particle(event.particleType,event.owner)
-                    it += Graphic(sprite(GameObject.DUST_PARTICLES, AnimationType.valueOf(event.particleType.name),position  , assetHelper ,0f))
-                    it += Animation(GameObject.DUST_PARTICLES, animationData = AnimationData(
+                    it += Graphic(sprite(GameObject.DUST_PARTICLES.atlasKey, AnimationType.valueOf(event.particleType.name),position  , assetHelper ,0f))
+                    it += Animation(GameObject.DUST_PARTICLES.atlasKey, animationData = AnimationData(
                         animationType = AnimationType.valueOf(event.particleType.name),
                         playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL
                     ))

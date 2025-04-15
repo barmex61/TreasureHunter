@@ -24,10 +24,8 @@ import com.libgdx.treasurehunter.state.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AttackMetaData
 import com.libgdx.treasurehunter.ecs.components.AttackType
-import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
-import com.libgdx.treasurehunter.utils.GameObject
 
 class AttackSystem(
     private val physicWorld : PhysicWorld = inject(),
@@ -41,13 +39,14 @@ class AttackSystem(
         val animComp = entity[Animation]
         val (_,center) = entity[Graphic]
         var (wantsToAttack, attackState,doAttack,attackMetaData) = attackComp
-        val attackType = getQueuedAttackType(entity,attackComp.queuedAttackType)
-        attackType?.let { attackMetaData.attackType =it }
+
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
+                    val attackType = getQueuedAttackType(entity,attackComp.queuedAttackType)
+                    attackType?.let { attackMetaData.attackType =it }
                     attackComp.doAttack = true
-                    val center = entity[Graphic].center
+                    val bottomCenter = entity[Graphic].bottomCenter
                     if (attackMetaData.isMelee) {
                         world.entity {
                             it += AttackMeta(
@@ -56,8 +55,8 @@ class AttackSystem(
                                 attackMetaData = attackMetaData
                             )
                             it += Damage(damage = attackMetaData.attackDamage, sourceEntity = entity)
-                            it += Physic(createAttackBody(center, it, BodyDef.BodyType.StaticBody))
-                            it += Graphic(sprite(GameObject.ATTACK_EFFECT, attackMetaData.attackType.attackAnimType,center,assetHelper,0f))
+                            it += Physic(createAttackBody(bottomCenter, it, BodyDef.BodyType.StaticBody))
+                            it += Graphic(sprite("attack_effect", attackMetaData.attackType.attackAnimType,bottomCenter,assetHelper,0f))
 
                         }
                     } else {
@@ -74,19 +73,19 @@ class AttackSystem(
                                 attackMetaData = attackMetaData
                             )
                             it += Damage(damage = attackMetaData.attackDamage, sourceEntity = entity)
-                            it += Physic(createAttackBody(center, it, BodyDef.BodyType.DynamicBody))
+                            it += Physic(createAttackBody(bottomCenter, it, BodyDef.BodyType.DynamicBody))
                             it += Graphic(
                                 sprite(
-                                    gameObject,
+                                    gameObject.atlasKey,
                                     AnimationType.SPINNING,
-                                    center,
+                                    bottomCenter,
                                     assetHelper,
                                     0f
                                 ).also {
                                     it.setAlpha(0f)
                                 }
                             )
-                            it += Animation(gameObject, animationData = AnimationData(
+                            it += Animation(gameObject.atlasKey, animationData = AnimationData(
                                 animationType = AnimationType.SPINNING,
                                 playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP
                             ))

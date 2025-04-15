@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.configureWorld
+import com.libgdx.treasurehunter.audio.AudioManager
 import com.libgdx.treasurehunter.ecs.systems.AiSystem
 import com.libgdx.treasurehunter.ecs.systems.AnimationSystem
 import com.libgdx.treasurehunter.ecs.systems.AttackMetaSystem
@@ -36,10 +37,11 @@ import com.libgdx.treasurehunter.input.KeyboardInputProcessor
 import com.libgdx.treasurehunter.tiled.TiledMapService
 import ktx.app.KtxScreen
 
-class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,private val physicWorld: com.badlogic.gdx.physics.box2d.World) : KtxScreen {
+class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,private val physicWorld: com.badlogic.gdx.physics.box2d.World,private val audioManager: AudioManager) : KtxScreen {
 
 
     private val gameViewPort by lazy { StretchViewport(16f, 9f) }
+
 
     private val gameCamera by lazy {
         (gameViewPort.camera as OrthographicCamera).apply {

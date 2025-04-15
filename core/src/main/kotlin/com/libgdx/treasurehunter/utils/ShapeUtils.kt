@@ -4,36 +4,35 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.ChainShape
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.times
 
 fun ChainShape.mirror(offset : Vector2) : ChainShape{
-    val vertexCount = this.vertexCount
-    val vertices = Array(vertexCount) { Vector2() }
+        val vertexCount = this.vertexCount
+        val vertices = Array(vertexCount) { Vector2() }
 
-    for (i in 0 until vertexCount) {
-        val vertex = Vector2()
-        this.getVertex(i, vertex)
-        vertices[i] = Vector2(-vertex.x + offset.x, vertex.y + offset.y)
+        for (i in 0 until vertexCount) {
+            val vertex = Vector2()
+            this.getVertex(i, vertex)
+            vertices[i] = Vector2(-vertex.x + offset.x, vertex.y + offset.y)
+        }
+        return ChainShape().apply {
+            createChain(vertices)
+        }
     }
 
-    return ChainShape().apply {
-        createChain(vertices)
-    }
-}
-
-private fun calculateShapeWidth(chainShape: ChainShape): Float {
+fun ChainShape.width(): Float {
     var minX = Float.MAX_VALUE
-    var maxX = Float.MIN_VALUE
-    val tempVertex = Vector2()
+    var maxX = -Float.MAX_VALUE
 
-    for (i in 0 until chainShape.vertexCount) {
-        chainShape.getVertex(i, tempVertex)
-        minX = minOf(minX, tempVertex.x)
-        maxX = maxOf(maxX, tempVertex.x)
+    val vertex = Vector2()
+    for (i in 0 until vertexCount) {
+        getVertex(i, vertex)
+        if (vertex.x < minX) minX = vertex.x
+        if (vertex.x > maxX) maxX = vertex.x
     }
 
     return maxX - minX
 }
+
 
 fun ChainShape.offset(offset: Vector2) : ChainShape {
     val vertexCount = vertexCount

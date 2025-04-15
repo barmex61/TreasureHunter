@@ -6,7 +6,7 @@ import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
 import com.libgdx.treasurehunter.ecs.components.ItemType.Damageable
 import com.libgdx.treasurehunter.ecs.components.ItemType.Throwable
-import com.libgdx.treasurehunter.utils.AttackMetaDataFactory
+import com.libgdx.treasurehunter.factory.AttackMetaDataFactory
 import com.libgdx.treasurehunter.utils.GameObject
 
 

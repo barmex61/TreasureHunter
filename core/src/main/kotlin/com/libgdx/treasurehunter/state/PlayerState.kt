@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.MathUtils
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.Item
-import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.ecs.components.Sword
@@ -186,7 +185,7 @@ enum class PlayerState : EntityState {
                             itemType = Sword(),
                             owner = stateEntity.entity
                         )
-                        it[com.libgdx.treasurehunter.ecs.components.Animation].setNewGameObject(GameObject.CAPTAIN_CLOWN_SWORD)
+                        it[com.libgdx.treasurehunter.ecs.components.Animation].setNewModel(GameObject.CAPTAIN_CLOWN_SWORD.atlasKey)
                     }
                 }
             }
@@ -204,7 +203,7 @@ enum class PlayerState : EntityState {
                 stateEntity.entity.configure {
                     it -= Item
                     it -= Attack
-                    it[com.libgdx.treasurehunter.ecs.components.Animation].setNewGameObject(GameObject.CAPTAIN_CLOWN)
+                    it[com.libgdx.treasurehunter.ecs.components.Animation].setNewModel(GameObject.CAPTAIN_CLOWN.atlasKey)
                 }
             }
         }

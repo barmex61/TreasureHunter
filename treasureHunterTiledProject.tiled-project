@@ -11,6 +11,23 @@
     ],
     "propertyTypes": [
         {
+            "id": 9,
+            "name": "AttackType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "AIR_ATTACK_1",
+                "AIR_ATTACK_2",
+                "ATTACK_1",
+                "ATTACK_2",
+                "ATTACK_3",
+                "PINK_STAR_ATTACK",
+                "CRABBY_ATTACK",
+                "FIERCE_TOOTH_ATTACK"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "id": 2,
             "name": "BodyType",
             "storageType": "string",

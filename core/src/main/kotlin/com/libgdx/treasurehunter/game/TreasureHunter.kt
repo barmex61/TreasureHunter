@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.World
+import com.libgdx.treasurehunter.audio.AudioManager
 import com.libgdx.treasurehunter.enums.AssetHelper
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.game.screens.LoadingScreen
 import com.libgdx.treasurehunter.utils.Constants
 import ktx.app.KtxGame
@@ -23,6 +25,11 @@ class TreasureHunter : KtxGame<KtxScreen>() {
     private val physicWorld = createWorld(gravity = Constants.GRAVITY, allowSleep = true).apply {
         autoClearForces = true
     }
+    private val audioManager by lazy {
+        AudioManager()
+    }.also {
+        GameEventDispatcher.registerListener(it.value)
+    }
 
     private val spriteBatch by lazy {
         SpriteBatch()
@@ -32,7 +39,7 @@ class TreasureHunter : KtxGame<KtxScreen>() {
 
     override fun create() {
         Gdx.input.inputProcessor = InputMultiplexer()
-        addScreen(LoadingScreen(assetHelper, spriteBatch, this, physicWorld))
+        addScreen(LoadingScreen(assetHelper, spriteBatch, this, physicWorld,audioManager))
         setScreen<LoadingScreen>()
     }
 

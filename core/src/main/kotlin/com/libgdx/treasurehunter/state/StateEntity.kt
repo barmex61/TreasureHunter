@@ -116,8 +116,8 @@ data class StateEntity(
                 val markPosition = entity[Graphic].center
                 val gameObjectFromType = markType.toGameObject()
                 world.entity{ markEntity ->
-                    markEntity += Graphic(sprite(gameObjectFromType, AnimationType.IN,markPosition,assetHelper,0f))
-                    markEntity += Animation(gameObjectFromType, AnimationData(
+                    markEntity += Graphic(sprite(gameObjectFromType.atlasKey, AnimationType.IN,markPosition,assetHelper,0f))
+                    markEntity += Animation(gameObjectFromType.atlasKey, AnimationData(
                         animationType = AnimationType.IN,
                         playMode = PlayMode.NORMAL,
                         frameDuration = 0.2f

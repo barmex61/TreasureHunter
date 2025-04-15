@@ -33,18 +33,18 @@ import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.Sword
-import com.libgdx.treasurehunter.utils.AttackMetaDataFactory
+import com.libgdx.treasurehunter.factory.AttackMetaDataFactory
 import ktx.app.gdxError
 import ktx.math.vec2
 import ktx.tiled.property
 import ktx.tiled.propertyOrNull
 
 
-fun sprite(gameObject: GameObject, animationType: AnimationType, startPosition : Vector2,assetHelper: AssetHelper, rotation : Float = 0f): Sprite {
-    val regionPath = "${gameObject.atlasKey}/${animationType.atlasKey}"
+fun sprite(modelName: String, animationType: AnimationType, startPosition : Vector2, assetHelper: AssetHelper, rotation : Float = 0f): Sprite {
+    val regionPath = "${modelName}/${animationType.atlasKey}"
     val atlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
     val regions = atlas.findRegions(regionPath) ?:
-    gdxError("There are no regions for $gameObject and $animationType")
+    gdxError("There are no regions for $modelName and $animationType")
     val firstFrame = regions.first()
     val w = firstFrame.regionWidth * UNIT_SCALE
     val h = firstFrame.regionHeight * UNIT_SCALE
@@ -58,7 +58,7 @@ fun sprite(gameObject: GameObject, animationType: AnimationType, startPosition :
 
 fun EntityCreateContext.configureEntityGraphic(entity: Entity,tile: TiledMapTile,position : Vector2,gameObject: GameObject,assetHelper: AssetHelper,world: World,rotation : Float ){
     val startAnimType = AnimationType.valueOf(tile.property("startAnimType","NONE"))
-    entity += Graphic(sprite(gameObject,startAnimType,position,assetHelper,rotation))
+    entity += Graphic(sprite(gameObject.atlasKey,startAnimType,position,assetHelper,rotation))
     if (startAnimType != AnimationType.NONE){
         configureAnimation(entity,tile,startAnimType,gameObject)
     }
@@ -67,7 +67,7 @@ fun EntityCreateContext.configureEntityGraphic(entity: Entity,tile: TiledMapTile
 fun EntityCreateContext.configureAnimation(entity: Entity, tile: TiledMapTile,startAnimType : AnimationType,gameObject: GameObject) {
     val frameDuration = tile.property<Float>("animFrameDuration",0f)
     if (frameDuration == 0f) return
-    entity += Animation(gameObject = gameObject, animationData = AnimationData(
+    entity += Animation(modelName = gameObject.atlasKey, animationData = AnimationData(
         frameDuration = frameDuration,
         animationType = startAnimType
     ))

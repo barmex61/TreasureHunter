@@ -1,8 +1,9 @@
-package com.libgdx.treasurehunter.utils
+package com.libgdx.treasurehunter.factory
 
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.libgdx.treasurehunter.ecs.components.AttackMetaData
 import com.libgdx.treasurehunter.ecs.components.AttackType
+import com.libgdx.treasurehunter.utils.GameObject
 import ktx.app.gdxError
 
 object AttackMetaDataFactory {

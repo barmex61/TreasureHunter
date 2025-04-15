@@ -73,12 +73,12 @@ class AnimationSystem (
     }
 
     private fun createOrGetAnimation(
-        gameObject: GameObject,
+        modelName: String,
         animationType: AnimationType,
         frameDuration: Float,
         playMode: PlayMode
     ): GdxAnimation {
-        val atlasKey = "${gameObject.atlasKey}/${animationType.atlasKey}"
+        val atlasKey = "${modelName}/${animationType.atlasKey}"
         return gdxAnimationCache.getOrPut(atlasKey) {
             val regions = gameObjectAtlas.findRegions(atlasKey) ?:
             gdxError("No regions for animation $atlasKey")
@@ -99,7 +99,7 @@ class AnimationSystem (
         val animData = animComp.animationData
         updateAnimationData(
             animData.apply { timer = 0f },
-            animComp.gameObject,
+            animComp.modelName,
             animationType,
             playMode,
             frameDuration
@@ -108,14 +108,14 @@ class AnimationSystem (
 
     private fun updateAnimationData(
         animData: AnimationData,
-        gameObject: GameObject,
+        modelName: String,
         newAnimType: AnimationType,
         newPlayMode: PlayMode,
         newFrameDuration: Float?= null
     ) {
         val finalFrameDuration = newFrameDuration ?: animData.frameDuration
         animData.apply {
-            gdxAnimation = createOrGetAnimation(gameObject, newAnimType, finalFrameDuration, newPlayMode)
+            gdxAnimation = createOrGetAnimation(modelName, newAnimType, finalFrameDuration, newPlayMode)
             timer = 0f
             playMode = newPlayMode
             animationType = newAnimType

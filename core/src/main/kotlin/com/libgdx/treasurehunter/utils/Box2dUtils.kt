@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.CircleShape
+import com.badlogic.gdx.physics.box2d.Filter
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
@@ -155,14 +156,20 @@ fun Body.destroyFixtures(){
     fixturesToDestroy.clear()
 }
 
-fun FixtureDef.copy() : FixtureDef{
-   return FixtureDef().apply {
-        {
-            this.isSensor = this.isSensor
-            density = this.density
-            friction = this.friction
-            restitution = this.restitution
-            filter.set(this.filter)
-        }
-    }
+fun FixtureDef.copy(
+    isSensor : Boolean? = null,
+    density : Float? = null,
+    friction : Float? = null,
+    restitution : Float? = null,
+    filter : Filter? = null,
+    shape : ChainShape? = null
+) : FixtureDef{
+   return  return FixtureDef().also {
+       it.isSensor = isSensor ?: this.isSensor
+       it.density = density ?: this.density
+       it.friction = friction ?: this.friction
+       it.restitution = restitution ?: this.restitution
+       it.filter.set(filter ?: this.filter)
+       it.shape = shape ?: this.shape
+   }
 }
