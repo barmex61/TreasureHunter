@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.utils.Array
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
+import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import com.libgdx.treasurehunter.ecs.components.Animation
@@ -15,28 +16,25 @@ import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.AttackMetaData
 import com.libgdx.treasurehunter.ecs.components.AttackType
+import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.ThrowState
 import com.libgdx.treasurehunter.ecs.systems.AnimationSystem.Companion.setFlipX
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.TextureAtlasAssets
-import com.libgdx.treasurehunter.event.GameEvent
-import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.utils.Constants.ATTACK_EFFECT_FIXTURES
 import com.libgdx.treasurehunter.utils.Constants.ATTACK_FIXTURES
 import com.libgdx.treasurehunter.utils.FixtureDefUserData
-import com.libgdx.treasurehunter.utils.calculateEffectPosition
 import com.libgdx.treasurehunter.utils.copy
 import com.libgdx.treasurehunter.utils.createFixtures
 import com.libgdx.treasurehunter.utils.destroyFixtures
 import ktx.math.vec2
-import ktx.math.plus
 import com.libgdx.treasurehunter.utils.mirror
 import com.libgdx.treasurehunter.utils.offset
-import com.libgdx.treasurehunter.utils.width
 import ktx.app.gdxError
 import ktx.collections.isNotEmpty
 
@@ -49,7 +47,7 @@ class AttackMetaSystem(
 
     override fun onTickEntity(entity: Entity) {
         val attackMeta = entity[AttackMeta]
-        val (owner, currentFrameIndex, _, _, _, attackMetaData) = attackMeta
+        val (owner, currentFrameIndex, _, _,  attackMetaData,attackHandler) = attackMeta
         val (body, _) = entity[Physic]
         val graphic = entity[Graphic]
         val ownerFlipX = owner[Move].flipX
@@ -57,19 +55,20 @@ class AttackMetaSystem(
         val ownerGraphic = owner[Graphic]
         val ownerItem = owner.getOrNull(Item)
         val ownerBottomCenter = ownerGraphic.bottomCenter
-        val ownerFrameIx = ownerAnim.getAttackAnimKeyFrameIx()
-        if (attackMeta.attackHandler.gameObjectAtlas == null){
-            attackMeta.attackHandler.gameObjectAtlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
+        val ownerFrameIx = ownerAnim.getAttackAnimKeyFrameIx(attackMetaData.attackType)
+        if (attackHandler == null){
+            attackMeta.setAttackHandler(textureAtlas = assetHelper[TextureAtlasAssets.GAMEOBJECT],world)
         }
-        attackMeta.attackHandler.update(
+        attackHandler?:return
+        attackHandler.update(
             attackMetaData = attackMetaData,
             deltaTime = deltaTime,
             entity = entity,
             graphic = graphic,
             body = body,
-            ownerFrameIx = ownerFrameIx
+            ownerFrameIx = ownerFrameIx,
         )
-        attackMeta.attackHandler.handleAttack(
+        attackHandler.handleAttack(
             entity = entity,
             entityGraphic = graphic,
             owner = owner,
@@ -78,6 +77,7 @@ class AttackMetaSystem(
             ownerGraphic = ownerGraphic,
             ownerBottomCenter = ownerBottomCenter,
             ownerFlipX = ownerFlipX,
+            ownerFrameIx = ownerFrameIx,
             currentFrameIndex = currentFrameIndex,
             attackMeta = attackMeta,
             body = body,
@@ -86,23 +86,26 @@ class AttackMetaSystem(
     }
 }
 
-sealed interface AttackHandler {
-    var gameObjectAtlas: TextureAtlas?
+sealed class AttackHandler(
+    val world: World
+) {
 
-    fun update(attackMetaData: AttackMetaData, deltaTime: Float, entity: Entity, graphic: Graphic, body: Body,ownerFrameIx : Int) {
+     abstract val isFixtureInitialized : Boolean
+
+    open fun update(attackMetaData: AttackMetaData, deltaTime: Float, entity: Entity, graphic: Graphic, body: Body,ownerFrameIx : Int) {
         attackMetaData.attackDestroyTime -= deltaTime
-        if (attackMetaData.attackDestroyTime <= 0f) {
-            GameEventDispatcher.fireEvent(GameEvent.RemoveEntityEvent(entity))
+        if (attackMetaData.attackDestroyTime <= 0f || (isFixtureInitialized && body.fixtureList.isEmpty)) {
+            with(world) {
+                entity.configure {
+                    println(entity.id)
+                    it += EntityTag.REMOVE
+                }
+            }
             attackMetaData.attackDestroyTime = attackMetaData.baseAttackDestroyTime
-        }
-        graphic.sprite.setAlpha(if (body.fixtureList.isEmpty) 0f else 1f)
-
-        if (ownerFrameIx == -1 && body.fixtureList.isNotEmpty()) {
-            body.destroyFixtures()
         }
     }
 
-    fun handleAttack(
+    abstract fun handleAttack(
         entity: Entity,
         entityGraphic: Graphic,
         owner: Entity,
@@ -111,6 +114,7 @@ sealed interface AttackHandler {
         ownerGraphic: Graphic,
         ownerBottomCenter: Vector2,
         ownerFlipX: Boolean,
+        ownerFrameIx: Int,
         currentFrameIndex: Int,
         attackMeta: AttackMeta,
         body: Body,
@@ -118,21 +122,36 @@ sealed interface AttackHandler {
     )
 }
 
-abstract class BaseAttackHandler : AttackHandler {
-    override var gameObjectAtlas: TextureAtlas? = null
 
-    protected val regionsCache = mutableMapOf<String, Array<TextureAtlas.AtlasRegion>>()
+class MeleeAttackHandler(
+    private val gameObjectAtlas: TextureAtlas,
+    world: World,
+) : AttackHandler(world) {
+    override var isFixtureInitialized: Boolean = false
 
-    protected fun getTextureRegion(modelName: String, attackType: AttackType, keyFrameIndex: Int): TextureRegion {
+    private val regionsCache = mutableMapOf<String, Array<TextureAtlas.AtlasRegion>>()
+
+    private fun getTextureRegion(modelName: String, attackType: AttackType, keyFrameIndex: Int): TextureRegion {
         val atlasKey = "${modelName}/${attackType.name.lowercase()}"
         return regionsCache.getOrPut(atlasKey) {
-            gameObjectAtlas?.findRegions(atlasKey) ?: gdxError("No regions for animation $atlasKey")
+            gameObjectAtlas.findRegions(atlasKey) ?: gdxError("No regions for animation $atlasKey")
         }.get(keyFrameIndex)
     }
 
-}
-
-class MeleeAttackHandler : BaseAttackHandler() {
+    override fun update(
+        attackMetaData: AttackMetaData,
+        deltaTime: Float,
+        entity: Entity,
+        graphic: Graphic,
+        body: Body,
+        ownerFrameIx: Int
+    ) {
+        super.update(attackMetaData, deltaTime, entity, graphic, body, ownerFrameIx)
+        if (ownerFrameIx == -1 && body.fixtureList.isNotEmpty()) {
+            body.destroyFixtures()
+        }
+        graphic.sprite.setAlpha(if (body.fixtureList.none { it.userData == "attackEffectFixture" }) 0f else 1f)
+    }
 
     override fun handleAttack(
         entity: Entity,
@@ -143,32 +162,31 @@ class MeleeAttackHandler : BaseAttackHandler() {
         ownerGraphic: Graphic,
         ownerBottomCenter: Vector2,
         ownerFlipX: Boolean,
+        ownerFrameIx : Int,
         currentFrameIndex: Int,
         attackMeta: AttackMeta,
         body: Body,
         attackType: AttackType
     ) {
-        val keyFrameIndex = ownerAnim.getAttackAnimKeyFrameIx()
         body.setTransform(ownerBottomCenter, body.angle)
-        if (keyFrameIndex != -1 && (keyFrameIndex != currentFrameIndex || ownerFlipX != attackMeta.isFixtureMirrored)) {
+        if (ownerFrameIx != -1 && (ownerFrameIx != currentFrameIndex || ownerFlipX != attackMeta.isFixtureMirrored)) {
             body.destroyFixtures()
             val spriteWidth = ownerGraphic.sprite.width
-            attackMeta.currentFrameIndex = keyFrameIndex
+            attackMeta.currentFrameIndex = ownerFrameIx
             attackMeta.isFixtureMirrored = ownerFlipX
             val fixtureDefList = mutableListOf<FixtureDefUserData>()
-            val attackFixture = ATTACK_FIXTURES[Pair(attackType,keyFrameIndex)]?.let {
+            val attackFixture = ATTACK_FIXTURES[Pair(attackType,ownerFrameIx)]?.let {
                 if (ownerFlipX) it.copy(
                     fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).mirror(vec2(spriteWidth/2f,0f)))
                 ) else it.copy(fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).offset(vec2(-spriteWidth/2f,0f))))
             }
-            val effectFixture = createEffectFixture(keyFrameIndex, attackType, ownerFlipX, entityGraphic)
+            val effectFixture = createEffectFixture(ownerFrameIx, attackType, ownerFlipX, entityGraphic)
             if (attackFixture != null) fixtureDefList.add(attackFixture)
             if (effectFixture != null) fixtureDefList.add(effectFixture)
             body.createFixtures(fixtureDefList)
+            isFixtureInitialized = true
             fixtureDefList.clear()
         }
-
-
     }
 
     private fun createEffectFixture(
@@ -189,14 +207,18 @@ class MeleeAttackHandler : BaseAttackHandler() {
 
         val region = getTextureRegion("attack_effect", attackType, keyFrameIndex)
         graphic.sprite.setRegion(region)
-        graphic.effectOffset.set(effectOffset)
+        graphic.offset.set(effectOffset)
         setFlipX(ownerFlipX, graphic.sprite)
 
         return attackEffectFixture
     }
 }
 
-class RangeAttackHandler : BaseAttackHandler() {
+class RangeAttackHandler(
+    world: World
+) : AttackHandler(world) {
+
+    override var isFixtureInitialized: Boolean = false
 
     override fun handleAttack(
         entity: Entity,
@@ -207,32 +229,33 @@ class RangeAttackHandler : BaseAttackHandler() {
         ownerGraphic: Graphic,
         ownerBottomCenter: Vector2,
         ownerFlipX: Boolean,
+        ownerFrameIx: Int,
         currentFrameIndex: Int,
         attackMeta: AttackMeta,
         body: Body,
         attackType: AttackType
     ) {
-        val keyFrameIx = ownerAnim.getAttackAnimKeyFrameIx()
         val animType = ownerAnim.animationData.animationType
 
-        if (keyFrameIx == 1 && !attackMeta.hasFixture) {
-            val attackFixture = ATTACK_FIXTURES[Pair(attackType,keyFrameIx)]?.let {
+        if (ownerFrameIx == 1 && !isFixtureInitialized) {
+            body.destroyFixtures()
+            val attackFixture = ATTACK_FIXTURES[Pair(attackType,0)]?.let {
                 if (ownerFlipX) it.copy(
                     fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).mirror(vec2()))
                 ) else it
             } ?: return
-
-            body.destroyFixtures()
             body.createFixtures(mutableListOf(attackFixture))
-            attackMeta.hasFixture = true
+            if (ownerFlipX) entityGraphic.offset.set(-entityGraphic.sprite.width,0f)
+            entityGraphic.sprite.setAlpha(1f)
+            isFixtureInitialized = true
             val multiplier = if (!ownerFlipX) 1f  else -1f
             body.applyLinearImpulse(Vector2(7f * multiplier, 0f), body.position, true)
         }
 
-        if (keyFrameIx == 2 && animType == AnimationType.THROW) {
+        if (ownerFrameIx == 2 && animType == AnimationType.THROW) {
             ownerItem?.let { item ->
                 val throwableItem = item.itemType as? ItemType.Throwable
-                throwableItem?.isThrown = true
+                throwableItem?.throwState = ThrowState.THROWED
             }
         }
     }

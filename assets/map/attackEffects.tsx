@@ -9,6 +9,9 @@
   <image source="../graphics/attackEffects/air_attack_1_01.png" width="22" height="26"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="17">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 7,0 7,-1 9,-1 15,-5 19,-10 20,-13 21,-17 22,-17 22,-10 21,-10 21,-7 19,-2 14,3 11,4 5,4 4,3 2,2"/>
    </object>
   </objectgroup>
@@ -21,6 +24,9 @@
   <image source="../graphics/attackEffects/air_attack_1_02.png" width="22" height="26"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="9" y="23">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 6,0 6,-1 9,-3 10,-4 11,-6 12,-6 12,-4 11,-4 11,-2 10,0 8,2 6,2 6,3 3,3 1,2 1,1 0,1"/>
    </object>
   </objectgroup>
@@ -33,6 +39,9 @@
   <image source="../graphics/attackEffects/air_attack_2_01.png" width="31" height="23"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="19">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 8,0 8,-1 15,-3 19,-6 21,-9 23,-14 24,-19 25,-19 26,-16 27,-13 27,-8 25,-4 24,-2 22,0 19,1 15,2 6,2 6,1 0,1"/>
    </object>
   </objectgroup>
@@ -45,6 +54,9 @@
   <image source="../graphics/attackEffects/air_attack_2_02.png" width="31" height="23"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="20" y="22">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 3,0 3,-1 6,-3 8,-7 9,-10 10,-10 10,-8 11,-8 11,-4 10,-2 8,-1 7,0 5,1 0,1"/>
    </object>
   </objectgroup>
@@ -57,6 +69,9 @@
   <image source="../graphics/attackEffects/attack_1_01.png" width="28" height="17"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="15">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 2,-2 3,-2 3,-6 2,-6 2,-7 4,-6 5,-5 5,-2 3,0 1,0 1,1 0,1"/>
    </object>
   </objectgroup>
@@ -69,6 +84,9 @@
   <image source="../graphics/attackEffects/attack_1_02.png" width="28" height="17"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="11" y="16">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 4,-4 6,-6 7,-8 8,-8 8,-10 7,-10 6,-12 3,-15 3,-16 5,-16 11,-13 14,-10 14,-9 6,-1 4,0 2,1 0,1"/>
    </object>
   </objectgroup>
@@ -81,6 +99,9 @@
   <image source="../graphics/attackEffects/attack_1_03.png" width="28" height="17"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="22" y="11">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 3,-3 4,-3 4,-5 3,-5 2,-6 2,-7 4,-7 5,-6 6,-5 6,-3 3,0 1,0 1,1 0,1"/>
    </object>
   </objectgroup>
@@ -93,6 +114,9 @@
   <image source="../graphics/attackEffects/attack_2_01.png" width="38" height="37"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="1">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 1,1 2,3 3,3 3,9 4,9 5,8 5,3 4,3 4,1 3,0 1,0 1,-1 0,-1"/>
    </object>
   </objectgroup>
@@ -105,6 +129,9 @@
   <image source="../graphics/attackEffects/attack_2_02.png" width="38" height="37"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="7" y="5">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 2,1 8,5 10,5 10,7 14,13 16,18 17,18 17,28 16,28 14,31 14,32 15,32 15,31 17,31 20,28 20,26 21,26 22,24 22,16 21,16 21,13 19,9 18,9 18,8 13,3 11,3 11,2 6,0 2,-1 0,-1"/>
    </object>
   </objectgroup>
@@ -117,6 +144,9 @@
   <image source="../graphics/attackEffects/attack_2_03.png" width="38" height="37"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="35" y="33">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 0,-2 1,-2 1,-10 0,-10 0,-13 -1,-13 -1,-15 -2,-15 -2,-16 -1,-16 1,-14 2,-12 3,-10 3,-3 2,-1 1,0"/>
    </object>
   </objectgroup>
@@ -129,6 +159,9 @@
   <image source="../graphics/attackEffects/attack_3_01.png" width="42" height="36"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="0" y="35">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 2,-2 3,-4 4,-4 4,-9 3,-9 3,-10 5,-10 6,-9 6,-4 5,-4 5,-2 3,0 1,0 1,1 0,1"/>
    </object>
   </objectgroup>
@@ -141,6 +174,9 @@
   <image source="../graphics/attackEffects/attack_3_02.png" width="42" height="36"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="14" y="31">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 4,-2 8,-5 9,-7 11,-10 12,-14 13,-14 13,-22 12,-22 10,-26 9,-27 8,-29 7,-30 7,-31 8,-31 8,-30 10,-30 17,-23 18,-21 19,-18 19,-11 18,-11 18,-8 15,-5 11,-2 6,0 3,1 0,1"/>
    </object>
   </objectgroup>
@@ -240,9 +276,15 @@
   <image source="../graphics/attackEffects/fierce_tooth_attack_03.png" width="22" height="24"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="5" y="13">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 0,-5 1,-5 1,-8 2,-8 2,-5 1,-5 1,0"/>
    </object>
    <object id="2" x="1" y="8">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 0,-4 1,-4 1,-7 0,-7 0,-4 -1,-4 -1,0"/>
    </object>
   </objectgroup>
@@ -255,9 +297,15 @@
   <image source="../graphics/attackEffects/pink_star_attack_01.png" width="16" height="12"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="6" y="12">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 0,-1 1,-1 1,-2 0,-2 0,-3 -2,-3 -3,-2 -5,-1 -5,0"/>
    </object>
    <object id="2" x="14" y="9">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 2,0 2,-1 0,-1"/>
    </object>
   </objectgroup>
@@ -270,6 +318,9 @@
   <image source="../graphics/attackEffects/pink_star_attack_02.png" width="16" height="12"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="7" y="7">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 1,0 2,-1 2,1 3,1 3,-3 2,-4 0,-4 -1,-3 -1,-1"/>
    </object>
   </objectgroup>
@@ -280,6 +331,20 @@
    <property name="keyFrameIx" type="int" value="2"/>
   </properties>
   <image source="../graphics/attackEffects/pink_star_attack_03.png" width="16" height="12"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="8" y="12">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
+    <polygon points="0,0 0,-1 2,-1 2,-2 5,-2 5,0"/>
+   </object>
+   <object id="2" x="8" y="3">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
+    <polygon points="0,0 2,0 2,-2 1,-2 1,-3 0,-3"/>
+   </object>
+  </objectgroup>
  </tile>
  <tile id="22">
   <properties>
@@ -289,9 +354,15 @@
   <image source="../graphics/attackEffects/pink_star_attack_04.png" width="16" height="12"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="14" y="9">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 1,-1 2,-1 2,2 0,2 0,1"/>
    </object>
    <object id="2" x="10" y="2">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 0,-1 -2,-1 -2,0"/>
    </object>
   </objectgroup>

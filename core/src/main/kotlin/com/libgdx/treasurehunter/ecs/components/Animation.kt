@@ -27,8 +27,8 @@ data class Animation(
     val animationData: AnimationData,
     var flipInitialized : Boolean = false
 )  : Component<Animation> {
-    fun getAttackAnimKeyFrameIx() : Int{
-        return if (animationData.animationType.isAttackAnimation){
+    fun getAttackAnimKeyFrameIx(attackType: AttackType) : Int{
+        return if (animationData.animationType == attackType.attackAnimType){
             animationData.gdxAnimation?.getKeyFrameIndex(animationData.timer) ?: 0
         }else{
             -1

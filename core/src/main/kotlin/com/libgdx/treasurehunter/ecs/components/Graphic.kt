@@ -1,12 +1,10 @@
 package com.libgdx.treasurehunter.ecs.components
 
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
-import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.vec2
 
 data class Graphic(val sprite : Sprite) : Component <Graphic> , Comparable<Graphic> {
@@ -30,7 +28,7 @@ data class Graphic(val sprite : Sprite) : Component <Graphic> , Comparable<Graph
             return field
         }
 
-    var effectOffset = vec2()
+    var offset = vec2()
 
     override fun World.onRemove(entity: Entity) {
         sprite.texture = null

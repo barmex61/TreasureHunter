@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.2" name="attackObjects" tilewidth="64" tileheight="40" tilecount="19" columns="0">
+<tileset version="1.10" tiledversion="1.11.2" name="attackObjects" tilewidth="64" tileheight="40" tilecount="20" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -226,6 +226,21 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="14" y="12">
     <polygon points="0,0 6,-6 11,-6 15,-2 15,1 14,1 12,-1 9,-1 10,1 16,6 16,9 14,12 13,12 11,8 11,13 9,16 6,17 2,17 1,15 4,13 0,13 0,14 -4,14 -6,11 -6,6 -3,9 -1,6 -6,4 -6,1 -4,-3 -2,-4 1,-4 1,-3 -1,-2"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="19">
+  <properties>
+   <property name="attackType" propertytype="AttackType" value="THROW"/>
+   <property name="keyFrameIx" type="int" value="0"/>
+  </properties>
+  <image source="../graphics/attackObjects/sword.png" width="20" height="20"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="7" y="12">
+    <properties>
+     <property name="userData" value="rangeAttackFixture"/>
+    </properties>
+    <polygon points="0,0 1,0 1,1 11,1 13,-1 13,-4 1,-4 1,-3 0,-3"/>
    </object>
   </objectgroup>
  </tile>

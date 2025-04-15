@@ -226,7 +226,7 @@
    <property name="item" propertytype="Item" value="NONE"/>
    <property name="jumpHeight" type="float" value="2"/>
    <property name="life" type="int" value="3"/>
-   <property name="speed" type="float" value="2"/>
+   <property name="speed" type="float" value="7"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
    <property name="timeToMax" type="float" value="3"/>
   </properties>

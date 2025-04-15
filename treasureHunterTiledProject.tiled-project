@@ -23,7 +23,8 @@
                 "ATTACK_3",
                 "PINK_STAR_ATTACK",
                 "CRABBY_ATTACK",
-                "FIERCE_TOOTH_ATTACK"
+                "FIERCE_TOOTH_ATTACK",
+                "THROW"
             ],
             "valuesAsFlags": false
         },

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
+import com.github.quillraven.fleks.EntityUpdateContext
 import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.ecs.components.AiComponent
 import com.libgdx.treasurehunter.ecs.components.Animation
@@ -12,6 +13,7 @@ import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackType
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
+import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Jump
 import com.libgdx.treasurehunter.ecs.components.Life
@@ -126,6 +128,12 @@ data class CrewEntity(
         return this@get[type]
     }
 
+    inline fun Entity.configure(configuration : EntityUpdateContext.(Entity) -> Unit) = with(world) {
+        this@configure.configure {
+            configuration(it)
+        }
+    }
+
     fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){
         animation(entity,animationType,playMode,frameDuration)
     }
@@ -166,5 +174,10 @@ data class CrewEntity(
         return isCollidedWithWall
     }
 
+    fun remove(){
+        entity.configure {
+            it += EntityTag.REMOVE
+        }
+    }
 
 }

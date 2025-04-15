@@ -4,6 +4,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.libgdx.treasurehunter.ecs.components.Animation
+import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
@@ -18,7 +19,9 @@ class ParticleSystem : IteratingSystem(
         val particle = entity[Particle]
         val animData = animComp.animationData
         if (animData.gdxAnimation?.isAnimationFinished(animData.timer) == true ){
-            GameEventDispatcher.fireEvent(GameEvent.RemoveEntityEvent(entity))
+            entity.configure {
+                it += EntityTag.REMOVE
+            }
         }
     }
 }

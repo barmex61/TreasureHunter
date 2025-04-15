@@ -11,6 +11,24 @@ enum class AttackState {
     DONE,
 }
 
+
+enum class AttackType(val isMelee : Boolean) {
+    ATTACK_1(true),
+    ATTACK_2(true),
+    ATTACK_3(true),
+    AIR_ATTACK_1(true),
+    AIR_ATTACK_2(true),
+    FIERCE_TOOTH_ATTACK(true),
+    PINK_STAR_ATTACK(true),
+    CRABBY_ATTACK(true),
+    THROW(false),;
+
+    val attackAnimType : AnimationType
+        get() = AnimationType.valueOf(this.name)
+}
+
+
+
 data class AttackMetaData(
     val attackSpeed: Float ,
     val attackRange: Float,
@@ -39,7 +57,7 @@ data class Attack(
     var wantsToAttack : Boolean = false,
     var attackState : AttackState = AttackState.READY,
     var doAttack : Boolean = false,
-    val attackMetaData: AttackMetaData,
+    var attackMetaData: AttackMetaData,
     ) : Component <Attack> {
 
     var queuedAttackType : AttackType? = null

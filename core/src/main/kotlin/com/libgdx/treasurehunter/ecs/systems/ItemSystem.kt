@@ -7,6 +7,7 @@ import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.State
+import com.libgdx.treasurehunter.ecs.components.ThrowState
 import com.libgdx.treasurehunter.state.PlayerState
 
 class ItemSystem : IteratingSystem(
@@ -27,8 +28,13 @@ class ItemSystem : IteratingSystem(
                 }
             }
         }
-        if (throwableItem != null && throwableItem.isThrown){
-            entity.getOrNull(State)?.stateMachine?.changeState(PlayerState.SWORD_THROWED)
+        if (throwableItem != null){
+            when(throwableItem.throwState){
+                ThrowState.THROWED ->  entity.getOrNull(State)?.stateMachine?.changeState(PlayerState.SWORD_THROWED)
+                else -> Unit
+            }
+
         }
+
     }
 }

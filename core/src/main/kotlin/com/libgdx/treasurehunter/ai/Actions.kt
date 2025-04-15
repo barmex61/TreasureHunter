@@ -211,7 +211,7 @@ class Dead : Actions(){
             return Status.RUNNING
         }
         if (entity.animationDone){
-            GameEventDispatcher.fireEvent(GameEvent.RemoveEntityEvent(entity.entity))
+            entity.remove()
             return Status.SUCCEEDED
         }
         return Status.RUNNING

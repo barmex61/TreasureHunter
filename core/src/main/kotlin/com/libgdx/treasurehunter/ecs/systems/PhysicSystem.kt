@@ -23,14 +23,12 @@ import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
-import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Jump
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.State
-import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
@@ -55,7 +53,6 @@ class PhysicSystem (
         physicWorld.setContactListener(this)
     }
 
-    private var removeEntityList = mutableSetOf<Entity>()
 
     override fun onUpdate() {
         if (physicWorld.autoClearForces){
@@ -78,18 +75,13 @@ class PhysicSystem (
         entity.getOrNull(Move)?.let {moveComp ->
             body.setLinearVelocity(moveComp.currentSpeed , body.linearVelocity.y)
         }
-        if (removeEntityList.isNotEmpty()){
-            removeEntityList.forEach { entity ->
-                entity.remove()
-            }
-            removeEntityList.clear()
-        }
+
     }
 
     override fun onAlphaEntity(entity: Entity, alpha: Float) {
         val graphic = entity[Graphic]
         val (sprite) = graphic
-        val effectOffset = graphic.effectOffset
+        val effectOffset = graphic.offset
         val physic = entity[Physic]
         val (body,previousPosition) = physic
         val (prevX,prevY) = previousPosition
@@ -188,6 +180,9 @@ class PhysicSystem (
     }
 
     private fun isSwordAndWallCollision(entityA: Entity?,fixtureA : Fixture,fixtureB:Fixture) : Boolean{
+        if (entityA != null && entityA has AttackMeta){
+            println()
+        }
         return entityA != null && entityA has AttackMeta && fixtureA.isRangeAttackFixture && !fixtureB.isSensor
     }
 
@@ -261,9 +256,6 @@ class PhysicSystem (
 
     override fun onEvent(event: GameEvent) {
         when(event){
-            is GameEvent.RemoveEntityEvent -> {
-                removeEntityList.add(event.entity)
-            }
             is GameEvent.CollectableItemEvent ->{
                 val collectableEntity = event.collectableEntity
                 val playerEntity = event.playerEntity

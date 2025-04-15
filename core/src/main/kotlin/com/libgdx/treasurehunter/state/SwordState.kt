@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.EntityTag
+import ktx.math.vec2
 
 
 enum class SwordState : EntityState{
@@ -62,6 +63,7 @@ enum class SwordState : EntityState{
         override fun enter(entity: StateEntity) {
             entity.addCollectable()
             entity.animation(AnimationType.EMBEDDED, playMode = Animation.PlayMode.NORMAL)
+            entity.setSpriteOffset()
         }
         override fun update(entity: StateEntity) {
             entity.attackDestroyTimer -= entity.world.deltaTime

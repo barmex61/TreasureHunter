@@ -15,7 +15,6 @@ import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.Blink
 import com.libgdx.treasurehunter.ecs.components.Collectable
-import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Mark
@@ -31,6 +30,7 @@ import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.utils.GameObject
+import ktx.math.vec2
 import kotlin.math.pow
 
 data class StateEntity(
@@ -57,7 +57,6 @@ data class StateEntity(
 
     var runParticleTimer : Float = 0.5f
 
-
     // ------ CAN BE REMOVED -------
 
     inline operator fun <reified T:Component<*>> get(type: ComponentType<T>) : T = with(world){
@@ -76,6 +75,14 @@ data class StateEntity(
 
     fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){
         animation(entity,animationType,playMode,frameDuration)
+    }
+
+    fun setSpriteOffset(){
+        val graphic = get(Graphic)
+        val offset = if (graphic.sprite.isFlipX){
+            vec2(-0.85f,0.07f)
+        }else vec2(0.2f,0.07f)
+        graphic.offset = offset
     }
 
     fun state(state : EntityState,toPreviousState : Boolean = false){
@@ -171,7 +178,9 @@ data class StateEntity(
     }
 
     fun remove(){
-        GameEventDispatcher.fireEvent(GameEvent.RemoveEntityEvent(entity))
+        entity.configure {
+            it += EntityTag.REMOVE
+        }
     }
 
 }

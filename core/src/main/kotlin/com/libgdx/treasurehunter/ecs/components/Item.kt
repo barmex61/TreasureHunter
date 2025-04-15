@@ -9,43 +9,34 @@ import com.libgdx.treasurehunter.ecs.components.ItemType.Throwable
 import com.libgdx.treasurehunter.factory.AttackMetaDataFactory
 import com.libgdx.treasurehunter.utils.GameObject
 
-
-enum class AttackType(val isMelee : Boolean) {
-    ATTACK_1(true),
-    ATTACK_2(true),
-    ATTACK_3(true),
-    AIR_ATTACK_1(true),
-    AIR_ATTACK_2(true),
-    FIERCE_TOOTH_ATTACK(true),
-    PINK_STAR_ATTACK(true),
-    CRABBY_ATTACK(true),
-    THROW(false),;
-
-    val attackAnimType : AnimationType
-        get() = AnimationType.valueOf(this.name)
+enum class ThrowState{
+    READY,
+    THROWING,
+    THROWED
 }
 
 sealed interface ItemType{
     interface Damageable : ItemType {
         val attackMetaData : AttackMetaData
-        fun toGameObject() : GameObject?{
-            return when(this){
-                is Sword -> GameObject.SWORD
-                else -> null
-            }
-        }
     }
     interface Throwable : ItemType{
-        var isThrown: Boolean
+        var throwState : ThrowState
     }
     data class Consumable(
         val effect: String
     ) : ItemType
+
+    fun toGameObject() : GameObject?{
+        return when(this){
+            is Sword -> GameObject.SWORD
+            else -> null
+        }
+    }
 }
 
 data class Sword(
     override val attackMetaData: AttackMetaData = AttackMetaDataFactory.create(GameObject.SWORD),
-    override var isThrown: Boolean = false
+    override var throwState: ThrowState = ThrowState.READY
 ) : Damageable,Throwable
 
 

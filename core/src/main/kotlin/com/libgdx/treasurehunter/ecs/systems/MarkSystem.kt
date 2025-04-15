@@ -4,6 +4,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.libgdx.treasurehunter.ecs.components.Animation
+import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Mark
 import com.libgdx.treasurehunter.event.GameEvent
@@ -21,11 +22,15 @@ class MarkSystem : IteratingSystem(
         var (markDuration, markOffset,markedEntity) = markComp
         val markedEntityGraphicCenter = markedEntity.getOrNull(Graphic)?.center
         if (markedEntityGraphicCenter == null){
-            GameEventDispatcher.fireEvent(GameEvent.RemoveEntityEvent(entity))
+            entity.configure {
+                it += EntityTag.REMOVE
+            }
             return
         }
         if (markDuration <= 0f){
-            GameEventDispatcher.fireEvent(GameEvent.RemoveEntityEvent(entity))
+            entity.configure {
+                it += EntityTag.REMOVE
+            }
             return
         }else{
             markDuration -= deltaTime

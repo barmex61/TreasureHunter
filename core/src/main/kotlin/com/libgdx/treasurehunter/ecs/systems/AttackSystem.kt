@@ -26,6 +26,7 @@ import com.libgdx.treasurehunter.ecs.components.AttackMetaData
 import com.libgdx.treasurehunter.ecs.components.AttackType
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
+import com.libgdx.treasurehunter.ecs.components.ThrowState
 
 class AttackSystem(
     private val physicWorld : PhysicWorld = inject(),
@@ -38,47 +39,58 @@ class AttackSystem(
         val attackComp = entity[Attack]
         val animComp = entity[Animation]
         val (_,center) = entity[Graphic]
-        var (wantsToAttack, attackState,doAttack,attackMetaData) = attackComp
+        var (wantsToAttack, attackState,doAttack,_) = attackComp
 
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
                     val attackType = getQueuedAttackType(entity,attackComp.queuedAttackType)
-                    attackType?.let { attackMetaData.attackType =it }
+                    val newAttackMetaData = attackComp.attackMetaData.copy()
+                    attackType?.let {
+                        newAttackMetaData.attackType = it
+                    }
                     attackComp.doAttack = true
-                    val bottomCenter = entity[Graphic].bottomCenter
-                    if (attackMetaData.isMelee) {
+                    val graphic = entity[Graphic]
+                    val bottomCenter = graphic.bottomCenter
+                    val center = graphic.center
+                    if (newAttackMetaData.isMelee) {
                         world.entity {
                             it += AttackMeta(
                                 owner = entity,
                                 isFixtureMirrored = false,
-                                attackMetaData = attackMetaData
+                                attackMetaData = newAttackMetaData
                             )
-                            it += Damage(damage = attackMetaData.attackDamage, sourceEntity = entity)
+                            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity)
                             it += Physic(createAttackBody(bottomCenter, it, BodyDef.BodyType.StaticBody))
-                            it += Graphic(sprite("attack_effect", attackMetaData.attackType.attackAnimType,bottomCenter,assetHelper,0f))
+                            it += Graphic(sprite("attack_effect", newAttackMetaData.attackType.attackAnimType,bottomCenter,assetHelper,0f))
 
                         }
                     } else {
-                        val item = getAttackItem(entity)
+                        val item = getRangeAttackItem(entity)
                         if (item == null){
-                            resetAttackComp(attackComp,attackMetaData)
+                            resetAttackComp(attackComp,newAttackMetaData)
                             return
+                        }
+                        if (item is ItemType.Throwable ){
+                            if (item.throwState == ThrowState.THROWING){
+                                return
+                            }
+                            item.throwState = ThrowState.THROWING
                         }
                         val gameObject = item.toGameObject() ?: return
                         world.entity {
                             it += AttackMeta(
                                 owner = entity,
                                 isFixtureMirrored = false,
-                                attackMetaData = attackMetaData
+                                attackMetaData = newAttackMetaData
                             )
-                            it += Damage(damage = attackMetaData.attackDamage, sourceEntity = entity)
-                            it += Physic(createAttackBody(bottomCenter, it, BodyDef.BodyType.DynamicBody))
+                            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity)
+                            it += Physic(createAttackBody(center, it, BodyDef.BodyType.DynamicBody))
                             it += Graphic(
                                 sprite(
                                     gameObject.atlasKey,
                                     AnimationType.SPINNING,
-                                    bottomCenter,
+                                    center,
                                     assetHelper,
                                     0f
                                 ).also {
@@ -95,27 +107,28 @@ class AttackSystem(
                             )
                         }
                     }
-                    val animDuration = if (attackMetaData.attackAnimPlayMode == com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL){
+                    val animDuration = if (newAttackMetaData.attackAnimPlayMode == com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL){
                         animComp.animationData.gdxAnimation?.animationDuration?:0f
                     } else {
                         0f
                     }
-                    attackMetaData.attackCooldown += animDuration
+                    newAttackMetaData.attackCooldown += animDuration
                     attackComp.attackState = AttackState.ATTACKING
+                    attackComp.attackMetaData = newAttackMetaData
                 }
             }
             AttackState.ATTACKING -> {
-                reduceAttackCooldown(attackMetaData,attackComp)
+                reduceAttackCooldown(attackComp.attackMetaData,attackComp)
             }
             AttackState.DONE -> {
-                resetAttackComp(attackComp,attackMetaData)
+                resetAttackComp(attackComp,attackComp.attackMetaData)
             }
         }
     }
 
     private fun reduceAttackCooldown(attackMetaData: AttackMetaData,attackComp: Attack) {
         attackMetaData.attackCooldown -= deltaTime
-        if (attackMetaData.attackCooldown <= 0f){
+        if (attackMetaData.attackCooldown <= 0f  ){
             attackComp.attackState = AttackState.DONE
         }
     }
@@ -151,7 +164,7 @@ class AttackSystem(
         return updatedAttackType
     }
 
-    private fun getAttackItem(entity: Entity) : ItemType.Damageable?{
+    private fun getRangeAttackItem(entity: Entity) : ItemType.Damageable?{
         val itemComp = entity.getOrNull(Item)?:return null
         if (itemComp.itemType !is ItemType.Damageable) return null
         val item = itemComp.itemType
