@@ -190,6 +190,7 @@ class Hit : Actions(){
         if (status != Status.RUNNING){
             entity.stop = true
             var frameDuration = 0.1f
+            entity.removeDamageTaken()
             entity.animation(AnimationType.HIT,PlayMode.NORMAL, frameDuration)
             return Status.RUNNING
         }

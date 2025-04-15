@@ -60,8 +60,8 @@ class AttackSystem(
                                 isFixtureMirrored = false,
                                 attackMetaData = newAttackMetaData
                             )
-                            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity)
-                            it += Physic(createAttackBody(bottomCenter, it, BodyDef.BodyType.StaticBody))
+                            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity,false)
+                            it += Physic(createAttackBody(bottomCenter, it, BodyDef.BodyType.DynamicBody))
                             it += Graphic(sprite("attack_effect", newAttackMetaData.attackType.attackAnimType,bottomCenter,assetHelper,0f))
 
                         }
@@ -84,7 +84,7 @@ class AttackSystem(
                                 isFixtureMirrored = false,
                                 attackMetaData = newAttackMetaData
                             )
-                            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity)
+                            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity,false)
                             it += Physic(createAttackBody(center, it, BodyDef.BodyType.DynamicBody))
                             it += Graphic(
                                 sprite(

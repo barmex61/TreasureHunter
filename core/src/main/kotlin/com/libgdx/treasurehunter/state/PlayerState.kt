@@ -45,7 +45,9 @@ enum class PlayerState : EntityState {
 
         override fun update(entity: StateEntity) {
             val (linX,linY) = entity.body.linearVelocity
+            println("LINY" + linY)
             when{
+                entity.isGetHit -> entity.state(HIT)
                 entity.doAttack -> entity.state(ATTACK)
                 linY > EntityState.Companion.TOLERANCE_Y -> entity.state(JUMP)
                 linY < -EntityState.Companion.TOLERANCE_Y -> entity.state(FALL)
@@ -65,6 +67,7 @@ enum class PlayerState : EntityState {
         }
 
         override fun update(entity: StateEntity) {
+            println("IDLE")
             entity.runParticleTimer -= Gdx.graphics.deltaTime
             if (entity.runParticleTimer <= 0f){
                 entity.runParticleTimer = 0.5f
@@ -72,6 +75,7 @@ enum class PlayerState : EntityState {
             }
             val (linX,linY) = entity.body.linearVelocity
             when{
+                entity.isGetHit -> entity.state(HIT)
                 entity.doAttack -> entity.state(ATTACK)
                 linY > EntityState.Companion.TOLERANCE_Y -> entity.state(JUMP)
                 linY < -EntityState.Companion.TOLERANCE_Y -> entity.state(FALL)
@@ -89,20 +93,20 @@ enum class PlayerState : EntityState {
         }
 
         override fun update(entity: StateEntity) {
+            println("JUMP")
             val (linX,linY) = entity.body.linearVelocity
+            println("LINY" + linY)
             when{
+                entity.isGetHit -> entity.state(HIT)
                 entity.doAttack -> entity.state(ATTACK)
                 linY < -EntityState.Companion.TOLERANCE_Y -> entity.state(FALL)
                 MathUtils.isEqual(linY,
                     EntityState.Companion.ZERO,
                     EntityState.Companion.TOLERANCE_Y
                 ) ->{
-                    if (MathUtils.isEqual(linX,
-                            EntityState.Companion.ZERO,
-                            EntityState.Companion.TOLERANCE_X
-                        )){
-                        entity.state(IDLE)
-                    }
+
+                    println("CHANGE TO IDLE")
+                    entity.state(IDLE)
                 }
             }
         }
@@ -114,8 +118,10 @@ enum class PlayerState : EntityState {
         }
 
         override fun update(entity: StateEntity) {
+            println("FALL")
             val (linX,linY) = entity.body.linearVelocity
             when{
+                entity.isGetHit -> entity.state(HIT)
                 entity.doAttack -> entity.state(ATTACK)
                 linY > EntityState.Companion.TOLERANCE_Y -> entity.state(JUMP)
                 MathUtils.isEqual(linY,
@@ -138,6 +144,7 @@ enum class PlayerState : EntityState {
             if (entity.isAnimationDone()){
                 val (linX,linY) = entity.body.linearVelocity
                 when{
+                    entity.isGetHit -> entity.state(HIT)
                     entity.doAttack -> entity.state(ATTACK)
                     linY > EntityState.Companion.TOLERANCE_Y -> entity.state(JUMP)
                     linY < -EntityState.Companion.TOLERANCE_Y -> entity.state(FALL)
@@ -155,6 +162,7 @@ enum class PlayerState : EntityState {
         override fun enter(entity: StateEntity) {
             entity.animation(AnimationType.HIT, Animation.PlayMode.NORMAL)
             entity.createMarkEntity(MarkType.EXCLAMATION_MARK)
+            entity.removeDamageTaken()
         }
 
         override fun update(entity: StateEntity) {
@@ -172,7 +180,9 @@ enum class PlayerState : EntityState {
         }
 
         override fun update(entity: StateEntity) {
-            if (entity.isAnimationDone()) entity.state(IDLE)
+            when{
+                entity.isAnimationDone() -> entity.state(IDLE)
+            }
         }
     },
 

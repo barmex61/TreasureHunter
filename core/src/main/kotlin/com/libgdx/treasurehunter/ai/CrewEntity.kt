@@ -134,6 +134,14 @@ data class CrewEntity(
         }
     }
 
+    fun removeDamageTaken(){
+        val damageTaken = getOrNull(DamageTaken)?:return
+        if (damageTaken.isContinuous) return
+        entity.configure {
+            it -= DamageTaken
+        }
+    }
+
     fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){
         animation(entity,animationType,playMode,frameDuration)
     }

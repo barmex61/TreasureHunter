@@ -40,7 +40,7 @@ object AttackMetaDataFactory {
                    attackRange = 1.5f,
                    attackType = AttackType.PINK_STAR_ATTACK,
                    attackDamage = 1,
-                   baseAttackCooldown = 0f,
+                   baseAttackCooldown = 2f,
                    baseAttackDestroyTime = 1.5f,
                    attackAnimPlayMode = Animation.PlayMode.LOOP,
                )

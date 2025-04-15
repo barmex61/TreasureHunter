@@ -34,6 +34,7 @@ import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.game.PhysicWorld
+import com.libgdx.treasurehunter.tiled.TiledMapService.Companion.logEntity
 import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.component1
@@ -132,10 +133,10 @@ class PhysicSystem (
 
     //----- HANDLE COLLISIONS -----
     private fun handleDamageBeginContact(damageSource: Entity, damageTarget: Entity) {
-        val (damageAmount,sourceEntity) = damageSource[Damage]
+        val (damageAmount,sourceEntity,isContinuous) = damageSource[Damage]
         if (sourceEntity == damageTarget) return
         damageTarget.configure {
-            val damageTakenComp = it.getOrAdd(DamageTaken){ DamageTaken(0) }
+            val damageTakenComp = it.getOrAdd(DamageTaken){ DamageTaken(0,isContinuous) }
             damageTakenComp.damageAmount = (damageTakenComp.damageAmount + damageAmount).coerceAtMost(damageAmount)
         }
     }
@@ -180,9 +181,6 @@ class PhysicSystem (
     }
 
     private fun isSwordAndWallCollision(entityA: Entity?,fixtureA : Fixture,fixtureB:Fixture) : Boolean{
-        if (entityA != null && entityA has AttackMeta){
-            println()
-        }
         return entityA != null && entityA has AttackMeta && fixtureA.isRangeAttackFixture && !fixtureB.isSensor
     }
 

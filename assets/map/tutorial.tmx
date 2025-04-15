@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="57">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="59">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
   <property name="ambientMusicVolume" type="float" value="0.04"/>
@@ -27,7 +27,7 @@
  </layer>
  <layer id="1" name="ground" width="64" height="20">
   <data encoding="base64" compression="zlib">
-   eJztVwEKwyAM7Fr8wLYfbHuM///QIjQQQlLjMIuWHhyoteol8UqX5cKFNtyAK3CLPkgQ7sAH8AlMlblnjNUL+AZ+9r4WgzJOYzUTWvMmxaCM8VjNAp43rk/TW5szC7S81TSmg2dnQk2bRbvljo3mnxZd1rxbvGEU/7BqGrHmf/Fy+k4W1tHa0ZDOclRDmfUxf9J3m45p7V7gOhKh9BzRel+oflq70jp0TGu3QtKp7U/Ryxdw/3+C5jHa30rt8jvQAx7+4OEzVv2te3v4g0et4Nky4Uq4sXmooRaPXv7gDdSlEfVyDbP+13GgLo3e/huNL95mEAI=
+   eJztVwsKwyAM7Ta8QLcbrD1M73+hRZjwCInGYaaWPnjgp1VfEl/psly4UIcb8U589D5IJ6zEJ/FFDIVnzxirN3Ej7t++FoM4jrGaCbV5k2IQx3isZgHPG9en6S09Mwu0vJU0hszcmVDSZtFuuWOj+adFlzXvFm8YxT+smkas+V+8HN85hHW0dm9IZ8nV0MH6KX/SdxvHtHYrcB0BKM0n1N4X1I+1K62DY1q7FpJObX9EK19I+/8TmMfe/hZrl9+BFvDwBw+fseqv3dvDHzxqZc3MoV6uoRSPVv7gjZR/iaiXa5j1v44j6dLo7b+98QGJlhBU
   </data>
  </layer>
  <objectgroup id="3" name="objects">
@@ -46,13 +46,14 @@
   <object id="32" gid="111" x="448" y="352" width="39" height="32"/>
   <object id="37" gid="112" x="453" y="384" width="32" height="32"/>
   <object id="38" gid="113" x="453" y="412" width="64" height="30"/>
-  <object id="40" gid="115" x="480" y="352" width="64" height="35"/>
+  <object id="40" gid="115" x="432" y="257" width="64" height="35"/>
   <object id="41" gid="116" x="704" y="480" width="34" height="93"/>
   <object id="42" gid="117" x="768" y="480" width="31" height="32"/>
   <object id="45" gid="118" x="196" y="161" width="32" height="32"/>
-  <object id="46" gid="121" x="153" y="549" width="64" height="40"/>
+  <object id="46" gid="121" x="629" y="224" width="64" height="40"/>
   <object id="50" gid="120" x="420" y="339" width="20" height="20"/>
   <object id="51" gid="120" x="221" y="535" width="20" height="20"/>
   <object id="55" gid="136" x="576" y="352" width="34" height="30"/>
+  <object id="58" gid="136" x="68" y="573" width="34" height="30"/>
  </objectgroup>
 </map>

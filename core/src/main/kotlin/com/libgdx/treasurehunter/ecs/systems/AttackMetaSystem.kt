@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.ChainShape
+import com.badlogic.gdx.physics.box2d.CircleShape
+import com.badlogic.gdx.physics.box2d.Shape
 import com.badlogic.gdx.utils.Array
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
@@ -33,6 +35,7 @@ import com.libgdx.treasurehunter.utils.copy
 import com.libgdx.treasurehunter.utils.createFixtures
 import com.libgdx.treasurehunter.utils.destroyFixtures
 import ktx.math.vec2
+import ktx.math.times
 import com.libgdx.treasurehunter.utils.mirror
 import com.libgdx.treasurehunter.utils.offset
 import ktx.app.gdxError
@@ -97,7 +100,6 @@ sealed class AttackHandler(
         if (attackMetaData.attackDestroyTime <= 0f || (isFixtureInitialized && body.fixtureList.isEmpty)) {
             with(world) {
                 entity.configure {
-                    println(entity.id)
                     it += EntityTag.REMOVE
                 }
             }
@@ -184,6 +186,7 @@ class MeleeAttackHandler(
             if (attackFixture != null) fixtureDefList.add(attackFixture)
             if (effectFixture != null) fixtureDefList.add(effectFixture)
             body.createFixtures(fixtureDefList)
+            println(body.fixtureList.size)
             isFixtureInitialized = true
             fixtureDefList.clear()
         }
@@ -212,6 +215,7 @@ class MeleeAttackHandler(
 
         return attackEffectFixture
     }
+
 }
 
 class RangeAttackHandler(

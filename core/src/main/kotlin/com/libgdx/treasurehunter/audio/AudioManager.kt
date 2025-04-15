@@ -10,7 +10,6 @@ class AudioManager : GameEventListener {
 
     private val musicCache : MutableMap<String, Music> = mutableMapOf()
 
-
     override fun onEvent(event: GameEvent) {
         when(event){
             is GameEvent.MapChangeEvent ->{

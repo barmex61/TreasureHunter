@@ -30,7 +30,7 @@ class RenderSystem (
     private val spriteBatch: SpriteBatch = inject(),
     private val gameViewPort : StretchViewport = inject(),
     private val gameCamera : OrthographicCamera = inject(),
-    private val assetHelper: AssetHelper = inject()
+    assetHelper: AssetHelper = inject()
 ): IntervalSystem(enabled = true), GameEventListener {
 
     private val entityComparator = compareEntityBy(Graphic)

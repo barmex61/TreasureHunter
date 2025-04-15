@@ -137,7 +137,7 @@ fun EntityCreateContext.configureEntityTags(
 fun EntityCreateContext.configureDamage(entity: Entity, tile: TiledMapTile){
     val damage = tile.property<Int>("damage",0)
     if (damage > 0f){
-        entity += Damage(damage = damage, sourceEntity = entity)
+        entity += Damage(damage = damage, sourceEntity = entity,false)
     }
 }
 

@@ -15,6 +15,7 @@ import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.Blink
 import com.libgdx.treasurehunter.ecs.components.Collectable
+import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Mark
@@ -57,6 +58,12 @@ data class StateEntity(
 
     var runParticleTimer : Float = 0.5f
 
+    val isGetHit : Boolean
+        get() = getOrNull(DamageTaken) != null
+
+    val state : PlayerState
+        get() = this[State].stateMachine.currentState as PlayerState
+
     // ------ CAN BE REMOVED -------
 
     inline operator fun <reified T:Component<*>> get(type: ComponentType<T>) : T = with(world){
@@ -71,6 +78,14 @@ data class StateEntity(
 
     fun fireParticleEvent(particleType: ParticleType) {
         GameEventDispatcher.fireEvent(GameEvent.ParticleEvent(entity, particleType))
+    }
+
+    fun removeDamageTaken(){
+        val damageTaken = getOrNull(DamageTaken)?:return
+        if (damageTaken.isContinuous) return
+        entity.configure {
+            it -= DamageTaken
+        }
     }
 
     fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){

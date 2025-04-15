@@ -224,9 +224,9 @@
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN"/>
    <property name="gravityScale" type="float" value="1"/>
    <property name="item" propertytype="Item" value="NONE"/>
-   <property name="jumpHeight" type="float" value="2"/>
+   <property name="jumpHeight" type="float" value="1.1"/>
    <property name="life" type="int" value="3"/>
-   <property name="speed" type="float" value="7"/>
+   <property name="speed" type="float" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
    <property name="timeToMax" type="float" value="3"/>
   </properties>
@@ -367,7 +367,7 @@
    <property name="isFlipped" type="bool" value="true"/>
    <property name="jumpHeight" type="float" value="2"/>
    <property name="life" type="int" value="3"/>
-   <property name="speed" type="int" value="2"/>
+   <property name="speed" type="int" value="3"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
    <property name="timeToMax" type="float" value="2"/>
   </properties>

@@ -18,6 +18,7 @@ import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.Damage
+import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Jump
 import com.libgdx.treasurehunter.ecs.components.Move
@@ -140,18 +141,15 @@ class TiledMapService (
         fun logEntities(world: com.github.quillraven.fleks.World){
             world.forEach {
                 val components = mutableListOf<String>()
-                if (it.has(Graphic)) {
-                    components.add("Graphic")
-                }
+                if (it.has(Graphic)) components.add("Graphic")
                 if (it.has(Animation)) components.add("Animation")
                 if (it.has(Move)) components.add("Move")
-                if (it.has(Physic)) {
-                    components.add("Physic ${it[Physic].body.userData}")
-                }
+                if (it.has(Physic)) components.add("Physic ${it[Physic].body.userData}")
                 if (it.has(Jump)) components.add("Jump")
                 if (it.has(Attack)) components.add("Attack")
                 if (it.has(State)) components.add("State")
                 if (it.has(Damage)) components.add("Damage")
+                if (it.has(EntityTag.PLAYER)) components.add("Player")
                 Gdx.app.log("EntityDebug", "Entity ${it.id} components: ${components.joinToString(", ")}")
             }
         }
@@ -171,6 +169,8 @@ class TiledMapService (
             if (entity.has(State)) components.add("State")
             if (entity.has(Damage)) components.add("Damage")
             if (entity.has(AttackMeta)) components.add("AttackMeta")
+            if (entity.has(EntityTag.PLAYER)) components.add("Player")
+
 
             Gdx.app.log("EntityDebug", "Entity ${entity.id} components: ${components.joinToString(", ")}")
         }

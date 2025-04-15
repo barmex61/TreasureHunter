@@ -4,7 +4,7 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
 
-data class Damage(val damage : Int,val sourceEntity : Entity) : Component <Damage> {
+data class Damage(val damage : Int,val sourceEntity : Entity, val isContinuous : Boolean ) : Component <Damage> {
 
     override fun type() = Damage
 

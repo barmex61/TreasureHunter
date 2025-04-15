@@ -22,7 +22,6 @@ data class AiComponent(
     override fun World.onAdd(entity: Entity) {
         val behaviorTreeParser = BehaviorTreeParser<CrewEntity>()
         behaviorTree = behaviorTreeParser.parse(Gdx.files.internal(treePath), CrewEntity(this,entity,physicWorld))
-
     }
 
     override fun type() = AiComponent

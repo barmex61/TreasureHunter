@@ -17,6 +17,7 @@ import com.badlogic.gdx.physics.box2d.Filter
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
 import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.physics.box2d.Shape
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.utils.Constants.UNIT_SCALE
 
@@ -124,7 +125,7 @@ fun ellipseFixtureDef(mapObject: EllipseMapObject) : FixtureDef {
         FixtureDef().apply {
             shape = CircleShape().apply {
                 position = vec2(ellipseX + 0.3f,ellipseY + 0.3f)
-                radius = sensorCircleRadius
+                radius = ellipseW
             }
             this.isSensor = isSensor
         }
@@ -162,7 +163,7 @@ fun FixtureDef.copy(
     friction : Float? = null,
     restitution : Float? = null,
     filter : Filter? = null,
-    shape : ChainShape? = null
+    shape : Shape? = null
 ) : FixtureDef{
    return  return FixtureDef().also {
        it.isSensor = isSensor ?: this.isSensor
