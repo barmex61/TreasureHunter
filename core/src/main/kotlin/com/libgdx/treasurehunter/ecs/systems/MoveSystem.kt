@@ -15,7 +15,7 @@ class MoveSystem : IteratingSystem(
     override fun onTickEntity(entity: Entity) {
         val moveComp = entity[Move]
         val physic = entity[Physic]
-        var (isFlipX,direction,current,maxSpeed,timer,timeToMax,_,defaultMax,maxReduceTimer,stop,initialFlipX) = moveComp
+        var (isFlipX,direction,current,maxSpeed,timer,timeToMax,_,defaultMax,maxReduceTimer,stop,initialFlipX,lockDirection) = moveComp
         if (stop) {
             moveComp.currentSpeed = 0f
             return

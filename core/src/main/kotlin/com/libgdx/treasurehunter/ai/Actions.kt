@@ -31,9 +31,12 @@ class Idle : Actions(){
     override fun execute(): Status {
 
         if (status != Status.RUNNING){
-            if (entity.raycast(vec2(0f,-0.5f)) && !entity.isJumping){
-                entity.stop = true
+            entity.raycast(vec2(0f,-0.5f)) { isCollidedWithWall,diffY ->
+                if (isCollidedWithWall && !entity.isJumping){
+                    entity.stop = true
+                }
             }
+
             idleDuration = (1f..3f).random()
             if (entity.animationType != AnimationType.IDLE){
                 entity.animation(AnimationType.IDLE)
@@ -91,11 +94,11 @@ class Wander: Actions(){
             if (!entity.isEnemyNearby){
                 return Status.FAILED
             }
+
             targetPosition.set(
                 entity.playerPosition.x,
                 entity.playerPosition.y,
             )
-            entity.moveTo(targetPosition)
         }
         if (entity.inRange(targetPosition)){
             return Status.SUCCEEDED
@@ -104,8 +107,10 @@ class Wander: Actions(){
             return Status.SUCCEEDED
         }
         if (raycastTimer >= raycastInterval){
-            if (entity.raycast(vec2(0.7f,0f))){
-                entity.jump()
+            entity.raycast(vec2(0.7f,0f)){isCollidedWithWall,_ ->
+                if (isCollidedWithWall){
+                    entity.jump()
+                }
             }
             raycastTimer = 0f
         }
@@ -118,6 +123,7 @@ class Wander: Actions(){
     }
 }
 
+
 class PinkStarAttack : Actions(){
     override fun execute(): Status {
         if (status != Status.RUNNING){
@@ -127,7 +133,7 @@ class PinkStarAttack : Actions(){
         if (!entity.doAttack){
             return Status.SUCCEEDED
         }
-        return Status.RUNNING
+        return super.execute()
     }
 }
 class FierceToothAttack : Actions(){
@@ -140,20 +146,22 @@ class FierceToothAttack : Actions(){
         if (entity.animationDone){
             return Status.SUCCEEDED
         }
-        return Status.RUNNING
+        return super.execute()
     }
 }
 class CrabbyAttack : Actions(){
     override fun execute(): Status {
         if (status != Status.RUNNING){
+            entity.stop = true
             entity.doAttack = false
-            entity.animation(entity.attackType.attackAnimType, entity.attackAnimPlayMode, 0.1f)
+            entity.animation(entity.attackType.attackAnimType, entity.attackAnimPlayMode, 0.15f)
             return Status.RUNNING
         }
         if (entity.animationDone){
+            entity.stop = false
             return Status.SUCCEEDED
         }
-        return Status.RUNNING
+        return super.execute()
     }
 }
 

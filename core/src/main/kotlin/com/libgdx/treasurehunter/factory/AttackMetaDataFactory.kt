@@ -51,7 +51,7 @@ object AttackMetaDataFactory {
                    attackRange= 0f,
                    attackType= AttackType.ATTACK_1,
                    attackDamage= 1,
-                   baseAttackCooldown= 0f,
+                   baseAttackCooldown= 0.5f,
                    baseAttackDestroyTime= 5f,
                    attackAnimPlayMode = Animation.PlayMode.NORMAL,
                )

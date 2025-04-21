@@ -26,6 +26,7 @@ import com.libgdx.treasurehunter.ecs.components.AttackMetaData
 import com.libgdx.treasurehunter.ecs.components.AttackType
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
+import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.ThrowState
 
 class AttackSystem(
@@ -61,7 +62,7 @@ class AttackSystem(
                                 attackMetaData = newAttackMetaData
                             )
                             it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity,false)
-                            it += Physic(createAttackBody(bottomCenter, it, BodyDef.BodyType.DynamicBody))
+                            it += Physic(createAttackBody(bottomCenter, it, BodyDef.BodyType.KinematicBody))
                             it += Graphic(sprite("attack_effect", newAttackMetaData.attackType.attackAnimType,bottomCenter,assetHelper,0f))
 
                         }
@@ -126,6 +127,7 @@ class AttackSystem(
         }
     }
 
+
     private fun reduceAttackCooldown(attackMetaData: AttackMetaData,attackComp: Attack) {
         attackMetaData.attackCooldown -= deltaTime
         if (attackMetaData.attackCooldown <= 0f  ){
@@ -147,8 +149,9 @@ class AttackSystem(
             position.set(centerPosition.x,centerPosition.y )
             fixedRotation = true
             gravityScale = 0f
-
-        }).apply { userData =  attackMetaData }
+        }).apply {
+            userData =  attackMetaData
+        }
         return attackBody
     }
 

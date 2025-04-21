@@ -21,8 +21,9 @@ import com.libgdx.treasurehunter.enums.ParticleType
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.game.PhysicWorld
-import com.libgdx.treasurehunter.utils.plus
 import ktx.box2d.query
+import ktx.math.plus
+import ktx.math.minus
 import ktx.math.vec2
 
 class JumpSystem(

@@ -1,5 +1,6 @@
 package com.libgdx.treasurehunter.ai
 
+import com.badlogic.gdx.ai.pfa.GraphPath
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Component
@@ -23,6 +24,7 @@ import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.RAY_CAST_POLYLINE
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isBodyFixture
 import com.libgdx.treasurehunter.game.PhysicWorld
+
 import com.libgdx.treasurehunter.state.EntityState
 import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.utils.distance
@@ -33,7 +35,7 @@ import ktx.math.vec2
 data class CrewEntity(
     val world: World,
     val entity: Entity,
-    val physicWorld: PhysicWorld
+    val physicWorld: PhysicWorld,
 ){
 
     val isGetHit: Boolean
@@ -167,19 +169,24 @@ data class CrewEntity(
         jumpComponent.wantsJump = true
     }
 
-    fun raycast(rayCastLength : Vector2) : Boolean{
+    fun raycast(rayCastLength : Vector2,shouldFlip : Boolean = true,collideCallback: (isCollidedWithWall : Boolean,diffY : Float) -> Unit) {
         val centerPosition = get(Graphic).center
         val flipX = get(Move).flipX
-        val mirroredRayCast = if (flipX) rayCastLength else vec2(rayCastLength.x * -1f ,rayCastLength.y)
-        RAY_CAST_POLYLINE.vertices = floatArrayOf(centerPosition.x,centerPosition.y,centerPosition.x + mirroredRayCast.x,centerPosition.y + mirroredRayCast.y)
+        val mirroredRayCast = if (shouldFlip){
+            if (flipX) rayCastLength else vec2(rayCastLength.x * -1f ,rayCastLength.y)
+        } else rayCastLength
         var isCollidedWithWall = false
+        RAY_CAST_POLYLINE.vertices = floatArrayOf(
+            centerPosition.x,centerPosition.y,
+            centerPosition.x + mirroredRayCast.x,centerPosition.y + mirroredRayCast.y
+        )
         physicWorld.rayCast({ fixture,vector1,vector2,value ->
             if (!fixture.isSensor && !fixture.isBodyFixture){
                 isCollidedWithWall = true
             }
             return@rayCast -1f
         },centerPosition.x,centerPosition.y,centerPosition.x + mirroredRayCast.x,centerPosition.y + mirroredRayCast.y)
-        return isCollidedWithWall
+        collideCallback(isCollidedWithWall,mirroredRayCast.y)
     }
 
     fun remove(){
@@ -187,5 +194,6 @@ data class CrewEntity(
             it += EntityTag.REMOVE
         }
     }
+
 
 }

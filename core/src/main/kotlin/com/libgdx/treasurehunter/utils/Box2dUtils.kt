@@ -34,9 +34,7 @@ import kotlin.math.sin
 
 fun PhysicWorld.createBody(bodyType : BodyType,position: Vector2,rotation : Float = 0f,gravityScale : Float = 1f) = this.body(bodyType) {
     this.position.set(position)
-    if (rotation != 0f){
-        this.fixedRotation = false
-    }
+    this.fixedRotation = rotation == 0f
     if (gravityScale != 1f){
         this.gravityScale = gravityScale
     }
@@ -52,7 +50,7 @@ fun Body.createFixtures(fixtureDefUserData: List<FixtureDefUserData>) {
 
 data class FixtureDefUserData(val fixtureDef: FixtureDef, val userData : String)
 
-fun fixtureDefinitionOf(mapObject: MapObject,isGround : Boolean = false): FixtureDefUserData {
+fun fixtureDefinitionOf(mapObject: MapObject): FixtureDefUserData {
     val fixtureDef = when(mapObject){
         is RectangleMapObject -> rectangleFixtureDef(mapObject)
         is EllipseMapObject -> ellipseFixtureDef(mapObject)
@@ -61,11 +59,12 @@ fun fixtureDefinitionOf(mapObject: MapObject,isGround : Boolean = false): Fixtur
         else -> gdxError("Unsupported mapObject $mapObject")
     }
     val userData = mapObject.property("userData","")
+    val isGround = userData == "ground"
     fixtureDef.apply {
         friction = mapObject.property("friction",if (isGround) 0.2f else 0f)
         restitution = mapObject.property("restitution",0f)
         isSensor = mapObject.property("isSensor",false)
-        density = mapObject.property("density",0f)
+        density = mapObject.property("density",1f)
     }
     return FixtureDefUserData(fixtureDef,userData)
 }

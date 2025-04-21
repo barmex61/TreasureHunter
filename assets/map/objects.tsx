@@ -23,26 +23,25 @@
      <property name="userData" value="hitbox"/>
     </properties>
    </object>
-   <object id="12" x="12" y="30">
-    <properties>
-     <property name="isSensor" type="bool" value="true"/>
-     <property name="userData" value="footFixture"/>
-    </properties>
-    <polygon points="18,0 21,0 21,-1 18,-1"/>
-   </object>
    <object id="15" x="26" y="18">
     <properties>
      <property name="userData" value="bodyFixture"/>
     </properties>
     <polygon points="0,0 0,13 12,13 12,0"/>
    </object>
-   <object id="16" x="21" y="12" width="22" height="22">
+   <object id="16" x="21" y="13" width="22" height="22">
     <properties>
      <property name="isSensor" type="bool" value="true"/>
      <property name="radius" type="float" value="4"/>
      <property name="userData" value="sensorFixture"/>
     </properties>
     <ellipse/>
+   </object>
+   <object id="18" x="29" y="30">
+    <properties>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="0,0 0,1 5,1 5,0"/>
    </object>
   </objectgroup>
  </tile>
@@ -212,6 +211,9 @@
   <image source="../graphics/objects/sword.png" width="20" height="20"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="18" y="13">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+    </properties>
     <polygon points="0,0 2,-2 2,-5 -10,-5 -12,-6 -14,-6 -14,-4 -16,-4 -16,-3 -17,-3 -17,0 -14,0 -14,1 -12,1 -12,0 -11,0 -11,-1 -10,-1 -10,0"/>
    </object>
   </objectgroup>
@@ -238,26 +240,14 @@
      <property name="userData" value="hitbox"/>
     </properties>
    </object>
-   <object id="2" x="12" y="30">
+   <object id="10" x="25" y="18">
+    <polygon points="0,0 0,12 13,12 13,0"/>
+   </object>
+   <object id="11" x="29" y="29">
     <properties>
-     <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="footFixture"/>
     </properties>
-    <polygon points="18,0 21,0 21,-1 18,-1"/>
-   </object>
-   <object id="3" x="26" y="17">
-    <properties>
-     <property name="userData" value="bodyFixture"/>
-    </properties>
-    <polygon points="0,0 0,13 12,13 12,0"/>
-   </object>
-   <object id="4" x="21" y="11" width="22" height="22">
-    <properties>
-     <property name="isSensor" type="bool" value="true"/>
-     <property name="radius" type="float" value="4"/>
-     <property name="userData" value="sensorFixture"/>
-    </properties>
-    <ellipse/>
+    <polygon points="-1,0 -1,1 6,1 6,0"/>
    </object>
   </objectgroup>
  </tile>
@@ -271,11 +261,11 @@
    <property name="gravityScale" type="float" value="1"/>
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="jumpHeight" type="float" value="2"/>
+   <property name="jumpHeight" type="float" value="1.1"/>
    <property name="life" type="int" value="3"/>
-   <property name="speed" type="int" value="2"/>
+   <property name="speed" type="int" value="1"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
-   <property name="timeToMax" type="float" value="2.5"/>
+   <property name="timeToMax" type="float" value="2"/>
   </properties>
   <image source="../graphics/objects/crabby.png" width="72" height="32"/>
   <objectgroup draworder="index" id="2">
@@ -291,20 +281,19 @@
     </properties>
     <polygon points="0,0 0,13 16,13 16,0"/>
    </object>
-   <object id="4" x="11" y="28">
-    <properties>
-     <property name="isSensor" type="bool" value="true"/>
-     <property name="userData" value="footFixture"/>
-    </properties>
-    <polygon points="24,0 28,0 28,-1 24,-1"/>
-   </object>
-   <object id="5" x="26" y="9" width="22" height="22">
+   <object id="5" x="25" y="10" width="22" height="22">
     <properties>
      <property name="isSensor" type="bool" value="true"/>
      <property name="radius" type="float" value="4"/>
      <property name="userData" value="sensorFixture"/>
     </properties>
     <ellipse/>
+   </object>
+   <object id="7" x="35" y="27">
+    <properties>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="0,0 0,1 5,1 5,0"/>
    </object>
   </objectgroup>
  </tile>
@@ -338,20 +327,19 @@
     </properties>
     <polygon points="0,0 0,17 13,17 13,0"/>
    </object>
-   <object id="3" x="-15" y="26">
-    <properties>
-     <property name="isSensor" type="bool" value="true"/>
-     <property name="userData" value="footFixture"/>
-    </properties>
-    <polygon points="30,0 35,0 35,-1 30,-1"/>
-   </object>
-   <object id="4" x="6" y="6" width="22" height="22">
+   <object id="4" x="6" y="7" width="22" height="22">
     <properties>
      <property name="isSensor" type="bool" value="true"/>
      <property name="radius" type="float" value="4"/>
      <property name="userData" value="sensorFixture"/>
     </properties>
     <ellipse/>
+   </object>
+   <object id="5" x="15" y="25">
+    <properties>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="0,0 0,1 5,1 5,0"/>
    </object>
   </objectgroup>
  </tile>
@@ -385,20 +373,19 @@
     </properties>
     <polygon points="0,0 0,15 12,15 12,0"/>
    </object>
-   <object id="3" x="-8" y="27">
-    <properties>
-     <property name="isSensor" type="bool" value="true"/>
-     <property name="userData" value="footFixture"/>
-    </properties>
-    <polygon points="23,0 28,0 28,-1 23,-1"/>
-   </object>
-   <object id="4" x="6" y="8" width="22" height="22">
+   <object id="4" x="7" y="8" width="22" height="22">
     <properties>
      <property name="isSensor" type="bool" value="true"/>
      <property name="radius" type="float" value="4"/>
      <property name="userData" value="sensorFixture"/>
     </properties>
     <ellipse/>
+   </object>
+   <object id="6" x="15" y="26">
+    <properties>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="0,0 0,1 5,1 5,0"/>
    </object>
   </objectgroup>
  </tile>

@@ -14,7 +14,7 @@ data class AiComponent(
     val nearbyEntities : MutableSet<Entity> = mutableSetOf(),
     var treePath : String = "",
     val physicWorld: PhysicWorld,
-    val aiWanderRadius : Float
+    val aiWanderRadius : Float,
 ) : Component <AiComponent> {
 
     lateinit var behaviorTree : BehaviorTree<CrewEntity>

@@ -11,6 +11,7 @@ import pinkStarAttack:"com.libgdx.treasurehunter.ai.PinkStarAttack"
 import fierceToothAttack:"com.libgdx.treasurehunter.ai.FierceToothAttack"
 import crabbyAttack:"com.libgdx.treasurehunter.ai.CrabbyAttack"
 
+
 #Conditions
 import canAttack?:"com.libgdx.treasurehunter.ai.CanAttack"
 import isEnemyNearby?:"com.libgdx.treasurehunter.ai.IsEnemyNearby"

@@ -239,6 +239,7 @@ class PhysicSystem (
         val fixtureB = contact.fixtureB
         val entityA = fixtureA.entity
         val entityB = fixtureB.entity
+        
         if (fixtureA.isPlatform && entityB != null){
             contact.isEnabled = entityB[Physic].body.linearVelocity.y <= 0.0001f
         }

@@ -189,6 +189,9 @@
   <image source="../graphics/attackEffects/attack_3_03.png" width="42" height="36"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="37" y="21">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 1,0 1,-2 2,-2 2,-10 1,-10 -3,-17 -3,-18 -2,-18 3,-13 4,-11 5,-9 5,-4 4,-2 1,1 0,1"/>
    </object>
   </objectgroup>
@@ -201,9 +204,15 @@
   <image source="../graphics/attackEffects/crabby_attack_01.png" width="118" height="24"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="20" y="15">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 0,-5 1,-5 6,-11 6,-13 7,-13 7,-14 6,-14 1,-11 -7,-3 -7,-2 1,6 3,6 3,7 6,9 7,9 7,8 6,6 2,2 1,2"/>
    </object>
    <object id="2" x="91" y="23">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 1,0 1,-2 5,-6 6,-8 7,-8 7,-13 6,-13 5,-15 1,-19 1,-21 0,-21 0,-22 1,-22 2,-21 2,-20 4,-20 6,-19 6,-18 7,-18 11,-14 14,-11 14,-10 13,-10 13,-9 9,-5 6,-2 4,-1 2,0 1,1 0,1"/>
    </object>
   </objectgroup>
@@ -216,9 +225,15 @@
   <image source="../graphics/attackEffects/crabby_attack_02.png" width="118" height="24"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="14" y="19">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 -3,-3 -4,-5 -5,-5 -5,-8 -4,-8 -4,-10 -3,-10 0,-13 0,-14 -1,-14 -1,-13 -3,-13 -4,-12 -9,-7 -9,-6 -3,0 -1,1 0,1"/>
    </object>
    <object id="2" x="104" y="6">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 3,3 4,5 5,5 5,8 4,8 4,10 3,10 0,13 0,14 1,14 3,13 9,7 9,6 4,1 3,0 1,-1 0,-1"/>
    </object>
   </objectgroup>
@@ -231,9 +246,15 @@
   <image source="../graphics/attackEffects/crabby_attack_03.png" width="118" height="24"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="114" y="14">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 1,0 1,-3 0,-3 -1,-4 -1,-5 1,-5 4,-2 4,-1 1,2 -1,2 -1,1"/>
    </object>
    <object id="2" x="5" y="15">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 -1,-1 -2,-1 -2,-4 -1,-4 0,-5 0,-6 -2,-6 -5,-3 -5,-2 -4,-2 -4,-1 -2,1 0,1"/>
    </object>
   </objectgroup>
@@ -246,9 +267,15 @@
   <image source="../graphics/attackEffects/fierce_tooth_attack_01.png" width="22" height="24"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="16" y="22">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 -2,-2 -3,-4 -4,-7 -4,-16 -3,-18 -2,-18 -2,-7 -1,-7 0,-4 1,-1 1,0"/>
    </object>
    <object id="2" x="17" y="6">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 -1,2 -1,9 0,12 1,14 2,16 3,17 4,18 5,18 5,17 3,12 2,9 1,9 1,0"/>
    </object>
   </objectgroup>
@@ -261,9 +288,15 @@
   <image source="../graphics/attackEffects/fierce_tooth_attack_02.png" width="22" height="24"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="6" y="15">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 -1,0 -2,-1 -3,-3 -3,-8 -2,-8 -2,-12 -1,-12 -1,-3 0,-3"/>
    </object>
    <object id="2" x="9" y="6">
+    <properties>
+     <property name="userData" value="attackEffectFixture"/>
+    </properties>
     <polygon points="0,0 0,4 -1,4 -1,9 1,12 2,13 3,13 3,12 2,9 1,9 1,0"/>
    </object>
   </objectgroup>

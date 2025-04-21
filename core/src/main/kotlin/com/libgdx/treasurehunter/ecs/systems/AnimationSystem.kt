@@ -79,6 +79,7 @@ class AnimationSystem (
         playMode: PlayMode
     ): GdxAnimation {
         val atlasKey = "${modelName}/${animationType.atlasKey}"
+        println(atlasKey)
         return gdxAnimationCache.getOrPut(atlasKey) {
             val regions = gameObjectAtlas.findRegions(atlasKey) ?:
             gdxError("No regions for animation $atlasKey")

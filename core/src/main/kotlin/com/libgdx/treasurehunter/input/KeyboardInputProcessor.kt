@@ -20,7 +20,6 @@ class KeyboardInputProcessor(val world: World) : KtxInputAdapter {
     private var playerEntities = with(world) {
         family { all(EntityTag.PLAYER) }
     }
-    var stopMovement : Boolean = false
     var wantsAttack : Boolean = false
     var cameraDirection : CameraMovement = CameraMovement(0,0)
 
@@ -39,29 +38,17 @@ class KeyboardInputProcessor(val world: World) : KtxInputAdapter {
         world.system<CameraSystem>().zoom = zoomValue
     }
 
-    fun updatePlayerMovement(moveValue : Int,reset : Boolean = false){
-        if (stopMovement) {
-            stopMovement()
-            return
-        }
-        if ((reset && moveX == 0) || moveX == moveValue) return
+    fun updatePlayerMovement(moveValue : Int){
+
+        if(moveX == moveValue) return
         moveX = (moveX + moveValue).coerceIn(-1,1)
-        if (reset) moveX = 0
         playerEntities.forEach {
             it.getOrNull(Move)?.let {
-                it.direction = MoveDirection.horizontalValueOf(moveX)
+               it.direction = MoveDirection.horizontalValueOf(moveX)
             }
         }
     }
 
-    private fun stopMovement(){
-        moveX = 0
-        playerEntities.forEach {
-            it.getOrNull(Move)?.let {
-                it.direction = MoveDirection.horizontalValueOf(moveX)
-            }
-        }
-    }
 
     fun updatePlayerJump(jump : Boolean){
 

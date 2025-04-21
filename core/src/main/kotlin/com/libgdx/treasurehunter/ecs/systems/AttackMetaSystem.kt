@@ -177,16 +177,20 @@ class MeleeAttackHandler(
             attackMeta.currentFrameIndex = ownerFrameIx
             attackMeta.isFixtureMirrored = ownerFlipX
             val fixtureDefList = mutableListOf<FixtureDefUserData>()
-            val attackFixture = ATTACK_FIXTURES[Pair(attackType,ownerFrameIx)]?.let {
-                if (ownerFlipX) it.copy(
-                    fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).mirror(vec2(spriteWidth/2f,0f)))
-                ) else it.copy(fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).offset(vec2(-spriteWidth/2f,0f))))
+            val attackFixture = ATTACK_FIXTURES[Pair(attackType,ownerFrameIx)]?.let {fixDefList ->
+                fixDefList.map{
+                    if (ownerFlipX) it.copy(
+                        fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).mirror(vec2(spriteWidth/2f,0f)))
+                    ) else it.copy(fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).offset(vec2(-spriteWidth/2f,0f))))
+                }
             }
             val effectFixture = createEffectFixture(ownerFrameIx, attackType, ownerFlipX, entityGraphic)
-            if (attackFixture != null) fixtureDefList.add(attackFixture)
-            if (effectFixture != null) fixtureDefList.add(effectFixture)
+            if (attackFixture != null) fixtureDefList.addAll(attackFixture)
+            if (effectFixture != null) fixtureDefList.addAll(effectFixture)
+            fixtureDefList.forEach {
+                it.fixtureDef.isSensor = true
+            }
             body.createFixtures(fixtureDefList)
-            println(body.fixtureList.size)
             isFixtureInitialized = true
             fixtureDefList.clear()
         }
@@ -197,17 +201,20 @@ class MeleeAttackHandler(
         attackType: AttackType,
         ownerFlipX: Boolean,
         graphic: Graphic
-    ): FixtureDefUserData? {
-        val offset = if (ownerFlipX) vec2(-0.3f, 0.15f) else vec2(0.3f, 0.15f)
+    ): List<FixtureDefUserData>? {
+        val offset = if (ownerFlipX) attackType.attackEffectOffset.cpy() else vec2(attackType.attackEffectOffset.x * -1f, 0.15f)
         val effectOffset = if (ownerFlipX) vec2(offset.x - graphic.sprite.width, offset.y) else offset
-        val attackEffectFixture = ATTACK_EFFECT_FIXTURES[Pair(attackType,keyFrameIndex)]?.let {
-            if (ownerFlipX) it.copy(
-                fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).mirror(offset))
-            ) else it.copy(
-                fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).offset(offset))
-            )
-        } ?: return null
+        val attackEffectFixture = ATTACK_EFFECT_FIXTURES[Pair(attackType,keyFrameIndex)]?.let {fixDefList ->
+            fixDefList.map {
+                if (ownerFlipX) it.copy(
+                    fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).mirror(offset))
+                ) else it.copy(
+                    fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).offset(offset))
+                )
+            }
 
+        } ?: return null
+        println(keyFrameIndex)
         val region = getTextureRegion("attack_effect", attackType, keyFrameIndex)
         graphic.sprite.setRegion(region)
         graphic.offset.set(effectOffset)
@@ -243,12 +250,14 @@ class RangeAttackHandler(
 
         if (ownerFrameIx == 1 && !isFixtureInitialized) {
             body.destroyFixtures()
-            val attackFixture = ATTACK_FIXTURES[Pair(attackType,0)]?.let {
-                if (ownerFlipX) it.copy(
-                    fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).mirror(vec2()))
-                ) else it
+            val attackFixture = ATTACK_FIXTURES[Pair(attackType,0)]?.let {fixDefList ->
+                fixDefList.map {
+                    if (ownerFlipX) it.copy(
+                        fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).mirror(vec2()))
+                    ) else it
+                }
             } ?: return
-            body.createFixtures(mutableListOf(attackFixture))
+            body.createFixtures(attackFixture)
             if (ownerFlipX) entityGraphic.offset.set(-entityGraphic.sprite.width,0f)
             entityGraphic.sprite.setAlpha(1f)
             isFixtureInitialized = true

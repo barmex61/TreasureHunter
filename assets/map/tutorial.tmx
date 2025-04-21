@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="14" nextobjectid="59">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="80">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
   <property name="ambientMusicVolume" type="float" value="0.04"/>
@@ -53,7 +53,6 @@
   <object id="46" gid="121" x="629" y="224" width="64" height="40"/>
   <object id="50" gid="120" x="420" y="339" width="20" height="20"/>
   <object id="51" gid="120" x="221" y="535" width="20" height="20"/>
-  <object id="55" gid="136" x="576" y="352" width="34" height="30"/>
-  <object id="58" gid="136" x="68" y="573" width="34" height="30"/>
+  <object id="78" gid="134" x="576" y="352" width="72" height="32"/>
  </objectgroup>
 </map>

@@ -114,6 +114,18 @@
             "valuesAsFlags": false
         },
         {
+            "id": 10,
+            "name": "NodeType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "NORMAL",
+                "JUMP",
+                "SPECIAL_ACTION"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "id": 4,
             "name": "StartAnimType",
             "storageType": "string",

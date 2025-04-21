@@ -34,12 +34,14 @@ import ktx.app.gdxError
 import ktx.assets.disposeSafely
 import ktx.math.vec2
 import ktx.tiled.property
+import ktx.tiled.x
+import ktx.tiled.y
 
 
 class TiledMapService (
     private val physicWorld : World,
     private val world: com.github.quillraven.fleks.World,
-    private val assetHelper: AssetHelper
+    private val assetHelper: AssetHelper,
 ) : GameEventListener {
 
 
@@ -75,9 +77,8 @@ class TiledMapService (
         }
 
         //spawn dynamic bodies
-
-        tiledMap.layers.filter { it !is TiledMapTileLayer }.forEach { mapLayer ->
-            mapLayer.objects.forEach { mapObject ->
+        with(tiledMap.layers.first { it.name == "objects" }) {
+            this.objects.forEach { mapObject ->
                 spawnEntity(mapObject)
             }
         }
@@ -126,7 +127,7 @@ class TiledMapService (
 
     private fun spawnStaticObject(mapObject: MapObject,x: Int,y : Int){
         val body = physicWorld.createBody(StaticBody,vec2(x.toFloat(),y.toFloat()))
-        val fixtureDefUserData = fixtureDefinitionOf(mapObject,true)
+        val fixtureDefUserData = fixtureDefinitionOf(mapObject)
         body.createFixtures(listOf(fixtureDefUserData))
     }
 
