@@ -44,7 +44,7 @@ class Idle : Actions(){
             return Status.RUNNING
         }
         idleDuration -= GdxAI.getTimepiece().deltaTime
-        if (entity.isEnemyNearby && entity.doAttack){
+        if (entity.isEnemyNearby ){
             entity.stop = false
             return Status.SUCCEEDED
         }
@@ -52,6 +52,7 @@ class Idle : Actions(){
             entity.stop = false
             return Status.SUCCEEDED
         }
+
         return super.execute()
     }
 }
@@ -159,6 +160,34 @@ class CrabbyAttack : Actions(){
         }
         if (entity.animationDone){
             entity.stop = false
+            return Status.SUCCEEDED
+        }
+        return super.execute()
+    }
+}
+
+class TotemIdle : Actions(){
+    override fun execute(): Status {
+        if (status != Status.RUNNING){
+            entity.animation(AnimationType.IDLE, PlayMode.NORMAL, 0.1f)
+            return Status.RUNNING
+        }
+        if (entity.isEnemyNearby && entity.inRange(entity.playerPosition)){
+           return Status.SUCCEEDED
+        }
+
+        return super.execute()
+    }
+}
+
+class TotemAttack : Actions(){
+    override fun execute(): Status {
+        if (status != Status.RUNNING){
+            entity.doAttack = false
+            entity.animation(entity.attackType.attackAnimType, entity.attackAnimPlayMode, 0.1f)
+            return Status.RUNNING
+        }
+        if (entity.animationDone){
             return Status.SUCCEEDED
         }
         return super.execute()

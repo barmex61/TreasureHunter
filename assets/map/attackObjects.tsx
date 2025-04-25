@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.2" name="attackObjects" tilewidth="72" tileheight="40" tilecount="29" columns="0">
+<tileset version="1.10" tiledversion="1.11.2" name="attackObjects" tilewidth="72" tileheight="40" tilecount="30" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -361,6 +361,22 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="19" y="22">
     <polygon points="0,-1.27273 3.67036,-1.90909 3.67036,-3.18182 3.67036,-7 0.734072,-8.27273 -7.34072,-8.27273 -10.277,-6.36364 -10.277,-2.54545 -6.60665,-1.27273"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="29">
+  <properties>
+   <property name="attackType" propertytype="AttackType" value="ATTACK"/>
+   <property name="keyFrameIx" type="int" value="0"/>
+  </properties>
+  <image source="../graphics/attackObjects/wood_spike.png" width="16" height="16"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="13" y="5">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="rangeAttackFixture"/>
+    </properties>
+    <polygon points="0,0 -8,0 -10,2 -10,4 -8,6 0,6"/>
    </object>
   </objectgroup>
  </tile>

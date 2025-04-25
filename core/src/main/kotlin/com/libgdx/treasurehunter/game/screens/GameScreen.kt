@@ -33,12 +33,19 @@ import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.event.GameEventDispatcher.fireEvent
 import com.libgdx.treasurehunter.event.GameEventListener
+import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.game.inputMultiplexer
 import com.libgdx.treasurehunter.input.KeyboardInputProcessor
 import com.libgdx.treasurehunter.tiled.TiledMapService
+import com.libgdx.treasurehunter.utils.Constants.currentMapPath
 import ktx.app.KtxScreen
 
-class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,private val physicWorld: com.badlogic.gdx.physics.box2d.World,private val audioManager: AudioManager) : KtxScreen {
+class GameScreen(
+    private val spriteBatch: SpriteBatch,
+    private val assetHelper: AssetHelper,
+    private val physicWorld: PhysicWorld,
+    private val audioManager: AudioManager,
+    ) : KtxScreen {
 
 
     private val gameViewPort by lazy { StretchViewport(16f, 9f) }
@@ -89,12 +96,12 @@ class GameScreen(private val spriteBatch: SpriteBatch,assetHelper: AssetHelper,p
 
     init {
         registerGameEventListeners()
-        fireEvent(GameEvent.MapChangeEvent(assetHelper[MapAssets.TUTORIAL]))
     }
 
     override fun show() {
         inputMultiplexer.addProcessor(keyboardInputProcessor)
         registerGameEventListeners()
+        fireEvent(GameEvent.MapChangeEvent(assetHelper[MapAssets.valueOf(currentMapPath)]))
     }
 
     override fun render(delta: Float) {

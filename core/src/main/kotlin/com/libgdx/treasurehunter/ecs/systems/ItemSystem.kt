@@ -8,7 +8,9 @@ import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.ecs.components.ThrowState
+import com.libgdx.treasurehunter.state.EntityState
 import com.libgdx.treasurehunter.state.PlayerState
+import com.libgdx.treasurehunter.state.StateEntity
 
 class ItemSystem : IteratingSystem(
     family = family{all(Item)}
@@ -30,7 +32,7 @@ class ItemSystem : IteratingSystem(
         }
         if (throwableItem != null){
             when(throwableItem.throwState){
-                ThrowState.THROWED ->  entity.getOrNull(State)?.stateMachine?.changeState(PlayerState.SWORD_THROWED)
+                ThrowState.THROWED ->  entity.getOrNull(State)?.stateMachine?.changeState(PlayerState.SWORD_THROWED as EntityState<StateEntity>)
                 else -> Unit
             }
 

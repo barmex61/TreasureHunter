@@ -12,6 +12,7 @@ import com.libgdx.treasurehunter.ecs.components.Jump
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.JUMP_DEBUG_RECT
+import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.entity
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isChest
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isFlag
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isGround
@@ -34,16 +35,13 @@ class JumpSystem(
     override fun onTickEntity(entity: Entity) {
         val jumpComp = entity[Jump]
         val (body,_) = entity[Physic]
-        var (maxHeight,lowerXY, upperXY,wantsJump,doubleJump,yImpulse) = entity[Jump]
+        var (maxHeight,lowerXY,wantsJump,doubleJump,yImpulse) = entity[Jump]
         if (!wantsJump ) return
         val bodyPosition = body.position
         val jumpRectLowerXY = bodyPosition + lowerXY
-        val jumpRectUpperXY = bodyPosition + upperXY
-        val jumpRectWidth = jumpRectUpperXY.x - jumpRectLowerXY.x
-        val jumpRectHeight = jumpRectUpperXY.y - jumpRectUpperXY.y
-        JUMP_DEBUG_RECT.set(jumpRectLowerXY.x,jumpRectLowerXY.y,jumpRectWidth,jumpRectHeight)
-        physicWorld.query(jumpRectLowerXY.x,jumpRectLowerXY.y + 0.05f,jumpRectUpperXY.x,jumpRectUpperXY.y) { collisionFixture ->
-            if (collisionFixture.isJumpable()){
+        JUMP_DEBUG_RECT.set(jumpRectLowerXY.x -0.06f,jumpRectLowerXY.y,0.12f,0.12f)
+        physicWorld.query(jumpRectLowerXY.x -0.06f,jumpRectLowerXY.y + 0.05f,jumpRectLowerXY.x + 0.12f,jumpRectLowerXY.y + 0.12f) { collisionFixture ->
+            if (!collisionFixture.isSensor && entity != collisionFixture.entity){
                 jump(entity,jumpComp,body,yImpulse)
                 return@query false
             }
@@ -51,7 +49,6 @@ class JumpSystem(
         }
     }
 
-    private fun Fixture.isJumpable() = this.isGround || this.isFlag || this.isPlatform || this.isShipHelm || this.isChest
 
     private fun jump(entity: Entity,jumpComp: Jump,jumpBody : Body,yImpulse : Float) {
         jumpBody.setLinearVelocity(jumpBody.linearVelocity.x,yImpulse)

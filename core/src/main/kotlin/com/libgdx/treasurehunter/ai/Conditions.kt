@@ -21,24 +21,27 @@ abstract class Conditions : LeafTask<CrewEntity>(){
     }
 
 }
+class IsDynamicEntity : Conditions(){
+    override fun condition(): Boolean = entity.isDynamicEntity
+}
 
 class IsEnemyNearby : Conditions(){
     override fun condition(): Boolean = entity.isEnemyNearby
+}
+class IsEnemyNotNearby : Conditions(){
+    override fun condition(): Boolean = !entity.isEnemyNearby
 }
 
 class CanAttack : Conditions(){
     override fun condition(): Boolean = entity.doAttack
 }
 
-class CanMove : Conditions(){
-    override fun condition(): Boolean = !entity.stop
-}
-class InRange : Conditions(){
-    override fun condition(): Boolean = entity.isEnemyNearby
+class CanNotAttack : Conditions(){
+    override fun condition(): Boolean = !entity.doAttack
 }
 
-class NotInRange : Conditions(){
-    override fun condition(): Boolean = !entity.isEnemyNearby
+class CanMove : Conditions(){
+    override fun condition(): Boolean = !entity.stop
 }
 
 class IsDead : Conditions(){

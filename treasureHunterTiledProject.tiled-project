@@ -24,7 +24,8 @@
                 "PINK_STAR_ATTACK",
                 "CRABBY_ATTACK",
                 "FIERCE_TOOTH_ATTACK",
-                "THROW"
+                "THROW",
+                "ATTACK"
             ],
             "valuesAsFlags": false
         },
@@ -48,7 +49,8 @@
                 "PLAYER",
                 "BACKGROUND",
                 "FOREGROUND",
-                "COLLECTABLE"
+                "COLLECTABLE",
+                "ATTACH_TO_SHIP"
             ],
             "valuesAsFlags": true
         },
@@ -81,7 +83,37 @@
                 "ATTACK_3",
                 "CRABBY",
                 "FIERCE_TOOTH",
-                "PINK_STAR"
+                "PINK_STAR",
+                "WATER",
+                "SHIP",
+                "SAIL",
+                "ANCHOR",
+                "BARREL",
+                "BOX",
+                "CHEST_LOCKED",
+                "KEY",
+                "PADLOCK",
+                "BIG_MAP",
+                "SMALL_MAP_1",
+                "SMALL_MAP_2",
+                "SMALL_MAP_3",
+                "SMALL_MAP_4",
+                "BLUE_DIAMOND",
+                "BLUE_POTION",
+                "GOLD_COIN",
+                "GOLDEN_SKULL",
+                "GREEN_BOTTLE",
+                "GREEN_DIAMOND",
+                "RED_DIAMOND",
+                "RED_POTION",
+                "SILVER_COIN",
+                "TOTEM_HEAD_1",
+                "TOTEM_HEAD_2",
+                "TOTEM_HEAD_3",
+                "TOTEM_HEAD_4",
+                "TOTEM_HEAD_5",
+                "TOTEM_HEAD_6",
+                "WOOD_SPIKE"
             ],
             "valuesAsFlags": false
         },
@@ -92,7 +124,8 @@
             "type": "enum",
             "values": [
                 "SWORD",
-                "NONE"
+                "NONE",
+                "PROJECTILE"
             ],
             "valuesAsFlags": false
         },
@@ -133,7 +166,13 @@
             "values": [
                 "NONE",
                 "IDLE",
-                "IDLE_SWORD"
+                "IDLE_SWORD",
+                "ON",
+                "REFLEXES_1",
+                "REFLEXES_2",
+                "SPLASH_1",
+                "SPLASH_2",
+                "WIND"
             ],
             "valuesAsFlags": false
         }

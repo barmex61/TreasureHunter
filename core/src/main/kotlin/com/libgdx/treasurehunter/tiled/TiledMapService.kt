@@ -82,7 +82,6 @@ class TiledMapService (
                 spawnEntity(mapObject)
             }
         }
-        logEntities(world)
     }
 
     private fun spawnEntity(mapObject: MapObject){
@@ -93,6 +92,9 @@ class TiledMapService (
         val gameObjectStr = tile.property<String>("gameObject")
         val gameObject = GameObject.valueOf(gameObjectStr)
         val fixtureDefUserData = OBJECT_FIXTURES[gameObject]
+        if (gameObject == GameObject.BARREL){
+            println(fixtureDefUserData!!.first().fixtureDef.shape)
+        }
         if (fixtureDefUserData == null){
             spawnBodilessEntities(mapObject,tile,gameObject)
             return
@@ -111,7 +113,7 @@ class TiledMapService (
         world.entity {
             body.userData = it
             it += Physic(body)
-            configureEntityGraphic(it,tile,body.position,gameObject, assetHelper,world,rotation)
+            configureEntityGraphic(it,mapObject,body.position,gameObject, assetHelper,world,rotation)
             configureEntityTags(it,mapObject,tile)
             configureMove(it,tile)
             configureJump(it,tile)
@@ -121,21 +123,24 @@ class TiledMapService (
             configureAttack(it,tile)
             configureLife(it,tile)
             configureAi(it,tile,physicWorld)
+            configureShip(it,mapObject,tile)
+            logEntity(it,world,gameObject)
         }
 
     }
 
     private fun spawnStaticObject(mapObject: MapObject,x: Int,y : Int){
         val body = physicWorld.createBody(StaticBody,vec2(x.toFloat(),y.toFloat()))
-        val fixtureDefUserData = fixtureDefinitionOf(mapObject)
+        val fixtureDefUserData = fixtureDefinitionOf(mapObject,true)
         body.createFixtures(listOf(fixtureDefUserData))
     }
 
     private fun spawnBodilessEntities(mapObject: TiledMapTileMapObject,tile : TiledMapTile,gameObject: GameObject){
         world.entity {
             val position = vec2(mapObject.x * UNIT_SCALE , mapObject.y * UNIT_SCALE)
-            configureEntityGraphic(it,tile,position,gameObject, assetHelper,world,0f)
+            configureEntityGraphic(it,mapObject,position,gameObject, assetHelper,world,0f)
             configureEntityTags(it,mapObject,tile)
+            logEntity(it,world,gameObject)
         }
     }
     companion object{
@@ -155,7 +160,7 @@ class TiledMapService (
             }
         }
 
-        fun logEntity(entity: Entity,world: com.github.quillraven.fleks.World)=with(world){
+        fun logEntity(entity: Entity,world: com.github.quillraven.fleks.World,gameObject: GameObject? = null)=with(world){
             val components = mutableListOf<String>()
             if (entity.has(Graphic)) {
                 components.add("Graphic")
@@ -171,7 +176,7 @@ class TiledMapService (
             if (entity.has(Damage)) components.add("Damage")
             if (entity.has(AttackMeta)) components.add("AttackMeta")
             if (entity.has(EntityTag.PLAYER)) components.add("Player")
-
+            if (gameObject != null) components.add(gameObject.name)
 
             Gdx.app.log("EntityDebug", "Entity ${entity.id} components: ${components.joinToString(", ")}")
         }

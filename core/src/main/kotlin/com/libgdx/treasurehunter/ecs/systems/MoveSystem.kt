@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Interpolation
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
+import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.MoveDirection
 import com.libgdx.treasurehunter.ecs.components.Physic
@@ -15,7 +16,7 @@ class MoveSystem : IteratingSystem(
     override fun onTickEntity(entity: Entity) {
         val moveComp = entity[Move]
         val physic = entity[Physic]
-        var (isFlipX,direction,current,maxSpeed,timer,timeToMax,_,defaultMax,maxReduceTimer,stop,initialFlipX,lockDirection) = moveComp
+        var (isFlipX,direction,current,maxSpeed,timer,timeToMax,_,defaultMax,maxReduceTimer,stop) = moveComp
         if (stop) {
             moveComp.currentSpeed = 0f
             return
@@ -30,7 +31,7 @@ class MoveSystem : IteratingSystem(
             current = pow50outInterpolation.apply(1f,maxSpeed,timer)
             current *= direction.valueX
             var moveFlip = direction == MoveDirection.LEFT
-            isFlipX = if (initialFlipX == false) moveFlip else !moveFlip
+            isFlipX = if (entity.getOrNull(Graphic)?.initialFlipX == false) moveFlip else !moveFlip
 
         }else{
             current = 0f

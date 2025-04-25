@@ -10,25 +10,27 @@ import attack:"com.libgdx.treasurehunter.ai.Attack"
 import pinkStarAttack:"com.libgdx.treasurehunter.ai.PinkStarAttack"
 import fierceToothAttack:"com.libgdx.treasurehunter.ai.FierceToothAttack"
 import crabbyAttack:"com.libgdx.treasurehunter.ai.CrabbyAttack"
-
+import totemAttack:"com.libgdx.treasurehunter.ai.TotemAttack"
+import totemIdle:"com.libgdx.treasurehunter.ai.TotemIdle"
 
 #Conditions
 import canAttack?:"com.libgdx.treasurehunter.ai.CanAttack"
-import isEnemyNearby?:"com.libgdx.treasurehunter.ai.IsEnemyNearby"
 import canMove?:"com.libgdx.treasurehunter.ai.CanMove"
 import isDead?:"com.libgdx.treasurehunter.ai.IsDead"
 import isGetHit?:"com.libgdx.treasurehunter.ai.IsGetHit"
-import notInRange?:"com.libgdx.treasurehunter.ai.NotInRange"
-import inRange?:"com.libgdx.treasurehunter.ai.InRange"
+import isEnemyNotNearby?:"com.libgdx.treasurehunter.ai.IsEnemyNotNearby"
+import isEnemyNearby?:"com.libgdx.treasurehunter.ai.IsEnemyNearby"
 import isJumping?:"com.libgdx.treasurehunter.ai.IsJumping"
 import isFalling?:"com.libgdx.treasurehunter.ai.IsFalling"
 import isPinkStarAttack?:"com.libgdx.treasurehunter.ai.IsPinkStarAttack"
 import isFierceToothAttack?:"com.libgdx.treasurehunter.ai.IsFierceToothAttack"
 import isCrabbyAttack?:"com.libgdx.treasurehunter.ai.IsCrabbyAttack"
+import canNotAttack?:"com.libgdx.treasurehunter.ai.CanNotAttack"
+import isDynamicEntity?:"com.libgdx.treasurehunter.ai.IsDynamicEntity"
 
 subtree name : "standard"
     randomSelector
-        (notInRange?) wander moveToPlayer:false
+        wander moveToPlayer:false
         idle
 
 subtree name : "attackTypeSelector"
@@ -41,11 +43,25 @@ subtree name : "tryToAttack"
     sequence
         wander moveToPlayer:true
         (canAttack?) $attackTypeSelector
-root
+
+subtree name : "dynamicEntitySubtree"
     selector
         (isJumping?) jump
         (isFalling?) fall
         (isGetHit?) hit
         (isDead?) dead
-        (inRange?) $tryToAttack
-        $standard
+        (isEnemyNearby?) $tryToAttack
+        (isEnemyNotNearby?) $standard
+
+subtree name  : "staticEntitySubtree"
+    selector
+        (isDead?) dead
+        (isGetHit?) hit
+        (isEnemyNearby?)(canAttack?) totemAttack
+        totemIdle
+
+root
+    selector
+        (isDynamicEntity?) $dynamicEntitySubtree
+        $staticEntitySubtree
+

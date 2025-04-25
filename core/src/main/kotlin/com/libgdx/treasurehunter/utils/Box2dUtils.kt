@@ -29,7 +29,9 @@ import ktx.tiled.shape
 import ktx.tiled.x
 import ktx.tiled.y
 import kotlin.collections.forEach
+import kotlin.div
 import kotlin.math.sin
+import kotlin.times
 
 
 fun PhysicWorld.createBody(bodyType : BodyType,position: Vector2,rotation : Float = 0f,gravityScale : Float = 1f) = this.body(bodyType) {
@@ -50,11 +52,11 @@ fun Body.createFixtures(fixtureDefUserData: List<FixtureDefUserData>) {
 
 data class FixtureDefUserData(val fixtureDef: FixtureDef, val userData : String)
 
-fun fixtureDefinitionOf(mapObject: MapObject): FixtureDefUserData {
+fun fixtureDefinitionOf(mapObject: MapObject,usePolygonShape : Boolean = false): FixtureDefUserData {
     val fixtureDef = when(mapObject){
         is RectangleMapObject -> rectangleFixtureDef(mapObject)
         is EllipseMapObject -> ellipseFixtureDef(mapObject)
-        is PolygonMapObject -> polygonFixtureDef(mapObject)
+        is PolygonMapObject -> polygonFixtureDef(mapObject,usePolygonShape)
         is PolylineMapObject -> polylineFixtureDef(mapObject)
         else -> gdxError("Unsupported mapObject $mapObject")
     }
@@ -74,11 +76,12 @@ private fun polylineFixtureDef(mapObject: PolylineMapObject) : FixtureDef {
     return polygonFixtureDef(mapObject.x,mapObject.y,mapObject.polyline.vertices,false)
 }
 
-private fun polygonFixtureDef(mapObject: PolygonMapObject) : FixtureDef {
-    return polygonFixtureDef(mapObject.x,mapObject.y,mapObject.polygon.vertices,true)
+private fun polygonFixtureDef(mapObject: PolygonMapObject,usePolygonShape: Boolean) : FixtureDef {
+
+    return polygonFixtureDef(mapObject.x,mapObject.y,mapObject.polygon.vertices,true,usePolygonShape)
 }
 
-private fun polygonFixtureDef(polyX : Float,polyY : Float,polyVertices : FloatArray,loop : Boolean) : FixtureDef {
+private fun polygonFixtureDef(polyX : Float,polyY : Float,polyVertices : FloatArray,loop : Boolean,isItPolygon : Boolean = false) : FixtureDef {
     val x = polyX * UNIT_SCALE
     val y = polyY * UNIT_SCALE
     val vertices = FloatArray(polyVertices.size){vertexIdx ->
@@ -90,14 +93,22 @@ private fun polygonFixtureDef(polyX : Float,polyY : Float,polyVertices : FloatAr
     }
 
     return FixtureDef().apply {
+
         shape =
-            ChainShape().apply {
-                if (loop){
-                    createLoop(vertices)
-                }else{
-                    createChain(vertices)
+            if (isItPolygon && vertices.size in 6..16){
+                PolygonShape().apply {
+                    set(vertices)
+                }
+            }else{
+                ChainShape().apply {
+                    if (loop){
+                        createLoop(vertices)
+                    }else{
+                        createChain(vertices)
+                    }
                 }
             }
+
     }
 }
 
@@ -118,24 +129,26 @@ fun ellipseFixtureDef(mapObject: EllipseMapObject) : FixtureDef {
     val (x,y,w,h) = mapObject.ellipse
     val ellipseX = x * UNIT_SCALE
     val ellipseY = y * UNIT_SCALE
-    val ellipseW = if (sensorCircleRadius == 0f) w * UNIT_SCALE / 2f else sensorCircleRadius
-    val ellipseH = if (sensorCircleRadius == 0f) h * UNIT_SCALE / 2f else sensorCircleRadius
+    val ellipseW = w * UNIT_SCALE
+    val ellipseH = h * UNIT_SCALE
     return if (MathUtils.isEqual(ellipseW, ellipseH, 0.1f) || sensorCircleRadius != 0f ){
         FixtureDef().apply {
             shape = CircleShape().apply {
-                position = vec2(ellipseX + 0.3f,ellipseY + 0.3f)
-                radius = ellipseW
+                position = vec2(ellipseX + ellipseW / 2f ,ellipseY + ellipseH /2f)
+                radius = if (sensorCircleRadius == 0f) ellipseW / 2f else sensorCircleRadius
             }
             this.isSensor = isSensor
         }
     }else{
         val numVertices = 20
         val angleStep = MathUtils.PI2 / numVertices
-        val vertices = Array(numVertices){vertexIdx ->
-            val angle = vertexIdx * angleStep
-            val offsetX = ellipseW * MathUtils.cos(angle)
-            val offsetY = ellipseH * sin(angle)
-            vec2(ellipseX + ellipseW + offsetX,ellipseY + ellipseH + offsetY)
+        val vertices = FloatArray(numVertices * 2) { i ->
+            val angle = (i / 2) * angleStep
+            if (i % 2 == 0) {
+                ellipseX + ellipseW / 2f + (ellipseW / 2f) * MathUtils.cos(angle)
+            } else {
+                ellipseY + ellipseH / 2f + (ellipseH / 2f) * MathUtils.sin(angle)
+            }
         }
         FixtureDef().apply {
             shape = ChainShape().apply {

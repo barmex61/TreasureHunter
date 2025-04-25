@@ -18,6 +18,7 @@ enum class TextureAtlasAssets(val path : String) {
 
 enum class MapAssets(val path : String){
     TUTORIAL("map/tutorial.tmx"),
+    MAP1("map/map1.tmx"),
     OBJECT("map/objects.tmx")
 }
 

@@ -27,7 +27,10 @@ import com.libgdx.treasurehunter.ecs.components.AttackType
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Move
+import com.libgdx.treasurehunter.ecs.components.Projectile
+import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.ecs.components.ThrowState
+import com.libgdx.treasurehunter.state.EntityState
 
 class AttackSystem(
     private val physicWorld : PhysicWorld = inject(),
@@ -41,7 +44,6 @@ class AttackSystem(
         val animComp = entity[Animation]
         val (_,center) = entity[Graphic]
         var (wantsToAttack, attackState,doAttack,_) = attackComp
-
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
@@ -50,6 +52,7 @@ class AttackSystem(
                     attackType?.let {
                         newAttackMetaData.attackType = it
                     }
+                    println("WANTSTO ATACCK AND READY")
                     attackComp.doAttack = true
                     val graphic = entity[Graphic]
                     val bottomCenter = graphic.bottomCenter
@@ -72,40 +75,13 @@ class AttackSystem(
                             resetAttackComp(attackComp,newAttackMetaData)
                             return
                         }
-                        if (item is ItemType.Throwable ){
-                            if (item.throwState == ThrowState.THROWING){
-                                return
+                        when(item){
+                            is Sword ->{
+                                handleRangeSwordAttack(item,entity,center,newAttackMetaData)
                             }
-                            item.throwState = ThrowState.THROWING
-                        }
-                        val gameObject = item.toGameObject() ?: return
-                        world.entity {
-                            it += AttackMeta(
-                                owner = entity,
-                                isFixtureMirrored = false,
-                                attackMetaData = newAttackMetaData
-                            )
-                            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity,false)
-                            it += Physic(createAttackBody(center, it, BodyDef.BodyType.DynamicBody))
-                            it += Graphic(
-                                sprite(
-                                    gameObject.atlasKey,
-                                    AnimationType.SPINNING,
-                                    center,
-                                    assetHelper,
-                                    0f
-                                ).also {
-                                    it.setAlpha(0f)
-                                }
-                            )
-                            it += Animation(gameObject.atlasKey, animationData = AnimationData(
-                                animationType = AnimationType.SPINNING,
-                                playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP
-                            ))
-                            it += State(
-                                StateEntity(it, world, physicWorld, assetHelper),
-                                SwordState.SPINNING
-                            )
+                            is Projectile ->{
+                                handleRangeProjectileAttack(item,entity,center,newAttackMetaData)
+                            }
                         }
                     }
                     val animDuration = if (newAttackMetaData.attackAnimPlayMode == com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL){
@@ -127,6 +103,84 @@ class AttackSystem(
         }
     }
 
+    private fun handleRangeSwordAttack(
+        item: Sword,
+        entity: Entity,
+        center: Vector2,
+        newAttackMetaData : AttackMetaData
+    ) {
+        item.throwState = ThrowState.THROWING
+        val gameObject = item.toGameObject() ?: return
+        world.entity {
+            it += AttackMeta(
+                owner = entity,
+                isFixtureMirrored = false,
+                attackMetaData = newAttackMetaData,
+                createFrameIndex = newAttackMetaData.createFrameIndex
+            )
+            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity, false)
+            it += Physic(createAttackBody(center, it, BodyDef.BodyType.DynamicBody))
+            it += Graphic(
+                sprite(
+                    gameObject.atlasKey,
+                    AnimationType.SPINNING,
+                    center,
+                    assetHelper,
+                    0f
+                ).also {
+                    it.setAlpha(0f)
+                }
+            )
+            it += Animation(
+                gameObject.atlasKey, animationData = AnimationData(
+                    animationType = AnimationType.SPINNING,
+                    playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP
+                )
+            )
+            it += State(
+                StateEntity.SwordEntity(it, world, physicWorld, assetHelper),
+                SwordState.SPINNING as EntityState<StateEntity>
+            )
+        }
+    }
+
+    private fun handleRangeProjectileAttack(
+        item: Projectile,
+        entity: Entity,
+        center: Vector2,
+        newAttackMetaData : AttackMetaData
+    ){
+        val gameObject = item.toGameObject() ?: return
+        world.entity {
+            it += AttackMeta(
+                owner = entity,
+                isFixtureMirrored = false,
+                attackMetaData = newAttackMetaData,
+                createFrameIndex = newAttackMetaData.createFrameIndex
+            )
+            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity, false)
+            it += Physic(createAttackBody(center, it, BodyDef.BodyType.DynamicBody))
+            it += Graphic(
+                sprite(
+                    gameObject.atlasKey,
+                    AnimationType.IDLE,
+                    center,
+                    assetHelper,
+                    0f
+                ).also {
+                    it.setAlpha(0f)
+                },
+                initialFlipX = true
+            )
+            it += Animation(
+                gameObject.atlasKey, animationData = AnimationData(
+                    animationType = AnimationType.IDLE,
+                    playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP
+                )
+            )
+        }
+    }
+
 
     private fun reduceAttackCooldown(attackMetaData: AttackMetaData,attackComp: Attack) {
         attackMetaData.attackCooldown -= deltaTime
@@ -136,6 +190,7 @@ class AttackSystem(
     }
 
     private fun resetAttackComp(attackComp: Attack, attackMetaData: AttackMetaData) {
+        println("resetattackcomp")
         attackMetaData.resetAttackCooldown()
         attackMetaData.resetAttackDestroyTime()
         attackComp.attackState = AttackState.READY

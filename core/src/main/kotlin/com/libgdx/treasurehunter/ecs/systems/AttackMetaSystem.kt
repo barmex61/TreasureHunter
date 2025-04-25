@@ -40,6 +40,7 @@ import com.libgdx.treasurehunter.utils.mirror
 import com.libgdx.treasurehunter.utils.offset
 import ktx.app.gdxError
 import ktx.collections.isNotEmpty
+import kotlin.math.abs
 
 
 class AttackMetaSystem(
@@ -50,10 +51,10 @@ class AttackMetaSystem(
 
     override fun onTickEntity(entity: Entity) {
         val attackMeta = entity[AttackMeta]
-        val (owner, currentFrameIndex, _, _,  attackMetaData,attackHandler) = attackMeta
+        val (owner, currentFrameIndex,createFrameIndex, _, collideWithWall,  attackMetaData,attackHandler) = attackMeta
         val (body, _) = entity[Physic]
         val graphic = entity[Graphic]
-        val ownerFlipX = owner[Move].flipX
+        val ownerFlipX = owner.getOrNull(Move)?.flipX ?: owner.getOrNull(Graphic)?.initialFlipX ?: false
         val ownerAnim = owner[Animation]
         val ownerGraphic = owner[Graphic]
         val ownerItem = owner.getOrNull(Item)
@@ -86,6 +87,9 @@ class AttackMetaSystem(
             body = body,
             attackType = attackMetaData.attackType
         )
+        if (collideWithWall && attackHandler is RangeAttackHandler){
+            attackHandler.collideWithWall(body)
+        }
     }
 }
 
@@ -214,7 +218,6 @@ class MeleeAttackHandler(
             }
 
         } ?: return null
-        println(keyFrameIndex)
         val region = getTextureRegion("attack_effect", attackType, keyFrameIndex)
         graphic.sprite.setRegion(region)
         graphic.offset.set(effectOffset)
@@ -244,22 +247,28 @@ class RangeAttackHandler(
         currentFrameIndex: Int,
         attackMeta: AttackMeta,
         body: Body,
-        attackType: AttackType
+        attackType: AttackType,
     ) {
         val animType = ownerAnim.animationData.animationType
 
-        if (ownerFrameIx == 1 && !isFixtureInitialized) {
+        if (ownerFrameIx == attackMeta.createFrameIndex && !isFixtureInitialized) {
             body.destroyFixtures()
+            val attackOffset = if (ownerFlipX) attackType.attackOffset.cpy() else vec2(attackType.attackOffset.x * -1f, attackType.attackOffset.y)
             val attackFixture = ATTACK_FIXTURES[Pair(attackType,0)]?.let {fixDefList ->
                 fixDefList.map {
                     if (ownerFlipX) it.copy(
-                        fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).mirror(vec2()))
-                    ) else it
+                        fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).mirror(attackOffset))
+                    ) else it.copy(
+                        fixtureDef = it.fixtureDef.copy(shape = (it.fixtureDef.shape as ChainShape).offset(attackOffset))
+                    )
                 }
             } ?: return
             body.createFixtures(attackFixture)
-            if (ownerFlipX) entityGraphic.offset.set(-entityGraphic.sprite.width,0f)
+            if (ownerFlipX) entityGraphic.offset.set(-entityGraphic.sprite.width + attackOffset.x,attackOffset.y)
             entityGraphic.sprite.setAlpha(1f)
+            if (entityGraphic.initialFlipX != ownerFlipX){
+                entityGraphic.sprite.setFlip(ownerFlipX,false)
+            }
             isFixtureInitialized = true
             val multiplier = if (!ownerFlipX) 1f  else -1f
             body.applyLinearImpulse(Vector2(7f * multiplier, 0f), body.position, true)
@@ -270,6 +279,13 @@ class RangeAttackHandler(
                 val throwableItem = item.itemType as? ItemType.Throwable
                 throwableItem?.throwState = ThrowState.THROWED
             }
+        }
+    }
+    fun collideWithWall(
+        body: Body
+    ){
+        if (body.linearVelocity != Vector2.Zero){
+            body.linearVelocity = vec2(0f,0f)
         }
     }
 }

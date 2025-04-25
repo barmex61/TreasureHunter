@@ -34,6 +34,8 @@ import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.game.PhysicWorld
+import com.libgdx.treasurehunter.state.EntityState
+import com.libgdx.treasurehunter.state.StateEntity
 import com.libgdx.treasurehunter.tiled.TiledMapService.Companion.logEntity
 import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.utils.GameObject
@@ -41,6 +43,7 @@ import ktx.math.component1
 import ktx.math.component2
 import ktx.math.plus
 import ktx.math.vec2
+import kotlin.math.abs
 
 class PhysicSystem (
     private val physicWorld : PhysicWorld = inject(),
@@ -96,13 +99,12 @@ class PhysicSystem (
 
     }
 
-    private val Fixture.entity : Entity?
-        get() {
-            val userData = this.body.userData
-            return userData as? Entity
-        }
-
     companion object{
+        val Fixture.entity : Entity?
+            get() {
+                val userData = this.body.userData
+                return userData as? Entity
+            }
         val Fixture.isGround : Boolean
             get() = this.userData == "ground"
         val Fixture.isPlatform : Boolean
@@ -180,8 +182,10 @@ class PhysicSystem (
         return entityA has EntityTag.COLLECTABLE && entityB has EntityTag.PLAYER && fixtureB.isSensor && !fixtureB.isSensorFixture
     }
 
-    private fun isSwordAndWallCollision(entityA: Entity?,fixtureA : Fixture,fixtureB:Fixture) : Boolean{
-        return entityA != null && entityA has AttackMeta && fixtureA.isRangeAttackFixture && !fixtureB.isSensor
+    private fun isSwordAndWallCollision(entityA: Entity?,fixtureA : Fixture,entityB: Entity?,fixtureB:Fixture) : Boolean{
+        val attackMeta = entityA?.getOrNull(AttackMeta)?:return false
+        if (attackMeta.owner == entityB) return false
+        return  entityA has AttackMeta && fixtureA.isRangeAttackFixture && !fixtureA.isSensor && !fixtureB.isSensor
     }
 
     private fun isSensorAndPlayerCollision(entityA: Entity,fixtureA : Fixture,fixtureB:Fixture) : Boolean{
@@ -199,8 +203,8 @@ class PhysicSystem (
 
         if (entityA == null || entityB == null) {
             when{
-                isSwordAndWallCollision(entityA,fixtureA,fixtureB) -> handleSwordAndWallCollision(entityA!!)
-                isSwordAndWallCollision(entityB,fixtureB,fixtureA) -> handleSwordAndWallCollision(entityB!!)
+                isSwordAndWallCollision(entityA,fixtureA,entityB,fixtureB) -> handleSwordAndWallCollision(entityA!!)
+                isSwordAndWallCollision(entityB,fixtureB,entityB,fixtureA) -> handleSwordAndWallCollision(entityB!!)
                 else -> Unit
             }
             return
@@ -210,8 +214,8 @@ class PhysicSystem (
             isSensorAndPlayerCollision(entityB,fixtureB,fixtureA) -> handleSensorAndPlayerCollision(entityB, entityA ,true)
             isCollectableCollision(entityA,entityB,fixtureB) -> handleCollectableBeginContact(entityA,entityB)
             isCollectableCollision(entityB,entityA,fixtureA) -> handleCollectableBeginContact(entityB,entityA)
-            isSwordAndWallCollision(entityA,fixtureA,fixtureB) -> handleSwordAndWallCollision(entityA)
-            isSwordAndWallCollision(entityB,fixtureB,fixtureA) -> handleSwordAndWallCollision(entityB)
+            isSwordAndWallCollision(entityA,fixtureA,entityB,fixtureB) -> handleSwordAndWallCollision(entityA)
+            isSwordAndWallCollision(entityB,fixtureB,entityB,fixtureA) -> handleSwordAndWallCollision(entityB)
             isDamageCollision(entityA,entityB,fixtureB) -> handleDamageBeginContact(entityA,entityB)
             isDamageCollision(entityB,entityA,fixtureA) -> handleDamageBeginContact(entityB,entityA)
         }
@@ -239,7 +243,7 @@ class PhysicSystem (
         val fixtureB = contact.fixtureB
         val entityA = fixtureA.entity
         val entityB = fixtureB.entity
-        
+
         if (fixtureA.isPlatform && entityB != null){
             contact.isEnabled = entityB[Physic].body.linearVelocity.y <= 0.0001f
         }
@@ -268,7 +272,7 @@ class PhysicSystem (
                             it -= EntityTag.COLLECTABLE
                         }
                         playerEntity.configure {
-                            it[State].stateMachine.changeState(PlayerState.SWORD_COLLECTED)
+                            it[State].stateMachine.changeState(PlayerState.SWORD_COLLECTED as EntityState<StateEntity>)
                         }
                     }
                     else -> Unit

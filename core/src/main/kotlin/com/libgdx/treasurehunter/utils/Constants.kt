@@ -10,4 +10,5 @@ object Constants {
     val OBJECT_FIXTURES = mutableMapOf<GameObject, List<FixtureDefUserData>>()
     val ATTACK_FIXTURES = mutableMapOf< Pair<AttackType, Int>, List<FixtureDefUserData>>()
     val ATTACK_EFFECT_FIXTURES = mutableMapOf<Pair<AttackType, Int>, List<FixtureDefUserData>>()
+    var currentMapPath : String = ""
 }

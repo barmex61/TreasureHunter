@@ -25,6 +25,7 @@ class TreasureHunter : KtxGame<KtxScreen>() {
     private val physicWorld = createWorld(gravity = Constants.GRAVITY, allowSleep = true).apply {
         autoClearForces = true
     }
+
     private val audioManager by lazy {
         AudioManager()
     }.also {

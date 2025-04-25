@@ -60,7 +60,14 @@ data class CrewEntity(
         }
 
     val isEnemyNearby : Boolean
-        get() = get(AiComponent).nearbyEntities.isNotEmpty()
+        get() {
+            return get(AiComponent).nearbyEntities.isNotEmpty()
+        }
+
+    val isDynamicEntity : Boolean
+        get() {
+            return getOrNull(Jump) != null && getOrNull(Move) != null
+        }
 
 
     var doAttack : Boolean

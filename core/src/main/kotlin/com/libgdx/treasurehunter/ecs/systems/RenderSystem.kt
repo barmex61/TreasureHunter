@@ -2,8 +2,11 @@ package com.libgdx.treasurehunter.ecs.systems
 
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.maps.MapLayer
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
+import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
+import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.github.quillraven.fleks.Family
 import com.github.quillraven.fleks.IntervalSystem
@@ -37,10 +40,13 @@ class RenderSystem (
     private val entities = family{all(Graphic).none(EntityTag.BACKGROUND,EntityTag.FOREGROUND)}
     private val backgroundEntities = family { all(Graphic,EntityTag.BACKGROUND) }
     private val foregroundEntities = family { all(Graphic,EntityTag.FOREGROUND) }
+
+    // Static background layers
     private var groundLayer : TiledMapTileLayer? = null
     private var backgroundClose : TiledMapTileLayer? = null
     private var backgroundFar : TiledMapTileLayer? = null
     private var backgroundMid : TiledMapTileLayer? = null
+
     private var currentColorSettings: ColorSettings = ColorSettings.DAY
     private val shaderManager: ShaderManager = ShaderManager(assetHelper[ShaderAsset.FLASH], onShaderEffectChange = { shaderProgram ->
         spriteBatch.shader = shaderProgram
@@ -48,18 +54,32 @@ class RenderSystem (
     private val mapRenderer: OrthogonalTiledMapRenderer = OrthogonalTiledMapRenderer(null, Constants.UNIT_SCALE, spriteBatch).apply {
         setView(gameCamera)
     }
+    private var mapInitialized : Boolean = false
 
     override fun onTick() {
+        AnimatedTiledMapTile.updateAnimationBaseTime()
+        if (!mapInitialized) return
+        // Update parallax offsets
         backgroundClose?.offsetX -= deltaTime * 10f
+
         gameViewPort.apply()
         mapRenderer.setView(gameCamera)
         spriteBatch.use {
+            // Render background layers in order
             mapRenderer.renderTileLayer(backgroundFar)
             mapRenderer.renderTileLayer(backgroundMid)
             mapRenderer.renderTileLayer(backgroundClose)
+
+
+            // Render background entities
             backgroundEntities.renderEntities()
+
+            // Render ground and main entities
             mapRenderer.renderTileLayer(groundLayer)
             entities.renderEntities()
+
+            // Render foreground elements
+
             foregroundEntities.renderEntities()
         }
     }
@@ -102,24 +122,19 @@ class RenderSystem (
     override fun onEvent(event: GameEvent) {
         when(event) {
             is GameEvent.MapChangeEvent -> {
-                try {
-                    groundLayer = event.tiledMap.layers.get("ground") as TiledMapTileLayer
-                    backgroundClose = (event.tiledMap.layers.get("background_close") as TiledMapTileLayer).apply {
-                        parallaxX = parallaxMap["background_close"]!!.first
-                        parallaxY = parallaxMap["background_close"]!!.second
-                    }
-                    backgroundFar = (event.tiledMap.layers.get("background_far") as TiledMapTileLayer).apply {
-                        parallaxX = parallaxMap["background_far"]!!.first
-                        parallaxY = parallaxMap["background_far"]!!.second
-                    }
-                    backgroundMid = (event.tiledMap.layers.get("background_mid") as TiledMapTileLayer).apply {
-                        parallaxX = parallaxMap["background_mid"]!!.first
-                        parallaxY = parallaxMap["background_mid"]!!.second
-                    }
-                    val displayMode = event.tiledMap.properties.get("mapDisplayMode", ColorSettings.DAY.name, String::class.java)
-                    setCurrentSettings(displayMode)
-                } catch (e: Exception) {
-                    gdxError("There is no layer name registerede for $e in tiledMap ${event.tiledMap}")
+                mapInitialized = true
+                groundLayer = event.tiledMap.layers.get("ground") as TiledMapTileLayer
+                backgroundClose = (event.tiledMap.layers.get("background_close") as TiledMapTileLayer).apply {
+                    parallaxX = parallaxMap["background_close"]!!.first
+                    parallaxY = parallaxMap["background_close"]!!.second
+                }
+                backgroundFar = (event.tiledMap.layers.get("background_far") as TiledMapTileLayer).apply {
+                    parallaxX = parallaxMap["background_far"]!!.first
+                    parallaxY = parallaxMap["background_far"]!!.second
+                }
+                backgroundMid = (event.tiledMap.layers.get("background_mid") as TiledMapTileLayer).apply {
+                    parallaxX = parallaxMap["background_mid"]!!.first
+                    parallaxY = parallaxMap["background_mid"]!!.second
                 }
             }
             else -> Unit
@@ -129,7 +144,7 @@ class RenderSystem (
     private val parallaxMap = mapOf<String, Pair<Float, Float>>(
         "background_close" to Pair(0.5f, 0.5f),
         "background_mid" to Pair(0.3f, 0.3f),
-        "background_far" to Pair(0.1f, 0.05f)
+        "background_far" to Pair(0f, 0f)
     )
 
     private fun setCurrentSettings(displayMode : String){

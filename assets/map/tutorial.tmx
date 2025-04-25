@@ -1,58 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="16" nextobjectid="80">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="64" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="23" nextobjectid="104">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
-  <property name="ambientMusicVolume" type="float" value="0.04"/>
+  <property name="ambientMusicVolume" type="float" value="0.1"/>
   <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DAY"/>
   <property name="mapMusic" value=""/>
   <property name="mapMusicVolume" type="float" value="0"/>
  </properties>
- <tileset firstgid="1" source="terrainTileset.tsx"/>
- <tileset firstgid="86" source="objects.tsx"/>
- <tileset firstgid="137" source="islandBackground.tsx"/>
+ <tileset firstgid="1" source="objects.tsx"/>
+ <tileset firstgid="72" source="islandBackground.tsx"/>
+ <tileset firstgid="2120" source="terrain.tsx"/>
  <layer id="5" name="background_far" width="64" height="20">
   <data encoding="base64" compression="zlib">
-   eJztz0kOglAQRVEcgiB2m7BDBVfhTkTFdv/hDnBiUOQLhsgbnDCgfqqu3bEsB1248NCDjz4GGGKEMew/m2/6fepXv/rVr371q1/96le/+r+b90QyE0wxwxwLBFhihTVCRNhU8L/MrufZsrd+MrNtuR1i7HHAEQlOuP3YNfveDSQFLWdccnbkvXl132O2itaiHpMWEyZ73nXVdWddUiX3rX8=
+   eJztzzsSgkAQRdExdCeiIgr7z1HxvwlF8LsBb4CJhSIjWJa84BQBPdV9Q2PMGBNMEWGGORZYYoU1Ngj/bP7X71O/+tWvfvWrX/3qV7/61f/ZfCSS2WKHGHskSHHAESecccG1gv9ldj3Olr31nZl2q9k6cNBFD324GMD/slH2DSy4BS0ehjk78t48u+8+W0VrUY9Niw2bPa+66rqzLjenImSs
   </data>
  </layer>
  <layer id="6" name="background_mid" width="64" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt1FtOwkAYQGFG3QMqBUTdg4qCIOwBFQS57AGU++WNJbAUFiI7UUDA0zcTGzqtDS3pnPA9MMnApM0/gYBK5b8+MHP7EBKtsMZG/yL44ACHOMIny1+YY4Elvi3s81IT8XctzFoEUZwhhnNc4BJBHOMEpwhBE/L7vNTU4DwJ1pK4RwppPCCDLK5wjRvEcYs7Ib/PLKN3sste+P8iSnhFGRVUUUMOj3jCM/IoCPl9ZunvxOoMOlmb3++gix76GGCIEepo4A3vaKIl5PfJZHUG9TSPzdZ/sjuDbs+OU9mdQaP7bB+fid0ZNOr3M3HzXvFCfrhXxlvOq+4V5+6VfczJe0WlUqms9gPmyGRk
+   eJzt1FlOwkAcgHGqd0BRUIE7iOwgbxyBo3AQuAkuyH4HdkTxDqjsX99IaKDTTGgJ8yW/lwmTwpT/uFwq1flVQNHuL2GiD1RQRQ11NNBECyW84BVveEdZYJ+Tymm7a0OM8IkxvvCNCX7QRgdd9NDHQGCfk8ob/P4FllhhrS/wGQ0XuMSUpV/84R8zzAX2HcronRwzL8/34Q73eIAfAQThxhWu4cENbjXz+w6lvxPRGZRZjOfHkUASKaTxjAweEcITwoggqpnfZybRGdQbSD0Fe7M6g3bPjqyszqDRfXaKZ2J1Bo3aPhM77xUndA73SnbP/13dK/LulVNM5r2iUqlUom0AR8GKLw==
   </data>
  </layer>
  <layer id="7" name="background_close" width="64" height="20">
   <data encoding="base64" compression="zlib">
-   eJzt1MkJwDAMRFG5/wKyFZKtucw9GBSQHBv+gznGKPJgM+BtKmazsiirspW/J/KLmH3XN4dyKpdyJ/x/1o5bzB5hlDnx3cjvRwS6nY+O5XQsYq+eM3q9v4i9es7gjajrtRut0A0AQKYHKTo7xQ==
+   eJzt1FsKwCAMRNG4yb4W0tfqO/9FSCGxCvfAfFbSOGgGvE3FbFYWZVW28vdEfhGz7/rmUE7lUu6E/8/acYvZI4wyJ74b+f2IQLfz0bGcjkXs1XNGr/cXsVfPGbwRdb12oxW6AQDI9ABIxSTr
   </data>
  </layer>
  <layer id="1" name="ground" width="64" height="20">
   <data encoding="base64" compression="zlib">
-   eJztVwsKwyAM7Ta8QLcbrD1M73+hRZjwCInGYaaWPnjgp1VfEl/psly4UIcb8U589D5IJ6zEJ/FFDIVnzxirN3Ej7t++FoM4jrGaCbV5k2IQx3isZgHPG9en6S09Mwu0vJU0hszcmVDSZtFuuWOj+adFlzXvFm8YxT+smkas+V+8HN85hHW0dm9IZ8nV0MH6KX/SdxvHtHYrcB0BKM0n1N4X1I+1K62DY1q7FpJObX9EK19I+/8TmMfe/hZrl9+BFvDwBw+fseqv3dvDHzxqZc3MoV6uoRSPVv7gjZR/iaiXa5j1v44j6dLo7b+98QGJlhBU
+   eJzt1cENgCAQRNE9UprSAdqB0P8ZGtiNxhgD818yd+awjBkA3LMls91JTn+/7ntldDycnAL9r9GxOmkC/QFoiTZPYQejzVPYwWjz2MG5Pb3tt1ntbwAwrw68qCFM
   </data>
  </layer>
  <objectgroup id="3" name="objects">
-  <object id="23" gid="102" x="511" y="382" width="51" height="53"/>
-  <object id="25" gid="108" x="426" y="394" width="52" height="53">
-   <properties>
-    <property name="gameObject" propertytype="GameObject" value="BACK_PALM_TREE_RIGHT"/>
-   </properties>
-  </object>
-  <object id="26" gid="105" x="553" y="382" width="64" height="64">
-   <properties>
-    <property name="entityTags" propertytype="EntityTags" value="BACKGROUND"/>
-   </properties>
-  </object>
-  <object id="27" gid="105" x="337" y="375" width="64" height="64"/>
-  <object id="32" gid="111" x="448" y="352" width="39" height="32"/>
-  <object id="37" gid="112" x="453" y="384" width="32" height="32"/>
-  <object id="38" gid="113" x="453" y="412" width="64" height="30"/>
-  <object id="40" gid="115" x="432" y="257" width="64" height="35"/>
-  <object id="41" gid="116" x="704" y="480" width="34" height="93"/>
-  <object id="42" gid="117" x="768" y="480" width="31" height="32"/>
-  <object id="45" gid="118" x="196" y="161" width="32" height="32"/>
-  <object id="46" gid="121" x="629" y="224" width="64" height="40"/>
-  <object id="50" gid="120" x="420" y="339" width="20" height="20"/>
-  <object id="51" gid="120" x="221" y="535" width="20" height="20"/>
-  <object id="78" gid="134" x="576" y="352" width="72" height="32"/>
+  <object id="40" gid="30" x="432" y="257" width="64" height="35"/>
+  <object id="41" gid="31" x="704" y="480" width="34" height="93"/>
+  <object id="42" gid="32" x="768" y="480" width="31" height="32"/>
+  <object id="46" gid="36" x="489" y="128" width="64" height="40"/>
+  <object id="50" gid="35" x="420" y="339" width="20" height="20"/>
+  <object id="78" gid="49" x="576" y="352" width="72" height="32"/>
+  <object id="80" gid="33" x="608" y="128" width="32" height="32"/>
  </objectgroup>
 </map>

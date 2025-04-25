@@ -7,14 +7,14 @@ import com.libgdx.treasurehunter.ecs.components.EntityTag
 import ktx.math.vec2
 
 
-enum class SwordState : EntityState{
+enum class SwordState : EntityState<StateEntity.SwordEntity> {
 
     IDLE{
-      override fun enter(entity: StateEntity) {
+      override fun enter(entity: StateEntity.SwordEntity) {
           entity.animation(AnimationType.IDLE)
           entity.addCollectable()
         }
-        override fun update(entity: StateEntity) {
+        override fun update(entity: StateEntity.SwordEntity) {
             if (entity.isCollected) {
                 entity.alpha = 0f
                 entity.state(RESPAWN)
@@ -24,7 +24,7 @@ enum class SwordState : EntityState{
 
     RESPAWN{
         var respawnTimer = 2f
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: StateEntity.SwordEntity) {
             respawnTimer = 2f
             with(entity.world){
                 entity.entity.configure {
@@ -32,7 +32,7 @@ enum class SwordState : EntityState{
                 }
             }
         }
-        override fun update(entity: StateEntity) {
+        override fun update(entity: StateEntity.SwordEntity) {
             respawnTimer -= Gdx.graphics.deltaTime
             if (respawnTimer <= 0f){
                 entity.state(IDLE)
@@ -43,12 +43,12 @@ enum class SwordState : EntityState{
 
     SPINNING{
         var spinningDuration = 3f
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: StateEntity.SwordEntity) {
             spinningDuration = 3f
             entity.animation(AnimationType.SPINNING)
         }
 
-        override fun update(entity: StateEntity) {
+        override fun update(entity: StateEntity.SwordEntity) {
             spinningDuration -= Gdx.graphics.deltaTime
             when{
                 entity.collidedWithWall -> entity.state(EMBEDDED)
@@ -60,12 +60,12 @@ enum class SwordState : EntityState{
         }
     },
     EMBEDDED{
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: StateEntity.SwordEntity) {
             entity.addCollectable()
             entity.animation(AnimationType.EMBEDDED, playMode = Animation.PlayMode.NORMAL)
             entity.setSpriteOffset()
         }
-        override fun update(entity: StateEntity) {
+        override fun update(entity: StateEntity.SwordEntity) {
             entity.attackDestroyTimer -= entity.world.deltaTime
             when{
                 entity.attackDestroyTimer <= 1f && entity.hasNoBlinkComp -> entity.addBlinkComp(1f,0.075f)

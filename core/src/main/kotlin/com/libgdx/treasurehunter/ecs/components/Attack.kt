@@ -14,7 +14,8 @@ enum class AttackState {
 }
 
 
-enum class AttackType(val isMelee : Boolean,val attackEffectOffset : Vector2 = vec2(-0.3f,0.15f)) {
+enum class AttackType(val isMelee : Boolean,val attackOffset : Vector2 = vec2(),val attackEffectOffset : Vector2 = vec2(-0.3f,0.15f)) {
+    ATTACK(false, attackOffset = vec2(0f,-0.5f)),
     ATTACK_1(true),
     ATTACK_2(true),
     ATTACK_3(true),
@@ -23,7 +24,8 @@ enum class AttackType(val isMelee : Boolean,val attackEffectOffset : Vector2 = v
     FIERCE_TOOTH_ATTACK(true,vec2(1f,0.15f)),
     PINK_STAR_ATTACK(true),
     CRABBY_ATTACK(true,vec2(1.7f,0f)),
-    THROW(false),;
+    THROW(false)
+    ;
 
     val attackAnimType : AnimationType
         get() = AnimationType.valueOf(this.name)
@@ -40,7 +42,8 @@ data class AttackMetaData(
     var attackCooldown: Float = baseAttackCooldown,
     val baseAttackDestroyTime : Float,
     var attackDestroyTime: Float = baseAttackDestroyTime,
-    val attackAnimPlayMode : Animation.PlayMode
+    val attackAnimPlayMode : Animation.PlayMode,
+    val createFrameIndex : Int
 ){
     val isMelee: Boolean
         get() = attackType.isMelee

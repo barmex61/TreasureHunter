@@ -11,16 +11,17 @@ import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.enums.MarkType
 import com.libgdx.treasurehunter.enums.ParticleType
+import com.libgdx.treasurehunter.state.StateEntity.*
 import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.component1
 import ktx.math.component2
 
-enum class PlayerState : EntityState {
+enum class PlayerState : EntityState<PlayerEntity> {
     APPEARING{
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: PlayerEntity) {
             entity[Move].stop = true
         }
-        override fun update(entity: StateEntity) {
+        override fun update(entity: PlayerEntity) {
             if (entity.isAnimationDone()) {
                 entity[Move].stop = false
                 entity.state(IDLE)
@@ -29,7 +30,7 @@ enum class PlayerState : EntityState {
         }
     },
     IDLE{
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: PlayerEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
                 entity.doAttack -> entity.state(ATTACK)
@@ -43,7 +44,7 @@ enum class PlayerState : EntityState {
             }
         }
 
-        override fun update(entity: StateEntity) {
+        override fun update(entity: PlayerEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
                 entity.isGetHit -> entity.state(HIT)
@@ -59,13 +60,13 @@ enum class PlayerState : EntityState {
     },
 
     RUN {
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: PlayerEntity) {
             entity.animation(AnimationType.RUN)
             entity.fireParticleEvent(ParticleType.RUN)
             entity.runParticleTimer = 0.5f
         }
 
-        override fun update(entity: StateEntity) {
+        override fun update(entity: PlayerEntity) {
             entity.runParticleTimer -= Gdx.graphics.deltaTime
             if (entity.runParticleTimer <= 0f){
                 entity.runParticleTimer = 0.5f
@@ -86,11 +87,11 @@ enum class PlayerState : EntityState {
     },
 
     JUMP {
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: PlayerEntity) {
             entity.animation(AnimationType.JUMP, Animation.PlayMode.NORMAL)
         }
 
-        override fun update(entity: StateEntity) {
+        override fun update(entity: PlayerEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
                 entity.isGetHit -> entity.state(HIT)
@@ -108,11 +109,11 @@ enum class PlayerState : EntityState {
     },
 
     FALL {
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: PlayerEntity) {
             entity.animation(AnimationType.FALL)
         }
 
-        override fun update(entity: StateEntity) {
+        override fun update(entity: PlayerEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
                 entity.isGetHit -> entity.state(HIT)
@@ -129,12 +130,12 @@ enum class PlayerState : EntityState {
     },
 
     GROUND{
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: PlayerEntity) {
             entity.animation(AnimationType.GROUND, playMode = Animation.PlayMode.NORMAL)
             entity.fireParticleEvent(ParticleType.FALL)
         }
 
-        override fun update(entity: StateEntity) {
+        override fun update(entity: PlayerEntity) {
             if (entity.isAnimationDone()){
                 val (linX,linY) = entity.body.linearVelocity
                 when{
@@ -153,13 +154,13 @@ enum class PlayerState : EntityState {
     },
 
     HIT {
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: PlayerEntity) {
             entity.animation(AnimationType.HIT, Animation.PlayMode.NORMAL)
             entity.createMarkEntity(MarkType.EXCLAMATION_MARK)
             entity.removeDamageTaken()
         }
 
-        override fun update(entity: StateEntity) {
+        override fun update(entity: PlayerEntity) {
             when{
                 entity.doAttack -> entity.state(ATTACK)
                 entity.isAnimationDone() -> entity.state(IDLE)
@@ -168,26 +169,27 @@ enum class PlayerState : EntityState {
     },
 
     ATTACK{
-        override fun enter(entity: StateEntity) {
+        override fun enter(entity: PlayerEntity) {
             val animType = entity[Attack].attackMetaData.attackType.attackAnimType
             entity.animation(animType, Animation.PlayMode.NORMAL,0.16f)
         }
 
-        override fun update(entity: StateEntity) {
+        override fun update(entity: PlayerEntity) {
             when{
+
                 entity.isAnimationDone() -> entity.state(IDLE)
             }
         }
     },
 
     SWORD_COLLECTED{
-        override fun enter(stateEntity: StateEntity) {
-            with(stateEntity.world){
-                if (stateEntity.entity hasNo Attack){
-                    stateEntity.entity.configure {
+        override fun enter(entity: PlayerEntity) {
+            with(entity.world){
+                if (entity.entity hasNo Attack){
+                    entity.entity.configure {
                         it += Item(
                             itemType = Sword(),
-                            owner = stateEntity.entity
+                            owner = entity.entity
                         )
                         it[com.libgdx.treasurehunter.ecs.components.Animation].setNewModel(GameObject.CAPTAIN_CLOWN_SWORD.atlasKey)
                     }
@@ -195,25 +197,25 @@ enum class PlayerState : EntityState {
             }
         }
 
-        override fun update(stateEntity: StateEntity) {
-            with(stateEntity.world) {
-                stateEntity.entity[State].stateMachine.changeState(IDLE)
+        override fun update(entity: PlayerEntity) {
+            with(entity.world) {
+                entity.state(IDLE)
             }
         }
     },
     SWORD_THROWED{
-        override fun enter(stateEntity: StateEntity) {
-            with(stateEntity.world){
-                stateEntity.entity.configure {
+        override fun enter(entity: PlayerEntity) {
+            with(entity.world){
+                entity.entity.configure {
                     it -= Item
                     it -= Attack
                     it[com.libgdx.treasurehunter.ecs.components.Animation].setNewModel(GameObject.CAPTAIN_CLOWN.atlasKey)
                 }
             }
         }
-        override fun update(stateEntity: StateEntity) {
-            with(stateEntity.world) {
-                stateEntity.entity[State].stateMachine.changeState(IDLE)
+        override fun update(entity: PlayerEntity) {
+            with(entity.world) {
+                entity.state(IDLE)
             }
         }
     }

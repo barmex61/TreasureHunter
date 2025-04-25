@@ -21,14 +21,22 @@ class CameraSystem(
 ) : IteratingSystem(family = family { all(Graphic, EntityTag.PLAYER) }), GameEventListener {
 
     private val mapBoundaries = Vector2(0f, 0f)
-    val viewportW = gameCamera.viewportWidth * 0.5f
-    val viewportH = gameCamera.viewportHeight * 0.5f
+    var viewportW = gameCamera.viewportWidth * 0.5f
+    var viewportH = gameCamera.viewportHeight * 0.5f
     var cameraMovement : CameraMovement = CameraMovement(0,0)
     var zoom : Float = 0f
 
+    private fun initViewPort(){
+        viewportW = gameCamera.viewportWidth * 0.5f
+        viewportH = gameCamera.viewportHeight * 0.5f
+    }
 
     override fun onTickEntity(entity: Entity) {
         val (sprite) = entity[Graphic]
+        if (viewportW == 0f || viewportH == 0f) {
+            initViewPort()
+            return
+        }
         var camX = sprite.x + sprite.width * 0.5f
         var camY = sprite.y + sprite.height * 0.5f
         if (zoom != 0f){

@@ -20,7 +20,8 @@ object AttackMetaDataFactory {
                    attackDamage = 1,
                    baseAttackCooldown = 0f,
                    baseAttackDestroyTime = 1.5f,
-                   attackAnimPlayMode = Animation.PlayMode.NORMAL
+                   attackAnimPlayMode = Animation.PlayMode.NORMAL,
+                   createFrameIndex = 0
                )
            }
            GameObject.CRABBY ->{
@@ -29,9 +30,11 @@ object AttackMetaDataFactory {
                    attackRange = 1f,
                    attackType = AttackType.CRABBY_ATTACK,
                    attackDamage = 1,
-                   baseAttackCooldown = 0f,
+                   baseAttackCooldown = 1f,
                    baseAttackDestroyTime = 1.5f,
-                   attackAnimPlayMode = Animation.PlayMode.NORMAL
+                   attackAnimPlayMode = Animation.PlayMode.NORMAL,
+                   createFrameIndex = 0
+
                )
            }
            GameObject.PINK_STAR->{
@@ -43,6 +46,7 @@ object AttackMetaDataFactory {
                    baseAttackCooldown = 2f,
                    baseAttackDestroyTime = 1.5f,
                    attackAnimPlayMode = Animation.PlayMode.LOOP,
+                   createFrameIndex = 0
                )
            }
            GameObject.SWORD ->{
@@ -54,7 +58,20 @@ object AttackMetaDataFactory {
                    baseAttackCooldown= 0.5f,
                    baseAttackDestroyTime= 5f,
                    attackAnimPlayMode = Animation.PlayMode.NORMAL,
+                   createFrameIndex = 1
                )
+           }
+           GameObject.WOOD_SPIKE ->{
+                AttackMetaData(
+                     attackSpeed= 1f,
+                     attackRange= 8f,
+                     attackType= AttackType.ATTACK,
+                     attackDamage= 1,
+                     baseAttackCooldown= 1.5f,
+                     baseAttackDestroyTime= 5f,
+                     attackAnimPlayMode = Animation.PlayMode.NORMAL,
+                     createFrameIndex = 3
+                )
            }
            else -> gdxError("Unknown game object for attack meta data$gameObject")
        }

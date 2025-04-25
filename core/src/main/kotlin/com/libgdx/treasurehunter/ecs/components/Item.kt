@@ -29,6 +29,7 @@ sealed interface ItemType{
     fun toGameObject() : GameObject?{
         return when(this){
             is Sword -> GameObject.SWORD
+            is Projectile -> this.projectileType.toGameObject()
             else -> null
         }
     }
@@ -39,7 +40,11 @@ data class Sword(
     override var throwState: ThrowState = ThrowState.READY
 ) : Damageable,Throwable
 
-
+data class Projectile(
+    val projectileType: ProjectileType,
+    override val attackMetaData: AttackMetaData = AttackMetaDataFactory.create(projectileType.toGameObject()),
+    override var throwState: ThrowState = ThrowState.READY
+) : Damageable, Throwable
 
 data class Bomb(
     override val attackMetaData: AttackMetaData = AttackMetaData(
@@ -49,10 +54,19 @@ data class Bomb(
         attackDamage= 3,
         baseAttackCooldown=2f,
         baseAttackDestroyTime= 2f,
-        attackAnimPlayMode = Animation.PlayMode.NORMAL
+        attackAnimPlayMode = Animation.PlayMode.NORMAL,
+        createFrameIndex = 0
     )
 ) : Damageable
 
+enum class ProjectileType{
+    WOOD_SPIKE;
+    fun toGameObject() : GameObject{
+        return when(this){
+            WOOD_SPIKE -> GameObject.WOOD_SPIKE
+        }
+    }
+}
 
 data class Item(
     var itemType: ItemType,

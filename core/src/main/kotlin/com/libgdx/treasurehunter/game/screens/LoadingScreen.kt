@@ -10,10 +10,13 @@ import com.libgdx.treasurehunter.audio.AudioManager
 import com.libgdx.treasurehunter.ecs.components.AttackType
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.MapAssets
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher.fireEvent
 import com.libgdx.treasurehunter.game.TreasureHunter
 import com.libgdx.treasurehunter.utils.Constants.ATTACK_EFFECT_FIXTURES
 import com.libgdx.treasurehunter.utils.Constants.ATTACK_FIXTURES
 import com.libgdx.treasurehunter.utils.Constants.OBJECT_FIXTURES
+import com.libgdx.treasurehunter.utils.Constants.currentMapPath
 import com.libgdx.treasurehunter.utils.GameObject
 import com.libgdx.treasurehunter.utils.fixtureDefinitionOf
 import ktx.app.KtxScreen
@@ -32,36 +35,38 @@ class LoadingScreen(
 
     override fun show() {
         assetHelper.loadAll()
-        parseObjectCollisionShapes(tiledMap = assetHelper[MapAssets.OBJECT],"objects")
-        parseObjectCollisionShapes(tiledMap = assetHelper[MapAssets.OBJECT],"attackObjects")
-        parseObjectCollisionShapes(tiledMap = assetHelper[MapAssets.OBJECT],"attackEffects")
+        parseObjectCollisionShapes(tiledMap = assetHelper[MapAssets.OBJECT])
         assetHelper -= MapAssets.OBJECT
     }
 
     override fun render(delta: Float) {
-        if (Gdx.input.isTouched || Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUMPAD_1)){
+            currentMapPath = MapAssets.MAP1.name
             treasureHunter.removeScreen<LoadingScreen>()
             dispose()
             treasureHunter.addScreen(GameScreen(spriteBatch, assetHelper,physicWorld,audioManager))
             treasureHunter.setScreen<GameScreen>()
         }
+
     }
 
-    fun parseObjectCollisionShapes(tiledMap: TiledMap,tilesetName : String){
-        val tileset = tiledMap.tileSets.getTileSet(tilesetName) ?: gdxError("There is no tileset in the ${MapAssets.OBJECT} tiledMap")
-        tileset.forEach{ tile ->
-            tile?:return@forEach
-            when(tilesetName){
-                "objects" -> parseGameObjectFixtures(tile)
-                "attackObjects" -> parseAttackFixtures(tile,false)
-                "attackEffects" -> parseAttackFixtures(tile,true)
+    fun parseObjectCollisionShapes(tiledMap: TiledMap){
+        tiledMap.tileSets.forEach { tileSet ->
+            tileSet.forEach{ tile ->
+                tile?:return@forEach
+                when(tileSet.name){
+                    "objects" -> parseGameObjectFixtures(tile)
+                    "attackObjects" -> parseAttackFixtures(tile,false)
+                    "attackEffects" -> parseAttackFixtures(tile,true)
+                }
             }
         }
     }
 
     private fun parseGameObjectFixtures(tile : TiledMapTile){
         val gameObjectStr : String = tile.propertyOrNull("gameObject") ?: return
-        val objectFixtureDefinitions = tile.objects.map { fixtureDefinitionOf(it) }
+        if (OBJECT_FIXTURES[GameObject.valueOf(gameObjectStr)] != null) return
+        val objectFixtureDefinitions = tile.objects.map { fixtureDefinitionOf(it,true) }
         if (objectFixtureDefinitions.isEmpty()) return
         OBJECT_FIXTURES[GameObject.valueOf(gameObjectStr)] = objectFixtureDefinitions
     }

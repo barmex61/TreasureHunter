@@ -12,6 +12,7 @@ import com.libgdx.treasurehunter.ecs.systems.RangeAttackHandler
 data class AttackMeta(
     val owner: Entity,
     var currentFrameIndex: Int = -1,
+    var createFrameIndex : Int = 0,
     var isFixtureMirrored : Boolean,
     var collidedWithWall : Boolean = false,
     var attackMetaData : AttackMetaData,
