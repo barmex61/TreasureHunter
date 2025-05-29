@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.CircleShape
+import com.badlogic.gdx.physics.box2d.EdgeShape
 import com.badlogic.gdx.physics.box2d.Filter
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
@@ -63,7 +64,7 @@ fun fixtureDefinitionOf(mapObject: MapObject,usePolygonShape : Boolean = false):
     val userData = mapObject.property("userData","")
     val isGround = userData == "ground"
     fixtureDef.apply {
-        friction = mapObject.property("friction",if (isGround) 0.2f else 0f)
+        friction = mapObject.property("friction",if (isGround) 0.5f else 0f)
         restitution = mapObject.property("restitution",0f)
         isSensor = mapObject.property("isSensor",false)
         density = mapObject.property("density",1f)

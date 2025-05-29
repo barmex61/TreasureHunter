@@ -25,11 +25,9 @@ abstract class Actions : LeafTask<CrewEntity>(){
 }
 
 class Idle : Actions(){
-
     private var idleDuration : Float = (1f..3f).random()
 
     override fun execute(): Status {
-
         if (status != Status.RUNNING){
             entity.raycast(vec2(0f,-0.5f)) { isCollidedWithWall,diffY ->
                 if (isCollidedWithWall && !entity.isJumping){
@@ -169,6 +167,7 @@ class CrabbyAttack : Actions(){
 class TotemIdle : Actions(){
     override fun execute(): Status {
         if (status != Status.RUNNING){
+            println("totem idle")
             entity.animation(AnimationType.IDLE, PlayMode.NORMAL, 0.1f)
             return Status.RUNNING
         }

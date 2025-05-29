@@ -3,6 +3,7 @@ package com.libgdx.treasurehunter.game.screens
 import com.badlogic.gdx.ai.GdxAI
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.github.quillraven.fleks.World
 import com.github.quillraven.fleks.configureWorld
@@ -37,6 +38,9 @@ import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.game.inputMultiplexer
 import com.libgdx.treasurehunter.input.KeyboardInputProcessor
 import com.libgdx.treasurehunter.tiled.TiledMapService
+import com.libgdx.treasurehunter.ui.model.GameModel
+import com.libgdx.treasurehunter.ui.navigation.StageNavigator
+import com.libgdx.treasurehunter.ui.navigation.ViewType
 import com.libgdx.treasurehunter.utils.Constants.currentMapPath
 import ktx.app.KtxScreen
 
@@ -45,11 +49,12 @@ class GameScreen(
     private val assetHelper: AssetHelper,
     private val physicWorld: PhysicWorld,
     private val audioManager: AudioManager,
+    private val stage: Stage,
+    private val stageNavigator: StageNavigator
     ) : KtxScreen {
 
 
     private val gameViewPort by lazy { StretchViewport(16f, 9f) }
-
 
     private val gameCamera by lazy {
         (gameViewPort.camera as OrthographicCamera).apply {
@@ -62,9 +67,11 @@ class GameScreen(
         injectables {
             add(assetHelper)
             add(spriteBatch)
+            add(stage)
             add(gameCamera)
-            add(gameViewPort)
+            add("gameViewPort",gameViewPort)
             add(physicWorld)
+            add("uiViewPort",stage.viewport)
         }
         systems {
             add(StateSystem())
@@ -90,7 +97,9 @@ class GameScreen(
 
         }
     }
-
+    private val gameModel = GameModel(world).also {
+        stageNavigator.gameModel = it
+    }
     private val tiledMapService by lazy { TiledMapService(physicWorld,world,assetHelper) }
     private val keyboardInputProcessor: KeyboardInputProcessor = KeyboardInputProcessor(world)
 
@@ -102,6 +111,7 @@ class GameScreen(
         inputMultiplexer.addProcessor(keyboardInputProcessor)
         registerGameEventListeners()
         fireEvent(GameEvent.MapChangeEvent(assetHelper[MapAssets.valueOf(currentMapPath)]))
+        stageNavigator.changeStageView(ViewType.GAME)
     }
 
     override fun render(delta: Float) {
@@ -111,11 +121,13 @@ class GameScreen(
 
     override fun resize(width: Int, height: Int) {
         gameViewPort.update(width, height, true)
+        stage.viewport.update(width,height,true)
     }
 
     override fun hide() {
         inputMultiplexer.removeProcessor(keyboardInputProcessor)
         unregisterGameEventListeners()
+        stage.clear()
     }
 
     override fun dispose() {
@@ -126,6 +138,7 @@ class GameScreen(
 
     private fun registerGameEventListeners() {
         GameEventDispatcher.registerListener(tiledMapService)
+        GameEventDispatcher.registerListener(gameModel)
         world.systems.filterIsInstance<GameEventListener>().forEach { gameEventListener ->
             GameEventDispatcher.registerListener(gameEventListener)
         }
@@ -133,6 +146,7 @@ class GameScreen(
 
     private fun unregisterGameEventListeners() {
         GameEventDispatcher.unRegisterListener(tiledMapService)
+        GameEventDispatcher.unRegisterListener(gameModel)
         world.systems.filterIsInstance<GameEventListener>().forEach { gameEventListener ->
             GameEventDispatcher.unRegisterListener(gameEventListener)
         }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.github.quillraven.fleks.Family
 import com.github.quillraven.fleks.IntervalSystem
@@ -31,7 +32,9 @@ import ktx.graphics.copy
 
 class RenderSystem (
     private val spriteBatch: SpriteBatch = inject(),
-    private val gameViewPort : StretchViewport = inject(),
+    private val gameViewPort : StretchViewport = inject("gameViewPort"),
+    private val uiViewport: StretchViewport = inject("uiViewPort"),
+    private val stage : Stage = inject(),
     private val gameCamera : OrthographicCamera = inject(),
     assetHelper: AssetHelper = inject()
 ): IntervalSystem(enabled = true), GameEventListener {
@@ -54,22 +57,18 @@ class RenderSystem (
     private val mapRenderer: OrthogonalTiledMapRenderer = OrthogonalTiledMapRenderer(null, Constants.UNIT_SCALE, spriteBatch).apply {
         setView(gameCamera)
     }
-    private var mapInitialized : Boolean = false
 
     override fun onTick() {
-        AnimatedTiledMapTile.updateAnimationBaseTime()
-        if (!mapInitialized) return
-        // Update parallax offsets
         backgroundClose?.offsetX -= deltaTime * 10f
 
         gameViewPort.apply()
+        uiViewport.apply()
         mapRenderer.setView(gameCamera)
         spriteBatch.use {
             // Render background layers in order
             mapRenderer.renderTileLayer(backgroundFar)
             mapRenderer.renderTileLayer(backgroundMid)
             mapRenderer.renderTileLayer(backgroundClose)
-
 
             // Render background entities
             backgroundEntities.renderEntities()
@@ -82,6 +81,8 @@ class RenderSystem (
 
             foregroundEntities.renderEntities()
         }
+        stage.act(deltaTime)
+        stage.draw()
     }
 
     private fun Family.renderEntities() {
@@ -122,7 +123,6 @@ class RenderSystem (
     override fun onEvent(event: GameEvent) {
         when(event) {
             is GameEvent.MapChangeEvent -> {
-                mapInitialized = true
                 groundLayer = event.tiledMap.layers.get("ground") as TiledMapTileLayer
                 backgroundClose = (event.tiledMap.layers.get("background_close") as TiledMapTileLayer).apply {
                     parallaxX = parallaxMap["background_close"]!!.first

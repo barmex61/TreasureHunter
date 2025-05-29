@@ -92,9 +92,7 @@ class TiledMapService (
         val gameObjectStr = tile.property<String>("gameObject")
         val gameObject = GameObject.valueOf(gameObjectStr)
         val fixtureDefUserData = OBJECT_FIXTURES[gameObject]
-        if (gameObject == GameObject.BARREL){
-            println(fixtureDefUserData!!.first().fixtureDef.shape)
-        }
+
         if (fixtureDefUserData == null){
             spawnBodilessEntities(mapObject,tile,gameObject)
             return

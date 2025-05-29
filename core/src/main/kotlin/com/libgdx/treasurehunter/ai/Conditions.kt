@@ -24,6 +24,9 @@ abstract class Conditions : LeafTask<CrewEntity>(){
 class IsDynamicEntity : Conditions(){
     override fun condition(): Boolean = entity.isDynamicEntity
 }
+class IsStaticEntity : Conditions(){
+    override fun condition(): Boolean = !entity.isDynamicEntity
+}
 
 class IsEnemyNearby : Conditions(){
     override fun condition(): Boolean = entity.isEnemyNearby

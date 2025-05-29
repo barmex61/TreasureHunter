@@ -66,6 +66,8 @@ data class CrewEntity(
 
     val isDynamicEntity : Boolean
         get() {
+            println("HAS MOVE COMPONENT: ${getOrNull(Move) != null}")
+            println("HAS JUMP COMPONENT: ${getOrNull(Jump) != null}")
             return getOrNull(Jump) != null && getOrNull(Move) != null
         }
 
@@ -152,6 +154,7 @@ data class CrewEntity(
     }
 
     fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){
+        println("AnimationType: $animationType")
         animation(entity,animationType,playMode,frameDuration)
     }
 

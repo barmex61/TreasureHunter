@@ -6,6 +6,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
+import com.libgdx.treasurehunter.ai.Idle
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AnimationType
@@ -58,7 +59,9 @@ class AnimationSystem (
             gdxAnimationCache.clear()
             log.info { "Animation cache cleared" }
         }
-
+        if (animationComp.modelName == "fierce_tooth"){
+            println(mainAnimationData.animationType)
+        }
     }
 
     private fun updateSprite(sprite: Sprite, entity: Entity, animData: AnimationData,alpha : Float? = null) {
@@ -79,14 +82,18 @@ class AnimationSystem (
         playMode: PlayMode
     ): GdxAnimation {
         val atlasKey = "${modelName}/${animationType.atlasKey}"
+
         return gdxAnimationCache.getOrPut(atlasKey) {
             val regions = gameObjectAtlas.findRegions(atlasKey) ?:
             gdxError("No regions for animation $atlasKey")
             GdxAnimation(frameDuration, regions, playMode)
         }.apply {
+
             this.playMode = playMode
             this.frameDuration = frameDuration
+
         }
+
     }
 
     fun setAnimation(
@@ -95,8 +102,10 @@ class AnimationSystem (
         playMode: PlayMode = PlayMode.LOOP,
         frameDuration: Float? = null
     ) {
+
         val animComp = entity[Animation]
         val animData = animComp.animationData
+
         updateAnimationData(
             animData.apply { timer = 0f },
             animComp.modelName,
@@ -119,6 +128,10 @@ class AnimationSystem (
             timer = 0f
             playMode = newPlayMode
             animationType = newAnimType
+        }
+        if (modelName == "fierce_tooth"){
+            println("updated animationtype ${animData.animationType}")
+
         }
     }
 

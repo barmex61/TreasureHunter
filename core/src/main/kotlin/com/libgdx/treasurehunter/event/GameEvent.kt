@@ -7,7 +7,7 @@ import com.libgdx.treasurehunter.enums.ParticleType
 
 sealed class GameEvent {
     data class MapChangeEvent(val tiledMap : TiledMap) : GameEvent()
-    data class EntityLifeChangeEvent(val entityLife : Int) : GameEvent()
+    data class EntityLifeChangeEvent(val entityLife : Int,val maxLife : Int,val entity : Entity) : GameEvent()
     data class CollectableItemEvent(val collectableEntity : Entity,val playerEntity : Entity) : GameEvent()
     data class ParticleEvent(val owner : Entity,val particleType : ParticleType) : GameEvent()
     object AttackStartEvent : GameEvent()

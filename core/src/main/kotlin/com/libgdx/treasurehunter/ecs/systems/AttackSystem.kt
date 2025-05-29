@@ -52,7 +52,6 @@ class AttackSystem(
                     attackType?.let {
                         newAttackMetaData.attackType = it
                     }
-                    println("WANTSTO ATACCK AND READY")
                     attackComp.doAttack = true
                     val graphic = entity[Graphic]
                     val bottomCenter = graphic.bottomCenter
@@ -190,7 +189,6 @@ class AttackSystem(
     }
 
     private fun resetAttackComp(attackComp: Attack, attackMetaData: AttackMetaData) {
-        println("resetattackcomp")
         attackMetaData.resetAttackCooldown()
         attackMetaData.resetAttackDestroyTime()
         attackComp.attackState = AttackState.READY

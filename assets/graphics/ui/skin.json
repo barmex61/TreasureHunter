@@ -1,0 +1,86 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: {
+	Masaaki-Regular: {
+		file: Masaaki-Regular.fnt
+		scaledSize: -1
+		markupEnabled: false
+		flip: false
+	}
+}
+com.badlogic.gdx.graphics.Color: {
+	RGBA_255_255_255_255: {
+		r: 1
+		g: 1
+		b: 1
+		a: 1
+	}
+	RGBA_30_11_11_255: {
+		r: 0.11764706
+		g: 0.043137256
+		b: 0.043137256
+		a: 1
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle: {
+	default: {
+		imageUp: green_button_back
+		pressedOffsetX: 3
+		pressedOffsetY: 3
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton$ImageTextButtonStyle: {
+	default: {
+		imageUp: yellow_button_accept
+		imageChecked: yellow_button_cancel
+		font: Masaaki-Regular
+		pressedOffsetX: 2
+		pressedOffsetY: 2
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: {
+		font: Masaaki-Regular
+		fontColor: RGBA_30_11_11_255
+		background: prefabs_7
+	}
+	yellow_bg: {
+		font: Masaaki-Regular
+		fontColor: RGBA_30_11_11_255
+		background: prefabs_7
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+	default-horizontal: {
+		backgroundOver: prefabs_14
+		backgroundDown: prefabs_14
+		knobOver: sliders_3
+		knobDown: sliders_3
+		background: prefabs_14
+		knob: sliders_3
+	}
+	default-vertical: {
+		background: prefabs_14
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: {
+		font: Masaaki-Regular
+		up: prefabs_13
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+	default: {
+		font: Masaaki-Regular
+		fontColor: RGBA_30_11_11_255
+	}
+	normal: {
+		font: Masaaki-Regular
+		fontColor: RGBA_30_11_11_255
+	}
+}
+com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
+	default: {
+		label: default
+	}
+}
+}

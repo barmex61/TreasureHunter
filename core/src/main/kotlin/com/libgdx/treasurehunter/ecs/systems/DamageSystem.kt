@@ -22,7 +22,7 @@ class DamageSystem : IteratingSystem(family = family{all(Life,DamageTaken).none(
         val lifeComp = entity[Life]
         val (damageAmount) = damageTaken
         lifeComp.currentLife = (lifeComp.currentLife - damageAmount).coerceAtLeast(0)
-        GameEventDispatcher.fireEvent(EntityLifeChangeEvent(lifeComp.currentLife))
+        GameEventDispatcher.fireEvent(EntityLifeChangeEvent(lifeComp.currentLife,lifeComp.maxLife,entity))
         if (entity has EntityTag.PLAYER){
             entity.configure {
                 it += Invulnarable(1f)

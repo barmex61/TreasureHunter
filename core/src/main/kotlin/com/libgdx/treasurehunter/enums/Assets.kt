@@ -2,10 +2,13 @@ package com.libgdx.treasurehunter.enums
 
 import com.badlogic.gdx.assets.AssetManager
 import com.badlogic.gdx.assets.loaders.ShaderProgramLoader.ShaderProgramParameter
+import com.badlogic.gdx.assets.loaders.SkinLoader
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
 import ktx.app.gdxError
 import ktx.assets.disposeSafely
@@ -26,11 +29,16 @@ enum class ShaderAsset(val vertexShader : String,val fragmentShader : String){
     FLASH("shaders/default.vert","shaders/mapDisplayMode.frag")
 }
 
+enum class SkinAsset(val path : String){
+    DEFAULT("graphics/ui/skin.json")
+}
+
 class AssetHelper : Disposable{
 
     private val assetManager by lazy {
         AssetManager().apply {
             setLoader(TiledMap::class.java, TmxMapLoader())
+            setLoader(Skin::class.java, SkinLoader(fileHandleResolver))
         }
     }
 
@@ -40,6 +48,9 @@ class AssetHelper : Disposable{
         }
         MapAssets.entries.forEach {
             assetManager.load<TiledMap>(it.path)
+        }
+        SkinAsset.entries.forEach {
+            assetManager.load<Skin>(it.path)
         }
         ShaderAsset.entries.forEach { shaderAsset->
             assetManager.load<ShaderProgram>(shaderAsset.name,ShaderProgramParameter().apply {
@@ -69,6 +80,10 @@ class AssetHelper : Disposable{
 
     operator fun get(shaderAsset: ShaderAsset) : ShaderProgram {
         return assetManager.getAsset(shaderAsset.name)
+    }
+
+    operator fun get(skinAsset: SkinAsset) : Skin {
+        return assetManager.get(skinAsset.path)
     }
 
 

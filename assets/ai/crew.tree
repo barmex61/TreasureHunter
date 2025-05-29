@@ -27,6 +27,7 @@ import isFierceToothAttack?:"com.libgdx.treasurehunter.ai.IsFierceToothAttack"
 import isCrabbyAttack?:"com.libgdx.treasurehunter.ai.IsCrabbyAttack"
 import canNotAttack?:"com.libgdx.treasurehunter.ai.CanNotAttack"
 import isDynamicEntity?:"com.libgdx.treasurehunter.ai.IsDynamicEntity"
+import isStaticEntity?:"com.libgdx.treasurehunter.ai.IsStaticEntity"
 
 subtree name : "standard"
     randomSelector
@@ -63,5 +64,5 @@ subtree name  : "staticEntitySubtree"
 root
     selector
         (isDynamicEntity?) $dynamicEntitySubtree
-        $staticEntitySubtree
+        (isStaticEntity?) $staticEntitySubtree
 
