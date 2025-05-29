@@ -28,6 +28,7 @@ class Idle : Actions(){
     private var idleDuration : Float = (1f..3f).random()
 
     override fun execute(): Status {
+        println("idle")
         if (status != Status.RUNNING){
             entity.raycast(vec2(0f,-0.5f)) { isCollidedWithWall,diffY ->
                 if (isCollidedWithWall && !entity.isJumping){
@@ -66,6 +67,7 @@ class Wander: Actions(){
     private var raycastTimer = 0f
 
     override fun execute(): Status {
+        println(status)
         if (status != Status.RUNNING){
             raycastInterval = 0.5f
             raycastTimer = 0f
@@ -85,13 +87,15 @@ class Wander: Actions(){
                     spawnPosition.y + (-entity.aiWanderRadius..entity.aiWanderRadius).random(),
                 )
             }
-            entity.animation(AnimationType.RUN, frameDuration = 0.1f)
+            if (entity.animationType != AnimationType.RUN){
+                entity.animation(AnimationType.RUN, PlayMode.LOOP, 0.1f)
+            }
             entity.moveTo(targetPosition)
             return Status.RUNNING
         }
         if (moveToPlayer){
             if (!entity.isEnemyNearby){
-                return Status.FAILED
+                return Status.SUCCEEDED
             }
 
             targetPosition.set(
@@ -167,7 +171,6 @@ class CrabbyAttack : Actions(){
 class TotemIdle : Actions(){
     override fun execute(): Status {
         if (status != Status.RUNNING){
-            println("totem idle")
             entity.animation(AnimationType.IDLE, PlayMode.NORMAL, 0.1f)
             return Status.RUNNING
         }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.ChainShape
+import com.badlogic.gdx.physics.box2d.PolygonShape
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityCreateContext
 import com.github.quillraven.fleks.World
@@ -95,7 +96,7 @@ fun EntityCreateContext.configureJump(entity: Entity, tile: TiledMapTile){
     if (jumpHeight > 0f){
         val (body) = entity[Physic]
         val feetFixture = body.fixtureList.first { it.userData == "footFixture" }
-        val chainShape = feetFixture.shape as ChainShape
+        val chainShape = feetFixture.shape as PolygonShape
         val lowerXY = vec2(Float.MAX_VALUE, Float.MAX_VALUE)
         val vertex = vec2()
         for (i in 0 until chainShape.vertexCount) {

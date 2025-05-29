@@ -24,17 +24,18 @@
      <property name="userData" value="hitbox"/>
     </properties>
    </object>
-   <object id="23" x="25" y="26" width="14" height="6">
-    <properties>
-     <property name="userData" value="footFixture"/>
-    </properties>
-    <ellipse/>
-   </object>
    <object id="26" x="25" y="18">
     <properties>
      <property name="userData" value="bodyFixture"/>
     </properties>
-    <polygon points="0,0 0,11 4,13 10,13 14,11 14,0"/>
+    <polygon points="0,0 0,12 2,13 12.8125,13 14,12 14,0"/>
+   </object>
+   <object id="27" x="29" y="30">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="0,0 0,1 6,1 6,0"/>
    </object>
   </objectgroup>
  </tile>
@@ -225,11 +226,12 @@
     </properties>
     <polygon points="0,0 0,10 3,12 15,12 18,10 18,0"/>
    </object>
-   <object id="9" x="28" y="22" width="18" height="6">
+   <object id="9" x="33" y="25">
     <properties>
+     <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="footFixture"/>
     </properties>
-    <ellipse/>
+    <polygon points="0,0 0,2 9,2 9,0"/>
    </object>
   </objectgroup>
  </tile>
@@ -270,13 +272,14 @@
     <properties>
      <property name="userData" value="bodyFixture"/>
     </properties>
-    <polygon points="0,0 0,13 3,17 12,17 15,13 15,0"/>
+    <polygon points="0,0 0,16 0.9375,17 14.0625,17 15,16 15,0"/>
    </object>
-   <object id="7" x="11" y="20" width="13" height="6">
+   <object id="8" x="13" y="24">
     <properties>
+     <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="footFixture"/>
     </properties>
-    <ellipse/>
+    <polygon points="0,0 0,2 9,2 9,0"/>
    </object>
   </objectgroup>
  </tile>
@@ -313,17 +316,18 @@
     </properties>
     <ellipse/>
    </object>
-   <object id="8" x="11" y="21" width="12" height="7">
-    <properties>
-     <property name="userData" value="footFixture"/>
-    </properties>
-    <ellipse/>
-   </object>
    <object id="10" x="11" y="13">
     <properties>
      <property name="userData" value="bodyFixture"/>
     </properties>
     <polygon points="0,0 0,11 3,14 10,14 12,11 12,0"/>
+   </object>
+   <object id="11" x="14" y="25">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="0,0 0,2 7,2 7,0"/>
    </object>
   </objectgroup>
  </tile>

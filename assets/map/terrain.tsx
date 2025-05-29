@@ -12,11 +12,10 @@
  </tile>
  <tile id="1">
   <objectgroup draworder="index" id="2">
-   <object id="2" x="0" y="0">
+   <object id="1" x="0" y="0" width="32" height="32">
     <properties>
      <property name="userData" value="ground"/>
     </properties>
-    <polygon points="0,0 0,32 32,32 32,0"/>
    </object>
   </objectgroup>
  </tile>

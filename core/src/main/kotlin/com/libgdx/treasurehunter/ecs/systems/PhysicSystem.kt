@@ -96,7 +96,6 @@ class PhysicSystem (
             MathUtils.lerp(prevY,bodyY,alpha) + effectOffset.y
         )
 
-
     }
 
     companion object{

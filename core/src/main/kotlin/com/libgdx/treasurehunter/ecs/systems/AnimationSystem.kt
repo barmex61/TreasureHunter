@@ -59,9 +59,7 @@ class AnimationSystem (
             gdxAnimationCache.clear()
             log.info { "Animation cache cleared" }
         }
-        if (animationComp.modelName == "fierce_tooth"){
-            println(mainAnimationData.animationType)
-        }
+
     }
 
     private fun updateSprite(sprite: Sprite, entity: Entity, animData: AnimationData,alpha : Float? = null) {
@@ -129,10 +127,7 @@ class AnimationSystem (
             playMode = newPlayMode
             animationType = newAnimType
         }
-        if (modelName == "fierce_tooth"){
-            println("updated animationtype ${animData.animationType}")
 
-        }
     }
 
     companion object{

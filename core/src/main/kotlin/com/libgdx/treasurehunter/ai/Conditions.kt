@@ -43,6 +43,7 @@ class CanNotAttack : Conditions(){
     override fun condition(): Boolean = !entity.doAttack
 }
 
+
 class CanMove : Conditions(){
     override fun condition(): Boolean = !entity.stop
 }

@@ -14,7 +14,7 @@ enum class AttackState {
 }
 
 
-enum class AttackType(val isMelee : Boolean,val attackOffset : Vector2 = vec2(),val attackEffectOffset : Vector2 = vec2(-0.3f,0.15f)) {
+enum class AttackType(val isMelee : Boolean,val attackOffset : Vector2 = vec2(-0.3f,0.15f)) {
     ATTACK(false, attackOffset = vec2(0f,-0.5f)),
     ATTACK_1(true),
     ATTACK_2(true),

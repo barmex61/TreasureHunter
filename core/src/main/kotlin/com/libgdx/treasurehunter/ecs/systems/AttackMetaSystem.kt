@@ -206,7 +206,7 @@ class MeleeAttackHandler(
         ownerFlipX: Boolean,
         graphic: Graphic
     ): List<FixtureDefUserData>? {
-        val offset = if (ownerFlipX) attackType.attackEffectOffset.cpy() else vec2(attackType.attackEffectOffset.x * -1f, 0.15f)
+        val offset = if (ownerFlipX) attackType.attackOffset.cpy() else vec2(attackType.attackOffset.x * -1f, 0.15f)
         val effectOffset = if (ownerFlipX) vec2(offset.x - graphic.sprite.width, offset.y) else offset
         val attackEffectFixture = ATTACK_EFFECT_FIXTURES[Pair(attackType,keyFrameIndex)]?.let {fixDefList ->
             fixDefList.map {
@@ -218,11 +218,11 @@ class MeleeAttackHandler(
             }
 
         } ?: return null
+
         val region = getTextureRegion("attack_effect", attackType, keyFrameIndex)
         graphic.sprite.setRegion(region)
         graphic.offset.set(effectOffset)
         setFlipX(ownerFlipX, graphic.sprite)
-
         return attackEffectFixture
     }
 
