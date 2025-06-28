@@ -5,14 +5,18 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
 import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.badlogic.gdx.scenes.scene2d.ui.Slider
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.libgdx.treasurehunter.event.GameEvent.AudioChangeEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.ui.navigation.StageNavigator
 import com.libgdx.treasurehunter.ui.navigation.TransitionType
 import com.libgdx.treasurehunter.ui.navigation.ViewType
+import com.libgdx.treasurehunter.utils.GamePreferences
 import ktx.actors.onClick
 import ktx.scene2d.KGroup
 import ktx.scene2d.KTable
@@ -33,14 +37,21 @@ import ktx.scene2d.verticalGroup
 
 class SettingsView(
     skin : Skin,
-    stageNavigator: StageNavigator
+    stageNavigator: StageNavigator,
+    gamePreferences: GamePreferences
 ): KTable , Table(skin) {
+    private var musicSlider : Slider ? = null
+    private var sfxSlider : Slider ? = null
+    private var musicButton : ImageTextButton ? = null
+    private var sfxButton : ImageTextButton ? = null
  init {
 
      setFillParent(true)
      stack{
-         it.maxWidth(130f).prefWidth(70f).prefHeight(150f)
-         image("prefabs_3_ninepatch")
+         it.prefSize(190f,170f)
+         image("prefabs_3_ninepatch"){
+             setScaling(Scaling.stretch)
+         }
          container{
              align(Align.topLeft)
              imageButton{
@@ -54,26 +65,61 @@ class SettingsView(
              align(Align.center)
              stack{
                  image("prefabs_8"){
-                     setScaling(Scaling.none)
+                     setScaling(Scaling.stretch)
                  }
                  verticalGroup{
                      align(Align.center)
-                     columnAlign(Align.left)
-                     space(4f)
-                     imageTextButton("MUSIC")
-                     imageTextButton("SFX")
+                     columnAlign(Align.center)
+                     space(5f)
+                     pad(15f,10f,15f,10f)
+                     this@SettingsView.musicButton = imageTextButton("MUSIC"){
+                            this.isChecked = gamePreferences.muteMusic
+                         onClick {
+                                gamePreferences.storeMuteMusic(!this.isChecked)
+                             if (this.isChecked){
+                                 this@SettingsView.musicSlider?.value = 0f
+                             }
+                         }
+                     }
+                     this@SettingsView.musicSlider = slider(min = 0f, max = 100f, step = 1f, vertical = false){
+                         this.value = gamePreferences.musicVolume * 100f
+                         addListener { event ->
+                             gamePreferences.storeMusicVolume(this.value / 100f)
+                             if (this.value > 0f){
+                                 this@SettingsView.musicButton?.isChecked = false
+                                 gamePreferences.storeMuteMusic(false)
+                             }else{
+                                 this@SettingsView.musicButton?.isChecked = true
+                                 gamePreferences.storeMuteMusic(true)
+                             }
+                             true
+                         }
+                     }
+                     this@SettingsView.sfxButton = imageTextButton("SFX"){
+                         this.isChecked = gamePreferences.muteSound
+                         onClick {
+
+                             gamePreferences.storeMuteSound(this.isChecked)
+                             if (this.isChecked){
+                                 this@SettingsView.sfxSlider?.value = 0f
+                             }
+                         }
+                     }
+                     this@SettingsView.sfxSlider = slider(min = 0f, max = 100f, step = 1f, vertical = false){
+                         this.value = gamePreferences.soundVolume * 100f
+                         addListener { event ->
+                             gamePreferences.storeSoundVolume(this.value / 100f)
+                             if (this.value > 0f){
+                                 this@SettingsView.sfxButton?.isChecked = false
+                                 gamePreferences.storeMuteSound(false)
+                             }else{
+                                 this@SettingsView.sfxButton?.isChecked = true
+                                 gamePreferences.storeMuteSound(true)
+                             }
+                             true
+                         }
+                     }
                  }
-             }
-             container{
-                 minWidth(70f)
-                 maxHeight(25f)
-                 label("VOLUME") {
-                     setAlignment(Align.center)
-                 }
-             }
-             container{
-                 maxWidth(100f)
-                 slider(min = 0f, max = 100f, step = 1f, vertical = false)
              }
          }
      }
@@ -103,5 +149,6 @@ class SettingsView(
 fun <S> KWidget<S>.settingsView(
     skin: Skin = Scene2DSkin.defaultSkin,
     stageNavigator: StageNavigator,
+    gamePreferences: GamePreferences,
     init: SettingsView.(S) -> Unit = {}
-): SettingsView = actor(SettingsView(skin,stageNavigator),init)
+): SettingsView = actor(SettingsView(skin,stageNavigator,gamePreferences),init)

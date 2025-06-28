@@ -9043,12 +9043,93 @@ sceneComposer: {
 					colSpan: 1
 				}
 				{
-					child: null
+					child: {
+						class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
+						name: null
+						children: [
+							{
+								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
+								name: null
+								drawable: {
+									file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_16.png
+									bgColor: {
+										r: 1
+										g: 1
+										b: 1
+										a: 1
+									}
+									tint: null
+									tintName: null
+									name: prefabs_16
+									tiled: false
+									minWidth: -1
+									minHeight: -1
+									customized: false
+									tenPatchData: null
+									tvgData: null
+									type: TEXTURE
+									hidden: false
+								}
+								scaling: stretch
+								touchable: enabled
+								visible: true
+							}
+							{
+								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
+								name: null
+								alignment: 1
+								background: null
+								fillX: false
+								fillY: false
+								minWidth: -1
+								minHeight: -1
+								maxWidth: -1
+								maxHeight: -1
+								preferredWidth: -1
+								preferredHeight: -1
+								padLeft: 14
+								padRight: 0
+								padTop: 0
+								padBottom: 2
+								child: {
+									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
+									name: null
+									drawable: {
+										file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Life Bars/Colors/life_bars_colors_1.png
+										bgColor: {
+											r: 1
+											g: 1
+											b: 1
+											a: 1
+										}
+										tint: null
+										tintName: null
+										name: life_bars_colors_1
+										tiled: false
+										minWidth: -1
+										minHeight: -1
+										customized: false
+										tenPatchData: null
+										tvgData: null
+										type: TEXTURE
+										hidden: false
+									}
+									scaling: stretch
+									touchable: enabled
+									visible: true
+								}
+								touchable: enabled
+								visible: true
+							}
+						]
+						touchable: enabled
+						visible: true
+					}
 					row: 0
 					column: 1
 					padLeft: 0
 					padRight: 0
-					padTop: 0
+					padTop: 10
 					padBottom: 0
 					spaceLeft: 0
 					spaceRight: 0
@@ -9060,7 +9141,7 @@ sceneComposer: {
 					fillY: false
 					growX: false
 					growY: false
-					alignment: 1
+					alignment: 2
 					minWidth: -1
 					minHeight: -1
 					maxWidth: -1

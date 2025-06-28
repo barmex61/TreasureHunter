@@ -10,6 +10,7 @@ sealed class GameEvent {
     data class EntityLifeChangeEvent(val entityLife : Int,val maxLife : Int,val entity : Entity) : GameEvent()
     data class CollectableItemEvent(val collectableEntity : Entity,val playerEntity : Entity) : GameEvent()
     data class ParticleEvent(val owner : Entity,val particleType : ParticleType) : GameEvent()
+    data class AudioChangeEvent(val soundVolume : Float,val musicVolume : Float,val muteMusic: Boolean,val muteSound : Boolean) : GameEvent()
     object AttackStartEvent : GameEvent()
 }
 

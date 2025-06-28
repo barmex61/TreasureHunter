@@ -22,6 +22,8 @@ import com.libgdx.treasurehunter.utils.Constants.ATTACK_FIXTURES
 import com.libgdx.treasurehunter.utils.Constants.OBJECT_FIXTURES
 import com.libgdx.treasurehunter.utils.Constants.currentMapPath
 import com.libgdx.treasurehunter.utils.GameObject
+import com.libgdx.treasurehunter.utils.GamePreferences
+import com.libgdx.treasurehunter.utils.GameProperties
 import com.libgdx.treasurehunter.utils.fixtureDefinitionOf
 import ktx.app.KtxScreen
 import ktx.scene2d.Scene2DSkin
@@ -35,15 +37,17 @@ class LoadingScreen(
     private val treasureHunter: TreasureHunter,
     private val physicWorld : World,
     private val audioManager: AudioManager,
-    private val stage: Stage
+    private val stage: Stage,
+    private val gameProperties: GameProperties,
+    private val gamePreferences: GamePreferences
 ) : KtxScreen {
     private val menuModel = MenuModel()
-    private val stageNavigator = StageNavigator(stage,menuModel){ viewType ->
+    private val stageNavigator = StageNavigator(stage,menuModel, gamePreferences = gamePreferences){ viewType ->
         if (viewType == ViewType.GAME){
             currentMapPath = MapAssets.MAP1.name
             treasureHunter.removeScreen<LoadingScreen>()
             dispose()
-            treasureHunter.addScreen(GameScreen(spriteBatch, assetHelper,physicWorld,audioManager,stage,this))
+            treasureHunter.addScreen(GameScreen(spriteBatch, assetHelper,physicWorld,audioManager,stage,this,gameProperties,gamePreferences))
             treasureHunter.setScreen<GameScreen>()
         }
     }

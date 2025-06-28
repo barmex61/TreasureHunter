@@ -14,6 +14,7 @@ import ktx.actors.alpha
 import ktx.actors.plusAssign
 import ktx.scene2d.actors
 import com.badlogic.gdx.utils.Align
+import com.libgdx.treasurehunter.utils.GamePreferences
 
 enum class ViewType{
     MENU,
@@ -34,6 +35,7 @@ class StageNavigator(
     val stage: Stage,
     val menuModel: MenuModel? = null,
     var gameModel: GameModel? = null,
+    val gamePreferences: GamePreferences,
     val navigateToScreen : StageNavigator.(ViewType) -> Unit
 ){
     private var currentView: Actor? = null
@@ -67,7 +69,7 @@ class StageNavigator(
             }
             ViewType.SETTINGS -> {
                 stage.actors {
-                    settingsView(stageNavigator = this@StageNavigator).apply {
+                    settingsView(stageNavigator = this@StageNavigator, gamePreferences = this@StageNavigator.gamePreferences).apply {
                         setupInitialState()
                         nextView = this
                     }

@@ -59,17 +59,23 @@ class GameView(
         add().expand()
         add().expand()
         coroutineScope.launch {
-            gameModel.playerLifeBarScale.collect { lifeBarScale ->
-                playerLifeBar += Actions.scaleTo(
-                    lifeBarScale,
-                    1f,
-                    0.4f,
-                    Interpolation.smooth
-                )
+            launch {
+                gameModel.playerLifeBarScale.collect { lifeBarScale ->
+                    playerLifeBar += Actions.scaleTo(
+                        lifeBarScale,
+                        1f,
+                        0.4f,
+                        Interpolation.smooth
+                    )
+                }
             }
-            gameModel.enemyLifeBarScale.collect { lifeBarScale ->
-                enemyLifeBar += Actions.scaleTo(lifeBarScale, 1f, 0.4f, Interpolation.smooth)
+            launch {
+                gameModel.enemyLifeBarScale.collect { lifeBarScale ->
+                    println(lifeBarScale)
+                    enemyLifeBar += Actions.scaleTo(lifeBarScale, 1f, 0.4f, Interpolation.smooth)
+                }
             }
+
         }
     }
 }

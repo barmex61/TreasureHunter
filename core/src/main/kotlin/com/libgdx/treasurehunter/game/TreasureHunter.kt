@@ -2,15 +2,21 @@ package com.libgdx.treasurehunter.game
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.InputMultiplexer
+import com.badlogic.gdx.Preferences
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.utils.ObjectMap
+import com.badlogic.gdx.utils.PropertiesUtils
 import com.badlogic.gdx.utils.viewport.StretchViewport
 import com.libgdx.treasurehunter.audio.AudioManager
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.game.screens.LoadingScreen
 import com.libgdx.treasurehunter.utils.Constants
+import com.libgdx.treasurehunter.utils.GamePreferences
+import com.libgdx.treasurehunter.utils.GameProperties
+import com.libgdx.treasurehunter.utils.toGameProperties
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
 import ktx.app.clearScreen
@@ -28,11 +34,21 @@ class TreasureHunter : KtxGame<KtxScreen>() {
         autoClearForces = true
     }
 
+    private val gameProperties : GameProperties by lazy {
+        val propertiesMap = ObjectMap<String, String>()
+        Gdx.files.internal("game.properties").reader().use {
+            PropertiesUtils.load(propertiesMap,it)
+        }
+        propertiesMap.toGameProperties()
+    }
 
-    private val audioManager by lazy {
-        AudioManager()
-    }.also {
-        GameEventDispatcher.registerListener(it.value)
+
+    private lateinit var audioManager : AudioManager
+    private val preferences : Preferences by lazy {
+        Gdx.app.getPreferences("treasure_hunter")
+    }
+    private val gamePreferences : GamePreferences by lazy {
+        GamePreferences(preferences)
     }
 
     private val spriteBatch by lazy {
@@ -44,8 +60,16 @@ class TreasureHunter : KtxGame<KtxScreen>() {
     private val assetHelper: AssetHelper by lazy { AssetHelper() }
 
     override fun create() {
+        audioManager = AudioManager(
+            if (gamePreferences.soundVolume != 0f) gamePreferences.soundVolume else gameProperties.soundVolume,
+            if (gamePreferences.musicVolume != 0f) gamePreferences.musicVolume else gameProperties.musicVolume,
+            gamePreferences.muteMusic,
+            gamePreferences.muteSound
+        ).also {
+            GameEventDispatcher.registerListener(it)
+        }
         Gdx.input.inputProcessor = InputMultiplexer()
-        addScreen(LoadingScreen(assetHelper, spriteBatch, this, physicWorld,audioManager,stage))
+        addScreen(LoadingScreen(assetHelper, spriteBatch, this, physicWorld,audioManager,stage, gameProperties,gamePreferences))
         setScreen<LoadingScreen>()
     }
 

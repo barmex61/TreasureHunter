@@ -42,6 +42,8 @@ import com.libgdx.treasurehunter.ui.model.GameModel
 import com.libgdx.treasurehunter.ui.navigation.StageNavigator
 import com.libgdx.treasurehunter.ui.navigation.ViewType
 import com.libgdx.treasurehunter.utils.Constants.currentMapPath
+import com.libgdx.treasurehunter.utils.GamePreferences
+import com.libgdx.treasurehunter.utils.GameProperties
 import ktx.app.KtxScreen
 
 class GameScreen(
@@ -50,7 +52,9 @@ class GameScreen(
     private val physicWorld: PhysicWorld,
     private val audioManager: AudioManager,
     private val stage: Stage,
-    private val stageNavigator: StageNavigator
+    private val stageNavigator: StageNavigator,
+    private val gameProperties: GameProperties,
+    private val gamePreferences: GamePreferences
     ) : KtxScreen {
 
 

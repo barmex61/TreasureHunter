@@ -4,9 +4,16 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
+import com.libgdx.treasurehunter.utils.GamePreferences
+import com.libgdx.treasurehunter.utils.GameProperties
 import ktx.tiled.property
 
-class AudioManager : GameEventListener {
+class AudioManager (
+    var soundVolume : Float ,
+    var musicVolume : Float ,
+    var muteMusic : Boolean ,
+    var muteSound : Boolean ,
+): GameEventListener {
 
     private val musicCache : MutableMap<String, Music> = mutableMapOf()
 
@@ -14,11 +21,8 @@ class AudioManager : GameEventListener {
         when(event){
             is GameEvent.MapChangeEvent ->{
                 val mapMusicPath = event.tiledMap.property<String>("mapMusic")
-                val mapMusicVolume = event.tiledMap.property<Float>("mapMusicVolume")
                 val ambientMusicPath = event.tiledMap.property<String>("ambientMusic")
-                val ambientMusicVolume = event.tiledMap.property<Float>("ambientMusicVolume")
                 val musicPath =  if (mapMusicPath.isNotEmpty()) mapMusicPath else ambientMusicPath
-                val musicVolume = if (mapMusicVolume > 0) mapMusicVolume else ambientMusicVolume
                 val music = musicCache.getOrPut(musicPath) {
                     Gdx.audio.newMusic(Gdx.files.internal(musicPath)).apply {
                         isLooping = true
@@ -26,6 +30,11 @@ class AudioManager : GameEventListener {
                     }
                 }
                 music.play()
+            }
+            is GameEvent.AudioChangeEvent ->{
+                soundVolume = if (muteSound) 0f else event.soundVolume
+                musicVolume = if (muteMusic) 0f else event.musicVolume
+                musicCache.values.forEach { it.volume = musicVolume }
             }
             else -> Unit
         }

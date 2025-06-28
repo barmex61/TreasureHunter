@@ -17,10 +17,13 @@ class GameModel(
     override fun onEvent(event: GameEvent) {
         when(event){
             is GameEvent.EntityLifeChangeEvent->{
+                println("entity life change event: ${event.entity} , life: ${event.entityLife} , maxLife: ${event.maxLife}")
                 if (event.entity in playerEntities){
+                    println("player life change event: ${event.entity}")
                     playerLife.value = event.entityLife
                     playerLifeBarScale.value = event.entityLife / event.maxLife.toFloat()
                 }else{
+                    println("enemy life change event: ${event.entity}")
                     enemyLifeBarScale.value = event.entityLife / event.maxLife.toFloat()
                 }
             }

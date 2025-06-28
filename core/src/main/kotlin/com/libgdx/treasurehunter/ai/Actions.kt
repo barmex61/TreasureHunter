@@ -28,7 +28,6 @@ class Idle : Actions(){
     private var idleDuration : Float = (1f..3f).random()
 
     override fun execute(): Status {
-        println("idle")
         if (status != Status.RUNNING){
             entity.raycast(vec2(0f,-0.5f)) { isCollidedWithWall,diffY ->
                 if (isCollidedWithWall && !entity.isJumping){
@@ -67,7 +66,6 @@ class Wander: Actions(){
     private var raycastTimer = 0f
 
     override fun execute(): Status {
-        println(status)
         if (status != Status.RUNNING){
             raycastInterval = 0.5f
             raycastTimer = 0f
