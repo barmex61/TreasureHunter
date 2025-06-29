@@ -80,6 +80,7 @@ class TreasureHunter : KtxGame<KtxScreen>() {
 
     override fun dispose() {
         super.dispose()
+        audioManager.dispose()
         assetHelper.disposeSafely()
         spriteBatch.disposeSafely()
         physicWorld.disposeSafely()

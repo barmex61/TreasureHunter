@@ -2,10 +2,8 @@
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="67">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
-  <property name="ambientMusicVolume" type="float" value="0.1"/>
   <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DAY"/>
   <property name="mapMusic" value=""/>
-  <property name="mapMusicVolume" type="float" value="0"/>
  </properties>
  <tileset firstgid="1" source="terrain.tsx"/>
  <tileset firstgid="86" source="objects.tsx"/>

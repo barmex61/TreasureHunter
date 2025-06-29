@@ -2,6 +2,7 @@ package com.libgdx.treasurehunter.audio
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.audio.Music
+import com.badlogic.gdx.audio.Sound
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.utils.GamePreferences
@@ -16,6 +17,33 @@ class AudioManager (
 ): GameEventListener {
 
     private val musicCache : MutableMap<String, Music> = mutableMapOf()
+    private val soundCache : MutableMap<String, Sound> = mutableMapOf()
+
+    fun playSound(soundPath: String) {
+        if (muteSound || soundVolume <= 0f) return
+
+        val sound = soundCache.getOrPut(soundPath) {
+            Gdx.audio.newSound(Gdx.files.internal(soundPath))
+        }
+        sound.play(soundVolume)
+    }
+
+    fun playSound(soundPath: String, volume: Float) {
+        if (muteSound) return
+
+        val sound = soundCache.getOrPut(soundPath) {
+            Gdx.audio.newSound(Gdx.files.internal(soundPath))
+        }
+        sound.stop()
+        sound.play(volume * soundVolume)
+    }
+
+    fun dispose() {
+        musicCache.values.forEach { it.dispose() }
+        soundCache.values.forEach { it.dispose() }
+        musicCache.clear()
+        soundCache.clear()
+    }
 
     override fun onEvent(event: GameEvent) {
         when(event){
@@ -36,7 +64,12 @@ class AudioManager (
                 musicVolume = if (muteMusic) 0f else event.musicVolume
                 musicCache.values.forEach { it.volume = musicVolume }
             }
+            is GameEvent.PlaySoundEvent -> {
+                playSound(event.soundAsset.path,event.soundAsset.volume)
+            }
             else -> Unit
         }
     }
 }
+
+

@@ -90,7 +90,7 @@ fun EntityCreateContext.configureMove(entity: Entity, tile: TiledMapTile){
     }
 }
 
-fun EntityCreateContext.configureJump(entity: Entity, tile: TiledMapTile){
+fun EntityCreateContext.configureJump(entity: Entity, tile: TiledMapTile,gameObject: GameObject){
     val jumpHeight = tile.property<Float>("jumpHeight",0f)
 
     if (jumpHeight > 0f){
@@ -107,7 +107,7 @@ fun EntityCreateContext.configureJump(entity: Entity, tile: TiledMapTile){
             }
         }
 
-        entity += Jump(jumpHeight,lowerXY  )
+        entity += Jump(jumpHeight,lowerXY , jumpSoundAsset = gameObject.toJumpSoundAsset() )
     }
 }
 

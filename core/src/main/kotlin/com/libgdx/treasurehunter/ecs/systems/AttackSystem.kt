@@ -31,6 +31,8 @@ import com.libgdx.treasurehunter.ecs.components.Projectile
 import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.ecs.components.ThrowState
 import com.libgdx.treasurehunter.state.EntityState
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 
 class AttackSystem(
     private val physicWorld : PhysicWorld = inject(),
@@ -47,6 +49,7 @@ class AttackSystem(
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
+
                     val attackType = getQueuedAttackType(entity,attackComp.queuedAttackType)
                     val newAttackMetaData = attackComp.attackMetaData.copy()
                     attackType?.let {

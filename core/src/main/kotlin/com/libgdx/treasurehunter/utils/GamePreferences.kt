@@ -17,26 +17,39 @@ class GamePreferences (
         get() = preferences.getBoolean("muteSound", false)
 
     fun storeMusicVolume(volume: Float) {
-        preferences.putFloat("musicVolume", volume)
-        preferences.flush()
-        fireAudioEvent()
+        if (volume != musicVolume){
+            preferences.putFloat("musicVolume", volume)
+            preferences.flush()
+            fireAudioEvent()
+        }
+    }
+
+    fun storeSoundVolume(volume: Float) {
+
+        if (volume != soundVolume){
+            preferences.putFloat("soundVolume", volume)
+            preferences.flush()
+            fireAudioEvent()
+        }
+    }
+
+    fun storeMuteMusic(mute: Boolean) {
+        if (mute != muteMusic){
+            preferences.putBoolean("muteMusic", mute)
+            preferences.flush()
+            fireAudioEvent()
+        }
+
 
     }
-    fun storeSoundVolume(volume: Float) {
-        preferences.putFloat("soundVolume", volume)
-        preferences.flush()
-        fireAudioEvent()
-    }
-    fun storeMuteMusic(mute: Boolean) {
-        preferences.putBoolean("muteMusic", mute)
-        preferences.flush()
-        fireAudioEvent()
-    }
     fun storeMuteSound(mute: Boolean) {
-        preferences.putBoolean("muteSound", mute)
-        preferences.flush()
-        fireAudioEvent()
+        if (mute != muteSound){
+            preferences.putBoolean("muteSound", mute)
+            preferences.flush()
+            fireAudioEvent()
+        }
     }
+
     private fun fireAudioEvent(){
         GameEventDispatcher.fireEvent(AudioChangeEvent(
             soundVolume,

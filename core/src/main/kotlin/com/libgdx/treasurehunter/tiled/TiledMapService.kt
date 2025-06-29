@@ -114,7 +114,7 @@ class TiledMapService (
             configureEntityGraphic(it,mapObject,body.position,gameObject, assetHelper,world,rotation)
             configureEntityTags(it,mapObject,tile)
             configureMove(it,tile)
-            configureJump(it,tile)
+            configureJump(it,tile,gameObject)
             configureState(it,tile,world,physicWorld,assetHelper)
             configureDamage(it,tile)
             configureItem(it,tile)

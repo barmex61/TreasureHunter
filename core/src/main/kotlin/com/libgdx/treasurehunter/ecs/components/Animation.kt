@@ -34,6 +34,9 @@ data class Animation(
             -1
         }
     }
+    fun getAnimKeyFrameIx() : Int{
+        return animationData.gdxAnimation?.getKeyFrameIndex(animationData.timer) ?: 0
+    }
     fun isAnimationDone() : Boolean{
         if (animationData.playMode == PlayMode.LOOP) return false
         return animationData.gdxAnimation?.isAnimationFinished(animationData.timer) == true

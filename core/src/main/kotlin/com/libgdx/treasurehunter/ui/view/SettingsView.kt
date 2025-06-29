@@ -78,6 +78,8 @@ class SettingsView(
                                 gamePreferences.storeMuteMusic(!this.isChecked)
                              if (this.isChecked){
                                  this@SettingsView.musicSlider?.value = 0f
+                             }else{
+                                 this@SettingsView.musicSlider?.value = 50f
                              }
                          }
                      }
@@ -102,6 +104,8 @@ class SettingsView(
                              gamePreferences.storeMuteSound(this.isChecked)
                              if (this.isChecked){
                                  this@SettingsView.sfxSlider?.value = 0f
+                             }else{
+                                 this@SettingsView.sfxSlider?.value = 50f
                              }
                          }
                      }

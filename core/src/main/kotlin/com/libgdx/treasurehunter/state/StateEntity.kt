@@ -88,9 +88,18 @@ sealed class StateEntity(
             this.getOrNull(Graphic)?.sprite?.setAlpha(value)
         }
 
+    val animKeyFrameIx : Int
+        get() {
+            return this.getOrNull(Animation)?.getAnimKeyFrameIx() ?: 0
+        }
+
+    val animType : AnimationType
+        get() = this.getOrNull(Animation)?.animationData?.animationType ?: AnimationType.NONE
+
     fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){
         animation(entity,animationType,playMode,frameDuration)
     }
+
 
     fun <T : StateEntity> state(state: EntityState<T>, toPreviousState: Boolean = false) {
         val stateComp = this[State]
@@ -110,7 +119,6 @@ sealed class StateEntity(
 
     class PlayerEntity(entity: Entity, world: World, physicWorld: PhysicWorld, assetHelper: AssetHelper) : StateEntity(entity, world, physicWorld, assetHelper){
         var runParticleTimer : Float = 0.5f
-
 
         val state : PlayerState
             get() = this[State].stateMachine.currentState as PlayerState

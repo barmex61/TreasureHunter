@@ -12,8 +12,11 @@ import com.libgdx.treasurehunter.ecs.components.Flash
 import com.libgdx.treasurehunter.ecs.components.Invulnarable
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.State
+import com.libgdx.treasurehunter.enums.SoundAsset
 import com.libgdx.treasurehunter.event.GameEvent.EntityLifeChangeEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher.fireEvent
 
 class DamageSystem : IteratingSystem(family = family{all(Life,DamageTaken).none(Invulnarable,Blink)}) {
 
@@ -22,7 +25,14 @@ class DamageSystem : IteratingSystem(family = family{all(Life,DamageTaken).none(
         val lifeComp = entity[Life]
         val (damageAmount) = damageTaken
         lifeComp.currentLife = (lifeComp.currentLife - damageAmount).coerceAtLeast(0)
-        GameEventDispatcher.fireEvent(EntityLifeChangeEvent(lifeComp.currentLife,lifeComp.maxLife,entity))
+        fireEvent(EntityLifeChangeEvent(lifeComp.currentLife,lifeComp.maxLife,entity))
+
+        if (entity has EntityTag.PLAYER) {
+            fireEvent(GameEvent.PlaySoundEvent(SoundAsset.PLAYER_HURT))
+        } else {
+            fireEvent(GameEvent.PlaySoundEvent(SoundAsset.FIERCE_TOOTH_HURT))
+        }
+
         entity.configure {
             it += Invulnarable(1f)
             it += Blink(1f,0.075f)

@@ -4,9 +4,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
+import com.libgdx.treasurehunter.enums.SoundAsset
 import com.libgdx.treasurehunter.ui.model.MenuModel
 import com.libgdx.treasurehunter.ui.navigation.StageNavigator
 import com.libgdx.treasurehunter.ui.navigation.ViewType
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 import ktx.actors.onClick
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
@@ -62,6 +65,7 @@ class MenuView(
                     fill()
                     textButton("Play"){
                         onClick {
+                            GameEventDispatcher.fireEvent(GameEvent.PlaySoundEvent(SoundAsset.BUTTON_CLICK))
                             with(stageNavigator) {
                                 navigateToScreen(ViewType.GAME)
                             }
@@ -70,6 +74,8 @@ class MenuView(
                     }
                     textButton("Settings"){
                         onClick {
+                            GameEventDispatcher.fireEvent(GameEvent.PlaySoundEvent(SoundAsset.BUTTON_CLICK))
+
                             stageNavigator.changeStageView(
                                 viewType = ViewType.SETTINGS
                             )

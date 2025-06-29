@@ -11,6 +11,9 @@ import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.enums.MarkType
 import com.libgdx.treasurehunter.enums.ParticleType
+import com.libgdx.treasurehunter.enums.SoundAsset
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.state.StateEntity.*
 import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.component1
@@ -71,6 +74,9 @@ enum class PlayerState : EntityState<PlayerEntity> {
             if (entity.runParticleTimer <= 0f){
                 entity.runParticleTimer = 0.5f
                 entity.fireParticleEvent(ParticleType.RUN)
+            }
+            if (entity.animKeyFrameIx == 3 && entity.animType == AnimationType.RUN){
+                GameEventDispatcher.fireEvent(GameEvent.PlaySoundEvent(SoundAsset.PLAYER_FOOTSTEP))
             }
             val (linX,linY) = entity.body.linearVelocity
             when{
@@ -170,8 +176,12 @@ enum class PlayerState : EntityState<PlayerEntity> {
 
     ATTACK{
         override fun enter(entity: PlayerEntity) {
-            val animType = entity[Attack].attackMetaData.attackType.attackAnimType
+            val attackType = entity[Attack].attackMetaData.attackType
+            val animType = attackType.attackAnimType
             entity.animation(animType, Animation.PlayMode.NORMAL,0.16f)
+            if (attackType.isMelee){
+                GameEventDispatcher.fireEvent(GameEvent.PlaySoundEvent(SoundAsset.SWORD_SWING))
+            }
         }
 
         override fun update(entity: PlayerEntity) {

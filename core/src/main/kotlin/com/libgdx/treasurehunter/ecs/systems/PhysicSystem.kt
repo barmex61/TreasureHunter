@@ -267,6 +267,7 @@ class PhysicSystem (
                         if (playerEntity has Attack ){
                             return
                         }
+
                         collectableEntity.configure {
                             it -= EntityTag.COLLECTABLE
                         }

@@ -1,5 +1,8 @@
 package com.libgdx.treasurehunter.utils
 
+import com.libgdx.treasurehunter.enums.SoundAsset
+import ktx.app.gdxError
+
 
 enum class GameObject() {
     CAPTAIN_CLOWN,
@@ -56,4 +59,14 @@ enum class GameObject() {
     WATER,
     GROUND;
     val atlasKey = this.name.lowercase()
+    fun toJumpSoundAsset() : SoundAsset {
+        return when(this){
+            CAPTAIN_CLOWN -> SoundAsset.PLAYER_JUMP
+            CAPTAIN_CLOWN_SWORD -> SoundAsset.PLAYER_JUMP
+            PINK_STAR-> SoundAsset.PINK_STAR_JUMP
+            CRABBY -> SoundAsset.CRABBY_JUMP
+            FIERCE_TOOTH -> SoundAsset.FIERCE_TOOTH_JUMP
+            else -> gdxError("There is no jump sound asset for this gameObject $this")
+        }
+    }
 }
