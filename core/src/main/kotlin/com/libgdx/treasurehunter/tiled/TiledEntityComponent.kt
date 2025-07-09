@@ -36,6 +36,7 @@ import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.Projectile
 import com.libgdx.treasurehunter.ecs.components.ProjectileType
 import com.libgdx.treasurehunter.ecs.components.Ship
+import com.libgdx.treasurehunter.ecs.components.Stat
 import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.factory.AttackMetaDataFactory
 import com.libgdx.treasurehunter.state.ShipState
@@ -181,7 +182,19 @@ fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){
     if (life > 0f){
         entity += Life(maxLife = life)
     }
+}
 
+fun EntityCreateContext.configureStat(entity: Entity,tile: TiledMapTile){
+    val stat = tile.propertyOrNull<Stat>("stat")
+    if (stat != null){
+        entity += Stat(
+            attack = stat.attack,
+            defense = stat.defense,
+            critChance = stat.critChance,
+            critDamage = stat.critDamage,
+            resistance = stat.resistance
+        )
+    }
 }
 
 fun EntityCreateContext.configureAi(entity: Entity, tile: TiledMapTile,physicWorld: PhysicWorld){

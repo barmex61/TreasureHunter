@@ -119,6 +119,7 @@ class TiledMapService (
             configureDamage(it,tile)
             configureItem(it,tile)
             configureAttack(it,tile)
+            configureStat(it,tile)
             configureLife(it,tile)
             configureAi(it,tile,physicWorld)
             configureShip(it,mapObject,tile)

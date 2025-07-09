@@ -15,7 +15,7 @@
  </layer>
  <layer id="3" name="background_mid" width="24" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYBgFo2AUDFUAAAPAAAE=
+   eJztzrcRwgAQRcETJUEDeF+E8FY94D09swUQiIxAb2azmz8X8T9Vk4gadRo0adGmQ5cefQYMk/zbmduUEWMmTJkxZ8GSFWs2bHPsl0sRFd5ud+w5cOTEmQtXbtx58OT1w/9FRd/6AEq2ERc=
   </data>
  </layer>
  <layer id="2" name="background_close" width="24" height="10">
@@ -84,9 +84,6 @@
   <object id="57" gid="165" x="570" y="158" width="24" height="24"/>
   <object id="58" gid="166" x="611" y="160" width="13" height="17"/>
   <object id="59" gid="167" x="641" y="159" width="16" height="16"/>
-  <object id="60" gid="176" x="684" y="153" width="24" height="32"/>
-  <object id="61" gid="177" x="678" y="131" width="30" height="32"/>
-  <object id="62" gid="172" x="669" y="110" width="60" height="32"/>
   <object id="66" gid="134" x="512" y="96" width="72" height="32"/>
  </objectgroup>
 </map>

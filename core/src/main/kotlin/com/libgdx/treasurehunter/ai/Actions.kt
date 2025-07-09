@@ -22,6 +22,7 @@ abstract class Actions : LeafTask<CrewEntity>(){
             Status.SUCCEEDED
         }else Status.RUNNING
     }
+
 }
 
 class Idle : Actions(){
@@ -88,14 +89,14 @@ class Wander: Actions(){
             if (entity.animationType != AnimationType.RUN){
                 entity.animation(AnimationType.RUN, PlayMode.LOOP, 0.1f)
             }
-            entity.moveTo(targetPosition)
             return Status.RUNNING
         }
+        entity.moveTo(targetPosition)
+
         if (moveToPlayer){
             if (!entity.isEnemyNearby){
                 return Status.SUCCEEDED
             }
-
             targetPosition.set(
                 entity.playerPosition.x,
                 entity.playerPosition.y,
@@ -115,6 +116,7 @@ class Wander: Actions(){
             }
             raycastTimer = 0f
         }
+
         wanderTimer -= GdxAI.getTimepiece().deltaTime
         raycastTimer += GdxAI.getTimepiece().deltaTime
         return super.execute()

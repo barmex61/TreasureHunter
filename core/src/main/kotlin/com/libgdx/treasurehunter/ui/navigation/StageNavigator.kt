@@ -14,12 +14,14 @@ import ktx.actors.alpha
 import ktx.actors.plusAssign
 import ktx.scene2d.actors
 import com.badlogic.gdx.utils.Align
+import com.libgdx.treasurehunter.ui.view.howToPlayView
 import com.libgdx.treasurehunter.utils.GamePreferences
 
 enum class ViewType{
     MENU,
     GAME,
-    SETTINGS
+    SETTINGS,
+    HOW_TO_PLAY
 }
 
 enum class TransitionType {
@@ -70,6 +72,14 @@ class StageNavigator(
             ViewType.SETTINGS -> {
                 stage.actors {
                     settingsView(stageNavigator = this@StageNavigator, gamePreferences = this@StageNavigator.gamePreferences).apply {
+                        setupInitialState()
+                        nextView = this
+                    }
+                }
+            }
+            ViewType.HOW_TO_PLAY -> {
+                stage.actors {
+                    howToPlayView(stageNavigator = this@StageNavigator).apply {
                         setupInitialState()
                         nextView = this
                     }

@@ -18,6 +18,7 @@ import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.AttackMetaData
 import com.libgdx.treasurehunter.ecs.components.AttackType
+import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Item
@@ -31,6 +32,7 @@ import com.libgdx.treasurehunter.enums.TextureAtlasAssets
 import com.libgdx.treasurehunter.utils.Constants.ATTACK_EFFECT_FIXTURES
 import com.libgdx.treasurehunter.utils.Constants.ATTACK_FIXTURES
 import com.libgdx.treasurehunter.utils.FixtureDefUserData
+import com.libgdx.treasurehunter.utils.GameObject
 import com.libgdx.treasurehunter.utils.copy
 import com.libgdx.treasurehunter.utils.createFixtures
 import com.libgdx.treasurehunter.utils.destroyFixtures
@@ -88,7 +90,7 @@ class AttackMetaSystem(
             attackType = attackMetaData.attackType
         )
         if (collideWithWall && attackHandler is RangeAttackHandler){
-            attackHandler.collideWithWall(body)
+            attackHandler.collideWithWall(body,attackMetaData,entity)
         }
     }
 }
@@ -250,7 +252,6 @@ class RangeAttackHandler(
         attackType: AttackType,
     ) {
         val animType = ownerAnim.animationData.animationType
-
         if (ownerFrameIx == attackMeta.createFrameIndex && !isFixtureInitialized) {
             body.destroyFixtures()
             val attackOffset = if (ownerFlipX) attackType.attackOffset.cpy() else vec2(attackType.attackOffset.x * -1f, attackType.attackOffset.y)
@@ -264,7 +265,7 @@ class RangeAttackHandler(
                 }
             } ?: return
             body.createFixtures(attackFixture)
-            if (ownerFlipX) entityGraphic.offset.set(-entityGraphic.sprite.width + attackOffset.x,attackOffset.y)
+            entityGraphic.offset.set(attackOffset.x + if (ownerFlipX) -entityGraphic.sprite.width else 0f ,attackOffset.y)
             entityGraphic.sprite.setAlpha(1f)
             if (entityGraphic.initialFlipX != ownerFlipX){
                 entityGraphic.sprite.setFlip(ownerFlipX,false)
@@ -282,10 +283,30 @@ class RangeAttackHandler(
         }
     }
     fun collideWithWall(
-        body: Body
+        body: Body,
+        attackMetaData: AttackMetaData,
+        entity: Entity
     ){
-        if (body.linearVelocity != Vector2.Zero){
-            body.linearVelocity = vec2(0f,0f)
+        when(attackMetaData.gameObject){
+            GameObject.WOOD_SPIKE ->{
+                body.gravityScale = 1F
+                with(world) {
+                    entity.configure {
+                        it -= Damage
+                    }
+                }
+            }
+            GameObject.SWORD -> {
+                if (body.linearVelocity != Vector2.Zero){
+                    body.linearVelocity = vec2(0f,0f)
+                    with(world) {
+                        entity.configure {
+                            it -= Damage
+                        }
+                    }
+                }
+            }
+            else -> Unit
         }
     }
 }

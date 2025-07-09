@@ -19,15 +19,6 @@ class AudioManager (
     private val musicCache : MutableMap<String, Music> = mutableMapOf()
     private val soundCache : MutableMap<String, Sound> = mutableMapOf()
 
-    fun playSound(soundPath: String) {
-        if (muteSound || soundVolume <= 0f) return
-
-        val sound = soundCache.getOrPut(soundPath) {
-            Gdx.audio.newSound(Gdx.files.internal(soundPath))
-        }
-        sound.play(soundVolume)
-    }
-
     fun playSound(soundPath: String, volume: Float) {
         if (muteSound) return
 

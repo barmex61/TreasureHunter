@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
+import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.vec2
 
 enum class AttackState {
@@ -15,7 +16,7 @@ enum class AttackState {
 
 
 enum class AttackType(val isMelee : Boolean,val attackOffset : Vector2 = vec2(-0.3f,0.15f)) {
-    ATTACK(false, attackOffset = vec2(0f,-0.5f)),
+    ATTACK(false, attackOffset = vec2(-0.2f,-0.5f)),
     ATTACK_1(true),
     ATTACK_2(true),
     ATTACK_3(true),
@@ -24,7 +25,7 @@ enum class AttackType(val isMelee : Boolean,val attackOffset : Vector2 = vec2(-0
     FIERCE_TOOTH_ATTACK(true,vec2(1f,0.15f)),
     PINK_STAR_ATTACK(true),
     CRABBY_ATTACK(true,vec2(1.7f,0f)),
-    THROW(false)
+    THROW(false,vec2(0f,-0.2f))
     ;
 
     val attackAnimType : AnimationType
@@ -43,7 +44,8 @@ data class AttackMetaData(
     val baseAttackDestroyTime : Float,
     var attackDestroyTime: Float = baseAttackDestroyTime,
     val attackAnimPlayMode : Animation.PlayMode,
-    val createFrameIndex : Int
+    val createFrameIndex : Int,
+    val gameObject: GameObject
 ){
     val isMelee: Boolean
         get() = attackType.isMelee

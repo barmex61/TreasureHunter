@@ -1,6 +1,7 @@
 package com.libgdx.treasurehunter.ecs.systems
 
 import com.badlogic.gdx.math.MathUtils
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d.Contact
 import com.badlogic.gdx.physics.box2d.ContactImpulse
 import com.badlogic.gdx.physics.box2d.ContactListener
@@ -116,9 +117,17 @@ class PhysicSystem (
             get() = this.userData == "chest"
         val Fixture.isBodyFixture : Boolean
             get() = this.userData == "bodyFixture"
+        val Fixture.isRangeAttackFixture : Boolean
+            get() = this.userData == "rangeAttackFixture"
     }
     private val Fixture.isPlayerFoot : Boolean
         get() = this.userData == "footFixture"
+
+    private val Fixture.isStaticBody : Boolean
+        get() = this.body.type == BodyType.StaticBody
+
+    private val Fixture.isDynamicBody : Boolean
+        get() = this.body.type == BodyType.DynamicBody
 
     private val Fixture.isHitbox : Boolean
         get() = this.userData == "hitbox"
@@ -126,8 +135,7 @@ class PhysicSystem (
     private val Entity.isPlayer : Boolean
         get() = this.has(EntityTag.PLAYER)
 
-    private val Fixture.isRangeAttackFixture : Boolean
-        get() = this.userData == "rangeAttackFixture"
+
 
     private val Fixture.isSensorFixture : Boolean
         get() = this.userData == "sensorFixture"
@@ -156,7 +164,7 @@ class PhysicSystem (
         GameEventDispatcher.fireEvent(GameEvent.CollectableItemEvent(collectableEntity,playerEntity))
     }
 
-    private fun handleSwordAndWallCollision(activeAttackEntity: Entity) {
+    private fun handleRangeAttackAndStaticObjectCollision(activeAttackEntity: Entity) {
         val attackMeta = activeAttackEntity[AttackMeta]
         attackMeta.collidedWithWall = true
     }
@@ -181,10 +189,10 @@ class PhysicSystem (
         return entityA has EntityTag.COLLECTABLE && entityB has EntityTag.PLAYER && fixtureB.isSensor && !fixtureB.isSensorFixture
     }
 
-    private fun isSwordAndWallCollision(entityA: Entity?,fixtureA : Fixture,entityB: Entity?,fixtureB:Fixture) : Boolean{
+    private fun isRangeAttackAndStaticObjectCollision(entityA: Entity?,fixtureA : Fixture,entityB: Entity?,fixtureB:Fixture) : Boolean{
         val attackMeta = entityA?.getOrNull(AttackMeta)?:return false
         if (attackMeta.owner == entityB) return false
-        return  entityA has AttackMeta && fixtureA.isRangeAttackFixture && !fixtureA.isSensor && !fixtureB.isSensor
+        return  entityA has AttackMeta && fixtureA.isRangeAttackFixture  && !fixtureA.isSensor && !fixtureB.isSensor && fixtureB.isStaticBody
     }
 
     private fun isSensorAndPlayerCollision(entityA: Entity,fixtureA : Fixture,fixtureB:Fixture) : Boolean{
@@ -202,8 +210,8 @@ class PhysicSystem (
 
         if (entityA == null || entityB == null) {
             when{
-                isSwordAndWallCollision(entityA,fixtureA,entityB,fixtureB) -> handleSwordAndWallCollision(entityA!!)
-                isSwordAndWallCollision(entityB,fixtureB,entityB,fixtureA) -> handleSwordAndWallCollision(entityB!!)
+                isRangeAttackAndStaticObjectCollision(entityA,fixtureA,entityB,fixtureB) -> handleRangeAttackAndStaticObjectCollision(entityA!!)
+                isRangeAttackAndStaticObjectCollision(entityB,fixtureB,entityB,fixtureA) -> handleRangeAttackAndStaticObjectCollision(entityB!!)
                 else -> Unit
             }
             return
@@ -213,8 +221,8 @@ class PhysicSystem (
             isSensorAndPlayerCollision(entityB,fixtureB,fixtureA) -> handleSensorAndPlayerCollision(entityB, entityA ,true)
             isCollectableCollision(entityA,entityB,fixtureB) -> handleCollectableBeginContact(entityA,entityB)
             isCollectableCollision(entityB,entityA,fixtureA) -> handleCollectableBeginContact(entityB,entityA)
-            isSwordAndWallCollision(entityA,fixtureA,entityB,fixtureB) -> handleSwordAndWallCollision(entityA)
-            isSwordAndWallCollision(entityB,fixtureB,entityB,fixtureA) -> handleSwordAndWallCollision(entityB)
+            isRangeAttackAndStaticObjectCollision(entityA,fixtureA,entityB,fixtureB) -> handleRangeAttackAndStaticObjectCollision(entityA)
+            isRangeAttackAndStaticObjectCollision(entityB,fixtureB,entityB,fixtureA) -> handleRangeAttackAndStaticObjectCollision(entityB)
             isDamageCollision(entityA,entityB,fixtureB) -> handleDamageBeginContact(entityA,entityB)
             isDamageCollision(entityB,entityA,fixtureA) -> handleDamageBeginContact(entityB,entityA)
         }
@@ -249,6 +257,10 @@ class PhysicSystem (
         if (fixtureB.isPlatform && entityA != null){
             contact.isEnabled = entityA[Physic].body.linearVelocity.y <= 0.0001f
         }
+        if (fixtureA.isRangeAttackFixture && fixtureB.isDynamicBody){
+            contact.isEnabled = false
+        }
+
     }
 
     override fun postSolve(contact: Contact, impulse: ContactImpulse) {

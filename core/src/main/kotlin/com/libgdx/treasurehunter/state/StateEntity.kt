@@ -43,6 +43,8 @@ import ktx.math.minus
 import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.text.get
+import com.libgdx.treasurehunter.utils.plus
+import kotlin.collections.plusAssign
 
 
 sealed class StateEntity(
@@ -186,12 +188,10 @@ sealed class StateEntity(
             }
         }
 
-        fun setSpriteOffset(){
+        fun setSpriteOffset() {
             val graphic = get(Graphic)
-            val offset = if (graphic.sprite.isFlipX){
-                vec2(-0.85f,0.07f)
-            }else vec2(0.2f,0.07f)
-            graphic.offset = offset
+            val xOffset = if (graphic.sprite.isFlipX) -0.18f else 0.18f
+            graphic.offset += vec2(xOffset, 0.07f)
         }
 
         fun addCollectable() {

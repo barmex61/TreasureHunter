@@ -2,6 +2,7 @@ package com.libgdx.treasurehunter.ecs.systems
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
@@ -17,6 +18,7 @@ import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isChest
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isFlag
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isGround
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isPlatform
+import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isRangeAttackFixture
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isShipHelm
 import com.libgdx.treasurehunter.enums.ParticleType
 import com.libgdx.treasurehunter.event.GameEvent
@@ -41,7 +43,7 @@ class JumpSystem(
         val jumpRectLowerXY = bodyPosition + lowerXY
         JUMP_DEBUG_RECT.set(jumpRectLowerXY.x -0.06f,jumpRectLowerXY.y,0.12f,0.12f)
         physicWorld.query(jumpRectLowerXY.x -0.06f,jumpRectLowerXY.y + 0.05f,jumpRectLowerXY.x + 0.12f,jumpRectLowerXY.y + 0.12f) { collisionFixture ->
-            if (!collisionFixture.isSensor && entity != collisionFixture.entity){
+            if (!collisionFixture.isSensor && entity != collisionFixture.entity && !collisionFixture.isRangeAttackFixture){
                 jump(entity,jumpComp,body,yImpulse)
                 return@query false
             }

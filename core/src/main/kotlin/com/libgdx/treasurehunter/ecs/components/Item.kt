@@ -1,6 +1,5 @@
 package com.libgdx.treasurehunter.ecs.components
 
-import com.badlogic.gdx.graphics.g2d.Animation
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
@@ -46,18 +45,6 @@ data class Projectile(
     override var throwState: ThrowState = ThrowState.READY
 ) : Damageable, Throwable
 
-data class Bomb(
-    override val attackMetaData: AttackMetaData = AttackMetaData(
-        attackSpeed= 1f,
-        attackRange= 0f,
-        attackType= AttackType.ATTACK_1,
-        attackDamage= 3,
-        baseAttackCooldown=2f,
-        baseAttackDestroyTime= 2f,
-        attackAnimPlayMode = Animation.PlayMode.NORMAL,
-        createFrameIndex = 0
-    )
-) : Damageable
 
 enum class ProjectileType{
     WOOD_SPIKE;

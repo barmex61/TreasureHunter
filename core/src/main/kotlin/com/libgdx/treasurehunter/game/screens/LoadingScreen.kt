@@ -1,5 +1,6 @@
 package com.libgdx.treasurehunter.game.screens
 
+import ParallaxBackground
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -20,12 +21,13 @@ import com.libgdx.treasurehunter.ui.navigation.ViewType
 import com.libgdx.treasurehunter.utils.Constants.ATTACK_EFFECT_FIXTURES
 import com.libgdx.treasurehunter.utils.Constants.ATTACK_FIXTURES
 import com.libgdx.treasurehunter.utils.Constants.OBJECT_FIXTURES
-import com.libgdx.treasurehunter.utils.Constants.currentMapPath
 import com.libgdx.treasurehunter.utils.GameObject
 import com.libgdx.treasurehunter.utils.GamePreferences
 import com.libgdx.treasurehunter.utils.GameProperties
 import com.libgdx.treasurehunter.utils.fixtureDefinitionOf
 import ktx.app.KtxScreen
+import ktx.graphics.use
+import ktx.math.vec2
 import ktx.scene2d.Scene2DSkin
 import ktx.tiled.isEmpty
 import ktx.tiled.propertyOrNull
@@ -44,13 +46,16 @@ class LoadingScreen(
     private val menuModel = MenuModel()
     private val stageNavigator = StageNavigator(stage,menuModel, gamePreferences = gamePreferences){ viewType ->
         if (viewType == ViewType.GAME){
-            currentMapPath = MapAssets.MAP1.name
             treasureHunter.removeScreen<LoadingScreen>()
             dispose()
             treasureHunter.addScreen(GameScreen(spriteBatch, assetHelper,physicWorld,audioManager,stage,this,gameProperties,gamePreferences))
             treasureHunter.setScreen<GameScreen>()
         }
     }
+    private val bg = ParallaxBackground(stage.viewport,"graphics/bg.png", vec2(1f,1f),1f)
+    private val clouds = ParallaxBackground(stage.viewport,"graphics/clouds.png", vec2(1f,1f),1f)
+    private val clouds2 = ParallaxBackground(stage.viewport,"graphics/clouds_2.png", vec2(1f,1f),1f)
+
     override fun show() {
         assetHelper.loadAll()
         Scene2DSkin.defaultSkin = assetHelper[SkinAsset.DEFAULT]
@@ -66,6 +71,13 @@ class LoadingScreen(
 
     override fun render(delta: Float) {
         stage.viewport.apply()
+        clouds.scrollBy(0.1f * delta,0f)
+        clouds2.scrollBy(0.05f * delta,0f)
+        stage.batch.use(stage.viewport.camera){
+            bg.draw(0f,0f,it)
+            clouds2.draw(0f,0f,it)
+            clouds.draw(0f,0f,it)
+        }
         stage.act(delta)
         stage.draw()
     }

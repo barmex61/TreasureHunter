@@ -373,7 +373,6 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="13" y="5">
     <properties>
-     <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="rangeAttackFixture"/>
     </properties>
     <polygon points="0,0 -8,0 -10,2 -10,4 -8,6 0,6"/>

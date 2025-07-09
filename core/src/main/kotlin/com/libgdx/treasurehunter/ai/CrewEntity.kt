@@ -81,6 +81,7 @@ data class CrewEntity(
             attackComp.doAttack = value
         }
 
+
     var stop : Boolean
         get() {
             val moveComp = getOrNull(Move) ?: return false
@@ -105,6 +106,9 @@ data class CrewEntity(
             val mainAnimationData = getOrNull(Animation)?.animationData ?: return false
             return mainAnimationData.gdxAnimation!!.isAnimationFinished(mainAnimationData.timer)
         }
+
+    private var directionChangeTimer : Float = 0f
+    private val directionChangeInterval : Float = 0.2f
 
     val aiWanderRadius : Float
         get() = get(AiComponent).aiWanderRadius
@@ -157,7 +161,14 @@ data class CrewEntity(
 
     fun moveTo(targetPosition : Vector2){
         val moveComponent = getOrNull(Move) ?: return
-        moveComponent.direction = MoveDirection.horizontalValueOf(targetPosition.x.compareTo(position.x).toInt())
+        if (directionChangeTimer == 0f || directionChangeTimer >= directionChangeInterval){
+            println("moveto")
+            moveComponent.direction = MoveDirection.horizontalValueOf(targetPosition.x.compareTo(position.x).toInt())
+            directionChangeTimer = 0.1f
+        }
+        directionChangeTimer += world.deltaTime
+        println("movetofirst")
+
     }
 
     fun inRange(targetPosition: Vector2) :Boolean {

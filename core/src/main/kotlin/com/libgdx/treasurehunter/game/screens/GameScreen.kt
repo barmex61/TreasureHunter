@@ -41,7 +41,6 @@ import com.libgdx.treasurehunter.tiled.TiledMapService
 import com.libgdx.treasurehunter.ui.model.GameModel
 import com.libgdx.treasurehunter.ui.navigation.StageNavigator
 import com.libgdx.treasurehunter.ui.navigation.ViewType
-import com.libgdx.treasurehunter.utils.Constants.currentMapPath
 import com.libgdx.treasurehunter.utils.GamePreferences
 import com.libgdx.treasurehunter.utils.GameProperties
 import ktx.app.KtxScreen
@@ -114,7 +113,7 @@ class GameScreen(
     override fun show() {
         inputMultiplexer.addProcessor(keyboardInputProcessor)
         registerGameEventListeners()
-        fireEvent(GameEvent.MapChangeEvent(assetHelper[MapAssets.valueOf(currentMapPath)]))
+        fireEvent(GameEvent.MapChangeEvent(assetHelper[MapAssets.MAP1]))
         stageNavigator.changeStageView(ViewType.GAME)
     }
 

@@ -5,11 +5,14 @@ import com.badlogic.gdx.assets.loaders.ShaderProgramLoader.ShaderProgramParamete
 import com.badlogic.gdx.assets.loaders.SkinLoader
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
 import com.badlogic.gdx.maps.tiled.TiledMap
 import com.badlogic.gdx.maps.tiled.TmxMapLoader
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.utils.Disposable
+import com.ray3k.stripe.FreeTypeSkinLoader
 import ktx.app.gdxError
 import ktx.assets.disposeSafely
 import ktx.assets.getAsset
@@ -55,7 +58,7 @@ class AssetHelper : Disposable{
     private val assetManager by lazy {
         AssetManager().apply {
             setLoader(TiledMap::class.java, TmxMapLoader())
-            setLoader(Skin::class.java, SkinLoader(fileHandleResolver))
+            setLoader(Skin::class.java, FreeTypeSkinLoader(fileHandleResolver))
         }
     }
 

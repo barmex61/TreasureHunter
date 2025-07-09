@@ -199,14 +199,14 @@ class AttackSystem(
         attackComp.doAttack = false
     }
 
-    private fun createAttackBody(centerPosition : Vector2, attackMetaData: Entity, bodyType: BodyDef.BodyType): Body {
+    private fun createAttackBody(centerPosition : Vector2, entity: Entity, bodyType: BodyDef.BodyType): Body {
         val attackBody = physicWorld.createBody(BodyDef().apply {
             type = bodyType
             position.set(centerPosition.x,centerPosition.y )
             fixedRotation = true
             gravityScale = 0f
         }).apply {
-            userData =  attackMetaData
+            userData =  entity
         }
         return attackBody
     }

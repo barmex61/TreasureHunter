@@ -66,19 +66,21 @@ class MenuView(
                     textButton("Play"){
                         onClick {
                             GameEventDispatcher.fireEvent(GameEvent.PlaySoundEvent(SoundAsset.BUTTON_CLICK))
-                            with(stageNavigator) {
-                                navigateToScreen(ViewType.GAME)
-                            }
+                            with(stageNavigator) { navigateToScreen(ViewType.GAME) }
                             true
                         }
                     }
                     textButton("Settings"){
                         onClick {
                             GameEventDispatcher.fireEvent(GameEvent.PlaySoundEvent(SoundAsset.BUTTON_CLICK))
-
-                            stageNavigator.changeStageView(
-                                viewType = ViewType.SETTINGS
-                            )
+                            stageNavigator.changeStageView(viewType = ViewType.SETTINGS)
+                            true
+                        }
+                    }
+                    textButton("How to Play"){
+                        onClick {
+                            GameEventDispatcher.fireEvent(GameEvent.PlaySoundEvent(SoundAsset.BUTTON_CLICK))
+                            stageNavigator.changeStageView(viewType = ViewType.HOW_TO_PLAY)
                             true
                         }
                     }

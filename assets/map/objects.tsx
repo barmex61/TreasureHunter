@@ -14,6 +14,7 @@
    <property name="life" type="int" value="3"/>
    <property name="speed" type="float" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="stat" type="class" propertytype="Stat"/>
    <property name="timeToMax" type="float" value="3"/>
   </properties>
   <image source="../graphics/objects/captain_clown_sword.png" width="64" height="40"/>
