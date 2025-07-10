@@ -1,12 +1,28 @@
 package com.libgdx.treasurehunter.ecs.components
 
-import com.github.quillraven.fleks.Component
-import com.github.quillraven.fleks.ComponentType
-import com.github.quillraven.fleks.Entity
 import com.libgdx.treasurehunter.ecs.components.ItemType.Damageable
 import com.libgdx.treasurehunter.ecs.components.ItemType.Throwable
 import com.libgdx.treasurehunter.factory.AttackMetaDataFactory
 import com.libgdx.treasurehunter.utils.GameObject
+
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
+import com.github.quillraven.fleks.Entity
+
+data class Item(
+    val itemData : ItemData,
+) : Component <Item> {
+
+    override fun type() = Item
+
+    companion object : ComponentType<Item>()
+
+}
+
+data class ItemData(
+    val itemType: ItemType,
+    val owner : Entity? = null
+)
 
 enum class ThrowState{
     READY,
@@ -21,9 +37,11 @@ sealed interface ItemType{
     interface Throwable : ItemType{
         var throwState : ThrowState
     }
-    data class Consumable(
-        val effect: String
-    ) : ItemType
+    interface Consumable : ItemType{
+
+    }
+
+    interface Collectable : ItemType
 
     fun toGameObject() : GameObject?{
         return when(this){
@@ -45,7 +63,24 @@ data class Projectile(
     override var throwState: ThrowState = ThrowState.READY
 ) : Damageable, Throwable
 
+data class Map (
+    val mapType : MapType
+) : ItemType.Collectable
 
+class Diamond : ItemType.Collectable
+
+class Skull : ItemType.Collectable
+
+class Key : ItemType.Collectable
+
+
+enum class MapType {
+    BIG_MAP,
+    SMALL_MAP_1,
+    SMALL_MAP_2,
+    SMALL_MAP_3,
+    SMALL_MAP_4
+}
 enum class ProjectileType{
     WOOD_SPIKE;
     fun toGameObject() : GameObject{
@@ -55,15 +90,4 @@ enum class ProjectileType{
     }
 }
 
-data class Item(
-    var itemType: ItemType,
-    val owner: Entity,
-    val isPickedUp: Boolean = false,
-    val isUsed: Boolean = false,
-    ) : Component <Item> {
 
-    override fun type() = Item
-
-    companion object : ComponentType<Item>()
-
-}

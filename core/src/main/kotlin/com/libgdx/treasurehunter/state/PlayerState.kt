@@ -5,7 +5,10 @@ import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.math.MathUtils
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.Item
+import com.libgdx.treasurehunter.ecs.components.ItemData
+import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.ecs.components.Sword
@@ -195,15 +198,7 @@ enum class PlayerState : EntityState<PlayerEntity> {
     SWORD_COLLECTED{
         override fun enter(entity: PlayerEntity) {
             with(entity.world){
-                if (entity.entity hasNo Attack){
-                    entity.entity.configure {
-                        it += Item(
-                            itemType = Sword(),
-                            owner = entity.entity
-                        )
-                        it[com.libgdx.treasurehunter.ecs.components.Animation].setNewModel(GameObject.CAPTAIN_CLOWN_SWORD.atlasKey)
-                    }
-                }
+                entity[Inventory].items.add(ItemData(Sword()))
             }
         }
 
@@ -216,11 +211,8 @@ enum class PlayerState : EntityState<PlayerEntity> {
     SWORD_THROWED{
         override fun enter(entity: PlayerEntity) {
             with(entity.world){
-                entity.entity.configure {
-                    it -= Item
-                    it -= Attack
-                    it[com.libgdx.treasurehunter.ecs.components.Animation].setNewModel(GameObject.CAPTAIN_CLOWN.atlasKey)
-                }
+                val sword = entity[Inventory].items.firstOrNull { it.itemType is Sword }
+                entity[Inventory].items.remove(sword)
             }
         }
         override fun update(entity: PlayerEntity) {

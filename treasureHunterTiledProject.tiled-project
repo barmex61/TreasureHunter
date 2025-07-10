@@ -49,8 +49,8 @@
                 "PLAYER",
                 "BACKGROUND",
                 "FOREGROUND",
-                "COLLECTABLE",
-                "ATTACH_TO_SHIP"
+                "ATTACH_TO_SHIP",
+                "RESPAWNABLE"
             ],
             "valuesAsFlags": true
         },

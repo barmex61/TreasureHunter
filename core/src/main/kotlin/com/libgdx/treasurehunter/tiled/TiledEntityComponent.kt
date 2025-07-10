@@ -28,10 +28,13 @@ import com.libgdx.treasurehunter.state.EntityState
 import com.libgdx.treasurehunter.state.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.Attack
-import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.Damage
+import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.Item
+import com.libgdx.treasurehunter.ecs.components.ItemData
 import com.libgdx.treasurehunter.ecs.components.Life
+import com.libgdx.treasurehunter.ecs.components.Map
+import com.libgdx.treasurehunter.ecs.components.MapType
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.Projectile
 import com.libgdx.treasurehunter.ecs.components.ProjectileType
@@ -147,10 +150,7 @@ fun EntityCreateContext.configureEntityTags(
         val tags = entityTags.split(",").map { splitEntityTag -> EntityTag.valueOf(splitEntityTag)}
         entity += tags
     }
-    if (entity has EntityTag.COLLECTABLE){
-        val gameObject = GameObject.valueOf(tile.propertyOrNull<String>("gameObject")?: gdxError("gameObject is null $tile"))
-        entity += Collectable(gameObject)
-    }
+
 }
 
 fun EntityCreateContext.configureDamage(entity: Entity, tile: TiledMapTile){
@@ -160,21 +160,23 @@ fun EntityCreateContext.configureDamage(entity: Entity, tile: TiledMapTile){
     }
 }
 
-fun EntityCreateContext.configureItem(entity: Entity, tile: TiledMapTile){
-    val itemObject = tile.property<String>("item","")
-    val item = when(itemObject){
-        "SWORD" -> Sword()
-        "PROJECTILE" -> Projectile(ProjectileType.WOOD_SPIKE)
-        else -> null
+fun EntityCreateContext.configureInventory(entity: Entity, gameObject: GameObject){
+    if (gameObject == GameObject.CAPTAIN_CLOWN || gameObject == GameObject.CAPTAIN_CLOWN_SWORD) {
+       entity += Inventory(owner = entity)
+    }else return
+}
+
+fun EntityCreateContext.configureItem(entity: Entity, gameObject: GameObject){
+    val item = when(gameObject){
+        GameObject.SWORD -> Sword()
+        GameObject.BIG_MAP -> Map(MapType.BIG_MAP)
+        GameObject.SMALL_MAP_1 -> Map(MapType.SMALL_MAP_1)
+        GameObject.SMALL_MAP_2 -> Map(MapType.SMALL_MAP_2)
+        GameObject.SMALL_MAP_3 -> Map(MapType.SMALL_MAP_3)
+        GameObject.SMALL_MAP_4 -> Map(MapType.SMALL_MAP_4)
+        else -> return
     }
-    if (item != null){
-        entity += Item(
-            item,
-            entity,
-            isPickedUp = true,
-            isUsed = false
-        )
-    }
+    entity += Item(itemData = ItemData(item))
 }
 
 fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){

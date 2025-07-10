@@ -19,7 +19,6 @@ import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
-import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
@@ -30,6 +29,8 @@ import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.State
+import com.libgdx.treasurehunter.ecs.components.Item
+import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
@@ -45,6 +46,7 @@ import ktx.math.component2
 import ktx.math.plus
 import ktx.math.vec2
 import kotlin.math.abs
+import com.libgdx.treasurehunter.ecs.components.Sword
 
 class PhysicSystem (
     private val physicWorld : PhysicWorld = inject(),
@@ -160,8 +162,14 @@ class PhysicSystem (
         }
     }
 
-    private fun handleCollectableBeginContact(collectableEntity: Entity, playerEntity: Entity) {
-        GameEventDispatcher.fireEvent(GameEvent.CollectableItemEvent(collectableEntity,playerEntity))
+    private fun handleItemBeginContact(itemEntity: Entity, playerEntity: Entity) {
+        if (itemEntity.has(EntityTag.COLLECTED)) return
+        val item = itemEntity.getOrNull(Item) ?: return
+        val inventory = playerEntity.getOrNull(Inventory) ?: return
+        inventory.addItem(item.itemData)
+        itemEntity.configure {
+            it += EntityTag.COLLECTED
+        }
     }
 
     private fun handleRangeAttackAndStaticObjectCollision(activeAttackEntity: Entity) {
@@ -185,8 +193,8 @@ class PhysicSystem (
         return  entityA has Damage  && entityB has Life && fixtureB.isSensor && fixtureB.isHitbox
     }
 
-    private fun isCollectableCollision(entityA: Entity,entityB: Entity,fixtureB:Fixture) : Boolean{
-        return entityA has EntityTag.COLLECTABLE && entityB has EntityTag.PLAYER && fixtureB.isSensor && !fixtureB.isSensorFixture
+    private fun isItemCollision(entityA: Entity, entityB: Entity, fixtureB: Fixture): Boolean {
+        return entityA.has(Item) && entityB.has(EntityTag.PLAYER) && fixtureB.isSensor && !fixtureB.isSensorFixture
     }
 
     private fun isRangeAttackAndStaticObjectCollision(entityA: Entity?,fixtureA : Fixture,entityB: Entity?,fixtureB:Fixture) : Boolean{
@@ -219,8 +227,8 @@ class PhysicSystem (
         when {
             isSensorAndPlayerCollision(entityA,fixtureA,fixtureB) -> handleSensorAndPlayerCollision(entityA, entityB ,true)
             isSensorAndPlayerCollision(entityB,fixtureB,fixtureA) -> handleSensorAndPlayerCollision(entityB, entityA ,true)
-            isCollectableCollision(entityA,entityB,fixtureB) -> handleCollectableBeginContact(entityA,entityB)
-            isCollectableCollision(entityB,entityA,fixtureA) -> handleCollectableBeginContact(entityB,entityA)
+            isItemCollision(entityA,entityB,fixtureB) -> handleItemBeginContact(entityA,entityB)
+            isItemCollision(entityB,entityA,fixtureA) -> handleItemBeginContact(entityB,entityA)
             isRangeAttackAndStaticObjectCollision(entityA,fixtureA,entityB,fixtureB) -> handleRangeAttackAndStaticObjectCollision(entityA)
             isRangeAttackAndStaticObjectCollision(entityB,fixtureB,entityB,fixtureA) -> handleRangeAttackAndStaticObjectCollision(entityB)
             isDamageCollision(entityA,entityB,fixtureB) -> handleDamageBeginContact(entityA,entityB)
@@ -270,26 +278,6 @@ class PhysicSystem (
 
     override fun onEvent(event: GameEvent) {
         when(event){
-            is GameEvent.CollectableItemEvent ->{
-                val collectableEntity = event.collectableEntity
-                val playerEntity = event.playerEntity
-                val (gameObject) = collectableEntity[Collectable]
-                when(gameObject){
-                    GameObject.SWORD ->{
-                        if (playerEntity has Attack ){
-                            return
-                        }
-
-                        collectableEntity.configure {
-                            it -= EntityTag.COLLECTABLE
-                        }
-                        playerEntity.configure {
-                            it[State].stateMachine.changeState(PlayerState.SWORD_COLLECTED as EntityState<StateEntity>)
-                        }
-                    }
-                    else -> Unit
-                }
-            }
             is GameEvent.ParticleEvent ->{
                 val bodyPosition = event.owner[Physic].body.position
                 val lowerXY = event.owner[Jump].lowerXY

@@ -25,10 +25,15 @@ import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.Stat
+import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.ecs.components.ThrowState
 import com.libgdx.treasurehunter.ecs.systems.AnimationSystem.Companion.setFlipX
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.TextureAtlasAssets
+import com.libgdx.treasurehunter.state.EntityState
+import com.libgdx.treasurehunter.state.PlayerState
+import com.libgdx.treasurehunter.state.StateEntity
 import com.libgdx.treasurehunter.utils.Constants.ATTACK_EFFECT_FIXTURES
 import com.libgdx.treasurehunter.utils.Constants.ATTACK_FIXTURES
 import com.libgdx.treasurehunter.utils.FixtureDefUserData
@@ -78,6 +83,7 @@ class AttackMetaSystem(
             entity = entity,
             entityGraphic = graphic,
             owner = owner,
+            ownerState = owner.getOrNull(State),
             ownerItem = ownerItem,
             ownerAnim = ownerAnim,
             ownerGraphic = ownerGraphic,
@@ -119,6 +125,7 @@ sealed class AttackHandler(
         owner: Entity,
         ownerItem : Item?,
         ownerAnim: Animation,
+        ownerState : State?,
         ownerGraphic: Graphic,
         ownerBottomCenter: Vector2,
         ownerFlipX: Boolean,
@@ -167,10 +174,11 @@ class MeleeAttackHandler(
         owner: Entity,
         ownerItem: Item?,
         ownerAnim: Animation,
+        ownerState: State?,
         ownerGraphic: Graphic,
         ownerBottomCenter: Vector2,
         ownerFlipX: Boolean,
-        ownerFrameIx : Int,
+        ownerFrameIx: Int,
         currentFrameIndex: Int,
         attackMeta: AttackMeta,
         body: Body,
@@ -242,6 +250,7 @@ class RangeAttackHandler(
         owner: Entity,
         ownerItem: Item?,
         ownerAnim: Animation,
+        ownerState: State?,
         ownerGraphic: Graphic,
         ownerBottomCenter: Vector2,
         ownerFlipX: Boolean,
@@ -249,7 +258,7 @@ class RangeAttackHandler(
         currentFrameIndex: Int,
         attackMeta: AttackMeta,
         body: Body,
-        attackType: AttackType,
+        attackType: AttackType
     ) {
         val animType = ownerAnim.animationData.animationType
         if (ownerFrameIx == attackMeta.createFrameIndex && !isFixtureInitialized) {
@@ -277,8 +286,9 @@ class RangeAttackHandler(
 
         if (ownerFrameIx == 2 && animType == AnimationType.THROW) {
             ownerItem?.let { item ->
-                val throwableItem = item.itemType as? ItemType.Throwable
+                val throwableItem = item.itemData.itemType as? ItemType.Throwable
                 throwableItem?.throwState = ThrowState.THROWED
+                ownerState?.stateMachine?.changeState(PlayerState.SWORD_THROWED as EntityState<StateEntity>)
             }
         }
     }

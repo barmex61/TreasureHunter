@@ -6,7 +6,7 @@ import com.github.quillraven.fleks.World.Companion.family
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 
 class RemoveSystem : IteratingSystem(
-    family = family{all(EntityTag.REMOVE)}
+    family = family{all(EntityTag.REMOVE, EntityTag.COLLECTED).none(EntityTag.RESPAWNABLE)}
 ) {
     override fun onTickEntity(entity: Entity) {
         entity.remove()

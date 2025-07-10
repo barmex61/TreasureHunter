@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="67">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="68">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
   <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DAY"/>
@@ -31,7 +31,6 @@
  <objectgroup id="5" name="objects">
   <object id="10" gid="116" x="288" y="192" width="34" height="93"/>
   <object id="11" gid="120" x="320" y="192" width="20" height="20"/>
-  <object id="16" gid="86" x="311" y="184" width="64" height="40"/>
   <object id="24" gid="143" x="416" y="192" width="32" height="32"/>
   <object id="25" gid="142" x="378" y="194" width="28" height="22"/>
   <object id="26" gid="145" x="380" y="176" width="24" height="24"/>
@@ -39,15 +38,19 @@
   <object id="28" gid="147" x="29" y="183" width="64" height="32"/>
   <object id="29" gid="144" x="57" y="151" width="39" height="32"/>
   <object id="30" gid="140" x="234" y="219" width="52" height="53"/>
-  <object id="31" gid="153" x="134" y="239" width="80" height="26"/>
-  <object id="32" gid="152" x="167" y="215" width="28" height="50">
+  <object id="31" gid="153" x="135" y="237" width="80" height="26">
    <properties>
-    <property name="entityTags" propertytype="EntityTags" value="FOREGROUND,ATTACH_TO_SHIP"/>
+    <property name="entityTags" propertytype="EntityTags" value=""/>
    </properties>
   </object>
-  <object id="33" gid="137" x="136" y="239" width="19" height="18">
+  <object id="32" gid="152" x="167" y="215" width="28" height="50">
    <properties>
-    <property name="entityTags" propertytype="EntityTags" value="FOREGROUND,ATTACH_TO_SHIP"/>
+    <property name="entityTags" propertytype="EntityTags" value="BACKGROUND,ATTACH_TO_SHIP"/>
+   </properties>
+  </object>
+  <object id="33" gid="137" x="135" y="234" width="19" height="18">
+   <properties>
+    <property name="entityTags" propertytype="EntityTags" value="ATTACH_TO_SHIP"/>
    </properties>
   </object>
   <object id="34" gid="154" x="243" y="226" width="24" height="12"/>
@@ -85,5 +88,6 @@
   <object id="58" gid="166" x="611" y="160" width="13" height="17"/>
   <object id="59" gid="167" x="641" y="159" width="16" height="16"/>
   <object id="66" gid="134" x="512" y="96" width="72" height="32"/>
+  <object id="67" gid="121" x="325" y="170" width="64" height="40"/>
  </objectgroup>
 </map>

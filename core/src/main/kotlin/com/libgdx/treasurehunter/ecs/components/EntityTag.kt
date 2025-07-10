@@ -4,5 +4,5 @@ import com.github.quillraven.fleks.EntityTags
 import com.github.quillraven.fleks.entityTagOf
 
 enum class EntityTag() : EntityTags by entityTagOf() {
-    PLAYER,BACKGROUND,FOREGROUND,HAS_MARK,COLLECTABLE,REMOVE,ATTACH_TO_SHIP
+    PLAYER,BACKGROUND,FOREGROUND,HAS_MARK,REMOVE,ATTACH_TO_SHIP,COLLECTED,RESPAWNABLE
 }

@@ -45,11 +45,11 @@ class AttackSystem(
         val attackComp = entity[Attack]
         val animComp = entity[Animation]
         val (_,center) = entity[Graphic]
-        var (wantsToAttack, attackState,doAttack,_) = attackComp
+        val (wantsToAttack, attackState,doAttack,_) = attackComp
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
-
+                    println("wants to attack")
                     val attackType = getQueuedAttackType(entity,attackComp.queuedAttackType)
                     val newAttackMetaData = attackComp.attackMetaData.copy()
                     attackType?.let {
@@ -225,8 +225,8 @@ class AttackSystem(
 
     private fun getRangeAttackItem(entity: Entity) : ItemType.Damageable?{
         val itemComp = entity.getOrNull(Item)?:return null
-        if (itemComp.itemType !is ItemType.Damageable) return null
-        val item = itemComp.itemType
+        if (itemComp.itemData.itemType !is ItemType.Damageable) return null
+        val item = itemComp.itemData.itemType
         return item as ItemType.Damageable?
     }
 

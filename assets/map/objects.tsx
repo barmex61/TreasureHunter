@@ -9,7 +9,6 @@
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN_SWORD"/>
    <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
-   <property name="item" propertytype="Item" value="SWORD"/>
    <property name="jumpHeight" type="float" value="1.1"/>
    <property name="life" type="int" value="3"/>
    <property name="speed" type="float" value="2"/>
@@ -135,7 +134,7 @@
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value="RESPAWNABLE"/>
    <property name="gameObject" propertytype="GameObject" value="SWORD"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -158,7 +157,6 @@
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN"/>
    <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
-   <property name="item" propertytype="Item" value="NONE"/>
    <property name="jumpHeight" type="float" value="1.1"/>
    <property name="life" type="int" value="3"/>
    <property name="speed" type="float" value="2"/>
@@ -167,23 +165,24 @@
   </properties>
   <image source="../graphics/objects/captain_clown.png" width="64" height="40"/>
   <objectgroup draworder="index" id="2">
-   <object id="18" x="24" y="16" width="16" height="16">
+   <object id="21" x="24" y="16" width="16" height="16">
     <properties>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="hitbox"/>
     </properties>
    </object>
-   <object id="19" x="25" y="26" width="14" height="6">
-    <properties>
-     <property name="userData" value="footFixture"/>
-    </properties>
-    <ellipse/>
-   </object>
-   <object id="20" x="25" y="18">
+   <object id="22" x="25" y="18">
     <properties>
      <property name="userData" value="bodyFixture"/>
     </properties>
-    <polygon points="0,0 0,11 4,13 10,13 14,11 14,0"/>
+    <polygon points="0,0 0,12 2,13 12.8125,13 14,12 14,0"/>
+   </object>
+   <object id="23" x="29" y="30">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="footFixture"/>
+    </properties>
+    <polygon points="0,0 0,1 6,1 6,0"/>
    </object>
   </objectgroup>
  </tile>
@@ -334,7 +333,7 @@
  <tile id="51">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="FOREGROUND"/>
+   <property name="entityTags" propertytype="EntityTags" value="FOREGROUND,ATTACH_TO_SHIP"/>
    <property name="gameObject" propertytype="GameObject" value="ANCHOR"/>
    <property name="hasAnimation" type="bool" value="false"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -529,7 +528,7 @@
  <tile id="66">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="FOREGROUND"/>
+   <property name="entityTags" propertytype="EntityTags" value="BACKGROUND,ATTACH_TO_SHIP"/>
    <property name="gameObject" propertytype="GameObject" value="SAIL"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="WIND"/>
@@ -594,7 +593,7 @@
  <tile id="72">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="BIG_MAP"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -612,7 +611,7 @@
  <tile id="73">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="BLUE_DIAMOND"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -631,7 +630,7 @@
  <tile id="74">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="BLUE_POTION"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -649,7 +648,7 @@
  <tile id="75">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="GOLD_COIN"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -668,7 +667,7 @@
  <tile id="76">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="GOLDEN_SKULL"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -687,7 +686,7 @@
  <tile id="77">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="GREEN_BOTTLE"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -706,7 +705,7 @@
  <tile id="78">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="GREEN_DIAMOND"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -724,7 +723,7 @@
  <tile id="79">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="RED_DIAMOND"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -743,7 +742,7 @@
  <tile id="80">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="RED_POTION"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -762,7 +761,7 @@
  <tile id="81">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="SILVER_COIN"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -781,7 +780,7 @@
  <tile id="82">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="SMALL_MAP_1"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -799,7 +798,7 @@
  <tile id="83">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="SMALL_MAP_2"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -817,7 +816,7 @@
  <tile id="84">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="SMALL_MAP_3"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -835,7 +834,7 @@
  <tile id="85">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value="COLLECTABLE"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="SMALL_MAP_4"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -903,7 +902,6 @@
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_2"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="item" propertytype="Item" value="PROJECTILE"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
@@ -934,7 +932,6 @@
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_3"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="item" propertytype="Item" value="PROJECTILE"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
@@ -965,7 +962,6 @@
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_4"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="item" propertytype="Item" value="PROJECTILE"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
@@ -997,7 +993,6 @@
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_5"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="item" propertytype="Item" value="PROJECTILE"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
@@ -1028,7 +1023,6 @@
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_6"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="item" propertytype="Item" value="PROJECTILE"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>

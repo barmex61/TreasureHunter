@@ -18,25 +18,10 @@ class ItemSystem : IteratingSystem(
 
     override fun onTickEntity(entity: Entity) {
         val itemComp = entity[Item]
-        val itemType = itemComp.itemType
+        val itemType = itemComp.itemData.itemType
         val damageableItem = itemType as? ItemType.Damageable
         val throwableItem = itemType as? ItemType.Throwable
-        if (damageableItem != null){
-            entity.configure {
-                if (entity hasNo Attack){
-                    entity += Attack(
-                        attackMetaData = damageableItem.attackMetaData
-                    )
-                }
-            }
-        }
-        if (throwableItem != null){
-            when(throwableItem.throwState){
-                ThrowState.THROWED ->  entity.getOrNull(State)?.stateMachine?.changeState(PlayerState.SWORD_THROWED as EntityState<StateEntity>)
-                else -> Unit
-            }
 
-        }
 
     }
 }

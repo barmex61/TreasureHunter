@@ -18,10 +18,10 @@ import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.Blink
-import com.libgdx.treasurehunter.ecs.components.Collectable
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
+import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.Mark
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
@@ -54,52 +54,58 @@ sealed class StateEntity(
     val assetHelper: AssetHelper,
 ) {
 
-    inline operator fun <reified T: Component<*>> Entity.get(type: ComponentType<T>): T = with(world) {
-        return this@get[type]
-    }
+    inline operator fun <reified T : Component<*>> Entity.get(type: ComponentType<T>): T =
+        with(world) {
+            return this@get[type]
+        }
 
-    inline operator fun <reified T:Component<*>> get(type: ComponentType<T>) : T = with(world){
+    inline operator fun <reified T : Component<*>> get(type: ComponentType<T>): T = with(world) {
         return entity[type]
     }
 
-    inline fun <reified T: Component<*>> getOrNull(type: ComponentType<T>) : T? = with(world){
+    inline fun <reified T : Component<*>> getOrNull(type: ComponentType<T>): T? = with(world) {
         return entity.getOrNull(type)
     }
 
-    fun Entity.configure(configuration : EntityUpdateContext.(Entity) -> Unit) = with(world) { this@configure.configure(configuration) }
+    fun Entity.configure(configuration: EntityUpdateContext.(Entity) -> Unit) =
+        with(world) { this@configure.configure(configuration) }
 
-    val body : Body
+    val body: Body
         get() = this[Physic].body
 
-    val doAttack : Boolean
+    val doAttack: Boolean
         get() {
-            var doAttack = this.getOrNull(Attack)?.doAttack?:return false
-            return if (doAttack){
+            var doAttack = this.getOrNull(Attack)?.doAttack ?: return false
+            return if (doAttack) {
                 this[Attack].doAttack = false
                 true
-            }else false
+            } else false
         }
 
 
-    val isGetHit : Boolean
+    val isGetHit: Boolean
         get() = getOrNull(DamageTaken) != null
 
-    var alpha : Float
-        get() = this.getOrNull(Graphic)?.sprite?.color?.a?:1f
+    var alpha: Float
+        get() = this.getOrNull(Graphic)?.sprite?.color?.a ?: 1f
         set(value) {
             this.getOrNull(Graphic)?.sprite?.setAlpha(value)
         }
 
-    val animKeyFrameIx : Int
+    val animKeyFrameIx: Int
         get() {
             return this.getOrNull(Animation)?.getAnimKeyFrameIx() ?: 0
         }
 
-    val animType : AnimationType
+    val animType: AnimationType
         get() = this.getOrNull(Animation)?.animationData?.animationType ?: AnimationType.NONE
 
-    fun animation(animationType: AnimationType,playMode: PlayMode = PlayMode.LOOP,frameDuration: Float? = null) = with(world){
-        animation(entity,animationType,playMode,frameDuration)
+    fun animation(
+        animationType: AnimationType,
+        playMode: PlayMode = PlayMode.LOOP,
+        frameDuration: Float? = null,
+    ) = with(world) {
+        animation(entity, animationType, playMode, frameDuration)
     }
 
 
@@ -109,64 +115,80 @@ sealed class StateEntity(
         this[State].stateMachine.changeState(nextState as AiState)
     }
 
-    fun isAnimationDone(): Boolean = with(world){
+    fun isAnimationDone(): Boolean = with(world) {
         return@with get(Animation).isAnimationDone()
     }
 
-    fun remove(){
+    fun remove() {
         entity.configure {
             it += EntityTag.REMOVE
         }
     }
 
-    class PlayerEntity(entity: Entity, world: World, physicWorld: PhysicWorld, assetHelper: AssetHelper) : StateEntity(entity, world, physicWorld, assetHelper){
-        var runParticleTimer : Float = 0.5f
+    class PlayerEntity(
+        entity: Entity,
+        world: World,
+        physicWorld: PhysicWorld,
+        assetHelper: AssetHelper,
+    ) : StateEntity(entity, world, physicWorld, assetHelper) {
+        var runParticleTimer: Float = 0.5f
 
-        val state : PlayerState
+        val state: PlayerState
             get() = this[State].stateMachine.currentState as PlayerState
 
         fun fireParticleEvent(particleType: ParticleType) {
             GameEventDispatcher.fireEvent(GameEvent.ParticleEvent(entity, particleType))
         }
 
-        fun removeDamageTaken(){
-            val damageTaken = getOrNull(DamageTaken)?:return
+        fun removeDamageTaken() {
+            val damageTaken = getOrNull(DamageTaken) ?: return
             if (damageTaken.isContinuous) return
             entity.configure {
                 it -= DamageTaken
             }
         }
 
-        fun createMarkEntity(markType : MarkType) {
+        fun createMarkEntity(markType: MarkType) {
             entity.configure { aiEntity ->
-                if (entity hasNo EntityTag.HAS_MARK){
+                if (entity hasNo EntityTag.HAS_MARK) {
                     aiEntity += EntityTag.HAS_MARK
                     val markPosition = entity[Graphic].center
                     val gameObjectFromType = markType.toGameObject()
-                    world.entity{ markEntity ->
-                        markEntity += Graphic(sprite(gameObjectFromType.atlasKey, AnimationType.IN,markPosition,assetHelper,0f))
-                        markEntity += Animation(gameObjectFromType.atlasKey, AnimationData(
-                            animationType = AnimationType.IN,
-                            playMode = PlayMode.NORMAL,
-                            frameDuration = 0.2f
-                        ))
-                        markEntity += Mark(1f,markType.offset,aiEntity)
+                    world.entity { markEntity ->
+                        markEntity += Graphic(
+                            sprite(
+                                gameObjectFromType.atlasKey,
+                                AnimationType.IN,
+                                markPosition,
+                                assetHelper,
+                                0f
+                            )
+                        )
+                        markEntity += Animation(
+                            gameObjectFromType.atlasKey, AnimationData(
+                                animationType = AnimationType.IN,
+                                playMode = PlayMode.NORMAL,
+                                frameDuration = 0.2f
+                            )
+                        )
+                        markEntity += Mark(1f, markType.offset, aiEntity)
                     }
                 }
             }
         }
 
     }
+
     class SwordEntity(
         entity: Entity,
         world: World,
         physicWorld: PhysicWorld,
-        assetHelper: AssetHelper
+        assetHelper: AssetHelper,
     ) : StateEntity(entity, world, physicWorld, assetHelper) {
         val isCollected: Boolean
             get() {
                 with(world) {
-                    return entity hasNo EntityTag.COLLECTABLE
+                    return entity hasNo Item
                 }
             }
 
@@ -194,22 +216,15 @@ sealed class StateEntity(
             graphic.offset += vec2(xOffset, 0.07f)
         }
 
-        fun addCollectable() {
-
-            entity.configure {
-                it += EntityTag.COLLECTABLE
-                it += Collectable(GameObject.SWORD)
-            }
-        }
     }
 
     class ShipEntity(
         entity: Entity,
         world: World,
         physicWorld: PhysicWorld,
-        assetHelper: AssetHelper
+        assetHelper: AssetHelper,
     ) : StateEntity(entity, world, physicWorld, assetHelper) {
-        private val ship : Ship
+        private val ship: Ship
             get() = this[Ship]
 
         private val attachedEntities
@@ -217,10 +232,11 @@ sealed class StateEntity(
                 family { all(EntityTag.ATTACH_TO_SHIP) }
             }.map()
 
-        private fun Family.map() : MutableMap<Entity, Vector2>{
+        private fun Family.map(): MutableMap<Entity, Vector2> {
             val attachedEntityMap = mutableMapOf<Entity, Vector2>()
             forEach { entity ->
-                attachedEntityMap[entity] = entity[Physic].body.position - this@ShipEntity.entity[Physic].body.position
+                attachedEntityMap[entity] =
+                    entity[Physic].body.position - this@ShipEntity.entity[Physic].body.position
             }
             return attachedEntityMap
         }
@@ -231,7 +247,7 @@ sealed class StateEntity(
         private val originalY: Float = body.position.y
 
         fun waveEffect(deltaTime: Float) {
-            if (ship.isWaveEffectEnabled){
+            if (ship.isWaveEffectEnabled) {
                 waveTime += deltaTime
                 val waveOffset = sin(waveTime * waveFrequency) * waveAmplitude
                 val newY = originalY + waveOffset
@@ -244,15 +260,15 @@ sealed class StateEntity(
         fun updateAttachedEntities(deltaTime: Float) {
 
             val shipTransform = body.position
-            if (ship.attachedEntities.isEmpty()){
+            if (ship.attachedEntities.isEmpty()) {
                 ship.attachedEntities = attachedEntities
             }
-            ship.attachedEntities.forEach { (entity,offset) ->
+            ship.attachedEntities.forEach { (entity, offset) ->
                 val attachedBody = entity[Physic].body
 
                 attachedBody.setTransform(
                     shipTransform.x + offset.x,
-                    shipTransform.y + offset.y ,
+                    shipTransform.y + offset.y,
                     attachedBody.angle
                 )
             }
