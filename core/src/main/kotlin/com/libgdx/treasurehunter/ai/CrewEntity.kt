@@ -162,12 +162,10 @@ data class CrewEntity(
     fun moveTo(targetPosition : Vector2){
         val moveComponent = getOrNull(Move) ?: return
         if (directionChangeTimer == 0f || directionChangeTimer >= directionChangeInterval){
-            println("moveto")
             moveComponent.direction = MoveDirection.horizontalValueOf(targetPosition.x.compareTo(position.x).toInt())
             directionChangeTimer = 0.1f
         }
         directionChangeTimer += world.deltaTime
-        println("movetofirst")
 
     }
 

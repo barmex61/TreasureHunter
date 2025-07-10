@@ -13,8 +13,11 @@ import com.libgdx.treasurehunter.ecs.components.MoveDirection
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.systems.CameraMovement
 import com.libgdx.treasurehunter.ecs.systems.CameraSystem
+import com.libgdx.treasurehunter.ui.navigation.StageNavigator
+import com.libgdx.treasurehunter.ui.navigation.TransitionType
+import com.libgdx.treasurehunter.ui.navigation.ViewType
 
-class KeyboardInputProcessor(val world: World) : KtxInputAdapter {
+class KeyboardInputProcessor(val world: World,val toggleInventory : () -> Unit) : KtxInputAdapter {
 
     private var moveX = 0
     private var playerEntities = with(world) {
@@ -64,6 +67,7 @@ class KeyboardInputProcessor(val world: World) : KtxInputAdapter {
     }
 
 
+
     override fun keyDown(keycode: Int): Boolean {
         when(keycode){
             Input.Keys.D -> updatePlayerMovement(1)
@@ -79,6 +83,7 @@ class KeyboardInputProcessor(val world: World) : KtxInputAdapter {
             Input.Keys.NUMPAD_8 -> updateCameraZoom(0.1f)
             Input.Keys.NUMPAD_5 -> updateCameraZoom(-0.1f)
             Input.Keys.P -> updatePlayerAttack(AttackType.THROW)
+            Input.Keys.I -> toggleInventory()
         }
 
         return false

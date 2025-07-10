@@ -14,6 +14,8 @@ import ktx.actors.alpha
 import ktx.actors.plusAssign
 import ktx.scene2d.actors
 import com.badlogic.gdx.utils.Align
+import com.libgdx.treasurehunter.ui.view.GameView
+import com.libgdx.treasurehunter.ui.view.InventoryView
 import com.libgdx.treasurehunter.ui.view.howToPlayView
 import com.libgdx.treasurehunter.utils.GamePreferences
 
@@ -21,13 +23,15 @@ enum class ViewType{
     MENU,
     GAME,
     SETTINGS,
-    HOW_TO_PLAY
+    HOW_TO_PLAY,
 }
 
 enum class TransitionType {
     FADE,
     SLIDE_LEFT,
     SLIDE_RIGHT,
+    SLIDE_DOWN,
+    SLIDE_UP,
     SCALE_UP,
     SCALE_DOWN,
     ROTATE
@@ -54,7 +58,7 @@ class StageNavigator(
             ViewType.MENU -> {
                 menuModel?:return
                 stage.actors {
-                    menuView(menuModel, stageNavigator = this@StageNavigator).apply {
+                    menuView(menuModel, stageNavigator = this@StageNavigator){
                         setupInitialState()
                         nextView = this
                     }
@@ -63,7 +67,7 @@ class StageNavigator(
             ViewType.GAME -> {
                 gameModel?:return
                 stage.actors {
-                    gameView(gameModel!!).apply {
+                    gameView(gameModel!!) {
                         setupInitialState()
                         nextView = this
                     }
@@ -71,7 +75,7 @@ class StageNavigator(
             }
             ViewType.SETTINGS -> {
                 stage.actors {
-                    settingsView(stageNavigator = this@StageNavigator, gamePreferences = this@StageNavigator.gamePreferences).apply {
+                    settingsView(stageNavigator = this@StageNavigator, gamePreferences = this@StageNavigator.gamePreferences) {
                         setupInitialState()
                         nextView = this
                     }
@@ -79,15 +83,22 @@ class StageNavigator(
             }
             ViewType.HOW_TO_PLAY -> {
                 stage.actors {
-                    howToPlayView(stageNavigator = this@StageNavigator).apply {
+                    howToPlayView(stageNavigator = this@StageNavigator) {
                         setupInitialState()
                         nextView = this
                     }
                 }
             }
+
         }
 
         applyTransition()
+    }
+
+    fun toggleInventoryView() {
+        if (currentView is GameView) {
+            (currentView as GameView).toggleInventoryView()
+        }
     }
 
     private fun Actor.setupInitialState() {
@@ -102,6 +113,14 @@ class StageNavigator(
             TransitionType.SLIDE_RIGHT -> {
                 alpha = 1f
                 setPosition(-stage.width, 0f)
+            }
+            TransitionType.SLIDE_DOWN -> {
+                alpha = 1f
+                setPosition(0f, stage.height)
+            }
+            TransitionType.SLIDE_UP -> {
+                alpha = 1f
+                setPosition(0f, -stage.height)
             }
             TransitionType.SCALE_UP -> {
                 alpha = 1f
@@ -135,7 +154,7 @@ class StageNavigator(
         nextView = null
     }
 
-    private fun getExitAction(): SequenceAction {
+    private fun getExitAction(removeCurrentActor : Boolean = false): SequenceAction {
         return Actions.sequence(
             when(currentTransitionType) {
                 TransitionType.FADE -> Actions.parallel(
@@ -147,6 +166,14 @@ class StageNavigator(
                 )
                 TransitionType.SLIDE_RIGHT -> Actions.parallel(
                     Actions.moveBy(stage.width, 0f, 0.5f),
+                    Actions.alpha(0f, 0.5f)
+                )
+                TransitionType.SLIDE_DOWN -> Actions.parallel(
+                    Actions.moveBy(0f, -stage.height, 0.5f),
+                    Actions.alpha(0f, 0.5f)
+                )
+                TransitionType.SLIDE_UP -> Actions.parallel(
+                    Actions.moveBy(0f, stage.height, 0.5f),
                     Actions.alpha(0f, 0.5f)
                 )
                 TransitionType.SCALE_UP -> Actions.parallel(
@@ -163,6 +190,7 @@ class StageNavigator(
                     Actions.alpha(0f, 0.5f)
                 )
             },
+
             Actions.removeActor()
         )
     }
@@ -177,6 +205,14 @@ class StageNavigator(
                 Actions.alpha(1f, 0.5f)
             )
             TransitionType.SLIDE_RIGHT -> Actions.parallel(
+                Actions.moveTo(0f, 0f, 0.5f),
+                Actions.alpha(1f, 0.5f)
+            )
+            TransitionType.SLIDE_DOWN -> Actions.parallel(
+                Actions.moveTo(0f, 0f, 0.5f),
+                Actions.alpha(1f, 0.5f)
+            )
+            TransitionType.SLIDE_UP -> Actions.parallel(
                 Actions.moveTo(0f, 0f, 0.5f),
                 Actions.alpha(1f, 0.5f)
             )

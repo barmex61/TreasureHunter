@@ -94,5 +94,6 @@ class MenuView(
 fun <S> KWidget<S>.menuView(
     menuModel: MenuModel,
     skin: Skin = Scene2DSkin.defaultSkin,
-    stageNavigator: StageNavigator
-): MenuView = actor(MenuView(skin, menuModel,stageNavigator)) {}
+    stageNavigator: StageNavigator,
+    init : MenuView.(S) -> Unit = {}
+): MenuView = actor(MenuView(skin, menuModel,stageNavigator),init)

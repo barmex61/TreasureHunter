@@ -10,6 +10,7 @@ import com.libgdx.treasurehunter.ui.model.GameModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ktx.actors.alpha
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2DSkin
@@ -28,6 +29,8 @@ class GameView(
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val playerLifeBar : Image
     private val enemyLifeBar : Image
+    private val inventoryView : InventoryView = InventoryView(skin, gameModel).also { it.alpha = 0f }
+    private var isInventoryVisible = false
     init {
 
         debug()
@@ -58,6 +61,7 @@ class GameView(
         add().expand()
         add().expand()
         add().expand()
+        addActor(inventoryView)
         coroutineScope.launch {
             launch {
                 gameModel.playerLifeBarScale.collect { lifeBarScale ->
@@ -78,10 +82,21 @@ class GameView(
 
         }
     }
+
+    fun toggleInventoryView() {
+        isInventoryVisible = !isInventoryVisible
+        inventoryView.clearActions()
+        inventoryView += if (isInventoryVisible){
+            Actions.fadeIn(1f)
+        }else {
+            Actions.fadeOut(1f)
+        }
+    }
 }
 
 @Scene2dDsl
 fun <S> KWidget<S>.gameView(
     gameModel: GameModel,
     skin: Skin = Scene2DSkin.defaultSkin,
-): GameView = actor(GameView(skin, gameModel)) {}
+    init : GameView.(S) -> Unit = {}
+): GameView = actor(GameView(skin, gameModel),init)

@@ -60,7 +60,6 @@ class RenderSystem (
 
     override fun onTick() {
         backgroundClose?.offsetX -= deltaTime * 10f
-
         gameViewPort.apply()
         uiViewport.apply()
         mapRenderer.setView(gameCamera)
