@@ -37,7 +37,6 @@ enum class SwordState : EntityState<StateEntity.SwordEntity> {
 
         override fun update(entity: StateEntity.SwordEntity) {
             respawnTimer -= Gdx.graphics.deltaTime
-            println(respawnTimer)
             if (respawnTimer <= 0f) {
 
                 entity.state(IDLE)
@@ -63,6 +62,7 @@ enum class SwordState : EntityState<StateEntity.SwordEntity> {
             when {
                 entity.collidedWithWall -> entity.state(EMBEDDED)
                 spinningDuration <= 0f -> {
+                    println("spinning remove")
                     entity.attackDestroyTimer = 0f
                     entity.remove()
                 }
@@ -70,7 +70,13 @@ enum class SwordState : EntityState<StateEntity.SwordEntity> {
         }
     },
     EMBEDDED {
+
         override fun enter(entity: StateEntity.SwordEntity) {
+            with(entity.world){
+                entity.entity.configure {
+                    it += Item(ItemData(Sword()))
+                }
+            }
             entity.animation(AnimationType.EMBEDDED, playMode = Animation.PlayMode.NORMAL)
             entity.setSpriteOffset()
         }
@@ -82,8 +88,15 @@ enum class SwordState : EntityState<StateEntity.SwordEntity> {
                     1f,
                     0.075f
                 )
-
                 entity.attackDestroyTimer <= 0f || entity.isCollected -> entity.remove()
+            }
+        }
+
+        override fun exit(entity: StateEntity.SwordEntity) {
+            with(entity.world){
+                entity.entity.configure {
+                    it -= Item
+                }
             }
         }
     }

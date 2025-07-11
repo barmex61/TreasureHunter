@@ -10110,7 +10110,7 @@ sceneComposer: {
 										padBottom: 17
 										reverse: false
 										columnAlignment: 1
-										space: -7
+										space: -4
 										wrap: false
 										wrapSpace: 0
 										children: [

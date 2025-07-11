@@ -18,6 +18,7 @@ import com.libgdx.treasurehunter.ecs.systems.DamageSystem
 import com.libgdx.treasurehunter.ecs.systems.DebugSystem
 import com.libgdx.treasurehunter.ecs.systems.FlashSystem
 import com.libgdx.treasurehunter.ecs.systems.GlProfilerSystem
+import com.libgdx.treasurehunter.ecs.systems.InventorySystem
 import com.libgdx.treasurehunter.ecs.systems.InvulnarableSystem
 import com.libgdx.treasurehunter.ecs.systems.ItemSystem
 import com.libgdx.treasurehunter.ecs.systems.JumpSystem
@@ -88,6 +89,7 @@ class GameScreen(
             add(AnimationSystem())
             add(MarkSystem())
             add(ItemSystem())
+            add(InventorySystem())
             add(JumpSystem())
             add(ParticleSystem())
             add(AiSystem())

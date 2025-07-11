@@ -195,19 +195,6 @@ enum class PlayerState : EntityState<PlayerEntity> {
         }
     },
 
-    SWORD_COLLECTED{
-        override fun enter(entity: PlayerEntity) {
-            with(entity.world){
-                entity[Inventory].items.add(ItemData(Sword()))
-            }
-        }
-
-        override fun update(entity: PlayerEntity) {
-            with(entity.world) {
-                entity.state(IDLE)
-            }
-        }
-    },
     SWORD_THROWED{
         override fun enter(entity: PlayerEntity) {
             with(entity.world){

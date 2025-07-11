@@ -66,6 +66,12 @@ data class Attack(
     var doAttack : Boolean = false,
     var attackMetaData: AttackMetaData,
     ) : Component <Attack> {
+    var equippedItem : ItemType.Damageable? = null
+        set(value) {
+            value?:return
+            attackMetaData = value.attackMetaData
+            field = value
+        }
 
     var queuedAttackType : AttackType? = null
 

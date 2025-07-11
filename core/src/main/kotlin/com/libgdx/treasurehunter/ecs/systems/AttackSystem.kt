@@ -49,7 +49,6 @@ class AttackSystem(
         when(attackState){
             AttackState.READY -> {
                 if (wantsToAttack) {
-                    println("wants to attack")
                     val attackType = getQueuedAttackType(entity,attackComp.queuedAttackType)
                     val newAttackMetaData = attackComp.attackMetaData.copy()
                     attackType?.let {
@@ -72,7 +71,7 @@ class AttackSystem(
 
                         }
                     } else {
-                        val item = getRangeAttackItem(entity)
+                        val item = attackComp.equippedItem
                         if (item == null){
                             resetAttackComp(attackComp,newAttackMetaData)
                             return
@@ -222,15 +221,6 @@ class AttackSystem(
         }
         return updatedAttackType
     }
-
-    private fun getRangeAttackItem(entity: Entity) : ItemType.Damageable?{
-        val itemComp = entity.getOrNull(Item)?:return null
-        if (itemComp.itemData.itemType !is ItemType.Damageable) return null
-        val item = itemComp.itemData.itemType
-        return item as ItemType.Damageable?
-    }
-
-
 
 }
 

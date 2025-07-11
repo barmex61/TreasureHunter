@@ -188,7 +188,7 @@ sealed class StateEntity(
         val isCollected: Boolean
             get() {
                 with(world) {
-                    return entity hasNo Item
+                    return entity has EntityTag.COLLECTED
                 }
             }
 

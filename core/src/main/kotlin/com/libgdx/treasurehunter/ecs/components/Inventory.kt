@@ -4,9 +4,14 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
 
+enum class EquipSlot { SWORD, ARMOR, BOOTS, HELMET }
 
 data class Inventory(
-    val items : MutableList<ItemData> = mutableListOf(),
+    val items: MutableList<ItemData> = mutableListOf(),
+    var equippedSword: ItemData? = null,
+    var equippedArmor: ItemData? = null,
+    var equippedBoots: ItemData? = null,
+    var equippedHelmet: ItemData? = null,
     val owner: Entity,
     val maxSize: Int = 25,
 ) : Component <Inventory> {

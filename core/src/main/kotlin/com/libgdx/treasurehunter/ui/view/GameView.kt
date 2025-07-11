@@ -75,7 +75,6 @@ class GameView(
             }
             launch {
                 gameModel.enemyLifeBarScale.collect { lifeBarScale ->
-                    println(lifeBarScale)
                     enemyLifeBar += Actions.scaleTo(lifeBarScale, 1f, 0.4f, Interpolation.smooth)
                 }
             }

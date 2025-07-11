@@ -96,6 +96,7 @@ class AttackMetaSystem(
             attackType = attackMetaData.attackType
         )
         if (collideWithWall && attackHandler is RangeAttackHandler){
+            println("Collide with wall")
             attackHandler.collideWithWall(body,attackMetaData,entity)
         }
     }
@@ -112,6 +113,7 @@ sealed class AttackHandler(
         if (attackMetaData.attackDestroyTime <= 0f || (isFixtureInitialized && body.fixtureList.isEmpty)) {
             with(world) {
                 entity.configure {
+                    println("Destroying attack meta data for entity: ${entity.id}")
                     it += EntityTag.REMOVE
                 }
             }
@@ -300,23 +302,18 @@ class RangeAttackHandler(
         when(attackMetaData.gameObject){
             GameObject.WOOD_SPIKE ->{
                 body.gravityScale = 1F
-                with(world) {
-                    entity.configure {
-                        it -= Damage
-                    }
-                }
             }
             GameObject.SWORD -> {
                 if (body.linearVelocity != Vector2.Zero){
                     body.linearVelocity = vec2(0f,0f)
-                    with(world) {
-                        entity.configure {
-                            it -= Damage
-                        }
-                    }
                 }
             }
             else -> Unit
+        }
+        with(world) {
+            entity.configure {
+                it -= Damage
+            }
         }
     }
 }
