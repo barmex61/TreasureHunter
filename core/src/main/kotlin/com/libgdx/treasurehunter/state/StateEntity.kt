@@ -21,6 +21,7 @@ import com.libgdx.treasurehunter.ecs.components.Blink
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
+import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.Mark
 import com.libgdx.treasurehunter.ecs.components.Move
@@ -136,6 +137,17 @@ sealed class StateEntity(
         val state: PlayerState
             get() = this[State].stateMachine.currentState as PlayerState
 
+        val hasSword : Boolean
+            get() {
+                val equippedItem = this.getOrNull(Inventory)?.equippedSword
+                return equippedItem != null
+            }
+
+        fun updateModelBySword() {
+            this[Animation].setNewModel(
+                if (hasSword) GameObject.CAPTAIN_CLOWN_SWORD.atlasKey else GameObject.CAPTAIN_CLOWN.atlasKey
+            )
+        }
         fun fireParticleEvent(particleType: ParticleType) {
             GameEventDispatcher.fireEvent(GameEvent.ParticleEvent(entity, particleType))
         }

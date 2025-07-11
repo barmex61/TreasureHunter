@@ -68,7 +68,12 @@ object AttackMetaDataFactory {
                 )
             }
 
-            GameObject.WOOD_SPIKE -> {
+            GameObject.TOTEM_HEAD_1,
+            GameObject.TOTEM_HEAD_2,
+            GameObject.TOTEM_HEAD_3,
+            GameObject.TOTEM_HEAD_4,
+            GameObject.TOTEM_HEAD_5,
+            GameObject.TOTEM_HEAD_6 -> {
                 AttackMetaData(
                     attackSpeed = 1f,
                     attackRange = 8f,
@@ -78,7 +83,7 @@ object AttackMetaDataFactory {
                     baseAttackDestroyTime = 5f,
                     attackAnimPlayMode = Animation.PlayMode.NORMAL,
                     createFrameIndex = 3,
-                    gameObject = gameObject
+                    gameObject = GameObject.WOOD_SPIKE
                 )
             }
 

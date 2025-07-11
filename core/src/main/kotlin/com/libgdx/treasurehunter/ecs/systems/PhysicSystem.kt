@@ -31,6 +31,7 @@ import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.Inventory
+import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
@@ -169,6 +170,10 @@ class PhysicSystem (
         inventory.addItem(item.itemData)
         itemEntity.configure {
             it += EntityTag.COLLECTED
+        }
+        if (item.itemData.itemType is Sword) {
+            playerEntity.getOrNull(Animation)?.setNewModel(GameObject.CAPTAIN_CLOWN_SWORD.atlasKey)
+            playerEntity.getOrNull(Inventory)?.equippedSword = item.itemData
         }
     }
 

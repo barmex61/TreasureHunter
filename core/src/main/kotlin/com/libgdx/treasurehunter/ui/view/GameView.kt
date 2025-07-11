@@ -6,7 +6,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.ui.model.GameModel
+import com.libgdx.treasurehunter.ui.model.InventoryModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,14 +27,14 @@ import ktx.scene2d.stack
 class GameView(
     skin: Skin,
     gameModel : GameModel,
+    inventoryModel: InventoryModel
 ) : Table(skin), KTable{
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val playerLifeBar : Image
     private val enemyLifeBar : Image
-    private val inventoryView : InventoryView = InventoryView(skin, gameModel).also { it.alpha = 0f }
+    private val inventoryView : InventoryView = InventoryView(skin,inventoryModel).also { it.alpha = 0f }
     private var isInventoryVisible = false
     init {
-
         debug()
         setFillParent(true)
 
@@ -96,6 +98,7 @@ class GameView(
 @Scene2dDsl
 fun <S> KWidget<S>.gameView(
     gameModel: GameModel,
+    inventoryModel: InventoryModel = InventoryModel().also { GameEventDispatcher.registerListener(it) },
     skin: Skin = Scene2DSkin.defaultSkin,
     init : GameView.(S) -> Unit = {}
-): GameView = actor(GameView(skin, gameModel),init)
+): GameView = actor(GameView(skin, gameModel,inventoryModel),init)

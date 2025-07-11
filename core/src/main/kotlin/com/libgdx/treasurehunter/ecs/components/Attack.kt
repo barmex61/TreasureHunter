@@ -16,7 +16,7 @@ enum class AttackState {
 
 
 enum class AttackType(val isMelee : Boolean,val attackOffset : Vector2 = vec2(-0.3f,0.15f)) {
-    ATTACK(false, attackOffset = vec2(-0.2f,-0.5f)),
+    ATTACK(false, attackOffset = vec2(-0.5f,-0.5f)),
     ATTACK_1(true),
     ATTACK_2(true),
     ATTACK_3(true),
@@ -65,18 +65,8 @@ data class Attack(
     var attackState : AttackState = AttackState.READY,
     var doAttack : Boolean = false,
     var attackMetaData: AttackMetaData,
-    ) : Component <Attack> {
-    var equippedItem : ItemType.Damageable? = null
-        set(value) {
-            value?:return
-            attackMetaData = value.attackMetaData
-            field = value
-        }
-
     var queuedAttackType : AttackType? = null
-
+) : Component <Attack> {
     override fun type(): ComponentType<Attack> = Attack
-
     companion object : ComponentType<Attack>()
-
 }

@@ -7282,6 +7282,126 @@ atlasData: {
 			type: TEXTURE
 			hidden: false
 		}
+		{
+			file: C:/Users/Fatih/Desktop/big_map_1.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: big_map_1
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Fatih/Desktop/small_map_1.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: small_map_1
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Fatih/Desktop/small_map_2.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: small_map_2
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Fatih/Desktop/small_map_3.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: small_map_3
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Fatih/Desktop/small_map_4.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: small_map_4
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
+		{
+			file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/pirate_treasure/blue_diamond/idle_01.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: idle_01
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
 	]
 	fontDrawables: []
 }
@@ -9673,7 +9793,7 @@ sceneComposer: {
 																	class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
 																	name: null
 																	drawable: {
-																		file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/sword_on.png
+																		file: C:/Users/Fatih/Desktop/small_map_1.png
 																		bgColor: {
 																			r: 1
 																			g: 1
@@ -9682,7 +9802,7 @@ sceneComposer: {
 																		}
 																		tint: null
 																		tintName: null
-																		name: sword_on
+																		name: small_map_1
 																		tiled: false
 																		minWidth: -1
 																		minHeight: -1
@@ -9744,33 +9864,6 @@ sceneComposer: {
 															name: null
 															children: [
 																{
-																	class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-																	name: null
-																	drawable: {
-																		file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/sword_off.png
-																		bgColor: {
-																			r: 1
-																			g: 1
-																			b: 1
-																			a: 1
-																		}
-																		tint: null
-																		tintName: null
-																		name: sword_off
-																		tiled: false
-																		minWidth: -1
-																		minHeight: -1
-																		customized: false
-																		tenPatchData: null
-																		tvgData: null
-																		type: TEXTURE
-																		hidden: false
-																	}
-																	scaling: none
-																	touchable: enabled
-																	visible: true
-																}
-																{
 																	class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
 																	name: null
 																	alignment: 20
@@ -9817,6 +9910,33 @@ sceneComposer: {
 																	touchable: enabled
 																	visible: true
 																}
+																{
+																	class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
+																	name: null
+																	drawable: {
+																		file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/pirate_treasure/blue_diamond/idle_01.png
+																		bgColor: {
+																			r: 1
+																			g: 1
+																			b: 1
+																			a: 1
+																		}
+																		tint: null
+																		tintName: null
+																		name: idle_01
+																		tiled: false
+																		minWidth: -1
+																		minHeight: -1
+																		customized: false
+																		tenPatchData: null
+																		tvgData: null
+																		type: TEXTURE
+																		hidden: false
+																	}
+																	scaling: none
+																	touchable: enabled
+																	visible: true
+																}
 															]
 															touchable: enabled
 															visible: true
@@ -9833,6 +9953,14 @@ sceneComposer: {
 										visible: true
 									}
 								]
+								touchable: enabled
+								visible: true
+							}
+							{
+								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
+								name: null
+								drawable: null
+								scaling: stretch
 								touchable: enabled
 								visible: true
 							}

@@ -40,6 +40,7 @@ import com.libgdx.treasurehunter.game.inputMultiplexer
 import com.libgdx.treasurehunter.input.KeyboardInputProcessor
 import com.libgdx.treasurehunter.tiled.TiledMapService
 import com.libgdx.treasurehunter.ui.model.GameModel
+import com.libgdx.treasurehunter.ui.model.InventoryModel
 import com.libgdx.treasurehunter.ui.navigation.StageNavigator
 import com.libgdx.treasurehunter.ui.navigation.ViewType
 import com.libgdx.treasurehunter.utils.GamePreferences

@@ -3,6 +3,8 @@ package com.libgdx.treasurehunter.ecs.components
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 
 enum class EquipSlot { SWORD, ARMOR, BOOTS, HELMET }
 
@@ -13,7 +15,6 @@ data class Inventory(
     var equippedBoots: ItemData? = null,
     var equippedHelmet: ItemData? = null,
     val owner: Entity,
-    val maxSize: Int = 25,
 ) : Component <Inventory> {
 
     override fun type() = Inventory
@@ -21,8 +22,8 @@ data class Inventory(
     companion object : ComponentType<Inventory>()
 
     fun addItem(item: ItemData): Boolean {
-        if (items.size >= maxSize) return false
         items.add(item)
+        GameEventDispatcher.fireEvent(GameEvent.InventoryChangeEvent(items.toList()))
         return true
     }
 }

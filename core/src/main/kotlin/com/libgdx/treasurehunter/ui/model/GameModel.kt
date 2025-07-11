@@ -24,6 +24,7 @@ class GameModel(
                     enemyLifeBarScale.value = event.entityLife / event.maxLife.toFloat()
                 }
             }
+
             else -> Unit
         }
     }

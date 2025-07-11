@@ -18,12 +18,9 @@ enum class SwordState : EntityState<StateEntity.SwordEntity> {
         }
 
         override fun update(entity: StateEntity.SwordEntity) {
-
-            with(entity.world) {
-                if (entity.entity has EntityTag.COLLECTED) {
-                    entity.alpha = 0f
-                    entity.state(RESPAWN)
-                }
+            if (entity.isCollected){
+                entity.alpha = 0f
+                entity.state(RESPAWN)
             }
         }
     },
@@ -62,7 +59,6 @@ enum class SwordState : EntityState<StateEntity.SwordEntity> {
             when {
                 entity.collidedWithWall -> entity.state(EMBEDDED)
                 spinningDuration <= 0f -> {
-                    println("spinning remove")
                     entity.attackDestroyTimer = 0f
                     entity.remove()
                 }

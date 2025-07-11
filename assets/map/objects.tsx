@@ -858,8 +858,8 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_1"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="item" propertytype="Item" value="PROJECTILE"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
@@ -901,6 +901,7 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_2"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -931,6 +932,7 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_3"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -961,6 +963,7 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_4"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -992,6 +995,7 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_5"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -1022,6 +1026,7 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_6"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
    <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>

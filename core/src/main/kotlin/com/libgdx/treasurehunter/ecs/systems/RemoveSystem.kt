@@ -9,12 +9,7 @@ class RemoveSystem : IteratingSystem(
     family = family{any(EntityTag.REMOVE, EntityTag.COLLECTED).none(EntityTag.RESPAWNABLE)}
 ) {
     override fun onTickEntity(entity: Entity) {
-        if (entity has EntityTag.REMOVE) {
-            println("entity has remove tag")
-        }
-        if (entity has EntityTag.COLLECTED) {
-            println("entity has collected tag")
-        }
+
         entity.remove()
     }
 }

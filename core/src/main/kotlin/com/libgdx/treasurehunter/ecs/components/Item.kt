@@ -8,6 +8,7 @@ import com.libgdx.treasurehunter.utils.GameObject
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
+import ktx.app.gdxError
 
 data class Item(
     val itemData : ItemData,
@@ -42,13 +43,18 @@ sealed interface ItemType{
     }
 
     interface Collectable : ItemType
-
-    fun toGameObject() : GameObject?{
-        return when(this){
-            is Sword -> GameObject.SWORD
-            is Projectile -> this.projectileType.toGameObject()
-            else -> null
+    fun toDrawablePath() : String = when(this){
+        is Sword -> "sword_on"
+        is Map -> {
+            when(mapType){
+                MapType.BIG_MAP -> "big_map"
+                MapType.SMALL_MAP_1 -> "small_map_1"
+                MapType.SMALL_MAP_2 -> "small_map_2"
+                MapType.SMALL_MAP_3 -> "small_map_3"
+                MapType.SMALL_MAP_4 -> "small_map_4"
+            }
         }
+        else -> gdxError("ItemType $this does not have a drawable path defined")
     }
 }
 
