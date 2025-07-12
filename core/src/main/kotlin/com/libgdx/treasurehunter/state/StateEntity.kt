@@ -137,17 +137,6 @@ sealed class StateEntity(
         val state: PlayerState
             get() = this[State].stateMachine.currentState as PlayerState
 
-        val hasSword : Boolean
-            get() {
-                val equippedItem = this.getOrNull(Inventory)?.equippedSword
-                return equippedItem != null
-            }
-
-        fun updateModelBySword() {
-            this[Animation].setNewModel(
-                if (hasSword) GameObject.CAPTAIN_CLOWN_SWORD.atlasKey else GameObject.CAPTAIN_CLOWN.atlasKey
-            )
-        }
         fun fireParticleEvent(particleType: ParticleType) {
             GameEventDispatcher.fireEvent(GameEvent.ParticleEvent(entity, particleType))
         }

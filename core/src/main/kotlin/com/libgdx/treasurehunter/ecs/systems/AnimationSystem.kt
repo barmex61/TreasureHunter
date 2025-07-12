@@ -7,6 +7,7 @@ import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.github.quillraven.fleks.World.Companion.inject
 import com.libgdx.treasurehunter.ai.Idle
+import com.libgdx.treasurehunter.ecs.components.AiState
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AnimationType
@@ -16,8 +17,12 @@ import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.TextureAtlasAssets
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventListener
+import com.libgdx.treasurehunter.state.PlayerState
 import com.libgdx.treasurehunter.utils.GameObject
 import ktx.app.gdxError
 import ktx.log.logger
@@ -28,7 +33,7 @@ class AnimationSystem (
     assetHelper: AssetHelper = inject()
 ): IteratingSystem(
     family = family { all(Animation, Graphic)}
-) {
+) , GameEventListener{
     private val gameObjectAtlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
     private val gdxAnimationCache = mutableMapOf<String, GdxAnimation>()
 
@@ -127,6 +132,18 @@ class AnimationSystem (
             animationType = newAnimType
         }
 
+    }
+
+    override fun onEvent(event: GameEvent) {
+        when(event){
+            is GameEvent.EntityModelChangeEvent ->{
+                val modelName = event.modelName
+                val animation = event.entity.getOrNull(Animation)
+                animation?.setNewModel(modelName)
+                event.entity.getOrNull(State)?.owner?.state(PlayerState.IDLE)
+            }
+            else -> Unit
+        }
     }
 
     companion object{

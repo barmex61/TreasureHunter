@@ -15,6 +15,11 @@ sealed class GameEvent {
     data class AudioChangeEvent(val soundVolume : Float,val musicVolume : Float,val muteMusic: Boolean,val muteSound : Boolean) : GameEvent()
     data class PlaySoundEvent(val soundAsset: SoundAsset) : GameEvent()
     object AttackStartEvent : GameEvent()
+    data class EquippedItemChanged(val slotName: String, val item: ItemData?) : GameEvent()
+    data class EquippedItemRemoved(val slotName: String, val entity: Entity) : GameEvent()
+    data class EntityModelChangeEvent(val entity: Entity, val modelName: String) : GameEvent()
+    data class EquipItemRequest(val slotName: String, val item: ItemData) : GameEvent()
+    data class UnEquipItemRequest(val slotName: String, val item: ItemData) : GameEvent()
 }
 
 interface GameEventListener {

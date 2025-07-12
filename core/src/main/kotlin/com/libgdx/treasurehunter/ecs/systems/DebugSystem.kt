@@ -8,11 +8,13 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import com.github.quillraven.fleks.IntervalSystem
 import com.github.quillraven.fleks.World.Companion.inject
+import com.libgdx.treasurehunter.utils.GameProperties
 import ktx.graphics.use
 
 class DebugSystem(
     private val physicWorld : World = inject(),
-    private val gameCamera : OrthographicCamera = inject()
+    private val gameCamera : OrthographicCamera = inject(),
+    private val gameProperties: GameProperties = inject()
 ) : IntervalSystem() {
 
     private val box2DDebugRenderer = Box2DDebugRenderer().apply {
@@ -22,7 +24,7 @@ class DebugSystem(
     private val shapeRenderer = ShapeRenderer()
 
     override fun onTick() {
-        box2DDebugRenderer.render(physicWorld, gameCamera.combined)
+        if (gameProperties.debugPhysic) box2DDebugRenderer.render(physicWorld, gameCamera.combined)
         shapeRenderer.use(ShapeRenderer.ShapeType.Line,gameCamera.combined){
             it.color = Color.RED
             it.rect(JUMP_DEBUG_RECT.x, JUMP_DEBUG_RECT.y, JUMP_DEBUG_RECT.width, JUMP_DEBUG_RECT.height)

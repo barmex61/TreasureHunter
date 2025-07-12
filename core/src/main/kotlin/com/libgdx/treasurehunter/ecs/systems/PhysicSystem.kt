@@ -167,13 +167,9 @@ class PhysicSystem (
         if (itemEntity.has(EntityTag.COLLECTED)) return
         val item = itemEntity.getOrNull(Item) ?: return
         val inventory = playerEntity.getOrNull(Inventory) ?: return
-        inventory.addItem(item.itemData)
+        inventory.addItem(item.itemData.also { it.owner = playerEntity })
         itemEntity.configure {
             it += EntityTag.COLLECTED
-        }
-        if (item.itemData.itemType is Sword) {
-            playerEntity.getOrNull(Animation)?.setNewModel(GameObject.CAPTAIN_CLOWN_SWORD.atlasKey)
-            playerEntity.getOrNull(Inventory)?.equippedSword = item.itemData
         }
     }
 

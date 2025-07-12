@@ -35,7 +35,6 @@ class GameView(
     private val inventoryView : InventoryView = InventoryView(skin,inventoryModel).also { it.alpha = 0f }
     private var isInventoryVisible = false
     init {
-        debug()
         setFillParent(true)
 
         stack{

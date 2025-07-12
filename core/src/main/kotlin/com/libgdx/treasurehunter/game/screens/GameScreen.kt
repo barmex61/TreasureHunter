@@ -70,6 +70,7 @@ class GameScreen(
 
     private val world: World = configureWorld {
         injectables {
+            add(gameProperties)
             add(assetHelper)
             add(spriteBatch)
             add(stage)

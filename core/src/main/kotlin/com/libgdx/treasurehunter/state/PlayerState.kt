@@ -8,12 +8,14 @@ import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackType
 import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.Move
+import com.libgdx.treasurehunter.ecs.components.SlotName
 import com.libgdx.treasurehunter.enums.MarkType
 import com.libgdx.treasurehunter.enums.ParticleType
 import com.libgdx.treasurehunter.enums.SoundAsset
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.state.StateEntity.*
+import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.component1
 import ktx.math.component2
 
@@ -189,16 +191,7 @@ enum class PlayerState : EntityState<PlayerEntity> {
                     val animType = entity[Attack].attackMetaData.attackType.attackAnimType
                     when(animType){
                         AnimationType.THROW->{
-                            val inventory = entity[Inventory]
-                            val sword = inventory.equippedSword
-                            inventory.apply {
-                                println("before remove items size: ${items.size}")
-                                println(sword)
-                                items.remove(sword)
-                                println("after remove items size: ${items.size}")
-                                equippedSword = null
-                                GameEventDispatcher.fireEvent(GameEvent.InventoryChangeEvent(items))
-                            }
+                            GameEventDispatcher.fireEvent(GameEvent.EquippedItemRemoved(SlotName.SWORD.toString() ,entity.entity))
                         }
                         else -> Unit
                     }

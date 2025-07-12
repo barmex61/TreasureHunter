@@ -22,7 +22,7 @@ data class Item(
 
 data class ItemData(
     val itemType: ItemType,
-    val owner : Entity? = null
+    var owner : Entity? = null
 )
 
 enum class ThrowState{
@@ -38,6 +38,7 @@ sealed interface ItemType{
     interface Throwable : ItemType{
         var throwState : ThrowState
     }
+    interface Equippable : ItemType
     interface Consumable : ItemType{
 
     }
@@ -47,7 +48,7 @@ sealed interface ItemType{
         is Sword -> "sword_on"
         is Map -> {
             when(mapType){
-                MapType.BIG_MAP -> "big_map"
+                MapType.BIG_MAP -> "big_map_1"
                 MapType.SMALL_MAP_1 -> "small_map_1"
                 MapType.SMALL_MAP_2 -> "small_map_2"
                 MapType.SMALL_MAP_3 -> "small_map_3"
@@ -61,7 +62,7 @@ sealed interface ItemType{
 data class Sword(
     override val attackMetaData: AttackMetaData = AttackMetaDataFactory.create(GameObject.SWORD),
     override var throwState: ThrowState = ThrowState.READY
-) : Damageable,Throwable
+) : Damageable,Throwable, ItemType.Equippable
 
 data class Projectile(
     val projectileType: ProjectileType,
@@ -72,6 +73,13 @@ data class Projectile(
 data class Map (
     val mapType : MapType
 ) : ItemType.Collectable
+
+class Armor : ItemType.Equippable
+class Helmet : ItemType.Equippable
+
+class Boots : ItemType.Equippable
+
+class Shield : ItemType.Equippable
 
 class Diamond : ItemType.Collectable
 

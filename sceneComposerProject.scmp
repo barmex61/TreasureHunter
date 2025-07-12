@@ -7283,7 +7283,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Fatih/Desktop/big_map_1.png
+			file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/big_map_1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -7303,7 +7303,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Fatih/Desktop/small_map_1.png
+			file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/small_map_1.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -7323,7 +7323,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Fatih/Desktop/small_map_2.png
+			file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/small_map_2.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -7343,7 +7343,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Fatih/Desktop/small_map_3.png
+			file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/small_map_3.png
 			bgColor: {
 				r: 1
 				g: 1
@@ -7363,7 +7363,7 @@ atlasData: {
 			hidden: false
 		}
 		{
-			file: C:/Users/Fatih/Desktop/small_map_4.png
+			file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/small_map_4.png
 			bgColor: {
 				r: 1
 				g: 1

@@ -57,6 +57,7 @@ class LoadingScreen(
     private val clouds2 = ParallaxBackground(stage.viewport,"graphics/clouds_2.png", vec2(1f,1f),1f)
 
     override fun show() {
+        stage.isDebugAll = gameProperties.debugStage
         assetHelper.loadAll()
         Scene2DSkin.defaultSkin = assetHelper[SkinAsset.DEFAULT]
         parseObjectCollisionShapes(tiledMap = assetHelper[MapAssets.OBJECT])

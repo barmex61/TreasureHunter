@@ -5,6 +5,7 @@ import com.badlogic.gdx.utils.ObjectMap
 fun ObjectMap<String,String>.toGameProperties() : GameProperties {
     return GameProperties(
         debugPhysic = getOrDefault("debugPhysic", false),
+        debugStage =  getOrDefault("debugStage", false),
         enableProfiling = this["enableProfiling"]?.toBoolean() == true,
         musicVolume = this["musicVolume"]?.toFloat() ?: 1f,
         soundVolume = this["soundVolume"]?.toFloat() ?: 1f
@@ -23,6 +24,7 @@ private inline fun <reified T> ObjectMap<String, String>.getOrDefault(key: Strin
 
 data class GameProperties(
     val debugPhysic : Boolean,
+    val debugStage: Boolean,
     val enableProfiling : Boolean,
     val musicVolume: Float,
     val soundVolume : Float
