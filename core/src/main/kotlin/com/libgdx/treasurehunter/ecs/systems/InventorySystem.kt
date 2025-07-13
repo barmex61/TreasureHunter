@@ -29,9 +29,7 @@ class InventorySystem : IteratingSystem(
                 entity.configure { it -= Attack }
             }
         }
-        if (entity has Attack){
-            println("Entity has attack")
-        }
+
     }
 
     override fun onEvent(event: GameEvent) {

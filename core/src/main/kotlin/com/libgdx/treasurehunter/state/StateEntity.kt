@@ -18,6 +18,7 @@ import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
 import com.libgdx.treasurehunter.ecs.components.Blink
+import com.libgdx.treasurehunter.ecs.components.Chest
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
@@ -45,6 +46,7 @@ import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.text.get
 import com.libgdx.treasurehunter.utils.plus
+import ktx.app.gdxError
 import kotlin.collections.plusAssign
 
 
@@ -67,6 +69,7 @@ sealed class StateEntity(
     inline fun <reified T : Component<*>> getOrNull(type: ComponentType<T>): T? = with(world) {
         return entity.getOrNull(type)
     }
+
 
     fun Entity.configure(configuration: EntityUpdateContext.(Entity) -> Unit) =
         with(world) { this@configure.configure(configuration) }
@@ -274,6 +277,44 @@ sealed class StateEntity(
                 )
             }
         }
+    }
+
+    class ChestEntity(
+        entity: Entity,
+        world: World,
+        physicWorld: PhysicWorld,
+        assetHelper: AssetHelper,
+    ): StateEntity(entity, world, physicWorld, assetHelper){
+
+        var isOpened: Boolean
+            get() = this[Chest].isOpened
+            set(value) {
+                this[Chest].isOpened = value
+            }
+
+        val openAnimType : AnimationType
+            get() {
+                val chest = this[Chest]
+                return when(chest.gameObject){
+                    GameObject.CHEST -> AnimationType.OPEN
+                    GameObject.CHEST_LOCKED -> if (!chest.isUnlockAnimPlayed) {
+                        chest.isUnlockAnimPlayed = true
+                        AnimationType.UNLOCK
+                    } else AnimationType.REUNLOCK
+                    else -> gdxError("Unknown chest type: ${chest.gameObject}")
+                }
+            }
+
+        val closeAnimType : AnimationType
+            get() {
+                val chest = this[Chest]
+                return when(chest.gameObject){
+                    GameObject.CHEST -> AnimationType.CLOSE
+                    GameObject.CHEST_LOCKED -> AnimationType.LOCK
+                    else -> gdxError("Unknown chest type: ${chest.gameObject}")
+                }
+            }
+
     }
 
 }

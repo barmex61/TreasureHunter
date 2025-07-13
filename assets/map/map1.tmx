@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="69">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="75">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
   <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DAY"/>
@@ -25,13 +25,13 @@
  </layer>
  <layer id="1" name="ground" width="24" height="10">
   <data encoding="base64" compression="zlib">
-   eJwTZmBgEAZidiBWAWIZKE0NzAE1G4RFGCBAnYF6QAjJ7apUNBfdfBFCCkfNxwkYgZiJTMxMhPkwN5CDRehkPj6szEB+/gKleQBJ4wo6
+   eJwTZmBgEAZidiBWAWIZKE0NzAE1G4RFGCBAnYF6QAjJ7apUNBfdfBFCCkfNxwkYgZiJTMxMhPkwN5CDRehkvjAe85UZyM9foDQPACcnCcg=
   </data>
  </layer>
  <objectgroup id="5" name="objects">
   <object id="10" gid="116" x="288" y="192" width="34" height="93"/>
   <object id="11" gid="120" x="320" y="192" width="20" height="20"/>
-  <object id="24" gid="143" x="416" y="192" width="32" height="32"/>
+  <object id="24" gid="143" x="638" y="191" width="32" height="32"/>
   <object id="25" gid="142" x="378" y="194" width="28" height="22"/>
   <object id="26" gid="145" x="380" y="176" width="24" height="24"/>
   <object id="27" gid="146" x="475" y="198" width="32" height="32"/>
@@ -73,11 +73,9 @@
   <object id="43" gid="157" x="64" y="288" width="96" height="32"/>
   <object id="44" gid="141" x="448" y="191" width="26" height="30"/>
   <object id="45" gid="139" x="480" y="224" width="64" height="64"/>
-  <object id="46" gid="158" x="544" y="187" width="30" height="32"/>
-  <object id="47" gid="168" x="587" y="183" width="20" height="20"/>
-  <object id="48" gid="169" x="613" y="183" width="20" height="20"/>
+  <object id="48" gid="169" x="693" y="183" width="20" height="20"/>
   <object id="49" gid="170" x="638" y="183" width="20" height="20"/>
-  <object id="50" gid="171" x="663" y="183" width="20" height="20"/>
+  <object id="50" gid="171" x="598" y="136" width="20" height="20"/>
   <object id="51" gid="159" x="449" y="165" width="24" height="24"/>
   <object id="52" gid="160" x="425" y="161" width="13" height="17"/>
   <object id="53" gid="161" x="478" y="162" width="16" height="16"/>
@@ -87,8 +85,16 @@
   <object id="57" gid="165" x="570" y="158" width="24" height="24"/>
   <object id="58" gid="166" x="611" y="160" width="13" height="17"/>
   <object id="59" gid="167" x="641" y="159" width="16" height="16"/>
-  <object id="66" gid="134" x="512" y="96" width="72" height="32"/>
   <object id="67" gid="121" x="325" y="170" width="64" height="40"/>
   <object id="68" gid="172" x="632" y="93" width="60" height="32"/>
+  <object id="69" gid="157" x="160" y="320" width="96" height="32"/>
+  <object id="70" gid="157" x="64" y="320" width="96" height="32"/>
+  <object id="72" gid="176" x="646" y="114" width="24" height="32"/>
+  <object id="73" gid="177" x="640" y="136" width="30" height="32"/>
+  <object id="74" gid="115" x="544" y="192" width="64" height="35">
+   <properties>
+    <property name="animFrameDuration" type="float" value="0.16"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

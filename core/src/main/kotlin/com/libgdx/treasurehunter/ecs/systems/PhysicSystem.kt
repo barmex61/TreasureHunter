@@ -118,6 +118,8 @@ class PhysicSystem (
             get() = this.userData == "shipHelm"
         val Fixture.isChest : Boolean
             get() = this.userData == "chest"
+        val Fixture.isChestLocked : Boolean
+            get() = this.userData == "chest_locked"
         val Fixture.isBodyFixture : Boolean
             get() = this.userData == "bodyFixture"
         val Fixture.isRangeAttackFixture : Boolean

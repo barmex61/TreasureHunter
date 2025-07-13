@@ -7402,6 +7402,26 @@ atlasData: {
 			type: TEXTURE
 			hidden: false
 		}
+		{
+			file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/key.png
+			bgColor: {
+				r: 1
+				g: 1
+				b: 1
+				a: 1
+			}
+			tint: null
+			tintName: null
+			name: key
+			tiled: false
+			minWidth: -1
+			minHeight: -1
+			customized: false
+			tenPatchData: null
+			tvgData: null
+			type: TEXTURE
+			hidden: false
+		}
 	]
 	fontDrawables: []
 }
@@ -7456,7 +7476,7 @@ jsonData: {
 			file: C:/Users/Fatih/AndroidStudioProjects/TreasureHunter/assets/graphics/ui/CronusItalic-M56J.ttf
 			previewTTF: IBMPlexSerif-Medium
 			useCustomSerializer: true
-			size: 20
+			size: 18
 			mono: false
 			hinting: AutoMedium
 			color: RGBA_255_255_255_255
@@ -7968,6 +7988,408 @@ jsonData: {
 					}
 				}
 				deletable: false
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: yes
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
+				properties: {
+					imageUp: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageUp
+						optional: true
+						value: yellow_button_accept
+					}
+					imageDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageDown
+						optional: true
+						value: null
+					}
+					imageOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageOver
+						optional: true
+						value: null
+					}
+					imageDisabled: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageDisabled
+						optional: true
+						value: null
+					}
+					imageChecked: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageChecked
+						optional: true
+						value: null
+					}
+					imageCheckedDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageCheckedDown
+						optional: true
+						value: null
+					}
+					imageCheckedOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageCheckedOver
+						optional: true
+						value: null
+					}
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: freeTypeMasakiFont
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: RGBA_30_11_11_255
+					}
+					downFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: downFontColor
+						optional: true
+						value: null
+					}
+					overFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: overFontColor
+						optional: true
+						value: null
+					}
+					focusedFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: focusedFontColor
+						optional: true
+						value: null
+					}
+					disabledFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: disabledFontColor
+						optional: true
+						value: null
+					}
+					checkedFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedFontColor
+						optional: true
+						value: null
+					}
+					checkedDownFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedDownFontColor
+						optional: true
+						value: null
+					}
+					checkedOverFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedOverFontColor
+						optional: true
+						value: null
+					}
+					checkedFocusedFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedFocusedFontColor
+						optional: true
+						value: null
+					}
+					up: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: up
+						optional: true
+						value: null
+					}
+					down: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: down
+						optional: true
+						value: null
+					}
+					over: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: over
+						optional: true
+						value: null
+					}
+					focused: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: focused
+						optional: true
+						value: null
+					}
+					disabled: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabled
+						optional: true
+						value: null
+					}
+					checked: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checked
+						optional: true
+						value: null
+					}
+					checkedOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedOver
+						optional: true
+						value: null
+					}
+					checkedDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedDown
+						optional: true
+						value: null
+					}
+					checkedFocused: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedFocused
+						optional: true
+						value: null
+					}
+					pressedOffsetX: {
+						type: float
+						name: pressedOffsetX
+						optional: true
+						value: 2
+					}
+					pressedOffsetY: {
+						type: float
+						name: pressedOffsetY
+						optional: true
+						value: 2
+					}
+					unpressedOffsetX: {
+						type: float
+						name: unpressedOffsetX
+						optional: true
+						value: 0
+					}
+					unpressedOffsetY: {
+						type: float
+						name: unpressedOffsetY
+						optional: true
+						value: 0
+					}
+					checkedOffsetX: {
+						type: float
+						name: checkedOffsetX
+						optional: true
+						value: 0
+					}
+					checkedOffsetY: {
+						type: float
+						name: checkedOffsetY
+						optional: true
+						value: 0
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: no
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
+				properties: {
+					imageUp: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageUp
+						optional: true
+						value: yellow_button_cancel
+					}
+					imageDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageDown
+						optional: true
+						value: null
+					}
+					imageOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageOver
+						optional: true
+						value: null
+					}
+					imageDisabled: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageDisabled
+						optional: true
+						value: null
+					}
+					imageChecked: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageChecked
+						optional: true
+						value: null
+					}
+					imageCheckedDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageCheckedDown
+						optional: true
+						value: null
+					}
+					imageCheckedOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: imageCheckedOver
+						optional: true
+						value: null
+					}
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: freeTypeMasakiFont
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: RGBA_30_11_11_255
+					}
+					downFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: downFontColor
+						optional: true
+						value: null
+					}
+					overFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: overFontColor
+						optional: true
+						value: null
+					}
+					focusedFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: focusedFontColor
+						optional: true
+						value: null
+					}
+					disabledFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: disabledFontColor
+						optional: true
+						value: null
+					}
+					checkedFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedFontColor
+						optional: true
+						value: null
+					}
+					checkedDownFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedDownFontColor
+						optional: true
+						value: null
+					}
+					checkedOverFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedOverFontColor
+						optional: true
+						value: null
+					}
+					checkedFocusedFontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: checkedFocusedFontColor
+						optional: true
+						value: null
+					}
+					up: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: up
+						optional: true
+						value: null
+					}
+					down: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: down
+						optional: true
+						value: null
+					}
+					over: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: over
+						optional: true
+						value: null
+					}
+					focused: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: focused
+						optional: true
+						value: null
+					}
+					disabled: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: disabled
+						optional: true
+						value: null
+					}
+					checked: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checked
+						optional: true
+						value: null
+					}
+					checkedOver: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedOver
+						optional: true
+						value: null
+					}
+					checkedDown: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedDown
+						optional: true
+						value: null
+					}
+					checkedFocused: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: checkedFocused
+						optional: true
+						value: null
+					}
+					pressedOffsetX: {
+						type: float
+						name: pressedOffsetX
+						optional: true
+						value: 2
+					}
+					pressedOffsetY: {
+						type: float
+						name: pressedOffsetY
+						optional: true
+						value: 2
+					}
+					unpressedOffsetX: {
+						type: float
+						name: unpressedOffsetX
+						optional: true
+						value: 0
+					}
+					unpressedOffsetY: {
+						type: float
+						name: unpressedOffsetY
+						optional: true
+						value: 0
+					}
+					checkedOffsetX: {
+						type: float
+						name: checkedOffsetX
+						optional: true
+						value: 0
+					}
+					checkedOffsetY: {
+						type: float
+						name: checkedOffsetY
+						optional: true
+						value: 0
+					}
+				}
+				deletable: true
 				parent: null
 			}
 		]
@@ -8855,13 +9277,13 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: freeTypeMasakiFont
+						value: freeTypeCronus
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
 						name: fontColor
 						optional: false
-						value: orange
+						value: RGBA_30_11_11_255
 					}
 					focusedFontColor: {
 						type: com.badlogic.gdx.graphics.Color
@@ -9124,49 +9546,22 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.g2d.BitmapFont
 						name: font
 						optional: false
-						value: freeTypeMasakiFont
+						value: freeTypeCronus
 					}
 					fontColor: {
 						type: com.badlogic.gdx.graphics.Color
 						name: fontColor
 						optional: true
-						value: RGBA_30_11_11_255
+						value: orange
 					}
 					background: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
 						name: background
 						optional: true
-						value: prefabs_7
+						value: null
 					}
 				}
 				deletable: false
-				parent: null
-			}
-			{
-				class: com.ray3k.skincomposer.data.StyleData
-				name: yellow_bg
-				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
-				properties: {
-					font: {
-						type: com.badlogic.gdx.graphics.g2d.BitmapFont
-						name: font
-						optional: false
-						value: null
-					}
-					fontColor: {
-						type: com.badlogic.gdx.graphics.Color
-						name: fontColor
-						optional: true
-						value: RGBA_30_11_11_255
-					}
-					background: {
-						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
-						name: background
-						optional: true
-						value: prefabs_7
-					}
-				}
-				deletable: true
 				parent: null
 			}
 		]
@@ -9306,665 +9701,42 @@ sceneComposer: {
 			cells: [
 				{
 					child: {
-						class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimVerticalGroup
+						class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
 						name: null
 						alignment: 1
-						expand: false
-						fill: true
+						background: {
+							file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_9.png
+							bgColor: {
+								r: 1
+								g: 1
+								b: 1
+								a: 1
+							}
+							tint: null
+							tintName: null
+							name: prefabs_9
+							tiled: false
+							minWidth: -1
+							minHeight: -1
+							customized: false
+							tenPatchData: null
+							tvgData: null
+							type: TEXTURE
+							hidden: false
+						}
+						fillX: false
+						fillY: false
+						minWidth: -1
+						minHeight: -1
+						maxWidth: -1
+						maxHeight: -1
+						preferredWidth: -1
+						preferredHeight: -1
 						padLeft: 0
 						padRight: 0
 						padTop: 0
 						padBottom: 0
-						reverse: false
-						columnAlignment: 1
-						space: 0
-						wrap: false
-						wrapSpace: 0
-						children: [
-							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-								name: null
-								alignment: 1
-								background: null
-								fillX: false
-								fillY: false
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: 200
-								preferredHeight: 45
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-									name: null
-									children: [
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-											name: null
-											drawable: {
-												file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_4_ninepatch.9.png
-												bgColor: {
-													r: 1
-													g: 1
-													b: 1
-													a: 1
-												}
-												tint: null
-												tintName: null
-												name: prefabs_4_ninepatch
-												tiled: false
-												minWidth: -1
-												minHeight: -1
-												customized: false
-												tenPatchData: null
-												tvgData: null
-												type: NINE_PATCH
-												hidden: false
-											}
-											scaling: stretch
-											touchable: enabled
-											visible: true
-										}
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimHorizontalGroup
-											name: null
-											alignment: 1
-											expand: false
-											fill: false
-											padLeft: 0
-											padRight: 0
-											padTop: 0
-											padBottom: 0
-											reverse: false
-											rowAlignment: 1
-											space: 0
-											wrap: false
-											wrapSpace: 0
-											children: [
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_i.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_i
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_n.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_n
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_v.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_v
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_e.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_e
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_n.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_n
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_t.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_t
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_o.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_o
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_r.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_r
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_y.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_y
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-											]
-											touchable: enabled
-											visible: true
-										}
-									]
-									touchable: enabled
-									visible: true
-								}
-								touchable: enabled
-								visible: true
-							}
-							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-								name: null
-								children: [
-									{
-										class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-										name: null
-										drawable: {
-											file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_6.png
-											bgColor: {
-												r: 1
-												g: 1
-												b: 1
-												a: 1
-											}
-											tint: null
-											tintName: null
-											name: prefabs_6
-											tiled: false
-											minWidth: -1
-											minHeight: -1
-											customized: false
-											tenPatchData: null
-											tvgData: null
-											type: TEXTURE
-											hidden: false
-										}
-										scaling: stretch
-										touchable: enabled
-										visible: true
-									}
-									{
-										class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimVerticalGroup
-										name: null
-										alignment: 1
-										expand: false
-										fill: false
-										padLeft: 25
-										padRight: 25
-										padTop: 25
-										padBottom: 25
-										reverse: false
-										columnAlignment: 1
-										space: 0
-										wrap: false
-										wrapSpace: 0
-										children: [
-											{
-												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimHorizontalGroup
-												name: null
-												alignment: 1
-												expand: false
-												fill: false
-												padLeft: 0
-												padRight: 0
-												padTop: 0
-												padBottom: 0
-												reverse: false
-												rowAlignment: 1
-												space: 0
-												wrap: false
-												wrapSpace: 0
-												children: [
-													{
-														class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-														name: null
-														alignment: 1
-														background: {
-															file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Yellow Paper/text_bubble.png
-															bgColor: {
-																r: 1
-																g: 1
-																b: 1
-																a: 1
-															}
-															tint: null
-															tintName: null
-															name: text_bubble
-															tiled: false
-															minWidth: -1
-															minHeight: -1
-															customized: false
-															tenPatchData: null
-															tvgData: null
-															type: TEXTURE
-															hidden: false
-														}
-														fillX: false
-														fillY: false
-														minWidth: -1
-														minHeight: -1
-														maxWidth: -1
-														maxHeight: -1
-														preferredWidth: 36
-														preferredHeight: 32
-														padLeft: 2
-														padRight: 0
-														padTop: 0
-														padBottom: 0
-														child: {
-															class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-															name: null
-															children: [
-																{
-																	class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-																	name: null
-																	alignment: 20
-																	background: null
-																	fillX: false
-																	fillY: false
-																	minWidth: -1
-																	minHeight: -1
-																	maxWidth: -1
-																	maxHeight: -1
-																	preferredWidth: 8
-																	preferredHeight: 8
-																	padLeft: 0
-																	padRight: 2
-																	padTop: 0
-																	padBottom: 2
-																	child: {
-																		class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-																		name: null
-																		drawable: {
-																			file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_6.png
-																			bgColor: {
-																				r: 1
-																				g: 1
-																				b: 1
-																				a: 1
-																			}
-																			tint: null
-																			tintName: null
-																			name: big_text_6
-																			tiled: false
-																			minWidth: -1
-																			minHeight: -1
-																			customized: false
-																			tenPatchData: null
-																			tvgData: null
-																			type: TEXTURE
-																			hidden: false
-																		}
-																		scaling: stretch
-																		touchable: enabled
-																		visible: true
-																	}
-																	touchable: enabled
-																	visible: true
-																}
-																{
-																	class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-																	name: null
-																	drawable: {
-																		file: C:/Users/Fatih/Desktop/small_map_1.png
-																		bgColor: {
-																			r: 1
-																			g: 1
-																			b: 1
-																			a: 1
-																		}
-																		tint: null
-																		tintName: null
-																		name: small_map_1
-																		tiled: false
-																		minWidth: -1
-																		minHeight: -1
-																		customized: false
-																		tenPatchData: null
-																		tvgData: null
-																		type: TEXTURE
-																		hidden: false
-																	}
-																	scaling: none
-																	touchable: enabled
-																	visible: true
-																}
-															]
-															touchable: enabled
-															visible: true
-														}
-														touchable: enabled
-														visible: true
-													}
-													{
-														class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-														name: null
-														alignment: 1
-														background: {
-															file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Yellow Paper/text_bubble.png
-															bgColor: {
-																r: 1
-																g: 1
-																b: 1
-																a: 1
-															}
-															tint: null
-															tintName: null
-															name: text_bubble
-															tiled: false
-															minWidth: -1
-															minHeight: -1
-															customized: false
-															tenPatchData: null
-															tvgData: null
-															type: TEXTURE
-															hidden: false
-														}
-														fillX: false
-														fillY: false
-														minWidth: -1
-														minHeight: -1
-														maxWidth: -1
-														maxHeight: -1
-														preferredWidth: 36
-														preferredHeight: 32
-														padLeft: 0
-														padRight: 0
-														padTop: 0
-														padBottom: 0
-														child: {
-															class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-															name: null
-															children: [
-																{
-																	class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-																	name: null
-																	alignment: 20
-																	background: null
-																	fillX: false
-																	fillY: false
-																	minWidth: -1
-																	minHeight: -1
-																	maxWidth: -1
-																	maxHeight: -1
-																	preferredWidth: 8
-																	preferredHeight: 8
-																	padLeft: 0
-																	padRight: 2
-																	padTop: 0
-																	padBottom: 2
-																	child: {
-																		class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-																		name: null
-																		drawable: {
-																			file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_3.png
-																			bgColor: {
-																				r: 1
-																				g: 1
-																				b: 1
-																				a: 1
-																			}
-																			tint: null
-																			tintName: null
-																			name: big_text_3
-																			tiled: false
-																			minWidth: -1
-																			minHeight: -1
-																			customized: false
-																			tenPatchData: null
-																			tvgData: null
-																			type: TEXTURE
-																			hidden: false
-																		}
-																		scaling: stretch
-																		touchable: enabled
-																		visible: true
-																	}
-																	touchable: enabled
-																	visible: true
-																}
-																{
-																	class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-																	name: null
-																	drawable: {
-																		file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/pirate_treasure/blue_diamond/idle_01.png
-																		bgColor: {
-																			r: 1
-																			g: 1
-																			b: 1
-																			a: 1
-																		}
-																		tint: null
-																		tintName: null
-																		name: idle_01
-																		tiled: false
-																		minWidth: -1
-																		minHeight: -1
-																		customized: false
-																		tenPatchData: null
-																		tvgData: null
-																		type: TEXTURE
-																		hidden: false
-																	}
-																	scaling: none
-																	touchable: enabled
-																	visible: true
-																}
-															]
-															touchable: enabled
-															visible: true
-														}
-														touchable: enabled
-														visible: true
-													}
-												]
-												touchable: enabled
-												visible: true
-											}
-										]
-										touchable: enabled
-										visible: true
-									}
-								]
-								touchable: enabled
-								visible: true
-							}
-							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-								name: null
-								drawable: null
-								scaling: stretch
-								touchable: enabled
-								visible: true
-							}
-						]
+						child: null
 						touchable: enabled
 						visible: true
 					}
@@ -9989,578 +9761,8 @@ sceneComposer: {
 					minHeight: -1
 					maxWidth: -1
 					maxHeight: -1
-					preferredWidth: -1
-					preferredHeight: -1
-					uniformX: false
-					uniformY: false
-					colSpan: 1
-				}
-				{
-					child: {
-						class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimVerticalGroup
-						name: null
-						alignment: 1
-						expand: false
-						fill: false
-						padLeft: 0
-						padRight: 0
-						padTop: 0
-						padBottom: 0
-						reverse: false
-						columnAlignment: 1
-						space: 0
-						wrap: false
-						wrapSpace: 0
-						children: [
-							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-								name: null
-								alignment: 1
-								background: null
-								fillX: false
-								fillY: false
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: 145
-								preferredHeight: 45
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-									name: null
-									children: [
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-											name: null
-											drawable: {
-												file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_4_ninepatch.9.png
-												bgColor: {
-													r: 1
-													g: 1
-													b: 1
-													a: 1
-												}
-												tint: null
-												tintName: null
-												name: prefabs_4_ninepatch
-												tiled: false
-												minWidth: -1
-												minHeight: -1
-												customized: false
-												tenPatchData: null
-												tvgData: null
-												type: NINE_PATCH
-												hidden: false
-											}
-											scaling: stretch
-											touchable: enabled
-											visible: true
-										}
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimHorizontalGroup
-											name: null
-											alignment: 1
-											expand: false
-											fill: false
-											padLeft: 0
-											padRight: 0
-											padTop: 0
-											padBottom: 0
-											reverse: false
-											rowAlignment: 1
-											space: 0
-											wrap: false
-											wrapSpace: 0
-											children: [
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_g.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_g
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_e.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_e
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_a.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_a
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-												{
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Big Text/big_text_r.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: big_text_r
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: stretch
-													touchable: enabled
-													visible: true
-												}
-											]
-											touchable: enabled
-											visible: true
-										}
-									]
-									touchable: enabled
-									visible: true
-								}
-								touchable: enabled
-								visible: true
-							}
-							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-								name: null
-								children: [
-									{
-										class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-										name: null
-										drawable: {
-											file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_5.png
-											bgColor: {
-												r: 1
-												g: 1
-												b: 1
-												a: 1
-											}
-											tint: null
-											tintName: null
-											name: prefabs_5
-											tiled: false
-											minWidth: -1
-											minHeight: -1
-											customized: false
-											tenPatchData: null
-											tvgData: null
-											type: TEXTURE
-											hidden: false
-										}
-										scaling: stretch
-										touchable: enabled
-										visible: true
-									}
-									{
-										class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimVerticalGroup
-										name: null
-										alignment: 1
-										expand: false
-										fill: false
-										padLeft: 0
-										padRight: 0
-										padTop: 17
-										padBottom: 17
-										reverse: false
-										columnAlignment: 1
-										space: -4
-										wrap: false
-										wrapSpace: 0
-										children: [
-											{
-												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-												name: null
-												alignment: 1
-												background: {
-													file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Yellow Paper/text_bubble.png
-													bgColor: {
-														r: 1
-														g: 1
-														b: 1
-														a: 1
-													}
-													tint: null
-													tintName: null
-													name: text_bubble
-													tiled: false
-													minWidth: -1
-													minHeight: -1
-													customized: false
-													tenPatchData: null
-													tvgData: null
-													type: TEXTURE
-													hidden: false
-												}
-												fillX: false
-												fillY: false
-												minWidth: -1
-												minHeight: -1
-												maxWidth: -1
-												maxHeight: -1
-												preferredWidth: 36
-												preferredHeight: 32
-												padLeft: 0
-												padRight: 0
-												padTop: 0
-												padBottom: 0
-												child: {
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/helmet_off.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: helmet_off
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: none
-													touchable: enabled
-													visible: true
-												}
-												touchable: enabled
-												visible: true
-											}
-											{
-												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimHorizontalGroup
-												name: null
-												alignment: 1
-												expand: false
-												fill: false
-												padLeft: 0
-												padRight: 0
-												padTop: 0
-												padBottom: 0
-												reverse: false
-												rowAlignment: 1
-												space: -6
-												wrap: false
-												wrapSpace: 0
-												children: [
-													{
-														class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-														name: null
-														alignment: 1
-														background: {
-															file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Yellow Paper/text_bubble.png
-															bgColor: {
-																r: 1
-																g: 1
-																b: 1
-																a: 1
-															}
-															tint: null
-															tintName: null
-															name: text_bubble
-															tiled: false
-															minWidth: -1
-															minHeight: -1
-															customized: false
-															tenPatchData: null
-															tvgData: null
-															type: TEXTURE
-															hidden: false
-														}
-														fillX: false
-														fillY: false
-														minWidth: -1
-														minHeight: -1
-														maxWidth: -1
-														maxHeight: -1
-														preferredWidth: 36
-														preferredHeight: 32
-														padLeft: 0
-														padRight: 0
-														padTop: 0
-														padBottom: 0
-														child: {
-															class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-															name: null
-															drawable: {
-																file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/sword_off.png
-																bgColor: {
-																	r: 1
-																	g: 1
-																	b: 1
-																	a: 1
-																}
-																tint: null
-																tintName: null
-																name: sword_off
-																tiled: false
-																minWidth: -1
-																minHeight: -1
-																customized: false
-																tenPatchData: null
-																tvgData: null
-																type: TEXTURE
-																hidden: false
-															}
-															scaling: none
-															touchable: enabled
-															visible: true
-														}
-														touchable: enabled
-														visible: true
-													}
-													{
-														class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-														name: null
-														alignment: 1
-														background: {
-															file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Yellow Paper/text_bubble.png
-															bgColor: {
-																r: 1
-																g: 1
-																b: 1
-																a: 1
-															}
-															tint: null
-															tintName: null
-															name: text_bubble
-															tiled: false
-															minWidth: -1
-															minHeight: -1
-															customized: false
-															tenPatchData: null
-															tvgData: null
-															type: TEXTURE
-															hidden: false
-														}
-														fillX: false
-														fillY: false
-														minWidth: -1
-														minHeight: -1
-														maxWidth: -1
-														maxHeight: -1
-														preferredWidth: 36
-														preferredHeight: 32
-														padLeft: 0
-														padRight: 0
-														padTop: 0
-														padBottom: 0
-														child: {
-															class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-															name: null
-															drawable: {
-																file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/armor_off.png
-																bgColor: {
-																	r: 1
-																	g: 1
-																	b: 1
-																	a: 1
-																}
-																tint: null
-																tintName: null
-																name: armor_off
-																tiled: false
-																minWidth: -1
-																minHeight: -1
-																customized: false
-																tenPatchData: null
-																tvgData: null
-																type: TEXTURE
-																hidden: false
-															}
-															scaling: none
-															touchable: enabled
-															visible: true
-														}
-														touchable: enabled
-														visible: true
-													}
-												]
-												touchable: enabled
-												visible: true
-											}
-											{
-												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-												name: null
-												alignment: 1
-												background: {
-													file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Yellow Paper/text_bubble.png
-													bgColor: {
-														r: 1
-														g: 1
-														b: 1
-														a: 1
-													}
-													tint: null
-													tintName: null
-													name: text_bubble
-													tiled: false
-													minWidth: -1
-													minHeight: -1
-													customized: false
-													tenPatchData: null
-													tvgData: null
-													type: TEXTURE
-													hidden: false
-												}
-												fillX: false
-												fillY: false
-												minWidth: -1
-												minHeight: -1
-												maxWidth: -1
-												maxHeight: -1
-												preferredWidth: 36
-												preferredHeight: 32
-												padLeft: 0
-												padRight: 0
-												padTop: 0
-												padBottom: 0
-												child: {
-													class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-													name: null
-													drawable: {
-														file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/boots_off.png
-														bgColor: {
-															r: 1
-															g: 1
-															b: 1
-															a: 1
-														}
-														tint: null
-														tintName: null
-														name: boots_off
-														tiled: false
-														minWidth: -1
-														minHeight: -1
-														customized: false
-														tenPatchData: null
-														tvgData: null
-														type: TEXTURE
-														hidden: false
-													}
-													scaling: none
-													touchable: enabled
-													visible: true
-												}
-												touchable: enabled
-												visible: true
-											}
-										]
-										touchable: enabled
-										visible: true
-									}
-								]
-								touchable: enabled
-								visible: true
-							}
-						]
-						touchable: enabled
-						visible: true
-					}
-					row: 0
-					column: 1
-					padLeft: 0
-					padRight: 0
-					padTop: 0
-					padBottom: 0
-					spaceLeft: 0
-					spaceRight: 0
-					spaceTop: 0
-					spaceBottom: 0
-					expandX: false
-					expandY: false
-					fillX: false
-					fillY: false
-					growX: false
-					growY: false
-					alignment: 1
-					minWidth: -1
-					minHeight: -1
-					maxWidth: -1
-					maxHeight: -1
-					preferredWidth: -1
-					preferredHeight: -1
+					preferredWidth: 200
+					preferredHeight: 250
 					uniformX: false
 					uniformY: false
 					colSpan: 1

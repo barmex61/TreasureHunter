@@ -42,7 +42,7 @@ data class GearSlot(
 
 class InventoryView(
     skin: Skin,
-    private val inventoryModel: InventoryModel,
+    inventoryModel: InventoryModel,
 ) : Table(skin), KTable {
 
 
@@ -116,6 +116,7 @@ class InventoryView(
                                                 itemCountImage.also {
                                                     it.onClick {
                                                         this@InventoryView.onInventoryItemClick(this@InventoryView.inventorySlots[xIndex * 5 + yIndex])
+                                                        false
                                                     }
                                                 }
                                         }
@@ -126,6 +127,7 @@ class InventoryView(
                                             itemImage.also {
                                                 it.onClick {
                                                     this@InventoryView.onInventoryItemClick(this@InventoryView.inventorySlots[xIndex * 5 + yIndex])
+                                                    false
                                                 }
                                             }
                                     }
@@ -226,6 +228,7 @@ class InventoryView(
                 setScaling(Scaling.none)
                 onClick {
                     this@InventoryView.onGearItemClick(this@InventoryView.gearSlots[index])
+                    false
                 }
             }
             this@InventoryView.gearSlots[index].image = slotImage

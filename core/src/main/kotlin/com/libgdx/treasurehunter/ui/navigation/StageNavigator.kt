@@ -14,7 +14,6 @@ import ktx.actors.alpha
 import ktx.actors.plusAssign
 import ktx.scene2d.actors
 import com.badlogic.gdx.utils.Align
-import com.libgdx.treasurehunter.ui.model.InventoryModel
 import com.libgdx.treasurehunter.ui.view.GameView
 import com.libgdx.treasurehunter.ui.view.InventoryView
 import com.libgdx.treasurehunter.ui.view.howToPlayView
@@ -98,7 +97,7 @@ class StageNavigator(
 
     fun toggleInventoryView() {
         if (currentView is GameView) {
-            (currentView as GameView).toggleInventoryView()
+            (currentView as GameView).toggleView(InventoryView::class)
         }
     }
 

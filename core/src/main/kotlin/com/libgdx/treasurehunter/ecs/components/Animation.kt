@@ -10,7 +10,7 @@ import com.libgdx.treasurehunter.utils.GameObject
 typealias GdxAnimation = com.badlogic.gdx.graphics.g2d.Animation<TextureRegion>
 
 enum class AnimationType(isAttackAnimation : Boolean = false){
-    NONE,ON,SPLASH_1,WIND,SPLASH_2,REFLEXES_1,REFLEXES_2,ATTACK(true),FIERCE_TOOTH_ATTACK(true),CRABBY_ATTACK(true),PINK_STAR_ATTACK(true),AIR_ATTACK_1(true), AIR_ATTACK_2(true), ATTACK_1(true), ATTACK_2(true), ATTACK_3(true), FALL, GROUND, HIT, IDLE, JUMP, RUN, THROW(true), DEAD_GROUND, DEAD_HIT,IN,OUT,SPINNING,EMBEDDED;
+    NONE,ON,OPEN,CLOSE,LOCK,UNLOCK,REUNLOCK,SPLASH_1,WIND,SPLASH_2,REFLEXES_1,REFLEXES_2,ATTACK(true),FIERCE_TOOTH_ATTACK(true),CRABBY_ATTACK(true),PINK_STAR_ATTACK(true),AIR_ATTACK_1(true), AIR_ATTACK_2(true), ATTACK_1(true), ATTACK_2(true), ATTACK_3(true), FALL, GROUND, HIT, IDLE, JUMP, RUN, THROW(true), DEAD_GROUND, DEAD_HIT,IN,OUT,SPINNING,EMBEDDED;
     val atlasKey : String = this.name.lowercase()
 }
 

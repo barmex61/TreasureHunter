@@ -28,7 +28,7 @@ class DebugSystem(
         shapeRenderer.use(ShapeRenderer.ShapeType.Line,gameCamera.combined){
             it.color = Color.RED
             it.rect(JUMP_DEBUG_RECT.x, JUMP_DEBUG_RECT.y, JUMP_DEBUG_RECT.width, JUMP_DEBUG_RECT.height)
-            it.rect(BODY_POSITION_DEBUG_RECT.x, BODY_POSITION_DEBUG_RECT.y, BODY_POSITION_DEBUG_RECT.width, BODY_POSITION_DEBUG_RECT.height)
+            it.rect(SCREEN_TOUCH_DEBUG_RECT.x, SCREEN_TOUCH_DEBUG_RECT.y, SCREEN_TOUCH_DEBUG_RECT.width, SCREEN_TOUCH_DEBUG_RECT.height)
             if (RAY_CAST_POLYLINE.vertices.isNotEmpty()) it.polyline(RAY_CAST_POLYLINE.vertices)
             if (JUMP_DEBUG_VECTOR_NORM.isNotEmpty()) it.polyline(JUMP_DEBUG_VECTOR_NORM)
         }
@@ -39,9 +39,9 @@ class DebugSystem(
     }
 
     companion object{
-        val BODY_POSITION_DEBUG_RECT = Rectangle()
         val RAY_CAST_POLYLINE = Polyline()
         val JUMP_DEBUG_RECT = Rectangle()
+        val SCREEN_TOUCH_DEBUG_RECT = Rectangle()
         var JUMP_DEBUG_VECTOR_NORM = floatArrayOf()
 
     }

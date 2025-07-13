@@ -39,9 +39,7 @@ sealed interface ItemType{
         var throwState : ThrowState
     }
     interface Equippable : ItemType
-    interface Consumable : ItemType{
-
-    }
+    interface Consumable : ItemType
 
     interface Collectable : ItemType
     fun toDrawablePath() : String = when(this){
@@ -55,6 +53,7 @@ sealed interface ItemType{
                 MapType.SMALL_MAP_4 -> "small_map_4"
             }
         }
+        is Key -> "key"
         else -> gdxError("ItemType $this does not have a drawable path defined")
     }
 }
@@ -73,6 +72,7 @@ data class Projectile(
 data class Map (
     val mapType : MapType
 ) : ItemType.Collectable
+
 
 class Armor : ItemType.Equippable
 class Helmet : ItemType.Equippable

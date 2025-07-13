@@ -1,11 +1,12 @@
 package com.libgdx.treasurehunter.event
 
 import com.badlogic.gdx.maps.tiled.TiledMap
-import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.libgdx.treasurehunter.ecs.components.ItemData
 import com.libgdx.treasurehunter.enums.ParticleType
 import com.libgdx.treasurehunter.enums.SoundAsset
+import com.libgdx.treasurehunter.ui.model.DialogResult
+import com.libgdx.treasurehunter.ui.model.DialogTarget
 
 sealed class GameEvent {
     data class MapChangeEvent(val tiledMap : TiledMap) : GameEvent()
@@ -20,6 +21,13 @@ sealed class GameEvent {
     data class EntityModelChangeEvent(val entity: Entity, val modelName: String) : GameEvent()
     data class EquipItemRequest(val slotName: String, val item: ItemData) : GameEvent()
     data class UnEquipItemRequest(val slotName: String, val item: ItemData) : GameEvent()
+    data class OnScreenTouchDownEvent(val screenX : Int,val screenY : Int) : GameEvent()
+    data class ChestClickedEvent(val dialogText: String,val chestEntity : Entity) : GameEvent()
+    data class DialogResultEvent(val target : DialogTarget,val dialogResult : DialogResult) : GameEvent()
+}
+
+enum class Dialog(val dialogText : String){
+    OPEN_CHEST("Would you like to open the chest?"),
 }
 
 interface GameEventListener {

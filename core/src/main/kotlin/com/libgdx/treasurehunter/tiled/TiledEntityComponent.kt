@@ -28,10 +28,12 @@ import com.libgdx.treasurehunter.state.EntityState
 import com.libgdx.treasurehunter.state.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.Chest
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemData
+import com.libgdx.treasurehunter.ecs.components.Key
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Map
 import com.libgdx.treasurehunter.ecs.components.MapType
@@ -42,6 +44,7 @@ import com.libgdx.treasurehunter.ecs.components.Ship
 import com.libgdx.treasurehunter.ecs.components.Stat
 import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.factory.AttackMetaDataFactory
+import com.libgdx.treasurehunter.state.ChestState
 import com.libgdx.treasurehunter.state.ShipState
 import ktx.app.gdxError
 import ktx.math.vec2
@@ -135,7 +138,29 @@ fun EntityCreateContext.configureState(entity: Entity, tile: TiledMapTile, world
             val shipEntity = StateEntity.ShipEntity(entity, world, physicWorld, assetHelper)
             entity += State(shipEntity, ShipState.IDLE as EntityState<StateEntity>)
         }
+        GameObject.CHEST.name ->{
+            val chestEntity = StateEntity.ChestEntity(entity, world, physicWorld, assetHelper)
+            entity += State(chestEntity, ChestState.IDLE as EntityState<StateEntity>)
+        }
+        GameObject.CHEST_LOCKED.name ->{
+            val chestEntity = StateEntity.ChestEntity(entity, world, physicWorld, assetHelper)
+            entity += State(chestEntity, ChestState.IDLE as EntityState<StateEntity>)
+        }
 
+        else -> return
+    }
+}
+
+fun EntityCreateContext.configureChest(entity: Entity, tile: TiledMapTile) {
+    val gameObjectStr = tile.property<String>("gameObject", "")
+    entity += when(gameObjectStr){
+        GameObject.CHEST.name -> {
+            Chest(GameObject.valueOf(gameObjectStr))
+        }
+        GameObject.CHEST_LOCKED.name -> {
+            Chest(GameObject.valueOf(gameObjectStr), isLocked = true)
+
+        }
         else -> return
     }
 }
@@ -174,6 +199,7 @@ fun EntityCreateContext.configureItem(entity: Entity, gameObject: GameObject){
         GameObject.SMALL_MAP_2 -> Map(MapType.SMALL_MAP_2)
         GameObject.SMALL_MAP_3 -> Map(MapType.SMALL_MAP_3)
         GameObject.SMALL_MAP_4 -> Map(MapType.SMALL_MAP_4)
+        GameObject.KEY -> Key()
         else -> return
     }
     entity += Item(itemData = ItemData(item))

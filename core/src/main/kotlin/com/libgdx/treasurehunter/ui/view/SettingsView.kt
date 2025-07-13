@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
 import com.badlogic.gdx.utils.viewport.ScreenViewport
+import com.libgdx.treasurehunter.enums.SoundAsset
+import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEvent.AudioChangeEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.ui.navigation.StageNavigator
@@ -56,8 +58,10 @@ class SettingsView(
              align(Align.topLeft)
              imageButton{
                  onClick {
+                     GameEventDispatcher.fireEvent(GameEvent.PlaySoundEvent(SoundAsset.BUTTON_CLICK))
+
                      stageNavigator.changeStageView(ViewType.MENU, TransitionType.SLIDE_RIGHT)
-                     true
+                     false
                  }
              }
          }
@@ -81,6 +85,7 @@ class SettingsView(
                              }else{
                                  this@SettingsView.musicSlider?.value = 50f
                              }
+                             false
                          }
                      }
                      this@SettingsView.musicSlider = slider(min = 0f, max = 100f, step = 1f, vertical = false){
@@ -94,7 +99,7 @@ class SettingsView(
                                  this@SettingsView.musicButton?.isChecked = true
                                  gamePreferences.storeMuteMusic(true)
                              }
-                             true
+                             false
                          }
                      }
                      this@SettingsView.sfxButton = imageTextButton("SFX"){
@@ -107,6 +112,7 @@ class SettingsView(
                              }else{
                                  this@SettingsView.sfxSlider?.value = 50f
                              }
+                             false
                          }
                      }
                      this@SettingsView.sfxSlider = slider(min = 0f, max = 100f, step = 1f, vertical = false){
@@ -120,7 +126,7 @@ class SettingsView(
                                  this@SettingsView.sfxButton?.isChecked = true
                                  gamePreferences.storeMuteSound(true)
                              }
-                             true
+                             false
                          }
                      }
                  }

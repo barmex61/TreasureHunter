@@ -40,7 +40,7 @@
  </tile>
  <tile id="29">
   <properties>
-   <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="animFrameDuration" type="float" value="0.16"/>
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="CHEST"/>
    <property name="hasAnimation" type="bool" value="true"/>

@@ -108,7 +108,7 @@ class GameScreen(
         stageNavigator.gameModel = it
     }
     private val tiledMapService by lazy { TiledMapService(physicWorld,world,assetHelper) }
-    private val keyboardInputProcessor: KeyboardInputProcessor = KeyboardInputProcessor(world){
+    private val keyboardInputProcessor: KeyboardInputProcessor = KeyboardInputProcessor(world,gameCamera){
         stageNavigator.toggleInventoryView()
     }
 
@@ -135,6 +135,7 @@ class GameScreen(
 
     override fun hide() {
         inputMultiplexer.removeProcessor(keyboardInputProcessor)
+        inputMultiplexer.removeProcessor(stage)
         unregisterGameEventListeners()
         stage.clear()
     }

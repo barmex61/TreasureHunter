@@ -1,6 +1,8 @@
 package com.libgdx.treasurehunter.ui.view
 
 import com.badlogic.gdx.math.Interpolation
+import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -22,6 +24,7 @@ import ktx.scene2d.container
 import ktx.scene2d.image
 import ktx.actors.plusAssign
 import ktx.scene2d.stack
+import kotlin.reflect.KClass
 
 
 class GameView(
@@ -32,8 +35,19 @@ class GameView(
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val playerLifeBar : Image
     private val enemyLifeBar : Image
-    private val inventoryView : InventoryView = InventoryView(skin,inventoryModel).also { it.alpha = 0f }
+    private val inventoryView : InventoryView = InventoryView(skin,inventoryModel).also {
+        it.alpha = 0f
+        it.touchable = Touchable.disabled
+    }
+    private val dialogView : DialogView = DialogView(skin, toggleDialogView = {
+        this@GameView.toggleView(this::class)
+    }).also {
+        it.alpha = 0f
+        it.touchable = Touchable.disabled
+    }
+
     private var isInventoryVisible = false
+    private var isDialogVisible = false
     init {
         setFillParent(true)
 
@@ -63,6 +77,7 @@ class GameView(
         add().expand()
         add().expand()
         addActor(inventoryView)
+        addActor(dialogView)
         coroutineScope.launch {
             launch {
                 gameModel.playerLifeBarScale.collect { lifeBarScale ->
@@ -83,13 +98,25 @@ class GameView(
         }
     }
 
-    fun toggleInventoryView() {
-        isInventoryVisible = !isInventoryVisible
-        inventoryView.clearActions()
-        inventoryView += if (isInventoryVisible){
-            Actions.fadeIn(1f)
+    fun toggleView(viewClass : KClass<out Actor>) {
+        val (actor,isVisible) = when(viewClass){
+            InventoryView::class -> {
+                isInventoryVisible = !isInventoryVisible
+                Pair(inventoryView, isInventoryVisible)
+            }
+            DialogView::class -> {
+                isDialogVisible = !isDialogVisible
+                Pair(dialogView,isDialogVisible)
+            }
+            else -> throw IllegalArgumentException("Unsupported view class: $viewClass")
+        }
+        actor.clearActions()
+        actor += if (isVisible){
+            actor.touchable = Touchable.enabled
+            Actions.alpha(1f,0.5f)
         }else {
-            Actions.fadeOut(1f)
+            actor.touchable = Touchable.disabled
+            Actions.fadeOut(0.5f)
         }
     }
 }

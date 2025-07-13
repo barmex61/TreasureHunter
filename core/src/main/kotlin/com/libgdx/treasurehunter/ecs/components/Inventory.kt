@@ -3,10 +3,10 @@ package com.libgdx.treasurehunter.ecs.components
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
-import com.github.quillraven.fleks.configureWorld
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.utils.GameObject
+import kotlin.reflect.KClass
 
 enum class SlotName {
     SWORD, ARMOR, BOOTS, HELMET;
@@ -34,10 +34,6 @@ data class Inventory(
         GameEventDispatcher.fireEvent(GameEvent.InventoryChangeEvent(_items.toList()))
     }
 
-    fun setItems(newItems: List<ItemData>) {
-        _items = newItems.toMutableList()
-        GameEventDispatcher.fireEvent(GameEvent.InventoryChangeEvent(_items.toList()))
-    }
     private var _equippedSword: ItemData? = null
     var equippedSword: ItemData?
         get() = _equippedSword
@@ -73,6 +69,10 @@ data class Inventory(
             _equippedHelmet = value
             GameEventDispatcher.fireEvent(GameEvent.EquippedItemChanged(SlotName.HELMET.toString(), value))
         }
+
+    fun hasItem(itemTypeClass: KClass<out ItemType>): Boolean {
+        return _items.any { it.itemType::class == itemTypeClass }
+    }
 
     override fun type() = Inventory
 

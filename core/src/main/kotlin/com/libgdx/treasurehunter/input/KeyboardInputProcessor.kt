@@ -1,6 +1,8 @@
 package com.libgdx.treasurehunter.input
 
 import com.badlogic.gdx.Input
+import com.badlogic.gdx.graphics.OrthographicCamera
+import com.badlogic.gdx.math.Vector3
 import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackState
@@ -13,11 +15,15 @@ import com.libgdx.treasurehunter.ecs.components.MoveDirection
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.systems.CameraMovement
 import com.libgdx.treasurehunter.ecs.systems.CameraSystem
+import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.ui.navigation.StageNavigator
 import com.libgdx.treasurehunter.ui.navigation.TransitionType
 import com.libgdx.treasurehunter.ui.navigation.ViewType
+import ktx.math.vec2
 
-class KeyboardInputProcessor(val world: World,val toggleInventory : () -> Unit) : KtxInputAdapter {
+class KeyboardInputProcessor(val world: World,val camera : OrthographicCamera,val toggleInventory : () -> Unit) : KtxInputAdapter {
+
 
     private var moveX = 0
     private var playerEntities = with(world) {
@@ -105,6 +111,12 @@ class KeyboardInputProcessor(val world: World,val toggleInventory : () -> Unit) 
             Input.Keys.NUMPAD_5 -> updateCameraZoom(0f)
             Input.Keys.P -> updatePlayerAttack(AttackType.THROW)
         }
+        return false
+    }
+
+    override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
+        println("touchDown: screenX=$screenX, screenY=$screenY, pointer=$pointer, button=$button")
+        GameEventDispatcher.fireEvent(GameEvent.OnScreenTouchDownEvent(screenX,screenY))
         return false
     }
 }
