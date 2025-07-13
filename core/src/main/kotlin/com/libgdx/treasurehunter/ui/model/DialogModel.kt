@@ -13,12 +13,16 @@ enum class DialogTargetType{
 data class DialogTarget(
     val type: DialogTargetType,
     val entity : Entity,
-    val dialogText: String
+    val dialogText: String,
+    val buttonTypes : List<ButtonType>
 )
 
-enum class DialogResult{
-    YES,NO
+enum class ButtonType {
+    YES,
+    NO,
+    OK
 }
+
 class DialogModel(
     var dialogTarget: DialogTarget? = null,
     var onDialogTargetChange : (DialogTarget) -> Unit = {},
@@ -30,7 +34,8 @@ class DialogModel(
                 dialogTarget = DialogTarget(
                     type = DialogTargetType.CHEST,
                     entity = event.chestEntity,
-                    dialogText = event.dialogText
+                    dialogText = event.dialogText,
+                    buttonTypes = event.buttonTypes
                 )
                 onDialogTargetChange(dialogTarget!!)
             }

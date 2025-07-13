@@ -22,38 +22,37 @@ import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.game.PhysicWorld
-import com.libgdx.treasurehunter.ui.model.DialogResult
-import com.libgdx.treasurehunter.ui.model.DialogTarget
-import com.libgdx.treasurehunter.ui.model.DialogTargetType
+import com.libgdx.treasurehunter.ui.model.ButtonType
 import ktx.box2d.query
 import ktx.math.minus
 
-class ItemSystem (
-    private val gameCamera : OrthographicCamera = inject(),
-    private val physicWorld: PhysicWorld = inject()
-): IteratingSystem(
-    family = family{all(Item)}
-) , GameEventListener {
+class ItemSystem(
+    private val gameCamera: OrthographicCamera = inject(),
+    private val physicWorld: PhysicWorld = inject(),
+) : IteratingSystem(
+    family = family { all(Item) }
+), GameEventListener {
 
     override fun onTickEntity(entity: Entity) {
         val itemComp = entity[Item]
         val itemType = itemComp.itemData.itemType
     }
 
-    companion object{
+    companion object {
         const val INTERACT_DIST = 1.25f
     }
 
     override fun onEvent(event: GameEvent) {
         when (event) {
             is GameEvent.OnScreenTouchDownEvent -> handleScreenTouch(event)
-            is GameEvent.DialogResultEvent -> handleDialogResult(event)
+            is GameEvent.OpenChestEvent -> handleChestOpening(event)
             else -> Unit
         }
     }
 
     private fun handleScreenTouch(event: GameEvent.OnScreenTouchDownEvent) {
-        val worldCoords = gameCamera.unproject(Vector3(event.screenX.toFloat(), event.screenY.toFloat(), 0f))
+        val worldCoords =
+            gameCamera.unproject(Vector3(event.screenX.toFloat(), event.screenY.toFloat(), 0f))
         SCREEN_TOUCH_DEBUG_RECT.set(worldCoords.x, worldCoords.y, 0.12f, 0.12f)
         physicWorld.query(
             SCREEN_TOUCH_DEBUG_RECT.x,
@@ -64,7 +63,7 @@ class ItemSystem (
             when {
                 checkDistanceBetweenEntities(fixture) -> true
                 fixture.isChest -> handleChestClick(fixture)
-                fixture.isChestLocked -> handleChestLockedClick(fixture)
+                fixture.isChestLocked -> handleLockedChestClicked(fixture)
                 else -> true
             }
         }
@@ -72,47 +71,62 @@ class ItemSystem (
 
     private fun handleChestClick(fixture: Fixture): Boolean {
         GameEventDispatcher.fireEvent(
-            GameEvent.DialogResultEvent(
-                DialogTarget(DialogTargetType.CHEST, fixture.entity!!, ""),
-                DialogResult.YES
+            GameEvent.OpenChestEvent(
+                fixture.entity!!
             )
         )
         return false
     }
 
-    private fun handleChestLockedClick(fixture: Fixture): Boolean {
+    private fun handleLockedChestClicked(fixture: Fixture): Boolean {
         val chest = fixture.entity?.getOrNull(Chest) ?: return true
         if (!chest.isLocked) {
             GameEventDispatcher.fireEvent(
-                GameEvent.DialogResultEvent(
-                    DialogTarget(DialogTargetType.CHEST, fixture.entity!!, ""),
-                    DialogResult.YES
+                GameEvent.OpenChestEvent(
+                    fixture.entity!!
                 )
             )
             return false
         }
         val player = world.family { all(EntityTag.PLAYER) }.firstOrNull() ?: return true
         val inventory = player.getOrNull(Inventory) ?: return true
+        val chestEntity = fixture.entity ?: return true
         if (inventory.hasItem(Key::class)) {
-            val chestEntity = fixture.entity ?: return true
-            GameEventDispatcher.fireEvent(GameEvent.ChestClickedEvent(Dialog.OPEN_CHEST.dialogText, chestEntity))
+            GameEventDispatcher.fireEvent(
+                GameEvent.ChestClickedEvent(
+                    Dialog.OPEN_CHEST.dialogText,
+                    chestEntity,
+                    listOf(ButtonType.YES, ButtonType.NO)
+                )
+            )
+        }else{
+            GameEventDispatcher.fireEvent(
+                GameEvent.ChestClickedEvent(
+                    Dialog.OPEN_CHEST_LOCKED.dialogText,
+                    chestEntity,
+                    listOf(ButtonType.OK)
+                )
+            )
         }
         return false
     }
 
-    private fun handleDialogResult(event: GameEvent.DialogResultEvent) {
-        if (event.dialogResult != DialogResult.YES) return
-        when (event.target.type) {
-            DialogTargetType.CHEST -> {
-                val chest = event.target.entity[Chest]
-                chest.isOpened = !chest.isOpened
-                chest.isLocked = false
+    private fun handleChestOpening(event: GameEvent.OpenChestEvent) {
+        val chest = event.chestEntity[Chest]
+        if (chest.isLocked){
+            val player = world.family { all(EntityTag.PLAYER) }.firstOrNull() ?: return
+            val inventory = player.getOrNull(Inventory) ?: return
+            if (inventory.hasItem(Key::class)) {
+                inventory.removeItem(inventory.items.first { it.itemType is Key })
+            } else {
+                return
             }
-            else -> Unit
         }
+        chest.isOpened = !chest.isOpened
+        chest.isLocked = false
     }
 
-    private fun checkDistanceBetweenEntities(collisionFixture : Fixture) : Boolean{
+    private fun checkDistanceBetweenEntities(collisionFixture: Fixture): Boolean {
         val player = world.family { all(EntityTag.PLAYER) }.firstOrNull() ?: return true
         val playerPos = player[Graphic].center
         val entityPos = collisionFixture.entity?.get(Graphic)?.center ?: return true

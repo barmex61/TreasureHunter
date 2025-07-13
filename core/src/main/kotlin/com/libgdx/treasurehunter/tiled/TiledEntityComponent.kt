@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.PolygonShape
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityCreateContext
@@ -28,8 +27,14 @@ import com.libgdx.treasurehunter.state.EntityState
 import com.libgdx.treasurehunter.state.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.BlueDiamond
+import com.libgdx.treasurehunter.ecs.components.BluePotion
 import com.libgdx.treasurehunter.ecs.components.Chest
 import com.libgdx.treasurehunter.ecs.components.Damage
+import com.libgdx.treasurehunter.ecs.components.GoldCoin
+import com.libgdx.treasurehunter.ecs.components.GoldenSkull
+import com.libgdx.treasurehunter.ecs.components.GreenBottle
+import com.libgdx.treasurehunter.ecs.components.GreenDiamond
 import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemData
@@ -38,9 +43,10 @@ import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Map
 import com.libgdx.treasurehunter.ecs.components.MapType
 import com.libgdx.treasurehunter.ecs.components.Physic
-import com.libgdx.treasurehunter.ecs.components.Projectile
-import com.libgdx.treasurehunter.ecs.components.ProjectileType
+import com.libgdx.treasurehunter.ecs.components.RedDiamond
+import com.libgdx.treasurehunter.ecs.components.RedPotion
 import com.libgdx.treasurehunter.ecs.components.Ship
+import com.libgdx.treasurehunter.ecs.components.SilverCoin
 import com.libgdx.treasurehunter.ecs.components.Stat
 import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.factory.AttackMetaDataFactory
@@ -192,17 +198,26 @@ fun EntityCreateContext.configureInventory(entity: Entity, gameObject: GameObjec
 }
 
 fun EntityCreateContext.configureItem(entity: Entity, gameObject: GameObject){
-    val item = when(gameObject){
+    val itemType = when(gameObject){
         GameObject.SWORD -> Sword()
         GameObject.BIG_MAP -> Map(MapType.BIG_MAP)
         GameObject.SMALL_MAP_1 -> Map(MapType.SMALL_MAP_1)
         GameObject.SMALL_MAP_2 -> Map(MapType.SMALL_MAP_2)
         GameObject.SMALL_MAP_3 -> Map(MapType.SMALL_MAP_3)
         GameObject.SMALL_MAP_4 -> Map(MapType.SMALL_MAP_4)
-        GameObject.KEY -> Key()
+        GameObject.KEY -> Key
+        GameObject.BLUE_DIAMOND -> BlueDiamond
+        GameObject.GREEN_DIAMOND -> GreenDiamond
+        GameObject.RED_DIAMOND -> RedDiamond
+        GameObject.GOLD_COIN -> GoldCoin
+        GameObject.SILVER_COIN -> SilverCoin
+        GameObject.GOLDEN_SKULL -> GoldenSkull
+        GameObject.BLUE_POTION -> BluePotion
+        GameObject.RED_POTION -> RedPotion
+        GameObject.GREEN_BOTTLE-> GreenBottle
         else -> return
     }
-    entity += Item(itemData = ItemData(item))
+    entity += Item(itemData = ItemData(itemType))
 }
 
 fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){

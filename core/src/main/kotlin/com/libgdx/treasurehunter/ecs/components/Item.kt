@@ -54,6 +54,16 @@ sealed interface ItemType{
             }
         }
         is Key -> "key"
+        is BlueDiamond -> "blue_diamond"
+        is GreenDiamond -> "green_diamond"
+        is RedDiamond -> "red_diamond"
+        is GoldCoin -> "gold_coin"
+        is SilverCoin -> "silver_coin"
+        is GoldenSkull -> "golden_skull"
+        is BluePotion -> "blue_potion"
+        is RedPotion -> "red_potion"
+        is GreenBottle -> "green_bottle"
+
         else -> gdxError("ItemType $this does not have a drawable path defined")
     }
 }
@@ -74,18 +84,25 @@ data class Map (
 ) : ItemType.Collectable
 
 
-class Armor : ItemType.Equippable
-class Helmet : ItemType.Equippable
+object Armor : ItemType.Equippable
+object Helmet : ItemType.Equippable
+object Boots : ItemType.Equippable
+object Shield : ItemType.Equippable
 
-class Boots : ItemType.Equippable
+object BlueDiamond : ItemType.Collectable
+object GreenDiamond : ItemType.Collectable
+object RedDiamond : ItemType.Collectable
 
-class Shield : ItemType.Equippable
+object GoldCoin : ItemType.Collectable
+object SilverCoin : ItemType.Collectable
 
-class Diamond : ItemType.Collectable
+object GoldenSkull : ItemType.Collectable
+object Key : ItemType.Collectable
 
-class Skull : ItemType.Collectable
+object BluePotion : ItemType.Consumable
+object RedPotion : ItemType.Consumable
 
-class Key : ItemType.Collectable
+object GreenBottle : ItemType.Consumable
 
 
 enum class MapType {

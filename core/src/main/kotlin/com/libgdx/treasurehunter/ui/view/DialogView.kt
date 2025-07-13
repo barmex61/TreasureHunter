@@ -1,21 +1,15 @@
 package com.libgdx.treasurehunter.ui.view
 
-import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.Batch
-import com.badlogic.gdx.scenes.scene2d.Actor
-import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup
-import com.badlogic.gdx.scenes.scene2d.ui.ImageTextButton
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.utils.Align
-import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
+import com.libgdx.treasurehunter.ui.model.ButtonType
 import com.libgdx.treasurehunter.ui.model.DialogModel
-import com.libgdx.treasurehunter.ui.model.DialogResult
 import com.libgdx.treasurehunter.ui.model.DialogTarget
 import ktx.actors.onClick
 import ktx.scene2d.KTable
@@ -35,11 +29,13 @@ class DialogView(
 
     private val textLabel: Label
     private var dialogTarget: DialogTarget? = null
+    private val horizontalButtonGroup: HorizontalGroup
 
     init {
         dialogModel.onDialogTargetChange = { target ->
             dialogTarget = target
             textLabel.setText(target.dialogText)
+            handleHorizontalButtonGroup(target,toggleDialogView)
             toggleDialogView()
         }
 
@@ -59,16 +55,15 @@ class DialogView(
                     setAlignment(Align.center)
                     wrap = true
                 }
-                horizontalGroup {
+                this@DialogView.horizontalButtonGroup = horizontalGroup {
                     align(Align.center)
                     space(15f)
                     imageTextButton("Yes", "yes") {
                         onClick {
                             this@DialogView.dialogTarget?.let { target ->
                                 GameEventDispatcher.fireEvent(
-                                    GameEvent.DialogResultEvent(
-                                        target,
-                                        DialogResult.YES
+                                    GameEvent.OpenChestEvent(
+                                        target.entity
                                     )
                                 )
                             }
@@ -77,18 +72,44 @@ class DialogView(
                     }
                     imageTextButton("No", "no") {
                         onClick {
-                            this@DialogView.dialogTarget?.let { target ->
-                                GameEventDispatcher.fireEvent(
-                                    GameEvent.DialogResultEvent(
-                                        target,
-                                        DialogResult.NO
-                                    )
-                                )
-                            }
                             this@DialogView.toggleDialogView()
                         }
                     }
                 }
+            }
+        }
+    }
+
+    private fun DialogView.handleHorizontalButtonGroup(target: DialogTarget,toggleDialogView: DialogView.() -> Unit) {
+        horizontalButtonGroup.clearChildren()
+        target.buttonTypes.forEach { buttonType ->
+            when (buttonType) {
+                ButtonType.YES -> horizontalButtonGroup.addActor(
+                    imageTextButton("Yes", "yes") {
+                        onClick {
+                            GameEventDispatcher.fireEvent(
+                                GameEvent.OpenChestEvent(target.entity)
+                            )
+                            this@DialogView.toggleDialogView()
+                        }
+                    }
+                )
+
+                ButtonType.NO -> horizontalButtonGroup.addActor(
+                    imageTextButton("No", "no") {
+                        onClick {
+                            this@DialogView.toggleDialogView()
+                        }
+                    }
+                )
+
+                ButtonType.OK -> horizontalButtonGroup.addActor(
+                    imageTextButton("OK", "yes") {
+                        onClick {
+                            this@DialogView.toggleDialogView()
+                        }
+                    }
+                )
             }
         }
     }

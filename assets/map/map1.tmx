@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="75">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="88">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
   <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DAY"/>
@@ -96,5 +96,18 @@
     <property name="animFrameDuration" type="float" value="0.16"/>
    </properties>
   </object>
+  <object id="75" gid="143" x="704" y="192" width="32" height="32"/>
+  <object id="76" gid="143" x="288" y="192" width="32" height="32"/>
+  <object id="77" gid="145" x="449" y="141" width="24" height="24"/>
+  <object id="78" gid="165" x="415" y="121" width="24" height="24"/>
+  <object id="79" gid="165" x="529" y="115" width="24" height="24"/>
+  <object id="80" gid="164" x="470" y="114" width="24" height="24"/>
+  <object id="81" gid="166" x="405" y="148" width="13" height="17"/>
+  <object id="82" gid="166" x="481" y="146" width="13" height="17"/>
+  <object id="83" gid="160" x="563" y="138" width="13" height="17"/>
+  <object id="84" gid="161" x="383" y="130" width="16" height="16"/>
+  <object id="85" gid="162" x="420" y="186" width="24" height="28"/>
+  <object id="86" gid="159" x="474" y="136" width="24" height="24"/>
+  <object id="87" gid="158" x="526" y="136" width="30" height="32"/>
  </objectgroup>
 </map>
