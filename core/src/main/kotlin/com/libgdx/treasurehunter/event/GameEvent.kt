@@ -18,6 +18,7 @@ sealed class GameEvent {
     data class EquippedItemRemoved(val slotName: String, val entity: Entity) : GameEvent()
     data class EntityModelChangeEvent(val entity: Entity, val modelName: String) : GameEvent()
     data class EquipItemRequest(val slotName: String, val item: ItemData) : GameEvent()
+    data class ConsumeItemRequest(val item: ItemData) : GameEvent()
     data class UnEquipItemRequest(val slotName: String, val item: ItemData) : GameEvent()
     data class OnScreenTouchDownEvent(val screenX : Int,val screenY : Int) : GameEvent()
     data class ChestClickedEvent(val dialogText: String,val chestEntity : Entity,val buttonTypes : List<ButtonType> ) : GameEvent()

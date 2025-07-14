@@ -223,7 +223,7 @@ fun EntityCreateContext.configureItem(entity: Entity, gameObject: GameObject){
 fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){
     val life = tile.property<Int>("life",0)
     if (life > 0f){
-        entity += Life(maxLife = life)
+        entity += Life(maxLife = life, owner = entity)
     }
 }
 

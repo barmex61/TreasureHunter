@@ -179,11 +179,8 @@ class InventoryView(
 
     private fun updateInventorySlotsFromModel(items : List<ItemData>){
         resetInventorySlots()
-        println(items.size)
         val groupedItems = items.groupBy { it.itemType }
         for ((itemType, itemList) in groupedItems) {
-            println(itemType)
-            println(itemList)
             val slotIndex = inventorySlots.indexOfFirst { it.itemData == null }
             if (slotIndex != -1) {
                 val inventorySlot = inventorySlots[slotIndex]
@@ -251,7 +248,7 @@ class InventoryView(
                 ))
             }
             is ItemType.Consumable ->{
-               // handleConsumableItem(slot)
+                GameEventDispatcher.fireEvent(GameEvent.ConsumeItemRequest(slot.itemData!!))
             }
             else -> Unit
         }

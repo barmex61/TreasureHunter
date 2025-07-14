@@ -25,8 +25,6 @@ class DamageSystem : IteratingSystem(family = family{all(Life,DamageTaken).none(
         val lifeComp = entity[Life]
         val (damageAmount) = damageTaken
         lifeComp.currentLife = (lifeComp.currentLife - damageAmount).coerceAtLeast(0)
-        fireEvent(EntityLifeChangeEvent(lifeComp.currentLife,lifeComp.maxLife,entity))
-
         if (entity has EntityTag.PLAYER) {
             fireEvent(GameEvent.PlaySoundEvent(SoundAsset.PLAYER_HURT))
         } else {

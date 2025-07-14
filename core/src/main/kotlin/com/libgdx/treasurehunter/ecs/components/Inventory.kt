@@ -30,8 +30,21 @@ data class Inventory(
     }
 
     fun removeItem(item: ItemData) {
-        _items.remove(item)
-        GameEventDispatcher.fireEvent(GameEvent.InventoryChangeEvent(_items.toList()))
+        // Aynı itemType'a sahip son item'ı bul ve sil
+        val lastIndex = _items.indexOfLast { it.itemType == item.itemType }
+        if (lastIndex != -1) {
+            _items.removeAt(lastIndex)
+            GameEventDispatcher.fireEvent(GameEvent.InventoryChangeEvent(_items.toList()))
+        }
+    }
+
+    fun removeItemByType(itemType: ItemType) {
+        // Belirli bir itemType'ın son item'ını sil
+        val lastIndex = _items.indexOfLast { it.itemType == itemType }
+        if (lastIndex != -1) {
+            _items.removeAt(lastIndex)
+            GameEventDispatcher.fireEvent(GameEvent.InventoryChangeEvent(_items.toList()))
+        }
     }
 
     private var _equippedSword: ItemData? = null

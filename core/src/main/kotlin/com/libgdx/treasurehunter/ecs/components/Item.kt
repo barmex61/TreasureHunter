@@ -101,7 +101,6 @@ object Key : ItemType.Collectable
 
 object BluePotion : ItemType.Consumable
 object RedPotion : ItemType.Consumable
-
 object GreenBottle : ItemType.Consumable
 
 

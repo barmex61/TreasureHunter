@@ -4,14 +4,19 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.libgdx.treasurehunter.ecs.components.Attack
+import com.libgdx.treasurehunter.ecs.components.BluePotion
+import com.libgdx.treasurehunter.ecs.components.GreenBottle
 import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.ItemData
 import com.libgdx.treasurehunter.ecs.components.ItemType
+import com.libgdx.treasurehunter.ecs.components.Life
+import com.libgdx.treasurehunter.ecs.components.RedPotion
 import com.libgdx.treasurehunter.ecs.components.SlotName
 import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEvent.EquipItemRequest
 import com.libgdx.treasurehunter.event.GameEventListener
+import ktx.app.gdxError
 
 class InventorySystem : IteratingSystem(
     family = family { all(Inventory) }
@@ -42,6 +47,24 @@ class InventorySystem : IteratingSystem(
                     slotName = event.slotName,
                     newItem = event.item
                 )
+            }
+            is GameEvent.ConsumeItemRequest -> {
+                val inventory = event.item.owner!![Inventory]
+                when(event.item.itemType){
+                    is BluePotion -> {
+
+                    }
+                    is RedPotion -> {
+                        val life = event.item.owner!!.getOrNull(Life)?:return
+                        if (life.currentLife == life.maxLife) return
+                        life.currentLife = (life.currentLife + 1).coerceAtMost(life.maxLife)
+                        inventory.removeItem(event.item)
+                    }
+                    is GreenBottle ->{
+
+                    }
+                    else -> gdxError("Unsupported item type for consumption: ${event.item.itemType}")
+                }
             }
             is GameEvent.UnEquipItemRequest -> {
                 val inventory = event.item.owner!![Inventory]
