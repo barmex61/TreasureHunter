@@ -192,6 +192,7 @@
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="circleRadius" type="float" value="3"/>
+   <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="CRABBY"/>
    <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
@@ -240,6 +241,7 @@
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="circleRadius" type="float" value="4"/>
+   <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="FIERCE_TOOTH"/>
    <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
@@ -288,6 +290,7 @@
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="circleRadius" type="float" value="7"/>
+   <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="PINK_STAR"/>
    <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
@@ -855,7 +858,7 @@
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
    <property name="circleRadius" type="float" value="8"/>
-   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_1"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
@@ -898,7 +901,7 @@
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
    <property name="circleRadius" type="float" value="8"/>
-   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_2"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
@@ -929,7 +932,7 @@
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
    <property name="circleRadius" type="float" value="8"/>
-   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_3"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
@@ -960,7 +963,7 @@
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
    <property name="circleRadius" type="float" value="8"/>
-   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_4"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
@@ -992,7 +995,7 @@
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
    <property name="circleRadius" type="float" value="8"/>
-   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_5"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
@@ -1023,7 +1026,7 @@
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
    <property name="circleRadius" type="float" value="8"/>
-   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="TOTEM_HEAD_6"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>

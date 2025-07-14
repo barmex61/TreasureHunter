@@ -22,7 +22,7 @@ import com.libgdx.treasurehunter.ui.navigation.TransitionType
 import com.libgdx.treasurehunter.ui.navigation.ViewType
 import ktx.math.vec2
 
-class KeyboardInputProcessor(val world: World,val camera : OrthographicCamera,val toggleInventory : () -> Unit) : KtxInputAdapter {
+class KeyboardInputProcessor(val world: World,val toggleInventory : () -> Unit) : KtxInputAdapter {
 
 
     private var moveX = 0
@@ -100,9 +100,6 @@ class KeyboardInputProcessor(val world: World,val camera : OrthographicCamera,va
             Input.Keys.D -> updatePlayerMovement(-1)
             Input.Keys.A -> updatePlayerMovement(1)
             Input.Keys.SPACE -> updatePlayerJump(false)
-            Input.Keys.NUMPAD_3 -> updatePlayerAttack(AttackType.ATTACK_3)
-            Input.Keys.NUMPAD_2 -> updatePlayerAttack(AttackType.ATTACK_2)
-            Input.Keys.NUMPAD_1 -> updatePlayerAttack(AttackType.ATTACK_1)
             Input.Keys.LEFT -> removeCameraMovement(MoveDirection.LEFT)
             Input.Keys.RIGHT -> removeCameraMovement(MoveDirection.RIGHT)
             Input.Keys.UP -> removeCameraMovement(MoveDirection.UP)

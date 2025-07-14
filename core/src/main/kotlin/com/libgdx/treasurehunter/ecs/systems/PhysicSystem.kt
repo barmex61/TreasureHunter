@@ -192,8 +192,12 @@ class PhysicSystem (
     // ----- /HANDLE COLLISIONS -----
 
     // ----- CHECK CONDITIONS -----
-    private fun isDamageCollision(entityA: Entity,entityB: Entity,fixtureB:Fixture) : Boolean{
-        return  entityA has Damage  && entityB has Life && fixtureB.isSensor && fixtureB.isHitbox
+    private fun isDamageCollision(entityA: Entity, entityB: Entity, fixtureB: Fixture): Boolean {
+        val attackMeta = entityA.getOrNull(AttackMeta)?:return false
+        val owner = attackMeta.owner
+        val isEnemyAndAllieCollision = (owner.has(EntityTag.ENEMY) && (entityB.has(EntityTag.ALLIE) || entityB.has(EntityTag.PLAYER)))
+                || ((owner.has(EntityTag.ALLIE) || owner.has(EntityTag.PLAYER)) && entityB.has(EntityTag.ENEMY))
+        return entityA has Damage && entityB has Life && fixtureB.isSensor && fixtureB.isHitbox && isEnemyAndAllieCollision
     }
 
     private fun isItemCollision(entityA: Entity, entityB: Entity, fixtureB: Fixture): Boolean {

@@ -1,13 +1,17 @@
 package com.libgdx.treasurehunter.ui.view
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Interpolation
 import com.badlogic.gdx.scenes.scene2d.Actor
+import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.actions.Actions
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup
 import com.badlogic.gdx.utils.Align
+import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.ui.model.GameModel
 import com.libgdx.treasurehunter.ui.model.InventoryModel
@@ -15,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ktx.actors.alpha
+import ktx.actors.plusAssign
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
 import ktx.scene2d.Scene2DSkin
@@ -22,15 +27,15 @@ import ktx.scene2d.Scene2dDsl
 import ktx.scene2d.actor
 import ktx.scene2d.container
 import ktx.scene2d.image
-import ktx.actors.plusAssign
 import ktx.scene2d.stack
+import ktx.scene2d.verticalGroup
 import kotlin.reflect.KClass
 
 
 class GameView(
     skin: Skin,
-    gameModel : GameModel,
-    inventoryModel: InventoryModel
+    gameModel: GameModel,
+    inventoryModel: InventoryModel,
 ) : Table(skin), KTable{
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
     private val playerLifeBar : Image
@@ -50,32 +55,98 @@ class GameView(
     private var isDialogVisible = false
     init {
         setFillParent(true)
+        verticalGroup {
+            align(Align.topLeft)
+            expand()
+            padLeft(25.0f)
+            padTop(25.0f)
+            columnAlign(Align.topLeft)
+            it.grow()
+            container {
+                align(Align.left)
+                stack {
+                    image("prefabs_15")
+                    container {
+                        padLeft(14.0f)
+                        padBottom(2.0f)
+                        this@GameView.playerLifeBar = image("life_bars_colors_1")
+                    }
+                }
+            }
+            container {
+                align(Align.left)
+                stack {
+                    image("prefabs_17")
+                    container {
+                        padLeft(12.0f)
+                        padBottom(1f)
+                        image("life_bars_colors_2")
+                    }
+                }
+            }
+            container {
+                align(Align.left)
+                stack {
+                    image("prefabs_18")
+                    container {
+                        padLeft(12.0f)
+                        padBottom(1.0f)
+                        image("life_bars_colors_3")
+                    }
+                }
+            }
+            container {
+                align(Align.left)
+                stack {
+                    image("prefabs_19")
+                    container {
+                        padLeft(12.0f)
+                        padBottom(1.0f)
+                        image("life_bars_colors_4")
+                    }
+                }
+            }
+        }
+        verticalGroup {
+            align(Align.top)
+            expand()
+            fill()
+            padTop(25.0f)
+            it.grow()
+            container {
+                stack {
+                    image("prefabs_16")
+                    container {
+                        padLeft(14.0f)
+                        padBottom(2.0f)
+                        this@GameView.enemyLifeBar = image("life_bars_colors_1")
+                    }
+                }
+            }
+        }
+        add().grow()
 
-        stack{
-            image("prefabs_15")
-            container{
-                padLeft(14.0f).padBottom(2.0f)
-                this@GameView.playerLifeBar = image("life_bars_colors_1")
-            }
-            it.padLeft(10.0f).padTop(10.0f).expand().align(Align.topLeft)
-        }
-        stack{
-            image("prefabs_16")
-            container{
-                padLeft(14.0f).padBottom(2.0f)
-                this@GameView.enemyLifeBar = image("life_bars_colors_1")
-            }
-            it.padTop(10.0f).padRight(50f).expand().align(Align.top)
-        }
-        add().expand()
         row()
-        add().expand()
-        add().expand()
-        add().expand()
+        add().grow()
+        add().grow()
+        add().grow()
+
         row()
-        add().expand()
-        add().expand()
-        add().expand()
+        add().grow()
+        add().grow()
+        verticalGroup {
+            align(Align.bottomRight)
+            expand()
+            fill()
+            padRight(25.0f)
+            padBottom(25.0f)
+            it.grow()
+            container {
+                prefSize(42f,42f)
+                align(Align.bottomRight)
+                image("inventory")
+            }
+        }
         addActor(inventoryView)
         addActor(dialogView)
         coroutineScope.launch {
@@ -126,5 +197,5 @@ fun <S> KWidget<S>.gameView(
     gameModel: GameModel,
     inventoryModel: InventoryModel = InventoryModel().also { GameEventDispatcher.registerListener(it) },
     skin: Skin = Scene2DSkin.defaultSkin,
-    init : GameView.(S) -> Unit = {}
+    init: GameView.(S) -> Unit = {},
 ): GameView = actor(GameView(skin, gameModel,inventoryModel),init)

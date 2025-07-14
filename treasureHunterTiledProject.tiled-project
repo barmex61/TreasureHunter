@@ -50,7 +50,9 @@
                 "BACKGROUND",
                 "FOREGROUND",
                 "ATTACH_TO_SHIP",
-                "RESPAWNABLE"
+                "RESPAWNABLE",
+                "ENEMY",
+                "ALLIE"
             ],
             "valuesAsFlags": true
         },

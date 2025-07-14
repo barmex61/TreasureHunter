@@ -293,7 +293,6 @@ class RangeAttackHandler(
         body: Body,
         attackType: AttackType
     ) {
-        val animType = ownerAnim.animationData.animationType
         if (ownerFrameIx == attackMeta.createFrameIndex && !isFixtureInitialized) {
             body.destroyFixtures()
             val attackOffset = if (ownerFlipX) attackType.attackOffset.cpy() else vec2(

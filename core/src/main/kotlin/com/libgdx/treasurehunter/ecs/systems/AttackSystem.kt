@@ -24,6 +24,7 @@ import com.libgdx.treasurehunter.state.SwordState
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AttackMetaData
 import com.libgdx.treasurehunter.ecs.components.AttackType
+import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Move
@@ -33,6 +34,7 @@ import com.libgdx.treasurehunter.ecs.components.ThrowState
 import com.libgdx.treasurehunter.state.EntityState
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
+import com.libgdx.treasurehunter.tiled.configureEntityTags
 import com.libgdx.treasurehunter.utils.GameObject
 
 class AttackSystem(
@@ -75,6 +77,7 @@ class AttackSystem(
                             GameObject.SWORD -> handleRangeSwordAttack(entity, center, newAttackMetaData)
                             GameObject.WOOD_SPIKE -> handleRangeProjectileAttack(entity, center, newAttackMetaData)
                             else -> {
+                                println("reset from range attack")
                                 resetAttackComp(attackComp, newAttackMetaData)
                                 return
                             }
@@ -181,11 +184,12 @@ class AttackSystem(
     }
 
     private fun resetAttackComp(attackComp: Attack, attackMetaData: AttackMetaData) {
+
         attackMetaData.resetAttackCooldown()
         attackMetaData.resetAttackDestroyTime()
-        attackComp.attackState = AttackState.READY
         attackComp.wantsToAttack = false
         attackComp.doAttack = false
+        attackComp.attackState = AttackState.READY
     }
 
     private fun createAttackBody(centerPosition : Vector2, entity: Entity, bodyType: BodyDef.BodyType): Body {
@@ -211,6 +215,7 @@ class AttackSystem(
         }
         return updatedAttackType
     }
+
 
 }
 

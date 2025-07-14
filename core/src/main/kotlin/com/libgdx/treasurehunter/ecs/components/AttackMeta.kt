@@ -5,6 +5,7 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
+import com.github.quillraven.fleks.entityTagOf
 import com.libgdx.treasurehunter.ecs.systems.AttackHandler
 import com.libgdx.treasurehunter.ecs.systems.MeleeAttackHandler
 import com.libgdx.treasurehunter.ecs.systems.RangeAttackHandler
@@ -19,7 +20,6 @@ data class AttackMeta(
     var attackHandler : AttackHandler? = null
 
 ) : Component<AttackMeta> {
-
 
     fun setAttackHandler(textureAtlas: TextureAtlas,world: World) {
         if (attackHandler != null) return

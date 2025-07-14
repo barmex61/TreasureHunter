@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="88">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="91">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
   <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DAY"/>
@@ -8,28 +8,27 @@
  <tileset firstgid="1" source="terrain.tsx"/>
  <tileset firstgid="86" source="objects.tsx"/>
  <tileset firstgid="178" source="islandBackground.tsx"/>
- <layer id="4" name="background_far" width="24" height="10">
+ <layer id="4" name="background_far" width="24" height="10" visible="0">
   <data encoding="base64" compression="zlib">
    eJzlzDkaQ1AUQOFnSxr7MMW4CUOExCqQEOzF0pziVSq39Cn+8hzTUMoUsgSk77v9bc2BCw8+HggQIkKMBKmwybQcBUo8UeGFGg3e+KAVNj0GfPHDiAl/zFiwHkiaTcl1xnlX/+9HZGY1
   </data>
  </layer>
  <layer id="3" name="background_mid" width="24" height="10">
   <data encoding="base64" compression="zlib">
-   eJztzrcRwgAQRcETJUEDeF+E8FY94D09swUQiIxAb2azmz8X8T9Vk4gadRo0adGmQ5cefQYMk/zbmduUEWMmTJkxZ8GSFWs2bHPsl0sRFd5ud+w5cOTEmQtXbtx58OT1w/9FRd/6AEq2ERc=
+   eJztzrcRwgAQRcETJUEDeF+E8FY94D09swUQiIxAb2azmz8XUfQvVZOIGnUaNGnRpkOXHn0GDJP825nblBFjJkyZMWfBkhVrNmxz7JdLERXebnfsOXDkxJkLV27cefDk9cP/Rd/7ADO3ERc=
   </data>
  </layer>
- <layer id="2" name="background_close" width="24" height="10">
+ <layer id="2" name="background_close" width="24" height="10" visible="0">
   <data encoding="base64" compression="zlib">
-   eJxjYMAPhJgYGISBWASIRYFYjImABhLNMQLSxkBsAsSmQGxGpvm4zAkC0sFAHALEoUAcRqb52MyhVtjgAtQKG1yAWmEzCgYOAADCjgl/
+   eJxjYMAPhJgYGISBWASIRYFYjImABhLNMQLSxkBsAsSmQGxGpvm4zAkC0sFAHALEoUAcRsB8dHfCAKnmEOtOUgEu9+FyJ6XuIzY+CLkLl/uIDUdqpRNqu2ugAQBDfQ77
   </data>
  </layer>
- <layer id="1" name="ground" width="24" height="10">
+ <layer id="1" name="ground" width="24" height="10" visible="0">
   <data encoding="base64" compression="zlib">
    eJwTZmBgEAZidiBWAWIZKE0NzAE1G4RFGCBAnYF6QAjJ7apUNBfdfBFCCkfNxwkYgZiJTMxMhPkwN5CDRehkvjAe85UZyM9foDQPACcnCcg=
   </data>
  </layer>
- <objectgroup id="5" name="objects">
-  <object id="10" gid="116" x="288" y="192" width="34" height="93"/>
+ <objectgroup id="5" name="objects" visible="0">
   <object id="11" gid="120" x="320" y="192" width="20" height="20"/>
   <object id="24" gid="143" x="638" y="191" width="32" height="32"/>
   <object id="25" gid="142" x="378" y="194" width="28" height="22"/>
@@ -109,5 +108,6 @@
   <object id="85" gid="162" x="420" y="186" width="24" height="28"/>
   <object id="86" gid="159" x="474" y="136" width="24" height="24"/>
   <object id="87" gid="158" x="526" y="136" width="30" height="32"/>
+  <object id="90" gid="134" x="401" y="146" width="72" height="32"/>
  </objectgroup>
 </map>
