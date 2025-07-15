@@ -1,9 +1,13 @@
 package com.libgdx.treasurehunter.ui.view
 
 import com.badlogic.gdx.graphics.g2d.Batch
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.scenes.scene2d.InputEvent
+import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
+import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
 import com.libgdx.treasurehunter.ecs.components.Armor
@@ -18,13 +22,16 @@ import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.ui.model.InventoryModel
 import ktx.actors.onClick
 import ktx.scene2d.KTable
+import ktx.scene2d.KTableWidget
+import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.container
 import ktx.scene2d.horizontalGroup
 import ktx.scene2d.image
+import ktx.scene2d.label
 import ktx.scene2d.verticalGroup
 import ktx.scene2d.stack
-import kotlin.collections.get
-import kotlin.toString
+import ktx.scene2d.table
+import ktx.scene2d.tooltip
 
 data class InventorySlot(
     var itemData: ItemData? = null,
@@ -65,6 +72,8 @@ class InventoryView(
         GearSlot(),
         GearSlot()
     )
+
+    private val tooltip : Table = ToolTipView()
 
     init {
         setFillParent(true)
@@ -124,9 +133,25 @@ class InventoryView(
                                             setScaling(Scaling.none)
                                         }
                                         this@InventoryView.inventorySlots[xIndex * 5 + yIndex].itemImage =
-                                            itemImage.also {
-                                                it.onClick {
+                                            itemImage.also { img ->
+                                                onClick {
                                                     this@InventoryView.onInventoryItemClick(this@InventoryView.inventorySlots[xIndex * 5 + yIndex])
+                                                    false
+                                                }
+                                                addListener { event->
+                                                    if (event is InputEvent){
+                                                        if (event.type == InputEvent.Type.enter) {
+                                                            val itemType = this@InventoryView.inventorySlots[xIndex * 5 + yIndex].itemData?.itemType
+                                                            val table = this@InventoryView.tooltip
+                                                            table.clearChildren()
+                                                            table.add(label(itemType?.toDrawablePath() ?: "Bilinmeyen"))
+                                                            val pos = img.localToStageCoordinates(Vector2(img.width, img.height))
+                                                            table.setPosition(pos.x + 20f, pos.y + 2f, Align.topRight)
+                                                            table.isVisible = true
+                                                        } else if (event.type == InputEvent.Type.exit) {
+                                                            this@InventoryView.tooltip.isVisible = false
+                                                        }
+                                                    }
                                                     false
                                                 }
                                             }
@@ -169,11 +194,20 @@ class InventoryView(
                 }
             }
         }
+        addActor(tooltip)
         inventoryModel.onItemChange = { items ->
             updateInventorySlotsFromModel(items)
         }
         inventoryModel.onEquippedItemChange = { slotName, itemData ->
             updateGearSlotsFromModel(slotName,itemData)
+        }
+    }
+    class ToolTipView(
+        skin: Skin = Scene2DSkin.defaultSkin
+    ) : Table(skin), KTable {
+        init {
+            touchable = Touchable.disabled
+            label("TOOLTIP")
         }
     }
 

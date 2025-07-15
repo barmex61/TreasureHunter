@@ -19,6 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ktx.actors.alpha
+import ktx.actors.onClick
 import ktx.actors.plusAssign
 import ktx.scene2d.KTable
 import ktx.scene2d.KWidget
@@ -144,7 +145,11 @@ class GameView(
             container {
                 prefSize(42f,42f)
                 align(Align.bottomRight)
-                image("inventory")
+                image("inventory"){
+                    onClick {
+                        this@GameView.toggleView(InventoryView::class)
+                    }
+                }
             }
         }
         addActor(inventoryView)
@@ -183,7 +188,7 @@ class GameView(
         }
         actor.clearActions()
         actor += if (isVisible){
-            actor.touchable = Touchable.enabled
+            actor.touchable = Touchable.childrenOnly
             Actions.alpha(1f,0.5f)
         }else {
             actor.touchable = Touchable.disabled

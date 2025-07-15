@@ -213,7 +213,7 @@ fun EntityCreateContext.configureItem(entity: Entity, gameObject: GameObject){
         GameObject.SILVER_COIN -> SilverCoin
         GameObject.GOLDEN_SKULL -> GoldenSkull
         GameObject.BLUE_POTION -> BluePotion
-        GameObject.RED_POTION -> RedPotion
+        GameObject.RED_POTION -> RedPotion(1)
         GameObject.GREEN_BOTTLE-> GreenBottle
         else -> return
     }

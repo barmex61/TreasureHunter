@@ -34,6 +34,7 @@ import com.libgdx.treasurehunter.ecs.components.ThrowState
 import com.libgdx.treasurehunter.state.EntityState
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
+import com.libgdx.treasurehunter.factory.AttackMetaDataFactory
 import com.libgdx.treasurehunter.tiled.configureEntityTags
 import com.libgdx.treasurehunter.utils.GameObject
 
@@ -53,6 +54,7 @@ class AttackSystem(
             AttackState.READY -> {
                 if (wantsToAttack) {
                     val attackType = getQueuedAttackType(entity,attackComp.queuedAttackType)
+                    attackComp.attackMetaData = AttackMetaDataFactory.create(attackComp.attackMetaData.gameObject,attackType)
                     val newAttackMetaData = attackComp.attackMetaData.copy()
                     attackType?.let {
                         newAttackMetaData.attackType = it

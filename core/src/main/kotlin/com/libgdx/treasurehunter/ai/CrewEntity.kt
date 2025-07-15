@@ -99,6 +99,9 @@ data class CrewEntity(
     val attackRange: Float
         get() = this[Attack].attackMetaData.attackRange
 
+    val invulnarable : Boolean
+        get() = getOrNull(Invulnarable) != null
+
     val animationType : AnimationType
         get() = this[Animation].animationData.animationType
 

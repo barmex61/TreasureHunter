@@ -133,7 +133,7 @@ class PinkStarAttack : Actions(){
             entity.animation(entity.attackType.attackAnimType, entity.attackAnimPlayMode, 0.1f)
             return Status.RUNNING
         }
-        if (!entity.doAttack){
+        if (!entity.doAttack || entity.isGetHit || entity.isDead){
             return Status.SUCCEEDED
         }
         return super.execute()
@@ -146,7 +146,7 @@ class FierceToothAttack : Actions(){
             entity.animation(entity.attackType.attackAnimType, entity.attackAnimPlayMode, 0.1f)
             return Status.RUNNING
         }
-        if (entity.animationDone){
+        if (entity.animationDone|| entity.isGetHit || entity.isDead){
             return Status.SUCCEEDED
         }
         return super.execute()
@@ -160,11 +160,11 @@ class CrabbyAttack : Actions(){
             entity.animation(entity.attackType.attackAnimType, entity.attackAnimPlayMode, 0.15f)
             return Status.RUNNING
         }
-        if (entity.animationDone){
+        if (entity.animationDone || entity.isGetHit || entity.isDead){
             entity.stop = false
             return Status.SUCCEEDED
         }
-        return super.execute()
+        return Status.RUNNING
     }
 }
 
@@ -202,7 +202,7 @@ class Jump : Actions(){
             entity.animation(AnimationType.JUMP, PlayMode.NORMAL, 0.1f)
             return Status.RUNNING
         }
-        if (!entity.isJumping){
+        if (!entity.isJumping || entity.isGetHit){
             return Status.SUCCEEDED
         }
         return Status.RUNNING
@@ -215,7 +215,7 @@ class Fall : Actions(){
             entity.animation(AnimationType.FALL, PlayMode.NORMAL, 0.1f)
             return Status.RUNNING
         }
-        if (!entity.isFalling){
+        if (!entity.isFalling || entity.isGetHit){
             return Status.SUCCEEDED
         }
         return Status.RUNNING
@@ -233,7 +233,7 @@ class Hit : Actions(){
             entity.animation(AnimationType.HIT,PlayMode.NORMAL, frameDuration)
             return Status.RUNNING
         }
-        if (entity.animationDone){
+        if (entity.animationDone && !entity.invulnarable){
             entity.stop = false
             println("hit anim done")
             return Status.SUCCEEDED

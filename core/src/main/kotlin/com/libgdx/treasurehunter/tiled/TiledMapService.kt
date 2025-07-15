@@ -124,7 +124,7 @@ class TiledMapService (
             configureStat(it,tile)
             configureLife(it,tile)
             configureAi(it,tile,physicWorld)
-            configureShip(it,mapObject,tile)
+            configureShip(it,tile)
             logEntity(it,world,gameObject)
         }
 

@@ -10,6 +10,7 @@ object AttackMetaDataFactory {
 
     fun create(
         gameObject: GameObject,
+        attackType: AttackType? = null,
     ): AttackMetaData {
         return when (gameObject) {
             GameObject.FIERCE_TOOTH -> {
@@ -55,17 +56,86 @@ object AttackMetaDataFactory {
             }
 
             GameObject.SWORD -> {
-                AttackMetaData(
-                    attackSpeed = 1f,
-                    attackRange = 0f,
-                    attackType = AttackType.ATTACK_1,
-                    attackDamage = 1,
-                    baseAttackCooldown = 0f,
-                    baseAttackDestroyTime = 5f,
-                    attackAnimPlayMode = Animation.PlayMode.NORMAL,
-                    createFrameIndex = 1,
-                    gameObject = gameObject
-                )
+                if (attackType != null) {
+                    when (attackType) {
+                        AttackType.ATTACK_1 ->
+                            AttackMetaData(
+                                attackSpeed = 1f,
+                                attackRange = 0f,
+                                attackType = AttackType.ATTACK_1,
+                                attackDamage = 1,
+                                baseAttackCooldown = 0f,
+                                baseAttackDestroyTime = 5f,
+                                attackAnimPlayMode = Animation.PlayMode.NORMAL,
+                                createFrameIndex = 1,
+                                gameObject = gameObject
+                            )
+
+                        AttackType.ATTACK_2 ->
+                            AttackMetaData(
+                                attackSpeed = 1f,
+                                attackRange = 0f,
+                                attackType = AttackType.ATTACK_2,
+                                attackDamage = 1,
+                                baseAttackCooldown = 0f,
+                                baseAttackDestroyTime = 5f,
+                                attackAnimPlayMode = Animation.PlayMode.NORMAL,
+                                createFrameIndex = 1,
+                                gameObject = gameObject
+                            )
+
+                        AttackType.ATTACK_3 ->
+                            AttackMetaData(
+                                attackSpeed = 1f,
+                                attackRange = 0f,
+                                attackType = AttackType.ATTACK_3,
+                                attackDamage = 1,
+                                baseAttackCooldown = 0f,
+                                baseAttackDestroyTime = 5f,
+                                attackAnimPlayMode = Animation.PlayMode.NORMAL,
+                                createFrameIndex = 1,
+                                gameObject = gameObject
+                            )
+
+                        AttackType.THROW ->
+                            AttackMetaData(
+                                attackSpeed = 1f,
+                                attackRange = 0f,
+                                attackType = AttackType.THROW,
+                                attackDamage = 1,
+                                baseAttackCooldown = 0f,
+                                baseAttackDestroyTime = 5f,
+                                attackAnimPlayMode = Animation.PlayMode.NORMAL,
+                                createFrameIndex = 1,
+                                gameObject = gameObject
+                            )
+
+                        else ->
+                            AttackMetaData(
+                                attackSpeed = 1f,
+                                attackRange = 0f,
+                                attackType = AttackType.ATTACK_1,
+                                attackDamage = 1,
+                                baseAttackCooldown = 0f,
+                                baseAttackDestroyTime = 5f,
+                                attackAnimPlayMode = Animation.PlayMode.NORMAL,
+                                createFrameIndex = 1,
+                                gameObject = gameObject
+                            )
+                    }
+                } else {
+                    AttackMetaData(
+                        attackSpeed = 1f,
+                        attackRange = 0f,
+                        attackType = AttackType.ATTACK_1,
+                        attackDamage = 1,
+                        baseAttackCooldown = 0f,
+                        baseAttackDestroyTime = 5f,
+                        attackAnimPlayMode = Animation.PlayMode.NORMAL,
+                        createFrameIndex = 1,
+                        gameObject = gameObject
+                    )
+                }
             }
 
             GameObject.TOTEM_HEAD_1,
@@ -73,7 +143,8 @@ object AttackMetaDataFactory {
             GameObject.TOTEM_HEAD_3,
             GameObject.TOTEM_HEAD_4,
             GameObject.TOTEM_HEAD_5,
-            GameObject.TOTEM_HEAD_6 -> {
+            GameObject.TOTEM_HEAD_6,
+            GameObject.WOOD_SPIKE    -> {
                 AttackMetaData(
                     attackSpeed = 1f,
                     attackRange = 8f,

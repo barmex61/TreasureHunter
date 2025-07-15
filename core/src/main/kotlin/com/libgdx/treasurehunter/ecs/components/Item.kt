@@ -100,7 +100,7 @@ object GoldenSkull : ItemType.Collectable
 object Key : ItemType.Collectable
 
 object BluePotion : ItemType.Consumable
-object RedPotion : ItemType.Consumable
+data class RedPotion(val healAmount : Int) : ItemType.Consumable
 object GreenBottle : ItemType.Consumable
 
 

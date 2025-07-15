@@ -106,13 +106,11 @@ class KeyboardInputProcessor(val world: World,val toggleInventory : () -> Unit) 
             Input.Keys.DOWN -> removeCameraMovement(MoveDirection.DOWN)
             Input.Keys.NUMPAD_8 -> updateCameraZoom(0f)
             Input.Keys.NUMPAD_5 -> updateCameraZoom(0f)
-            Input.Keys.P -> updatePlayerAttack(AttackType.THROW)
         }
         return false
     }
 
     override fun touchDown(screenX: Int, screenY: Int, pointer: Int, button: Int): Boolean {
-        println("touchDown: screenX=$screenX, screenY=$screenY, pointer=$pointer, button=$button")
         GameEventDispatcher.fireEvent(GameEvent.OnScreenTouchDownEvent(screenX,screenY))
         return false
     }
