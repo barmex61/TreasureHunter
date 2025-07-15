@@ -46,10 +46,10 @@ subtree name : "tryToAttack"
 
 subtree name : "dynamicEntitySubtree"
     selector
+        (isDead?) dead
+        (isGetHit?) hit
         (isJumping?) jump
         (isFalling?) fall
-        (isGetHit?) hit
-        (isDead?) dead
         (isEnemyNearby?) $tryToAttack
         (isEnemyNotNearby?) $standard
 

@@ -60,9 +60,9 @@ class RenderSystem (
     private var lastCellPositionBgMid = Int.MIN_VALUE
 
     override fun onTick() {
-        backgroundClose?.offsetX -= deltaTime * 100f
+        backgroundClose?.offsetX -= deltaTime * 10f
         resetLayerOffset(backgroundClose?.offsetX, BACKGROUND_CLOSE)
-        backgroundMid?.offsetX -= deltaTime * 50f
+        backgroundMid?.offsetX -= deltaTime * 5f
         resetLayerOffset(backgroundMid?.offsetX, BACKGROUND_MID)
         gameViewPort.apply()
         uiViewport.apply()
@@ -95,9 +95,16 @@ class RenderSystem (
             sprite.color = currentColorSettings.entityColor.copy(alpha = sprite.color.a)
             val flashCmp = entity.getOrNull(Flash)
             if (flashCmp != null && flashCmp.doFlash) {
-                sprite.color = flashCmp.color
+                spriteBatch.end()
+                shaderManager.applyShaderEffect(ShaderEffect.HIT_EFFECT)
+                spriteBatch.begin()
+                sprite.draw(spriteBatch)
+                spriteBatch.end()
+                shaderManager.applyShaderEffect(currentColorSettings.shaderEffect)
+                spriteBatch.begin()
+            } else {
+                sprite.draw(spriteBatch)
             }
-            sprite.draw(spriteBatch)
         }
     }
 
@@ -158,6 +165,8 @@ class RenderSystem (
                     parallaxX = parallaxMap[BACKGROUND_FAR.layerName]!!.first
                     parallaxY = parallaxMap[BACKGROUND_FAR.layerName]!!.second
                 }
+                val mapDisplayMode = event.tiledMap.properties.get("mapDisplayMode", String::class.java) ?: ColorSettings.DAY.name
+                setCurrentSettings(mapDisplayMode)
             }
             else -> Unit
         }
@@ -185,7 +194,7 @@ class RenderSystem (
         }
     }
 
-    private val parallaxMap = mapOf<String, Pair<Float, Float>>(
+    private val parallaxMap = mapOf(
         BACKGROUND_CLOSE.layerName to Pair(0.5f, 0.5f),
         BACKGROUND_MID.layerName to Pair(0.3f, 0.3f),
         BACKGROUND_FAR.layerName to Pair(0f, 0f)
@@ -195,10 +204,6 @@ class RenderSystem (
         currentColorSettings = ColorSettings.valueOf(displayMode)
         setShaderEffectFromColorSettings()
         applyColorSettings(currentColorSettings)
-    }
-
-    fun setShaderEffect(shaderEffect: ShaderEffect){
-        shaderManager.applyShaderEffect(shaderEffect)
     }
 
     fun setShaderEffectFromColorSettings(){

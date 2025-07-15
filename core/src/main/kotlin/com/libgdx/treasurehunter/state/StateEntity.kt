@@ -23,6 +23,7 @@ import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Inventory
+import com.libgdx.treasurehunter.ecs.components.Invulnarable
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.Mark
 import com.libgdx.treasurehunter.ecs.components.Move
@@ -88,7 +89,7 @@ sealed class StateEntity(
 
 
     val isGetHit: Boolean
-        get() = getOrNull(DamageTaken) != null
+        get() = getOrNull(DamageTaken) != null && getOrNull(Invulnarable) == null
 
     var alpha: Float
         get() = this.getOrNull(Graphic)?.sprite?.color?.a ?: 1f

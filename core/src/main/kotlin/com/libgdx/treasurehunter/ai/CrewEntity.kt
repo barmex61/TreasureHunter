@@ -16,6 +16,7 @@ import com.libgdx.treasurehunter.ecs.components.AttackType
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
+import com.libgdx.treasurehunter.ecs.components.Invulnarable
 import com.libgdx.treasurehunter.ecs.components.Jump
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Move

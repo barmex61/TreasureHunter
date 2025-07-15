@@ -235,6 +235,7 @@ class Hit : Actions(){
         }
         if (entity.animationDone){
             entity.stop = false
+            println("hit anim done")
             return Status.SUCCEEDED
         }
         return Status.RUNNING

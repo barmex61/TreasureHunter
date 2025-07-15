@@ -16,7 +16,5 @@ class ShaderManager(val shader: ShaderProgram,val onShaderEffectChange : (Shader
         onShaderEffectChange(shader)
     }
 
-    fun resetToNormal() {
-        applyShaderEffect(ShaderEffect.NORMAL)
-    }
+
 }

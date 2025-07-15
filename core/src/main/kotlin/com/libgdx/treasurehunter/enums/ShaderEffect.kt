@@ -50,8 +50,6 @@ enum class ShaderEffect(
         brightness = 1.3f,
         contrast = 1.2f
     ),
-
-    // Ekstra efektler
     HIT_EFFECT(
         saturation = 1.5f,
         brightness = 1.2f,

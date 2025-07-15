@@ -253,12 +253,12 @@ fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile){
     val gameObject = GameObject.valueOf(tile.propertyOrNull<String>("gameObject")?: gdxError("gameObject is null $tile"))
     if (hasAttack){
         entity += Attack(
-            attackMetaData = AttackMetaDataFactory.create(gameObject)
+            attackMetaData = AttackMetaDataFactory.create(gameObject = gameObject)
         )
     }
 }
 
-fun EntityCreateContext.configureShip(entity: Entity,mapObject: TiledMapTileMapObject, tile: TiledMapTile){
+fun EntityCreateContext.configureShip(entity: Entity, tile: TiledMapTile){
     val gameObjectStr = tile.property<String>("gameObject","")
     if (gameObjectStr == GameObject.SHIP.name){
         entity += Ship()
