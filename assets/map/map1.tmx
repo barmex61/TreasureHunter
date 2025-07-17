@@ -2,7 +2,7 @@
 <map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="91">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
-  <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DESERT"/>
+  <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DAY"/>
   <property name="mapMusic" value=""/>
  </properties>
  <tileset firstgid="1" source="terrain.tsx"/>
@@ -29,9 +29,11 @@
   </data>
  </layer>
  <objectgroup id="5" name="objects">
-  <object id="11" gid="120" x="320" y="192" width="20" height="20"/>
-  <object id="24" gid="143" x="638" y="191" width="32" height="32"/>
-  <object id="25" gid="142" x="378" y="194" width="28" height="22"/>
+  <object id="24" gid="143" x="587" y="191" width="32" height="32">
+   <properties>
+    <property name="itemsInside" value="GOLD_COIN:1,SILVER_COIN:1"/>
+   </properties>
+  </object>
   <object id="26" gid="145" x="380" y="176" width="24" height="24"/>
   <object id="27" gid="146" x="475" y="198" width="32" height="32"/>
   <object id="28" gid="147" x="29" y="183" width="64" height="32"/>
@@ -70,18 +72,11 @@
   <object id="41" gid="151" x="80" y="275" width="56" height="36"/>
   <object id="42" gid="157" x="160" y="288" width="96" height="32"/>
   <object id="43" gid="157" x="64" y="288" width="96" height="32"/>
-  <object id="44" gid="141" x="448" y="191" width="26" height="30"/>
   <object id="45" gid="139" x="480" y="224" width="64" height="64"/>
   <object id="48" gid="169" x="693" y="183" width="20" height="20"/>
   <object id="49" gid="170" x="638" y="183" width="20" height="20"/>
   <object id="50" gid="171" x="598" y="136" width="20" height="20"/>
-  <object id="51" gid="159" x="449" y="165" width="24" height="24"/>
-  <object id="52" gid="160" x="425" y="161" width="13" height="17"/>
-  <object id="53" gid="161" x="478" y="162" width="16" height="16"/>
   <object id="54" gid="162" x="502" y="159" width="24" height="28"/>
-  <object id="55" gid="163" x="542" y="152" width="13" height="17"/>
-  <object id="56" gid="164" x="498" y="139" width="24" height="24"/>
-  <object id="57" gid="165" x="570" y="158" width="24" height="24"/>
   <object id="58" gid="166" x="611" y="160" width="13" height="17"/>
   <object id="59" gid="167" x="641" y="159" width="16" height="16"/>
   <object id="67" gid="121" x="325" y="170" width="64" height="40"/>
@@ -90,24 +85,31 @@
   <object id="70" gid="157" x="64" y="320" width="96" height="32"/>
   <object id="72" gid="176" x="646" y="114" width="24" height="32"/>
   <object id="73" gid="177" x="640" y="136" width="30" height="32"/>
-  <object id="74" gid="115" x="544" y="192" width="64" height="35">
+  <object id="74" gid="115" x="436" y="191" width="64" height="35">
    <properties>
     <property name="animFrameDuration" type="float" value="0.16"/>
+    <property name="itemsInside" value="GOLD_COIN:3,SILVER_COIN:2"/>
    </properties>
   </object>
-  <object id="75" gid="143" x="704" y="192" width="32" height="32"/>
-  <object id="76" gid="143" x="288" y="192" width="32" height="32"/>
+  <object id="75" gid="143" x="654" y="191" width="32" height="32">
+   <properties>
+    <property name="itemsInside" value="GOLD_COIN:3,SWORD:1"/>
+   </properties>
+  </object>
+  <object id="76" gid="143" x="288" y="192" width="32" height="32">
+   <properties>
+    <property name="itemsInside" value="GOLD_COIN:1,SILVER_COIN:5,SWORD:1"/>
+   </properties>
+  </object>
   <object id="77" gid="145" x="449" y="141" width="24" height="24"/>
-  <object id="78" gid="165" x="415" y="121" width="24" height="24"/>
-  <object id="79" gid="165" x="529" y="115" width="24" height="24"/>
-  <object id="80" gid="164" x="470" y="114" width="24" height="24"/>
+  <object id="78" gid="165" x="410" y="170" width="24" height="24"/>
+  <object id="80" gid="164" x="360" y="156" width="24" height="24"/>
   <object id="81" gid="166" x="405" y="148" width="13" height="17"/>
-  <object id="82" gid="166" x="481" y="146" width="13" height="17"/>
+  <object id="82" gid="166" x="555" y="163" width="13" height="17"/>
   <object id="83" gid="160" x="563" y="138" width="13" height="17"/>
   <object id="84" gid="161" x="383" y="130" width="16" height="16"/>
   <object id="85" gid="162" x="420" y="186" width="24" height="28"/>
-  <object id="86" gid="159" x="474" y="136" width="24" height="24"/>
+  <object id="86" gid="159" x="488" y="145" width="24" height="24"/>
   <object id="87" gid="158" x="526" y="136" width="30" height="32"/>
-  <object id="90" gid="134" x="401" y="146" width="72" height="32"/>
  </objectgroup>
 </map>

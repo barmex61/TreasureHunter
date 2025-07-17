@@ -3,11 +3,9 @@ package com.libgdx.treasurehunter.ui.view
 import com.badlogic.gdx.graphics.g2d.Batch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.scenes.scene2d.InputEvent
-import com.badlogic.gdx.scenes.scene2d.Touchable
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
 import com.badlogic.gdx.scenes.scene2d.ui.Table
-import com.badlogic.gdx.scenes.scene2d.ui.Tooltip
 import com.badlogic.gdx.utils.Align
 import com.badlogic.gdx.utils.Scaling
 import com.libgdx.treasurehunter.ecs.components.Armor
@@ -22,16 +20,11 @@ import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.ui.model.InventoryModel
 import ktx.actors.onClick
 import ktx.scene2d.KTable
-import ktx.scene2d.KTableWidget
-import ktx.scene2d.Scene2DSkin
 import ktx.scene2d.container
 import ktx.scene2d.horizontalGroup
 import ktx.scene2d.image
-import ktx.scene2d.label
 import ktx.scene2d.verticalGroup
 import ktx.scene2d.stack
-import ktx.scene2d.table
-import ktx.scene2d.tooltip
 
 data class InventorySlot(
     var itemData: ItemData? = null,
@@ -73,7 +66,7 @@ class InventoryView(
         GearSlot()
     )
 
-    private val tooltip : Table = ToolTipView()
+    private val tooltip : ToolTipView = ToolTipView()
 
     init {
         setFillParent(true)
@@ -139,17 +132,12 @@ class InventoryView(
                                                     false
                                                 }
                                                 addListener { event->
+
                                                     if (event is InputEvent){
                                                         if (event.type == InputEvent.Type.enter) {
-                                                            val itemType = this@InventoryView.inventorySlots[xIndex * 5 + yIndex].itemData?.itemType
-                                                            val table = this@InventoryView.tooltip
-                                                            table.clearChildren()
-                                                            table.add(label(itemType?.toDrawablePath() ?: "Bilinmeyen"))
-                                                            val pos = img.localToStageCoordinates(Vector2(img.width, img.height))
-                                                            table.setPosition(pos.x + 20f, pos.y + 2f, Align.topRight)
-                                                            table.isVisible = true
+                                                            this@InventoryView.handleToolTip(img,xIndex, yIndex,true)
                                                         } else if (event.type == InputEvent.Type.exit) {
-                                                            this@InventoryView.tooltip.isVisible = false
+                                                            this@InventoryView.handleToolTip(img,xIndex, yIndex,false)
                                                         }
                                                     }
                                                     false
@@ -202,14 +190,27 @@ class InventoryView(
             updateGearSlotsFromModel(slotName,itemData)
         }
     }
-    class ToolTipView(
-        skin: Skin = Scene2DSkin.defaultSkin
-    ) : Table(skin), KTable {
-        init {
-            touchable = Touchable.disabled
-            label("TOOLTIP")
+
+    private fun handleToolTip(img: Image, xIndex: Int, yIndex: Int, isVisible: Boolean, isInventorySource : Boolean = true) {
+        val itemType = if (isInventorySource) this@InventoryView.inventorySlots[xIndex * 5 + yIndex].itemData?.itemType else this@InventoryView.gearSlots[xIndex].itemData?.itemType
+        if (itemType == null || !isVisible) {
+            this@InventoryView.tooltip.isVisible = false
+            return
         }
+        val pos = img.localToStageCoordinates(Vector2(img.width + img.x, img.height + img.y))
+        this@InventoryView.tooltip.setPosition(pos.x + 45f, pos.y + 42f, Align.topRight)
+        with(this@InventoryView.tooltip){
+
+            this.verticalGroup.updateTooltip(
+                itemType.getDisplayName(),
+                itemType.getProperties(),
+                itemType.getDescription()
+            )
+
+        }
+        this@InventoryView.tooltip.isVisible = true
     }
+
 
     private fun updateInventorySlotsFromModel(items : List<ItemData>){
         resetInventorySlots()
@@ -220,7 +221,7 @@ class InventoryView(
                 val inventorySlot = inventorySlots[slotIndex]
                 inventorySlot.itemData = itemList.first()
                 inventorySlot.count = itemList.size
-                inventorySlot.itemImage?.drawable = skin.getDrawable(itemType.toDrawablePath())
+                inventorySlot.itemImage?.drawable = skin.getDrawable(itemType.getDrawablePath())
                 inventorySlot.countImage?.drawable = skin.getDrawable("big_text_${inventorySlot.count}")
             }
         }
@@ -238,7 +239,7 @@ class InventoryView(
             gearSlots[index].apply {
                 isEquipped = itemData != null
                 this.itemData = itemData
-                image?.drawable = skin.getDrawable(itemData?.itemType?.toDrawablePath() ?: slotMap[index].second)
+                image?.drawable = skin.getDrawable(itemData?.itemType?.getDrawablePath() ?: slotMap[index].second)
             }
         }
     }
@@ -261,6 +262,17 @@ class InventoryView(
                 setScaling(Scaling.none)
                 onClick {
                     this@InventoryView.onGearItemClick(this@InventoryView.gearSlots[index])
+                    false
+                }
+                addListener { event->
+
+                    if (event is InputEvent){
+                        if (event.type == InputEvent.Type.enter) {
+                            this@InventoryView.handleToolTip(this,index, 0,isVisible = true,false)
+                        } else if (event.type == InputEvent.Type.exit) {
+                            this@InventoryView.handleToolTip(this,index, 0,isVisible = false,false)
+                        }
+                    }
                     false
                 }
             }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.utils.Json
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityCreateContext
 import com.github.quillraven.fleks.World
@@ -157,7 +158,7 @@ fun EntityCreateContext.configureState(entity: Entity, tile: TiledMapTile, world
     }
 }
 
-fun EntityCreateContext.configureChest(entity: Entity, tile: TiledMapTile) {
+fun EntityCreateContext.configureChest(entity: Entity, tile: TiledMapTile,mapObject: TiledMapTileMapObject) {
     val gameObjectStr = tile.property<String>("gameObject", "")
     entity += when(gameObjectStr){
         GameObject.CHEST.name -> {
@@ -165,11 +166,21 @@ fun EntityCreateContext.configureChest(entity: Entity, tile: TiledMapTile) {
         }
         GameObject.CHEST_LOCKED.name -> {
             Chest(GameObject.valueOf(gameObjectStr), isLocked = true)
-
         }
         else -> return
     }
+    val itemsCsv = mapObject.propertyOrNull<String>("itemsInside") ?: return
+    val items: List<ItemEntry> = itemsCsv.split(',').mapNotNull { entry ->
+        val parts = entry.split(':')
+        if (parts.size != 2) null else ItemEntry(parts[0],parts[1].toIntOrNull()?:1)
+    }
+    entity[Chest].itemsInside = items
 }
+
+data class ItemEntry(
+    val type : String,
+    val count : Int
+)
 
 fun EntityCreateContext.configureEntityTags(
     entity: Entity,
@@ -199,7 +210,7 @@ fun EntityCreateContext.configureInventory(entity: Entity, gameObject: GameObjec
 
 fun EntityCreateContext.configureItem(entity: Entity, gameObject: GameObject){
     val itemType = when(gameObject){
-        GameObject.SWORD -> Sword()
+        GameObject.SWORD -> Sword(1)
         GameObject.BIG_MAP -> Map(MapType.BIG_MAP)
         GameObject.SMALL_MAP_1 -> Map(MapType.SMALL_MAP_1)
         GameObject.SMALL_MAP_2 -> Map(MapType.SMALL_MAP_2)

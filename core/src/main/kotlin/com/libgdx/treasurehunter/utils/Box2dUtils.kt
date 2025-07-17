@@ -1,5 +1,6 @@
 package com.libgdx.treasurehunter.utils
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.maps.MapObject
 import com.badlogic.gdx.maps.objects.CircleMapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
@@ -67,8 +68,10 @@ fun fixtureDefinitionOf(mapObject: MapObject,usePolygonShape : Boolean = false):
         friction = mapObject.property("friction",if (isGround) 0.2f else 0f)
         restitution = mapObject.property("restitution",0f)
         isSensor = mapObject.property("isSensor",false)
-        density = mapObject.property("density",1f)
+        density = mapObject.property("density",1f / UNIT_SCALE) / UNIT_SCALE
     }
+    Gdx.app.log("fixtureDefinitionOf","Created fixtureDef for mapObject ${mapObject::class.simpleName} "+
+        "with userData $userData and shape ${fixtureDef.shape::class.simpleName}")
     return FixtureDefUserData(fixtureDef,userData)
 }
 
@@ -178,7 +181,7 @@ fun FixtureDef.copy(
     filter : Filter? = null,
     shape : Shape? = null
 ) : FixtureDef{
-   return  return FixtureDef().also {
+   return FixtureDef().also {
        it.isSensor = isSensor ?: this.isSensor
        it.density = density ?: this.density
        it.friction = friction ?: this.friction

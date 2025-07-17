@@ -1,16 +1,17 @@
 package com.libgdx.treasurehunter.state
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.BodyDef
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityUpdateContext
 import com.github.quillraven.fleks.Family
 import com.github.quillraven.fleks.World
-import com.libgdx.treasurehunter.ecs.components.AiComponent
 import com.libgdx.treasurehunter.ecs.components.AiState
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationData
@@ -21,12 +22,12 @@ import com.libgdx.treasurehunter.ecs.components.Blink
 import com.libgdx.treasurehunter.ecs.components.Chest
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
+import com.libgdx.treasurehunter.ecs.components.Flash
 import com.libgdx.treasurehunter.ecs.components.Graphic
-import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.Invulnarable
 import com.libgdx.treasurehunter.ecs.components.Item
+import com.libgdx.treasurehunter.ecs.components.ItemData
 import com.libgdx.treasurehunter.ecs.components.Mark
-import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.Ship
 import com.libgdx.treasurehunter.game.PhysicWorld
@@ -35,20 +36,25 @@ import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.enums.MarkType
 import com.libgdx.treasurehunter.enums.ParticleType
+import com.libgdx.treasurehunter.enums.ShaderEffect
+import com.libgdx.treasurehunter.enums.ShaderEffectData
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
-import com.libgdx.treasurehunter.state.StateEntity
+import com.libgdx.treasurehunter.tiled.ItemEntry
 import com.libgdx.treasurehunter.tiled.sprite
+import com.libgdx.treasurehunter.utils.Constants.OBJECT_FIXTURES
+import com.libgdx.treasurehunter.utils.FixtureDefUserData
 import com.libgdx.treasurehunter.utils.GameObject
-import com.libgdx.treasurehunter.utils.distance
+import com.libgdx.treasurehunter.utils.copy
+import com.libgdx.treasurehunter.utils.createBody
+import com.libgdx.treasurehunter.utils.createFixtures
 import ktx.math.vec2
 import ktx.math.minus
-import kotlin.math.pow
 import kotlin.math.sin
-import kotlin.text.get
 import com.libgdx.treasurehunter.utils.plus
 import ktx.app.gdxError
-import kotlin.collections.plusAssign
+import ktx.math.random
+import ktx.math.times
 
 
 sealed class StateEntity(
@@ -77,6 +83,9 @@ sealed class StateEntity(
 
     val body: Body
         get() = this[Physic].body
+
+    val center : Vector2
+        get() = this[Graphic].center
 
     val doAttack: Boolean
         get() {
@@ -306,6 +315,16 @@ sealed class StateEntity(
                 }
             }
 
+        val isItemsSpawned : Boolean
+            get() = this[Chest].isItemsSpawned
+
+
+        var itemAppearInterval : Float
+            get() = this[Chest].itemAppearInterval
+            set(value) {
+                this[Chest].itemAppearInterval = value
+            }
+
         val closeAnimType : AnimationType
             get() {
                 val chest = this[Chest]
@@ -315,6 +334,52 @@ sealed class StateEntity(
                     else -> gdxError("Unknown chest type: ${chest.gameObject}")
                 }
             }
+
+        fun spawnItem(){
+            val chest = this[Chest]
+            if (chest.itemsInside.isEmpty()) return
+            chest.itemsInside.forEach { itemEntry ->
+                val gameObject = GameObject.valueOf(itemEntry.type)
+                (1..itemEntry.count).forEach { index ->
+                    world.entity { entity ->
+                        val physicWorld = world.inject<PhysicWorld>()
+                        val fixtureUserData = OBJECT_FIXTURES[gameObject] ?: gdxError("No fixture definition for $gameObject")
+                        val nonSensorFixtures = fixtureUserData.map { it.copy(fixtureDef = it.fixtureDef.copy(isSensor = false)) }
+                        val body = physicWorld.createBody(
+                            BodyDef.BodyType.DynamicBody, center + vec2(0f,0.5f) ,
+                        ).also { body ->
+                            body.createFixtures(nonSensorFixtures)
+                            body.userData = entity
+                        }
+                        entity += Physic(body)
+                        val itemType = gameObject.toItemType()
+                        entity += Item(ItemData(gameObject.toItemType()))
+                        val shaderEffect = itemType.getItemShaderEffect()
+                        entity += Flash(shaderEffect, 5,0.1f, flashInterval = 0.25f, isContinuous = shaderEffect.isContinuous, shaderEffectData = shaderEffect.shaderEffectData.copy())
+                        entity += Graphic(
+                            sprite(
+                                gameObject.atlasKey,
+                                AnimationType.IDLE,
+                                body.position ,
+                                assetHelper,
+                                0f
+                            )
+                        )
+                        entity += Animation(
+                            gameObject.atlasKey,
+                            AnimationData(
+                                animationType = AnimationType.IDLE,
+                                playMode = PlayMode.LOOP
+                            )
+                        )
+                        val impulse = vec2(body.mass * (-3f..3f).random(), body.mass * (0f..5f).random())
+                        body.applyLinearImpulse(impulse, body.worldCenter, true)
+                    }
+                }
+            }
+            chest.itemsInside = emptyList()
+            chest.isItemsSpawned = true
+        }
 
     }
 

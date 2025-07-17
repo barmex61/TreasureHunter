@@ -7690,6 +7690,36 @@ jsonData: {
 		{
 			class: com.ray3k.skincomposer.data.ColorData
 			color: {
+				r: 0.78431374
+				g: 0.78431374
+				b: 0.78431374
+				a: 1
+			}
+			name: gray
+		}
+		{
+			class: com.ray3k.skincomposer.data.ColorData
+			color: {
+				r: 0
+				g: 1
+				b: 0
+				a: 1
+			}
+			name: green
+		}
+		{
+			class: com.ray3k.skincomposer.data.ColorData
+			color: {
+				r: 0.02745098
+				g: 0.49411765
+				b: 0.101960786
+				a: 1
+			}
+			name: green_dark
+		}
+		{
+			class: com.ray3k.skincomposer.data.ColorData
+			color: {
 				r: 0.3019608
 				g: 0.1254902
 				b: 0.047058824
@@ -7726,6 +7756,16 @@ jsonData: {
 				a: 1
 			}
 			name: RGBA_30_11_11_255
+		}
+		{
+			class: com.ray3k.skincomposer.data.ColorData
+			color: {
+				r: 0.9490196
+				g: 0.9490196
+				b: 0.9490196
+				a: 1
+			}
+			name: white_1
 		}
 	]
 	fonts: []
@@ -7795,6 +7835,35 @@ jsonData: {
 			previewTTF: PressStart2P-Regular
 			useCustomSerializer: true
 			size: 16
+			mono: false
+			hinting: AutoMedium
+			color: RGBA_255_255_255_255
+			gamma: 1.8
+			renderCount: 2
+			borderWidth: 0
+			borderColor: null
+			borderStraight: false
+			borderGamma: 1.8
+			shadowOffsetX: 0
+			shadowOffsetY: 0
+			shadowColor: null
+			spaceX: 0
+			spaceY: 0
+			characters: ""
+			kerning: true
+			flip: false
+			genMipMaps: false
+			minFilter: Nearest
+			magFilter: Nearest
+			incremental: false
+		}
+		{
+			class: com.ray3k.skincomposer.data.FreeTypeFontData
+			name: masakiSmall
+			file: C:/Users/Fatih/AndroidStudioProjects/TreasureHunter/assets/graphics/ui/Masaaki-Regular.otf
+			previewTTF: IBMPlexSerif-Medium
+			useCustomSerializer: true
+			size: 14
 			mono: false
 			hinting: AutoMedium
 			color: RGBA_255_255_255_255
@@ -9812,7 +9881,7 @@ jsonData: {
 						type: com.badlogic.gdx.graphics.Color
 						name: fontColor
 						optional: true
-						value: orange
+						value: RGBA_255_255_255_255
 					}
 					background: {
 						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
@@ -9822,6 +9891,60 @@ jsonData: {
 					}
 				}
 				deletable: false
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: small
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: freeTypeMasakiFont
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: RGBA_255_255_255_255
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+				}
+				deletable: true
+				parent: null
+			}
+			{
+				class: com.ray3k.skincomposer.data.StyleData
+				name: very_small
+				clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+				properties: {
+					font: {
+						type: com.badlogic.gdx.graphics.g2d.BitmapFont
+						name: font
+						optional: false
+						value: masakiSmall
+					}
+					fontColor: {
+						type: com.badlogic.gdx.graphics.Color
+						name: fontColor
+						optional: true
+						value: RGBA_255_255_255_255
+					}
+					background: {
+						type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+						name: background
+						optional: true
+						value: null
+					}
+				}
+				deletable: true
 				parent: null
 			}
 		]
@@ -9965,845 +10088,137 @@ sceneComposer: {
 			cells: [
 				{
 					child: {
-						class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimVerticalGroup
+						class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
 						name: null
-						alignment: 10
-						expand: false
-						fill: false
-						padLeft: 25
-						padRight: 0
-						padTop: 25
-						padBottom: 0
-						reverse: false
-						columnAlignment: 10
-						space: 0
-						wrap: false
-						wrapSpace: 0
 						children: [
 							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
+								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
 								name: null
-								alignment: 8
-								background: null
-								fillX: false
-								fillY: false
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-									name: null
-									children: [
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-											name: null
-											drawable: {
-												file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_15.png
-												bgColor: {
-													r: 1
-													g: 1
-													b: 1
-													a: 1
-												}
-												tint: null
-												tintName: null
-												name: prefabs_15
-												tiled: false
-												minWidth: -1
-												minHeight: -1
-												customized: false
-												tenPatchData: null
-												tvgData: null
-												type: TEXTURE
-												hidden: false
-											}
-											scaling: stretch
-											touchable: enabled
-											visible: true
-										}
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-											name: null
-											alignment: 1
-											background: null
-											fillX: false
-											fillY: false
-											minWidth: -1
-											minHeight: -1
-											maxWidth: -1
-											maxHeight: -1
-											preferredWidth: -1
-											preferredHeight: -1
-											padLeft: 14
-											padRight: 0
-											padTop: 0
-											padBottom: 2
-											child: {
-												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-												name: null
-												drawable: {
-													file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Life Bars/Colors/life_bars_colors_1.png
-													bgColor: {
-														r: 1
-														g: 1
-														b: 1
-														a: 1
-													}
-													tint: null
-													tintName: null
-													name: life_bars_colors_1
-													tiled: false
-													minWidth: -1
-													minHeight: -1
-													customized: false
-													tenPatchData: null
-													tvgData: null
-													type: TEXTURE
-													hidden: false
-												}
-												scaling: stretch
-												touchable: enabled
-												visible: true
-											}
-											touchable: enabled
-											visible: true
-										}
-									]
-									touchable: enabled
-									visible: true
+								drawable: {
+									file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_8.png
+									bgColor: {
+										r: 1
+										g: 1
+										b: 1
+										a: 1
+									}
+									tint: null
+									tintName: null
+									name: prefabs_8
+									tiled: false
+									minWidth: -1
+									minHeight: -1
+									customized: false
+									tenPatchData: null
+									tvgData: null
+									type: TEXTURE
+									hidden: false
 								}
+								scaling: stretch
 								touchable: enabled
 								visible: true
 							}
 							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-								name: null
-								alignment: 8
-								background: null
-								fillX: false
-								fillY: false
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-									name: null
-									children: [
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-											name: null
-											drawable: {
-												file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_17.png
-												bgColor: {
-													r: 1
-													g: 1
-													b: 1
-													a: 1
-												}
-												tint: null
-												tintName: null
-												name: prefabs_17
-												tiled: false
-												minWidth: -1
-												minHeight: -1
-												customized: false
-												tenPatchData: null
-												tvgData: null
-												type: TEXTURE
-												hidden: false
-											}
-											scaling: stretch
-											touchable: enabled
-											visible: true
-										}
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-											name: null
-											alignment: 1
-											background: null
-											fillX: false
-											fillY: false
-											minWidth: -1
-											minHeight: -1
-											maxWidth: -1
-											maxHeight: -1
-											preferredWidth: -1
-											preferredHeight: -1
-											padLeft: 13
-											padRight: 0
-											padTop: 0
-											padBottom: 2
-											child: {
-												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-												name: null
-												drawable: {
-													file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Life Bars/Colors/life_bars_colors_2.png
-													bgColor: {
-														r: 1
-														g: 1
-														b: 1
-														a: 1
-													}
-													tint: null
-													tintName: null
-													name: life_bars_colors_2
-													tiled: false
-													minWidth: -1
-													minHeight: -1
-													customized: false
-													tenPatchData: null
-													tvgData: null
-													type: TEXTURE
-													hidden: false
-												}
-												scaling: stretch
-												touchable: enabled
-												visible: true
-											}
-											touchable: enabled
-											visible: true
-										}
-									]
-									touchable: enabled
-									visible: true
-								}
-								touchable: enabled
-								visible: true
-							}
-							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-								name: null
-								alignment: 8
-								background: null
-								fillX: false
-								fillY: false
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-									name: null
-									children: [
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-											name: null
-											drawable: {
-												file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_18.png
-												bgColor: {
-													r: 1
-													g: 1
-													b: 1
-													a: 1
-												}
-												tint: null
-												tintName: null
-												name: prefabs_18
-												tiled: false
-												minWidth: -1
-												minHeight: -1
-												customized: false
-												tenPatchData: null
-												tvgData: null
-												type: TEXTURE
-												hidden: false
-											}
-											scaling: stretch
-											touchable: enabled
-											visible: true
-										}
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-											name: null
-											alignment: 1
-											background: null
-											fillX: false
-											fillY: false
-											minWidth: -1
-											minHeight: -1
-											maxWidth: -1
-											maxHeight: -1
-											preferredWidth: -1
-											preferredHeight: -1
-											padLeft: 12
-											padRight: 0
-											padTop: 0
-											padBottom: 2
-											child: {
-												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-												name: null
-												drawable: {
-													file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Life Bars/Colors/life_bars_colors_3.png
-													bgColor: {
-														r: 1
-														g: 1
-														b: 1
-														a: 1
-													}
-													tint: null
-													tintName: null
-													name: life_bars_colors_3
-													tiled: false
-													minWidth: -1
-													minHeight: -1
-													customized: false
-													tenPatchData: null
-													tvgData: null
-													type: TEXTURE
-													hidden: false
-												}
-												scaling: stretch
-												touchable: enabled
-												visible: true
-											}
-											touchable: enabled
-											visible: true
-										}
-									]
-									touchable: enabled
-									visible: true
-								}
-								touchable: enabled
-								visible: true
-							}
-							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-								name: null
-								alignment: 8
-								background: null
-								fillX: false
-								fillY: false
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-									name: null
-									children: [
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-											name: null
-											drawable: {
-												file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_19.png
-												bgColor: {
-													r: 1
-													g: 1
-													b: 1
-													a: 1
-												}
-												tint: null
-												tintName: null
-												name: prefabs_19
-												tiled: false
-												minWidth: -1
-												minHeight: -1
-												customized: false
-												tenPatchData: null
-												tvgData: null
-												type: TEXTURE
-												hidden: false
-											}
-											scaling: stretch
-											touchable: enabled
-											visible: true
-										}
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-											name: null
-											alignment: 1
-											background: null
-											fillX: false
-											fillY: false
-											minWidth: -1
-											minHeight: -1
-											maxWidth: -1
-											maxHeight: -1
-											preferredWidth: -1
-											preferredHeight: -1
-											padLeft: 12
-											padRight: 0
-											padTop: 0
-											padBottom: 2
-											child: {
-												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-												name: null
-												drawable: {
-													file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Life Bars/Colors/life_bars_colors_4.png
-													bgColor: {
-														r: 1
-														g: 1
-														b: 1
-														a: 1
-													}
-													tint: null
-													tintName: null
-													name: life_bars_colors_4
-													tiled: false
-													minWidth: -1
-													minHeight: -1
-													customized: false
-													tenPatchData: null
-													tvgData: null
-													type: TEXTURE
-													hidden: false
-												}
-												scaling: stretch
-												touchable: enabled
-												visible: true
-											}
-											touchable: enabled
-											visible: true
-										}
-									]
-									touchable: enabled
-									visible: true
-								}
-								touchable: enabled
-								visible: true
-							}
-						]
-						touchable: enabled
-						visible: true
-					}
-					row: 0
-					column: 0
-					padLeft: 0
-					padRight: 0
-					padTop: 0
-					padBottom: 0
-					spaceLeft: 0
-					spaceRight: 0
-					spaceTop: 0
-					spaceBottom: 0
-					expandX: true
-					expandY: true
-					fillX: true
-					fillY: true
-					growX: true
-					growY: true
-					alignment: 1
-					minWidth: -1
-					minHeight: -1
-					maxWidth: -1
-					maxHeight: -1
-					preferredWidth: -1
-					preferredHeight: -1
-					uniformX: false
-					uniformY: false
-					colSpan: 1
-				}
-				{
-					child: {
-						class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimVerticalGroup
-						name: null
-						alignment: 2
-						expand: true
-						fill: true
-						padLeft: 0
-						padRight: 0
-						padTop: 25
-						padBottom: 0
-						reverse: false
-						columnAlignment: 1
-						space: 0
-						wrap: false
-						wrapSpace: 0
-						children: [
-							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
+								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimVerticalGroup
 								name: null
 								alignment: 1
-								background: null
-								fillX: false
-								fillY: false
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: -1
-								preferredHeight: -1
+								expand: true
+								fill: true
 								padLeft: 0
 								padRight: 0
 								padTop: 0
 								padBottom: 0
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimStack
-									name: null
-									children: [
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-											name: null
-											drawable: {
-												file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Prefabs/prefabs_16.png
-												bgColor: {
-													r: 1
-													g: 1
-													b: 1
-													a: 1
+								reverse: false
+								columnAlignment: 1
+								space: 0
+								wrap: false
+								wrapSpace: 0
+								children: [
+									{
+										class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+										name: null
+										style: {
+											name: default
+											clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+											properties: {
+												font: {
+													type: com.badlogic.gdx.graphics.g2d.BitmapFont
+													name: font
+													optional: false
+													value: freeTypeCronus
 												}
-												tint: null
-												tintName: null
-												name: prefabs_16
-												tiled: false
-												minWidth: -1
-												minHeight: -1
-												customized: false
-												tenPatchData: null
-												tvgData: null
-												type: TEXTURE
-												hidden: false
-											}
-											scaling: stretch
-											touchable: enabled
-											visible: true
-										}
-										{
-											class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-											name: null
-											alignment: 1
-											background: null
-											fillX: false
-											fillY: false
-											minWidth: -1
-											minHeight: -1
-											maxWidth: -1
-											maxHeight: -1
-											preferredWidth: -1
-											preferredHeight: -1
-											padLeft: 14
-											padRight: 0
-											padTop: 0
-											padBottom: 2
-											child: {
-												class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-												name: null
-												drawable: {
-													file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Life Bars/Colors/life_bars_colors_1.png
-													bgColor: {
-														r: 1
-														g: 1
-														b: 1
-														a: 1
-													}
-													tint: null
-													tintName: null
-													name: life_bars_colors_1
-													tiled: false
-													minWidth: -1
-													minHeight: -1
-													customized: false
-													tenPatchData: null
-													tvgData: null
-													type: TEXTURE
-													hidden: false
+												fontColor: {
+													type: com.badlogic.gdx.graphics.Color
+													name: fontColor
+													optional: true
+													value: RGBA_255_255_255_255
 												}
-												scaling: stretch
-												touchable: enabled
-												visible: true
+												background: {
+													type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+													name: background
+													optional: true
+													value: null
+												}
 											}
-											touchable: enabled
-											visible: true
+											deletable: false
+											parent: null
 										}
-									]
-									touchable: enabled
-									visible: true
-								}
-								touchable: enabled
-								visible: true
-							}
-						]
-						touchable: enabled
-						visible: true
-					}
-					row: 0
-					column: 1
-					padLeft: 0
-					padRight: 0
-					padTop: 0
-					padBottom: 0
-					spaceLeft: 0
-					spaceRight: 0
-					spaceTop: 0
-					spaceBottom: 0
-					expandX: true
-					expandY: true
-					fillX: true
-					fillY: true
-					growX: true
-					growY: true
-					alignment: 1
-					minWidth: -1
-					minHeight: -1
-					maxWidth: -1
-					maxHeight: -1
-					preferredWidth: -1
-					preferredHeight: -1
-					uniformX: false
-					uniformY: false
-					colSpan: 1
-				}
-				{
-					child: null
-					row: 0
-					column: 2
-					padLeft: 0
-					padRight: 0
-					padTop: 0
-					padBottom: 0
-					spaceLeft: 0
-					spaceRight: 0
-					spaceTop: 0
-					spaceBottom: 0
-					expandX: true
-					expandY: true
-					fillX: true
-					fillY: true
-					growX: true
-					growY: true
-					alignment: 1
-					minWidth: -1
-					minHeight: -1
-					maxWidth: -1
-					maxHeight: -1
-					preferredWidth: -1
-					preferredHeight: -1
-					uniformX: false
-					uniformY: false
-					colSpan: 1
-				}
-				{
-					child: null
-					row: 1
-					column: 0
-					padLeft: 0
-					padRight: 0
-					padTop: 0
-					padBottom: 0
-					spaceLeft: 0
-					spaceRight: 0
-					spaceTop: 0
-					spaceBottom: 0
-					expandX: true
-					expandY: true
-					fillX: false
-					fillY: false
-					growX: false
-					growY: false
-					alignment: 1
-					minWidth: -1
-					minHeight: -1
-					maxWidth: -1
-					maxHeight: -1
-					preferredWidth: -1
-					preferredHeight: -1
-					uniformX: false
-					uniformY: false
-					colSpan: 1
-				}
-				{
-					child: null
-					row: 1
-					column: 1
-					padLeft: 0
-					padRight: 0
-					padTop: 0
-					padBottom: 0
-					spaceLeft: 0
-					spaceRight: 0
-					spaceTop: 0
-					spaceBottom: 0
-					expandX: true
-					expandY: true
-					fillX: false
-					fillY: false
-					growX: false
-					growY: false
-					alignment: 1
-					minWidth: -1
-					minHeight: -1
-					maxWidth: -1
-					maxHeight: -1
-					preferredWidth: -1
-					preferredHeight: -1
-					uniformX: false
-					uniformY: false
-					colSpan: 1
-				}
-				{
-					child: null
-					row: 1
-					column: 2
-					padLeft: 0
-					padRight: 0
-					padTop: 0
-					padBottom: 0
-					spaceLeft: 0
-					spaceRight: 0
-					spaceTop: 0
-					spaceBottom: 0
-					expandX: true
-					expandY: true
-					fillX: false
-					fillY: false
-					growX: false
-					growY: false
-					alignment: 1
-					minWidth: -1
-					minHeight: -1
-					maxWidth: -1
-					maxHeight: -1
-					preferredWidth: -1
-					preferredHeight: -1
-					uniformX: false
-					uniformY: false
-					colSpan: 1
-				}
-				{
-					child: null
-					row: 2
-					column: 0
-					padLeft: 0
-					padRight: 0
-					padTop: 0
-					padBottom: 0
-					spaceLeft: 0
-					spaceRight: 0
-					spaceTop: 0
-					spaceBottom: 0
-					expandX: true
-					expandY: true
-					fillX: false
-					fillY: false
-					growX: false
-					growY: false
-					alignment: 1
-					minWidth: -1
-					minHeight: -1
-					maxWidth: -1
-					maxHeight: -1
-					preferredWidth: -1
-					preferredHeight: -1
-					uniformX: false
-					uniformY: false
-					colSpan: 1
-				}
-				{
-					child: null
-					row: 2
-					column: 1
-					padLeft: 0
-					padRight: 0
-					padTop: 0
-					padBottom: 0
-					spaceLeft: 0
-					spaceRight: 0
-					spaceTop: 0
-					spaceBottom: 0
-					expandX: true
-					expandY: true
-					fillX: false
-					fillY: false
-					growX: false
-					growY: false
-					alignment: 1
-					minWidth: -1
-					minHeight: -1
-					maxWidth: -1
-					maxHeight: -1
-					preferredWidth: -1
-					preferredHeight: -1
-					uniformX: false
-					uniformY: false
-					colSpan: 1
-				}
-				{
-					child: {
-						class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimVerticalGroup
-						name: null
-						alignment: 20
-						expand: true
-						fill: true
-						padLeft: 0
-						padRight: 25
-						padTop: 0
-						padBottom: 25
-						reverse: false
-						columnAlignment: 1
-						space: 0
-						wrap: false
-						wrapSpace: 0
-						children: [
-							{
-								class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimContainer
-								name: null
-								alignment: 20
-								background: null
-								fillX: false
-								fillY: false
-								minWidth: -1
-								minHeight: -1
-								maxWidth: -1
-								maxHeight: -1
-								preferredWidth: 42
-								preferredHeight: 42
-								padLeft: 0
-								padRight: 0
-								padTop: 0
-								padBottom: 0
-								child: {
-									class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimImage
-									name: null
-									drawable: {
-										file: C:/Users/Fatih/Desktop/Treasure Hunters Assets/Wood and Paper UI/Sprites/Ui/inventory.png
-										bgColor: {
-											r: 1
-											g: 1
-											b: 1
-											a: 1
+										text: Headline
+										textAlignment: 1
+										ellipsis: false
+										ellipsisString: ...
+										wrap: false
+										color: {
+											color: {
+												r: 0.9490196
+												g: 0.9490196
+												b: 0.9490196
+												a: 1
+											}
+											name: white_1
 										}
-										tint: null
-										tintName: null
-										name: inventory
-										tiled: false
-										minWidth: -1
-										minHeight: -1
-										customized: false
-										tenPatchData: null
-										tvgData: null
-										type: TEXTURE
-										hidden: false
+										touchable: enabled
+										visible: true
 									}
-									scaling: stretch
-									touchable: enabled
-									visible: true
-								}
+									{
+										class: com.ray3k.skincomposer.dialog.scenecomposer.DialogSceneComposerModel$SimLabel
+										name: null
+										style: {
+											name: very_small
+											clazz: com.badlogic.gdx.scenes.scene2d.ui.Label
+											properties: {
+												font: {
+													type: com.badlogic.gdx.graphics.g2d.BitmapFont
+													name: font
+													optional: false
+													value: masakiSmall
+												}
+												fontColor: {
+													type: com.badlogic.gdx.graphics.Color
+													name: fontColor
+													optional: true
+													value: RGBA_255_255_255_255
+												}
+												background: {
+													type: com.badlogic.gdx.scenes.scene2d.utils.Drawable
+													name: background
+													optional: true
+													value: null
+												}
+											}
+											deletable: true
+											parent: null
+										}
+										text: An item type of key
+										textAlignment: 1
+										ellipsis: false
+										ellipsisString: ...
+										wrap: true
+										color: null
+										touchable: enabled
+										visible: true
+									}
+								]
 								touchable: enabled
 								visible: true
 							}
@@ -10811,8 +10226,8 @@ sceneComposer: {
 						touchable: enabled
 						visible: true
 					}
-					row: 2
-					column: 2
+					row: 0
+					column: 0
 					padLeft: 0
 					padRight: 0
 					padTop: 0
@@ -10821,14 +10236,14 @@ sceneComposer: {
 					spaceRight: 0
 					spaceTop: 0
 					spaceBottom: 0
-					expandX: true
-					expandY: true
-					fillX: true
-					fillY: true
-					growX: true
-					growY: true
+					expandX: false
+					expandY: false
+					fillX: false
+					fillY: false
+					growX: false
+					growY: false
 					alignment: 1
-					minWidth: -1
+					minWidth: 150
 					minHeight: -1
 					maxWidth: -1
 					maxHeight: -1

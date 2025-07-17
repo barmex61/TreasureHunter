@@ -1,5 +1,7 @@
 package com.libgdx.treasurehunter.utils
 
+import com.libgdx.treasurehunter.ecs.components.ItemType
+import com.libgdx.treasurehunter.ecs.components.*
 import com.libgdx.treasurehunter.enums.SoundAsset
 import ktx.app.gdxError
 
@@ -68,5 +70,24 @@ enum class GameObject() {
             FIERCE_TOOTH -> SoundAsset.FIERCE_TOOTH_JUMP
             else -> gdxError("There is no jump sound asset for this gameObject $this")
         }
+    }
+    fun toItemType() : ItemType = when(this){
+        SWORD -> Sword(1)
+        GOLD_COIN -> GoldCoin
+        SILVER_COIN -> SilverCoin
+        KEY -> Key
+        BLUE_DIAMOND -> BlueDiamond
+        GREEN_DIAMOND -> GreenDiamond
+        RED_DIAMOND -> RedDiamond
+        GOLDEN_SKULL -> GoldenSkull
+        BLUE_POTION -> BluePotion
+        RED_POTION -> RedPotion(1)
+        GREEN_BOTTLE -> GreenBottle
+        BIG_MAP -> Map(MapType.BIG_MAP)
+        SMALL_MAP_1 -> Map(MapType.SMALL_MAP_1)
+        SMALL_MAP_2 -> Map(MapType.SMALL_MAP_2)
+        SMALL_MAP_3 -> Map(MapType.SMALL_MAP_3)
+        SMALL_MAP_4 -> Map(MapType.SMALL_MAP_4)
+        else -> gdxError("GameObject $this bir ItemType'a dönüştürülemez!")
     }
 }

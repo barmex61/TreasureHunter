@@ -1,5 +1,6 @@
 package com.libgdx.treasurehunter.ecs.systems
 
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer
@@ -96,11 +97,12 @@ class RenderSystem (
             val flashCmp = entity.getOrNull(Flash)
             if (flashCmp != null && flashCmp.doFlash) {
                 spriteBatch.end()
-                shaderManager.applyShaderEffect(ShaderEffect.HIT_EFFECT)
+                val effectData = flashCmp.shaderEffectData ?: flashCmp.shaderEffect.shaderEffectData
+                shaderManager.applyShaderEffect(effectData)
                 spriteBatch.begin()
                 sprite.draw(spriteBatch)
                 spriteBatch.end()
-                shaderManager.applyShaderEffect(currentColorSettings.shaderEffect)
+                shaderManager.applyShaderEffect(currentColorSettings.shaderEffect.shaderEffectData)
                 spriteBatch.begin()
             } else {
                 sprite.draw(spriteBatch)
@@ -207,7 +209,7 @@ class RenderSystem (
     }
 
     fun setShaderEffectFromColorSettings(){
-        shaderManager.applyShaderEffect(currentColorSettings.shaderEffect)
+        shaderManager.applyShaderEffect(currentColorSettings.shaderEffect.shaderEffectData)
     }
 
 

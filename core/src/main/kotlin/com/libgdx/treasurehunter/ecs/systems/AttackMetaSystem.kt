@@ -327,7 +327,8 @@ class RangeAttackHandler(
             }
             isFixtureInitialized = true
             val multiplier = if (!ownerFlipX) 1f else -1f
-            body.applyLinearImpulse(Vector2(7f * multiplier, 0f), body.position, true)
+            val impulse = vec2(body.mass * multiplier * 7f,0f)
+            body.applyLinearImpulse(impulse, body.position, true)
         }
 
     }

@@ -5,6 +5,7 @@ import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.BluePotion
+import com.libgdx.treasurehunter.ecs.components.Flash
 import com.libgdx.treasurehunter.ecs.components.GreenBottle
 import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.ItemData
@@ -13,9 +14,12 @@ import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.RedPotion
 import com.libgdx.treasurehunter.ecs.components.SlotName
 import com.libgdx.treasurehunter.ecs.components.Sword
+import com.libgdx.treasurehunter.enums.ShaderEffect
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEvent.EquipItemRequest
 import com.libgdx.treasurehunter.event.GameEventListener
+import com.libgdx.treasurehunter.factory.AttackMetaDataFactory
+import com.libgdx.treasurehunter.utils.GameObject
 import ktx.app.gdxError
 
 class InventorySystem : IteratingSystem(
@@ -27,7 +31,7 @@ class InventorySystem : IteratingSystem(
         val attackComp = entity.getOrNull(Attack)
         if (equippedSword != null && equippedSword.itemType is ItemType.Damageable) {
             if (attackComp == null) {
-                entity.configure { it += Attack(attackMetaData = equippedSword.itemType.attackMetaData) }
+                entity.configure { it += Attack(attackMetaData = AttackMetaDataFactory.create(GameObject.SWORD)) }
             }
         } else {
             if (attackComp != null) {
@@ -58,6 +62,9 @@ class InventorySystem : IteratingSystem(
                         val life = event.item.owner!!.getOrNull(Life)?:return
                         if (life.currentLife == life.maxLife) return
                         life.currentLife = (life.currentLife + 1).coerceAtMost(life.maxLife)
+                        event.item.owner!!.configure {
+                            it += Flash(ShaderEffect.HEAL_EFFECT, flashAmount = 2, flashDuration = 0.4f, flashInterval = 0.15f)
+                        }
                         inventory.removeItem(event.item)
                     }
                     is GreenBottle ->{

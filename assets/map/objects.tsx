@@ -44,6 +44,7 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="CHEST"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="itemsInside" value="GOLD_COIN:3,SILVER_COIN:2,SWORD:1"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
   <image source="../graphics/objects/chest.png" width="64" height="35"/>
@@ -141,11 +142,11 @@
   </properties>
   <image source="../graphics/objects/sword.png" width="20" height="20"/>
   <objectgroup draworder="index" id="2">
-   <object id="1" x="18" y="13">
+   <object id="2" x="1" y="10">
     <properties>
      <property name="isSensor" type="bool" value="true"/>
     </properties>
-    <polygon points="0,0 2,-2 2,-5 -10,-5 -12,-6 -14,-6 -14,-4 -16,-4 -16,-3 -17,-3 -17,0 -14,0 -14,1 -12,1 -12,0 -11,0 -11,-1 -10,-1 -10,0"/>
+    <polygon points="0,0 4,-3 19,-2 19,1 17,3 7,3 3,4 0,3"/>
    </object>
   </objectgroup>
  </tile>
@@ -239,8 +240,12 @@
   <properties>
    <property name="aiTreePath" value="ai/crew.tree"/>
    <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="attack" type="int" value="0"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="circleRadius" type="float" value="4"/>
+   <property name="critChance" type="float" value="0"/>
+   <property name="critDamage" type="float" value="0"/>
+   <property name="defence" type="int" value="0"/>
    <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="FIERCE_TOOTH"/>
    <property name="gravityScale" type="float" value="1"/>
@@ -249,6 +254,7 @@
    <property name="isFlipped" type="bool" value="true"/>
    <property name="jumpHeight" type="float" value="2"/>
    <property name="life" type="int" value="3"/>
+   <property name="resistance" type="int" value="0"/>
    <property name="speed" type="int" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
    <property name="timeToMax" type="float" value="2"/>
@@ -405,6 +411,7 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="BOX"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="itemsInside" type="int" value="1"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
   <image source="../graphics/objects/box.png" width="28" height="22"/>
@@ -422,6 +429,7 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="CHEST_LOCKED"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="itemsInside" value="GOLD_COIN:3,SILVER_COIN:2,SWORD:1"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
   <image source="../graphics/objects/chest_locked.png" width="32" height="32"/>
@@ -660,6 +668,7 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="3" y="3" width="11" height="11">
     <properties>
+     <property name="friction" type="float" value="1"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="goldCoin"/>
     </properties>

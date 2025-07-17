@@ -1,18 +1,17 @@
 package com.libgdx.treasurehunter.shaders
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram
-import com.libgdx.treasurehunter.enums.ShaderEffect
-import com.libgdx.treasurehunter.utils.ColorSettings
+import com.libgdx.treasurehunter.enums.ShaderEffectData
 
 class ShaderManager(val shader: ShaderProgram,val onShaderEffectChange : (ShaderProgram) -> Unit) {
-    fun applyShaderEffect(effect: ShaderEffect) {
+    fun applyShaderEffect(shaderEffectData: ShaderEffectData) {
         shader.bind()
-        shader.setUniformf("u_saturation", effect.saturation)
-        shader.setUniformf("u_brightness", effect.brightness)
-        shader.setUniformf("u_contrast", effect.contrast)
-        shader.setUniformf("u_redTint", effect.redTint)
-        shader.setUniformf("u_greenTint", effect.greenTint)
-        shader.setUniformf("u_blueTint", effect.blueTint)
+        shader.setUniformf("u_saturation", shaderEffectData.saturation)
+        shader.setUniformf("u_brightness", shaderEffectData.brightness)
+        shader.setUniformf("u_contrast", shaderEffectData.contrast)
+        shader.setUniformf("u_redTint", shaderEffectData.redTint)
+        shader.setUniformf("u_greenTint", shaderEffectData.greenTint)
+        shader.setUniformf("u_blueTint", shaderEffectData.blueTint)
         onShaderEffectChange(shader)
     }
 

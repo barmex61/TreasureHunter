@@ -38,8 +38,8 @@ import ktx.tiled.x
 import ktx.tiled.y
 
 
-class TiledMapService (
-    private val physicWorld : World,
+class TiledMapService(
+    private val physicWorld: World,
     private val world: com.github.quillraven.fleks.World,
     private val assetHelper: AssetHelper,
 ) : GameEventListener {
@@ -50,28 +50,29 @@ class TiledMapService (
             is GameEvent.MapChangeEvent -> {
                 spawnEntities(event.tiledMap)
             }
+
             else -> Unit
         }
     }
 
-    private fun TiledMapTileLayer.forEachCell(onCell: (TiledMapTileLayer.Cell, Int, Int) -> Unit){
+    private fun TiledMapTileLayer.forEachCell(onCell: (TiledMapTileLayer.Cell, Int, Int) -> Unit) {
         val width = this.width
         val height = this.height
         (0..width).forEach { x ->
             (0..height).forEach { y ->
-                this.getCell(x,y)?.let { cell ->
-                    onCell(cell,x,y)
+                this.getCell(x, y)?.let { cell ->
+                    onCell(cell, x, y)
                 }
             }
         }
     }
 
-    private fun spawnEntities(tiledMap: TiledMap){
+    private fun spawnEntities(tiledMap: TiledMap) {
         // spawn static ground bodies
         tiledMap.layers.filterIsInstance<TiledMapTileLayer>().forEach { tileLayer ->
-            tileLayer.forEachCell{ cell,x,y ->
+            tileLayer.forEachCell { cell, x, y ->
                 cell.tile.objects.forEach { mapObject ->
-                    spawnStaticObject(mapObject,x,y)
+                    spawnStaticObject(mapObject, x, y)
                 }
             }
         }
@@ -84,8 +85,8 @@ class TiledMapService (
         }
     }
 
-    private fun spawnEntity(mapObject: MapObject){
-        if (mapObject !is TiledMapTileMapObject){
+    private fun spawnEntity(mapObject: MapObject) {
+        if (mapObject !is TiledMapTileMapObject) {
             gdxError("mapObject of type $mapObject is not supported")
         }
         val tile = mapObject.tile
@@ -93,96 +94,97 @@ class TiledMapService (
         val gameObject = GameObject.valueOf(gameObjectStr)
         val fixtureDefUserData = OBJECT_FIXTURES[gameObject]
 
-        if (fixtureDefUserData == null){
-            spawnBodilessEntities(mapObject,tile,gameObject)
+        if (fixtureDefUserData == null) {
+            spawnBodilessEntities(mapObject, tile, gameObject)
             return
         }
 
-        val bodyType = tile.property<String>("bodyType","StaticBody")
-        val gravityScale = tile.property<Float>("gravityScale",1f)
+        val bodyType = tile.property<String>("bodyType", "StaticBody")
+        val gravityScale = tile.property<Float>("gravityScale", 1f)
         val rotation = mapObject.rotation
         val x = mapObject.x * UNIT_SCALE
         val y = mapObject.y * UNIT_SCALE
-        val body = physicWorld.createBody(BodyType.valueOf(bodyType), vec2(x,y),rotation).apply {
+        val body = physicWorld.createBody(BodyType.valueOf(bodyType), vec2(x, y), rotation).apply {
             this.gravityScale = gravityScale
-            this.setTransform(this.position,-rotation * MathUtils.degreesToRadians)
+            this.setTransform(this.position, -rotation * MathUtils.degreesToRadians)
         }
         body.createFixtures(fixtureDefUserData)
         world.entity {
             body.userData = it
             it += Physic(body)
-            configureEntityGraphic(it,mapObject,body.position,gameObject, assetHelper,world,rotation)
-            configureEntityTags(it,mapObject,tile)
-            configureMove(it,tile)
-            configureJump(it,tile,gameObject)
-            configureChest(it,tile)
-            configureState(it,tile,world,physicWorld,assetHelper)
-            configureDamage(it,tile)
-            configureInventory(it,gameObject)
-            configureItem(it,gameObject)
-            configureAttack(it,tile)
-            configureStat(it,tile)
-            configureLife(it,tile)
-            configureAi(it,tile,physicWorld)
-            configureShip(it,tile)
-            logEntity(it,world,gameObject)
+            configureEntityGraphic(
+                it,
+                mapObject,
+                body.position,
+                gameObject,
+                assetHelper,
+                world,
+                rotation
+            )
+            configureEntityTags(it, mapObject, tile)
+            configureMove(it, tile)
+            configureJump(it, tile, gameObject)
+            configureChest(it, tile,mapObject)
+            configureState(it, tile, world, physicWorld, assetHelper)
+            configureDamage(it, tile)
+            configureInventory(it, gameObject)
+            configureItem(it, gameObject)
+            configureAttack(it, tile)
+            configureStat(it, tile)
+            configureLife(it, tile)
+            configureAi(it, tile, physicWorld)
+            configureShip(it, tile)
+            logEntity(it, world, gameObject)
         }
 
     }
 
-    private fun spawnStaticObject(mapObject: MapObject,x: Int,y : Int){
-        val body = physicWorld.createBody(StaticBody,vec2(x.toFloat(),y.toFloat()))
-        val fixtureDefUserData = fixtureDefinitionOf(mapObject,true)
+    private fun spawnStaticObject(mapObject: MapObject, x: Int, y: Int) {
+        val body = physicWorld.createBody(StaticBody, vec2(x.toFloat(), y.toFloat()))
+        val fixtureDefUserData = fixtureDefinitionOf(mapObject, true)
         body.createFixtures(listOf(fixtureDefUserData))
     }
 
-    private fun spawnBodilessEntities(mapObject: TiledMapTileMapObject,tile : TiledMapTile,gameObject: GameObject){
+    private fun spawnBodilessEntities(
+        mapObject: TiledMapTileMapObject,
+        tile: TiledMapTile,
+        gameObject: GameObject,
+    ) {
         world.entity {
-            val position = vec2(mapObject.x * UNIT_SCALE , mapObject.y * UNIT_SCALE)
-            configureEntityGraphic(it,mapObject,position,gameObject, assetHelper,world,0f)
-            configureEntityTags(it,mapObject,tile)
-            logEntity(it,world,gameObject)
+            val position = vec2(mapObject.x * UNIT_SCALE, mapObject.y * UNIT_SCALE)
+            configureEntityGraphic(it, mapObject, position, gameObject, assetHelper, world, 0f)
+            configureEntityTags(it, mapObject, tile)
+            logEntity(it, world, gameObject)
         }
     }
-    companion object{
-        fun logEntities(world: com.github.quillraven.fleks.World){
-            world.forEach {
-                val components = mutableListOf<String>()
-                if (it.has(Graphic)) components.add("Graphic")
-                if (it.has(Animation)) components.add("Animation")
-                if (it.has(Move)) components.add("Move")
-                if (it.has(Physic)) components.add("Physic ${it[Physic].body.userData}")
-                if (it.has(Jump)) components.add("Jump")
-                if (it.has(Attack)) components.add("Attack")
-                if (it.has(State)) components.add("State")
-                if (it.has(Damage)) components.add("Damage")
-                if (it.has(EntityTag.PLAYER)) components.add("Player")
-                Gdx.app.log("EntityDebug", "Entity ${it.id} components: ${components.joinToString(", ")}")
+
+    companion object {
+        fun logEntities(world: com.github.quillraven.fleks.World) {
+            world.snapshot().forEach { entity, snapshot ->
+                val components =
+                    snapshot.components.mapNotNull { it::class.simpleName }.toMutableList()
+                Gdx.app.log(
+                    "EntityDebug",
+                    "Entity ${entity.id} components: ${components.joinToString(", ")}"
+                )
             }
         }
 
-        fun logEntity(entity: Entity,world: com.github.quillraven.fleks.World,gameObject: GameObject? = null)=with(world){
-            val components = mutableListOf<String>()
-            if (entity.has(Graphic)) {
-                components.add("Graphic")
-            }
-            if (entity.has(Animation)) components.add("Animation")
-            if (entity.has(Move)) components.add("Move")
-            if (entity.has(Physic)) {
-                components.add("Physic ${entity[Physic].body.userData}")
-            }
-            if (entity.has(Jump)) components.add("Jump")
-            if (entity.has(Attack)) components.add("Attack")
-            if (entity.has(State)) components.add("State")
-            if (entity.has(Damage)) components.add("Damage")
-            if (entity.has(AttackMeta)) components.add("AttackMeta")
-            if (entity.has(EntityTag.PLAYER)) components.add("Player")
+        fun logEntity(
+            entity: Entity,
+            world: com.github.quillraven.fleks.World,
+            gameObject: GameObject? = null,
+        ) = with(world) {
+            val snapshot = world.snapshot()[entity] ?: return@with
+            val components = snapshot.components.mapNotNull { it::class.simpleName }.toMutableList()
             if (gameObject != null) components.add(gameObject.name)
-
-            Gdx.app.log("EntityDebug", "Entity ${entity.id} components: ${components.joinToString(", ")}")
+            Gdx.app.log(
+                "EntityDebug",
+                "Entity ${entity.id} components: ${components.joinToString(", ")}"
+            )
         }
-    }
 
+    }
 
     fun dispose() {
         OBJECT_FIXTURES.values.forEach { fixture ->

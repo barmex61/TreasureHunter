@@ -120,18 +120,6 @@
             "valuesAsFlags": false
         },
         {
-            "id": 6,
-            "name": "Item",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "SWORD",
-                "NONE",
-                "PROJECTILE"
-            ],
-            "valuesAsFlags": false
-        },
-        {
             "id": 5,
             "name": "MapDisplayMode",
             "storageType": "string",
@@ -145,18 +133,6 @@
                 "SNOW",
                 "FOREST",
                 "UNDERWATER"
-            ],
-            "valuesAsFlags": false
-        },
-        {
-            "id": 10,
-            "name": "NodeType",
-            "storageType": "string",
-            "type": "enum",
-            "values": [
-                "NORMAL",
-                "JUMP",
-                "SPECIAL_ACTION"
             ],
             "valuesAsFlags": false
         },

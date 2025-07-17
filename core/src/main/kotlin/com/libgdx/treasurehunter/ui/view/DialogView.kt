@@ -52,6 +52,7 @@ class DialogView(
                 fill()
                 space(10.0f)
                 this@DialogView.textLabel = label("") {
+                    color = skin.getColor("orange")
                     setAlignment(Align.center)
                     wrap = true
                 }

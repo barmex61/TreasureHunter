@@ -70,7 +70,7 @@ enum class SwordState : EntityState<StateEntity.SwordEntity> {
         override fun enter(entity: StateEntity.SwordEntity) {
             with(entity.world){
                 entity.entity.configure {
-                    it += Item(ItemData(Sword()))
+                    it += Item(ItemData(Sword(1)))
                 }
             }
             entity.animation(AnimationType.EMBEDDED, playMode = Animation.PlayMode.NORMAL)
