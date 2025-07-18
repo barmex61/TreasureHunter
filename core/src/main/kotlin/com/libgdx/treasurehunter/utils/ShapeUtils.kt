@@ -2,22 +2,65 @@ package com.libgdx.treasurehunter.utils
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.ChainShape
+import com.badlogic.gdx.physics.box2d.PolygonShape
+import com.badlogic.gdx.physics.box2d.Shape
 import kotlin.math.max
 import kotlin.math.min
 
-fun ChainShape.mirror(offset : Vector2) : ChainShape{
-        val vertexCount = this.vertexCount
-        val vertices = Array(vertexCount) { Vector2() }
-
-        for (i in 0 until vertexCount) {
-            val vertex = Vector2()
-            this.getVertex(i, vertex)
-            vertices[i] = Vector2(-vertex.x + offset.x, vertex.y + offset.y)
-        }
-        return ChainShape().apply {
-            createChain(vertices)
-        }
+fun mirrorVertices(shape: Shape, offset: Vector2): Array<Vector2> {
+    val vertexCount = when (shape) {
+        is ChainShape -> shape.vertexCount
+        is PolygonShape -> shape.vertexCount
+        else -> throw IllegalArgumentException("Unsupported shape type")
     }
+    return Array(vertexCount) { i ->
+        val vertex = Vector2()
+        when (shape) {
+            is ChainShape -> shape.getVertex(i, vertex)
+            is PolygonShape -> shape.getVertex(i, vertex)
+        }
+        Vector2(-vertex.x + offset.x, vertex.y + offset.y)
+    }
+}
+
+fun ChainShape.mirror(offset: Vector2): ChainShape {
+    val mirrored = mirrorVertices(this, offset)
+    return ChainShape().apply { createChain(mirrored) }
+}
+
+fun PolygonShape.mirror(offset: Vector2): PolygonShape {
+    val mirrored = mirrorVertices(this, offset)
+    return PolygonShape().apply { set(mirrored) }
+}
+
+
+
+fun offsetVertices(shape: Shape, offset: Vector2): Array<Vector2> {
+    val vertexCount = when (shape) {
+        is ChainShape -> shape.vertexCount
+        is PolygonShape -> shape.vertexCount
+        else -> throw IllegalArgumentException("Unsupported shape type")
+    }
+    return Array(vertexCount) { i ->
+        val vertex = Vector2()
+        when (shape) {
+            is ChainShape -> shape.getVertex(i, vertex)
+            is PolygonShape -> shape.getVertex(i, vertex)
+        }
+        Vector2(vertex.x + offset.x, vertex.y + offset.y)
+    }
+}
+
+fun ChainShape.offset(offset: Vector2): ChainShape {
+    val offsetted = offsetVertices(this, offset)
+    return ChainShape().apply { createChain(offsetted) }
+}
+
+fun PolygonShape.offset(offset: Vector2): PolygonShape {
+    val offsetted = offsetVertices(this, offset)
+    return PolygonShape().apply { set(offsetted) }
+}
+
 
 fun ChainShape.width(): Float {
     var minX = Float.MAX_VALUE
@@ -33,21 +76,6 @@ fun ChainShape.width(): Float {
     return maxX - minX
 }
 
-
-fun ChainShape.offset(offset: Vector2) : ChainShape {
-    val vertexCount = vertexCount
-    val vertices = Array(vertexCount) { Vector2() }
-
-    for (i in 0 until vertexCount) {
-        val vertex = Vector2()
-        getVertex(i, vertex)
-        vertices[i] = Vector2(vertex.x + offset.x, vertex.y + offset.y)
-    }
-
-    return ChainShape().apply {
-        createChain(vertices)
-    }
-}
 
 fun ChainShape.vertices(): FloatArray {
     val vertexCount = this.vertexCount

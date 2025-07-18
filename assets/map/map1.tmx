@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="91">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="104">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
   <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DAY"/>
@@ -79,17 +79,8 @@
   <object id="58" gid="166" x="611" y="160" width="13" height="17"/>
   <object id="59" gid="167" x="641" y="159" width="16" height="16"/>
   <object id="67" gid="121" x="325" y="170" width="64" height="40"/>
-  <object id="68" gid="172" x="632" y="93" width="60" height="32"/>
   <object id="69" gid="157" x="160" y="320" width="96" height="32"/>
   <object id="70" gid="157" x="64" y="320" width="96" height="32"/>
-  <object id="72" gid="176" x="646" y="114" width="24" height="32"/>
-  <object id="73" gid="177" x="640" y="136" width="30" height="32"/>
-  <object id="74" gid="115" x="436" y="191" width="64" height="35">
-   <properties>
-    <property name="animFrameDuration" type="float" value="0.16"/>
-    <property name="itemsInside" value="ARMOR:1,BOOTS:1,HELMET:1,SWORD:1"/>
-   </properties>
-  </object>
   <object id="75" gid="143" x="654" y="191" width="32" height="32">
    <properties>
     <property name="itemsInside" value="GOLD_COIN:3,SWORD:1"/>
@@ -110,5 +101,14 @@
   <object id="85" gid="162" x="420" y="186" width="24" height="28"/>
   <object id="86" gid="159" x="488" y="145" width="24" height="24"/>
   <object id="87" gid="158" x="526" y="136" width="30" height="32"/>
+  <object id="91" gid="142" x="408" y="69" width="28" height="22" rotation="35.3836"/>
+  <object id="92" gid="141" x="352" y="194" width="26" height="30"/>
+  <object id="93" gid="142" x="515" y="83" width="28" height="22" rotation="335.331"/>
+  <object id="94" gid="142" x="467.714" y="117.62" width="28" height="22" rotation="5.981"/>
+  <object id="97" gid="142" x="544" y="192" width="28" height="22"/>
+  <object id="100" gid="142" x="562" y="165" width="28" height="22"/>
+  <object id="101" gid="142" x="596" y="155" width="28" height="22"/>
+  <object id="102" gid="142" x="554" y="126" width="28" height="22"/>
+  <object id="103" gid="135" x="416" y="128" width="34" height="30"/>
  </objectgroup>
 </map>

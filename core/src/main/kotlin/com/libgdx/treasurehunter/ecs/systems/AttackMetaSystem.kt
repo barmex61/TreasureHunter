@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.ChainShape
+import com.badlogic.gdx.physics.box2d.PolygonShape
 import com.badlogic.gdx.utils.Array
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
@@ -204,21 +205,21 @@ class MeleeAttackHandler(
                 fixDefList.map {
                     if (ownerFlipX) it.copy(
                         fixtureDef = it.fixtureDef.copy(
-                            shape = (it.fixtureDef.shape as ChainShape).mirror(
+                            shape = (it.fixtureDef.shape as PolygonShape).mirror(
                                 vec2(spriteWidth / 2f, 0f)
-                            )
+                            ),
                         )
                     ) else it.copy(
                         fixtureDef = it.fixtureDef.copy(
-                            shape = (it.fixtureDef.shape as ChainShape).offset(
+                            shape = (it.fixtureDef.shape as PolygonShape).offset(
                                 vec2(-spriteWidth / 2f, 0f)
-                            )
+                            ),
                         )
                     )
                 }
             }
-            val effectFixture =
-                createEffectFixture(ownerFrameIx, attackType, ownerFlipX, entityGraphic)
+
+            val effectFixture = createEffectFixture(ownerFrameIx, attackType, ownerFlipX, entityGraphic)
             if (attackFixture != null) fixtureDefList.addAll(attackFixture)
             if (effectFixture != null) fixtureDefList.addAll(effectFixture)
             fixtureDefList.forEach {
@@ -303,13 +304,13 @@ class RangeAttackHandler(
                 fixDefList.map {
                     if (ownerFlipX) it.copy(
                         fixtureDef = it.fixtureDef.copy(
-                            shape = (it.fixtureDef.shape as ChainShape).mirror(
+                            shape = (it.fixtureDef.shape as PolygonShape).mirror(
                                 attackOffset
                             )
                         )
                     ) else it.copy(
                         fixtureDef = it.fixtureDef.copy(
-                            shape = (it.fixtureDef.shape as ChainShape).offset(
+                            shape = (it.fixtureDef.shape as PolygonShape).offset(
                                 attackOffset
                             )
                         )

@@ -2,19 +2,16 @@ package com.libgdx.treasurehunter.utils
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.maps.MapObject
-import com.badlogic.gdx.maps.objects.CircleMapObject
 import com.badlogic.gdx.maps.objects.EllipseMapObject
 import com.badlogic.gdx.maps.objects.PolygonMapObject
 import com.badlogic.gdx.maps.objects.PolylineMapObject
 import com.badlogic.gdx.maps.objects.RectangleMapObject
-import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType
 import com.badlogic.gdx.physics.box2d.ChainShape
 import com.badlogic.gdx.physics.box2d.CircleShape
-import com.badlogic.gdx.physics.box2d.EdgeShape
 import com.badlogic.gdx.physics.box2d.Filter
 import com.badlogic.gdx.physics.box2d.Fixture
 import com.badlogic.gdx.physics.box2d.FixtureDef
@@ -27,18 +24,14 @@ import ktx.app.gdxError
 import ktx.box2d.body
 import ktx.math.vec2
 import ktx.tiled.property
-import ktx.tiled.shape
 import ktx.tiled.x
 import ktx.tiled.y
 import kotlin.collections.forEach
-import kotlin.div
-import kotlin.math.sin
-import kotlin.times
 
 
-fun PhysicWorld.createBody(bodyType : BodyType,position: Vector2,rotation : Float = 0f,gravityScale : Float = 1f) = this.body(bodyType) {
+fun PhysicWorld.createBody(bodyType : BodyType, position: Vector2, isFixedRotation : Boolean = true, gravityScale : Float = 1f) = this.body(bodyType) {
     this.position.set(position)
-    this.fixedRotation = rotation == 0f
+    this.fixedRotation = isFixedRotation
     if (gravityScale != 1f){
         this.gravityScale = gravityScale
     }
@@ -68,10 +61,10 @@ fun fixtureDefinitionOf(mapObject: MapObject,usePolygonShape : Boolean = false):
         friction = mapObject.property("friction",if (isGround) 0.2f else 0f)
         restitution = mapObject.property("restitution",0f)
         isSensor = mapObject.property("isSensor",false)
-        density = mapObject.property("density",1f / UNIT_SCALE) / UNIT_SCALE
+        density = mapObject.property("density",1f)
     }
     Gdx.app.log("fixtureDefinitionOf","Created fixtureDef for mapObject ${mapObject::class.simpleName} "+
-        "with userData $userData and shape ${fixtureDef.shape::class.simpleName}")
+        "with userData $userData and shape ${fixtureDef.shape::class.simpleName} density ${fixtureDef.density}")
     return FixtureDefUserData(fixtureDef,userData)
 }
 
@@ -140,6 +133,7 @@ fun ellipseFixtureDef(mapObject: EllipseMapObject) : FixtureDef {
             shape = CircleShape().apply {
                 position = vec2(ellipseX + ellipseW / 2f ,ellipseY + ellipseH /2f)
                 radius = if (sensorCircleRadius == 0f) ellipseW / 2f else sensorCircleRadius
+                density = 0f
             }
             this.isSensor = isSensor
         }
@@ -157,6 +151,7 @@ fun ellipseFixtureDef(mapObject: EllipseMapObject) : FixtureDef {
         FixtureDef().apply {
             shape = ChainShape().apply {
                 createLoop(vertices)
+                density = 0f
             }
         }
     }

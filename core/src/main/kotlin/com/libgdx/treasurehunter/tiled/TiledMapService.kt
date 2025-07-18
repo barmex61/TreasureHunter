@@ -104,7 +104,7 @@ class TiledMapService(
         val rotation = mapObject.rotation
         val x = mapObject.x * UNIT_SCALE
         val y = mapObject.y * UNIT_SCALE
-        val body = physicWorld.createBody(BodyType.valueOf(bodyType), vec2(x, y), rotation).apply {
+        val body = physicWorld.createBody(BodyType.valueOf(bodyType), vec2(x, y), rotation == 0f).apply {
             this.gravityScale = gravityScale
             this.setTransform(this.position, -rotation * MathUtils.degreesToRadians)
         }

@@ -53,7 +53,9 @@ class JumpSystem(
 
 
     private fun jump(entity: Entity,jumpComp: Jump,jumpBody : Body,yImpulse : Float) {
-        jumpBody.setLinearVelocity(jumpBody.linearVelocity.x,yImpulse)
+        jumpBody.setLinearVelocity(jumpBody.linearVelocity.x, 0f)
+        val mass = jumpBody.mass
+        jumpBody.applyLinearImpulse(vec2(0f, mass * yImpulse), jumpBody.worldCenter, true)
         jumpComp.wantsJump = false
         GameEventDispatcher.fireEvent(GameEvent.PlaySoundEvent(jumpComp.jumpSoundAsset))
         GameEventDispatcher.fireEvent(GameEvent.ParticleEvent(entity, ParticleType.JUMP))

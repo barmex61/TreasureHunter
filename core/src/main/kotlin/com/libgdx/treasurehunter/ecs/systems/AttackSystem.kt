@@ -79,7 +79,6 @@ class AttackSystem(
                             GameObject.SWORD -> handleRangeSwordAttack(entity, center, newAttackMetaData)
                             GameObject.WOOD_SPIKE -> handleRangeProjectileAttack(entity, center, newAttackMetaData)
                             else -> {
-                                println("reset from range attack")
                                 resetAttackComp(attackComp, newAttackMetaData)
                                 return
                             }

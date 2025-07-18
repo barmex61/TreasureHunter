@@ -163,7 +163,6 @@ enum class PlayerState : EntityState<PlayerEntity> {
         override fun enter(entity: PlayerEntity) {
             entity.animation(AnimationType.HIT, Animation.PlayMode.NORMAL)
             entity.createMarkEntity(MarkType.EXCLAMATION_MARK)
-            entity.removeDamageTaken()
         }
 
         override fun update(entity: PlayerEntity) {

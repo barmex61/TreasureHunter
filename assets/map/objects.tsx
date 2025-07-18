@@ -49,10 +49,11 @@
   </properties>
   <image source="../graphics/objects/chest.png" width="64" height="35"/>
   <objectgroup draworder="index" id="2">
-   <object id="1" x="19" y="11" width="28" height="23">
+   <object id="2" x="18" y="10">
     <properties>
      <property name="userData" value="chest"/>
     </properties>
+    <polygon points="0,0 0,25 30,25 30,0"/>
    </object>
   </objectgroup>
  </tile>
@@ -409,6 +410,7 @@
  <tile id="56">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="BOX"/>
    <property name="hasAnimation" type="bool" value="true"/>
@@ -417,10 +419,13 @@
   </properties>
   <image source="../graphics/objects/box.png" width="28" height="22"/>
   <objectgroup draworder="index" id="2">
-   <object id="1" x="1" y="2" width="25" height="18">
+   <object id="2" x="1" y="2">
     <properties>
+     <property name="density" type="float" value="1.5"/>
+     <property name="friction" type="float" value="0.5"/>
      <property name="userData" value="box"/>
     </properties>
+    <polygon points="0,1 0,17 1.8125,18 23.875,18 25,17 25,1 23.875,0 1.0625,0"/>
    </object>
   </objectgroup>
  </tile>
@@ -435,10 +440,11 @@
   </properties>
   <image source="../graphics/objects/chest_locked.png" width="32" height="32"/>
   <objectgroup draworder="index" id="2">
-   <object id="1" x="1" y="8" width="30" height="24">
+   <object id="2" x="1" y="8">
     <properties>
      <property name="userData" value="chest_locked"/>
     </properties>
+    <polygon points="0,0 0,24 30,24 30,0"/>
    </object>
   </objectgroup>
  </tile>

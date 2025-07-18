@@ -3,6 +3,7 @@ package com.libgdx.treasurehunter.state
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.BodyDef
@@ -345,8 +346,9 @@ sealed class StateEntity(
                         val physicWorld = world.inject<PhysicWorld>()
                         val fixtureUserData = OBJECT_FIXTURES[gameObject] ?: gdxError("No fixture definition for $gameObject")
                         val nonSensorFixtures = fixtureUserData.map { it.copy(fixtureDef = it.fixtureDef.copy(isSensor = false)) }
+                        val position = center + vec2(0f,0.5f)
                         val body = physicWorld.createBody(
-                            BodyDef.BodyType.DynamicBody, center + vec2(0f,0.5f) ,
+                            BodyDef.BodyType.DynamicBody, position,
                         ).also { body ->
                             body.createFixtures(nonSensorFixtures)
                             body.userData = entity

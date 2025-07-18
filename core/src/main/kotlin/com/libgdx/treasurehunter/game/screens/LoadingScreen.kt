@@ -113,7 +113,7 @@ class LoadingScreen(
         val keyFrameIx : Int = tile.propertyOrNull("keyFrameIx") ?: return
         if (tile.objects.isEmpty()) return
         val attackType = AttackType.valueOf(attackTypeStr)
-        val fixtureDefList = tile.objects.map{fixtureDefinitionOf(it) }
+        val fixtureDefList = tile.objects.map{fixtureDefinitionOf(it,!isAttackEffect) }
         if (!isAttackEffect){
             ATTACK_FIXTURES[Pair(attackType,keyFrameIx)] = fixtureDefList
         }else{
