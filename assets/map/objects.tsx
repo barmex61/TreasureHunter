@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tileset version="1.10" tiledversion="1.11.2" name="objects" tilewidth="96" tileheight="93" tilecount="50" columns="0">
+<tileset version="1.10" tiledversion="1.11.2" name="objects" tilewidth="96" tileheight="93" tilecount="53" columns="0">
  <grid orientation="orthogonal" width="1" height="1"/>
  <tile id="0">
   <properties>
@@ -145,6 +145,7 @@
    <object id="2" x="1" y="10">
     <properties>
      <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="sword"/>
     </properties>
     <polygon points="0,0 4,-3 19,-2 19,1 17,3 7,3 3,4 0,3"/>
    </object>
@@ -668,7 +669,6 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="3" y="3" width="11" height="11">
     <properties>
-     <property name="friction" type="float" value="1"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="goldCoin"/>
     </properties>
@@ -1057,6 +1057,63 @@
      <property name="userData" value="sensorFixture"/>
     </properties>
     <ellipse/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="92">
+  <properties>
+   <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="gameObject" propertytype="GameObject" value="ARMOR"/>
+   <property name="hasAnimation" type="bool" value="true"/>
+   <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+  </properties>
+  <image source="../graphics/objects/armor.png" width="24" height="22"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="4" y="8">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="shield"/>
+    </properties>
+    <polygon points="0,0 5,9 8,10 11,9 16,0 15,-2 1,-2"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="93">
+  <properties>
+   <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="gameObject" propertytype="GameObject" value="BOOTS"/>
+   <property name="hasAnimation" type="bool" value="true"/>
+   <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+  </properties>
+  <image source="../graphics/objects/boots.png" width="24" height="22"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="10" y="5">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="boots"/>
+    </properties>
+    <polygon points="0,0 -2,4 -7,7 -5,10 0,13 8,9 9,2 7,0"/>
+   </object>
+  </objectgroup>
+ </tile>
+ <tile id="95">
+  <properties>
+   <property name="animFrameDuration" type="float" value="0.1"/>
+   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="gameObject" propertytype="GameObject" value="HELMET"/>
+   <property name="hasAnimation" type="bool" value="true"/>
+   <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+  </properties>
+  <image source="../graphics/objects/helmet.png" width="24" height="22"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="10" y="4">
+    <properties>
+     <property name="isSensor" type="bool" value="true"/>
+     <property name="userData" value="helmet"/>
+    </properties>
+    <polygon points="1,0 -3,3 -4,5 -3,14 8,14 9,5 8,3 4,0"/>
    </object>
   </objectgroup>
  </tile>

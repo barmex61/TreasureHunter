@@ -53,6 +53,9 @@ enum class GameObject() {
     SHIP_HELM,
     DEAD_MARK,
     SWORD,
+    HELMET,
+    ARMOR,
+    BOOTS,
     SWORD_EMBEDDED,
     INTERROGATION_MARK,
     EXCLAMATION_MARK,
@@ -76,6 +79,9 @@ enum class GameObject() {
         GOLD_COIN -> GoldCoin
         SILVER_COIN -> SilverCoin
         KEY -> Key
+        ARMOR -> Armor(1)
+        HELMET -> Helmet(1)
+        BOOTS -> Boots(1, 1)
         BLUE_DIAMOND -> BlueDiamond
         GREEN_DIAMOND -> GreenDiamond
         RED_DIAMOND -> RedDiamond

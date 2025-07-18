@@ -115,7 +115,10 @@
                 "TOTEM_HEAD_5",
                 "TOTEM_HEAD_6",
                 "WOOD_SPIKE",
-                "CHEST_LOCKED"
+                "CHEST_LOCKED",
+                "BOOTS",
+                "ARMOR",
+                "HELMET"
             ],
             "valuesAsFlags": false
         },

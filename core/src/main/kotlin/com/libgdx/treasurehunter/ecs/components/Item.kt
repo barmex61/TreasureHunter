@@ -62,7 +62,9 @@ sealed interface ItemType {
         is BluePotion -> "blue_potion"
         is RedPotion -> "red_potion"
         is GreenBottle -> "green_bottle"
-
+        is Armor -> "armor_on"
+        is Helmet -> "helmet_on"
+        is Boots -> "boots_on"
         else -> gdxError("ItemType $this does not have a drawable path defined")
     }
 

@@ -13,7 +13,9 @@ data class ShaderEffectData(
         InterpolateChannels.GREEN,
         InterpolateChannels.BLUE,
         InterpolateChannels.RED
-    )
+    ),
+    val amplitude : Float = 0.75f,
+    val frequency : Float = 6f
 )
 
 enum class InterpolateChannels{
@@ -209,7 +211,7 @@ enum class ShaderEffect(
             contrast = 1.3f,
             redTint = 1.2f,
             greenTint = 1.2f,
-            blueTint = 1.2f // Nötr, hafif metalik bir his
+            blueTint = 1.2f ,
         ),
         isContinuous = true
     ),
@@ -218,7 +220,7 @@ enum class ShaderEffect(
             saturation = 1.4f,
             brightness = 1.3f,
             contrast = 1.1f,
-            redTint = 1.5f,   // Hafif turuncu/sarımsı, çeviklik hissi
+            redTint = 1.5f,
             greenTint = 1.3f,
             blueTint = 0.7f
         ),
@@ -230,25 +232,11 @@ enum class ShaderEffect(
             saturation = 1.3f,
             brightness = 1.2f,
             contrast = 1.2f,
-            redTint = 0.7f,
-            greenTint = 1.2f,
-            blueTint = 1.7f // Mavi tonlu, koruyucu his
+            redTint = 0.75f,
+            greenTint = 0.8f,
+            blueTint = 0.9f,
+            amplitude = 0.3f
         ),
         isContinuous = true
     );
-
-    companion object {
-        fun fromColorSettings(settings: ColorSettings): ShaderEffect {
-            return when (settings) {
-                ColorSettings.EVENING -> EVENING
-                ColorSettings.NIGHT -> NIGHT
-                ColorSettings.DAY -> DAY
-                ColorSettings.CAVE -> CAVE
-                ColorSettings.UNDERWATER -> UNDERWATER
-                ColorSettings.FOREST -> FOREST
-                ColorSettings.DESERT -> DESERT
-                ColorSettings.SNOW -> SNOW
-            }
-        }
-    }
 }

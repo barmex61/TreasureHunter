@@ -7,20 +7,20 @@
  </properties>
  <tileset firstgid="1" source="terrain.tsx"/>
  <tileset firstgid="86" source="objects.tsx"/>
- <tileset firstgid="178" source="islandBackground.tsx"/>
+ <tileset firstgid="182" source="islandBackground.tsx"/>
  <layer id="4" name="background_far" width="24" height="10">
   <data encoding="base64" compression="zlib">
-   eJzlzDkaQ1AUQOFnSxr7MMW4CUOExCqQEOzF0pziVSq39Cn+8hzTUMoUsgSk77v9bc2BCw8+HggQIkKMBKmwybQcBUo8UeGFGg3e+KAVNj0GfPHDiAl/zFiwHkiaTcl1xnlX/+9HZGY1
+   eJzlzDkaQ1AUQOFnUxr7MMW4CUOExCqQEOzFwpziVSq39Cn+8hzTUMoUsgSk77v9bc2BCw8+HggQIkKMBKmwybQcBUo8UeGFGg3e+KAVNj0GfPHDiAl/zFiwHkiaTcl1xnlX/+9XTWn1
   </data>
  </layer>
  <layer id="3" name="background_mid" width="24" height="10">
   <data encoding="base64" compression="zlib">
-   eJztzrcRwgAQRcETJUEDeF+E8FY94D09swUQiIxAb2azmz8XUfQvVZOIGnUaNGnRpkOXHn0GDJP825nblBFjJkyZMWfBkhVrNmxz7JdLERXebnfsOXDkxJkLV27cefDk9cP/Rd/7ADO3ERc=
+   eJztzrcRwgAQRcETRUEDeF+E8FY94D0dswUQiIxAb2azmz8XUfQvVZOIGnUaNGnRpkOXHn0GDJP825nblBFjJkyZMWfBkhVrNmxz7JdLERXebnfsOXDkxJkLV27cefDk9cP/Rd/7AFuGEcM=
   </data>
  </layer>
  <layer id="2" name="background_close" width="24" height="10">
   <data encoding="base64" compression="zlib">
-   eJxjYMAPhJgYGISBWASIRYFYjImABhLNMQLSxkBsAsSmQGxGpvm4zAkC0sFAHALEoUAcRsB8dHfCAKnmEOtOUgEu9+FyJ6XuIzY+CLkLl/uIDUdqpRNqu2ugAQBDfQ77
+   eJxjYMAPxJgYGMSBWAKIJYFYiomABhLNMQPS5kBsAcSWQGxFpvm4zAkD0uFAHAHEkUAcRcB8dHfCAKnmEOtOUgEu9+FyJ6XuIzY+CLkLl/uIDUdqpRNqu2ugAQC4WxAT
   </data>
  </layer>
  <layer id="1" name="ground" width="24" height="10">
@@ -35,7 +35,6 @@
    </properties>
   </object>
   <object id="26" gid="145" x="380" y="176" width="24" height="24"/>
-  <object id="27" gid="146" x="475" y="198" width="32" height="32"/>
   <object id="28" gid="147" x="29" y="183" width="64" height="32"/>
   <object id="29" gid="144" x="57" y="151" width="39" height="32"/>
   <object id="30" gid="140" x="234" y="219" width="52" height="53"/>
@@ -88,7 +87,7 @@
   <object id="74" gid="115" x="436" y="191" width="64" height="35">
    <properties>
     <property name="animFrameDuration" type="float" value="0.16"/>
-    <property name="itemsInside" value="GOLD_COIN:3,SILVER_COIN:2"/>
+    <property name="itemsInside" value="ARMOR:1,BOOTS:1,HELMET:1,SWORD:1"/>
    </properties>
   </object>
   <object id="75" gid="143" x="654" y="191" width="32" height="32">
