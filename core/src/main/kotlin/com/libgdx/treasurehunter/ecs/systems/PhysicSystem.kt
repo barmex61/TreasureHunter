@@ -28,6 +28,7 @@ import com.libgdx.treasurehunter.ecs.components.Particle
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.Inventory
+import com.libgdx.treasurehunter.ecs.components.Invulnarable
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
@@ -131,8 +132,14 @@ class PhysicSystem (
     private val Fixture.isStaticBody : Boolean
         get() = this.body.type == BodyType.StaticBody
 
+    private val Fixture.isAttackEffectFixture : Boolean
+        get() = this.userData == "attackEffectFixture"
+
     private val Fixture.isDynamicBody : Boolean
         get() = this.body.type == BodyType.DynamicBody
+
+    private val Fixture.isKinematicBody : Boolean
+        get() = this.body.type == BodyType.KinematicBody
 
     private val Fixture.isHitbox : Boolean
         get() = this.userData == "hitbox"
@@ -195,12 +202,12 @@ class PhysicSystem (
     // ----- /HANDLE COLLISIONS -----
 
     // ----- CHECK CONDITIONS -----
-    private fun isDamageCollision(entityA: Entity, entityB: Entity, fixtureB: Fixture): Boolean {
+    private fun isDamageCollision(entityA: Entity, entityB: Entity,fixtureA: Fixture, fixtureB: Fixture): Boolean {
         val attackMeta = entityA.getOrNull(AttackMeta)?:return false
         val owner = attackMeta.owner
         val isEnemyAndAllieCollision = (owner.has(EntityTag.ENEMY) && (entityB.has(EntityTag.ALLIE) || entityB.has(EntityTag.PLAYER)))
                 || ((owner.has(EntityTag.ALLIE) || owner.has(EntityTag.PLAYER)) && entityB.has(EntityTag.ENEMY))
-        return entityA has Damage && entityB has Life && fixtureB.isSensor && fixtureB.isHitbox && isEnemyAndAllieCollision
+        return entityA has Damage && !fixtureA.isAttackEffectFixture &&  entityB has Life && fixtureB.isSensor && fixtureB.isHitbox && isEnemyAndAllieCollision
     }
 
     private fun isItemCollision(entityA: Entity, entityB: Entity, fixtureB: Fixture): Boolean {
@@ -210,7 +217,7 @@ class PhysicSystem (
     private fun isRangeAttackAndStaticObjectCollision(entityA: Entity?,fixtureA : Fixture,entityB: Entity?,fixtureB:Fixture) : Boolean{
         val attackMeta = entityA?.getOrNull(AttackMeta)?:return false
         if (attackMeta.owner == entityB) return false
-        return  entityA has AttackMeta && fixtureA.isRangeAttackFixture  && !fixtureA.isSensor && !fixtureB.isSensor && fixtureB.isStaticBody
+        return  entityA has AttackMeta && fixtureA.isRangeAttackFixture  && !fixtureB.isSensor && fixtureB.isStaticBody
     }
 
     private fun isAttackFixtureCollision(entityA: Entity, entityB: Entity): Boolean {
@@ -226,6 +233,9 @@ class PhysicSystem (
         fixtureB: Fixture
     ) {
         val attackMeta = entityA[AttackMeta]
+        if (isDamageCollision(entityA,entityB,fixtureA,fixtureB)){
+            handleDamageBeginContact(entityA,entityB)
+        }
         when{
             fixtureA.isRangeAttackFixture -> handleRangeAttackFixtureCollision(entityA,entityB,fixtureA,fixtureB,attackMeta)
             fixtureA.isMeleeAttackFixture -> handleMeleeAttackFixtureCollision(entityA,entityB,fixtureA,fixtureB,attackMeta)
@@ -251,22 +261,18 @@ class PhysicSystem (
         fixtureB: Fixture,
         attackMeta: AttackMeta
     ) {
-        if (isDamageCollision(entityA,entityB,fixtureB)){
-            handleDamageBeginContact(entityA,entityB)
-        }
-        if (isKnockBackCollision(fixtureB)) {
-            handleKnockbackBeginContact(entityA, entityB,fixtureA, fixtureB, attackMeta)
+
+        if (isKnockBackCollision(fixtureB,entityB)) {
+            handleKnockbackBeginContact(entityB, fixtureB, attackMeta)
         }
     }
 
-    private fun isKnockBackCollision(fixtureB: Fixture): Boolean {
-        return fixtureB.body.type == BodyType.DynamicBody && !fixtureB.isSensor
+    private fun isKnockBackCollision(fixtureB: Fixture,entityB: Entity): Boolean {
+        return fixtureB.body.type == BodyType.DynamicBody && !fixtureB.isSensor && entityB hasNo Item
     }
 
     private fun handleKnockbackBeginContact(
-        entityA: Entity,
         entityB: Entity,
-        fixtureA: Fixture,
         fixtureB: Fixture,
         attackMeta: AttackMeta
     ) {
@@ -278,8 +284,9 @@ class PhysicSystem (
         val targetMass = targetBody.mass
         val direction = targetBodyPosition - attackBodyPosition
         val knockbackVec = direction.set(direction.x + if (direction.x < 0f) -attackType.knockbackVector.x else attackType.knockbackVector.x , direction.y + attackType.knockbackVector.y)
-        val impulse = knockbackVec / targetMass
-        println("targetmass $targetMass")
+        val impulse = knockbackVec / (targetMass * 1.75f)
+
+        targetBody.setLinearVelocity(0f, 0f)
         targetBody.applyLinearImpulse(impulse, targetBody.worldCenter, true)
     }
 
@@ -328,8 +335,8 @@ class PhysicSystem (
         when {
             isSensorAndPlayerCollision(entityA,fixtureA,fixtureB) -> handleSensorAndPlayerCollision(entityA, entityB ,false)
             isSensorAndPlayerCollision(entityB,fixtureB,fixtureA) -> handleSensorAndPlayerCollision(entityB, entityA ,false)
-            isDamageCollision(entityA,entityB,fixtureB) ->  handleDamageEndContact(entityA,entityB)
-            isDamageCollision(entityB,entityA,fixtureA) -> handleDamageEndContact(entityB,entityA)
+            isDamageCollision(entityA,entityB,fixtureA,fixtureB) ->  handleDamageEndContact(entityA,entityB)
+            isDamageCollision(entityB,entityA,fixtureB,fixtureA) -> handleDamageEndContact(entityB,entityA)
         }
     }
 
@@ -345,9 +352,7 @@ class PhysicSystem (
         if (fixtureB.isPlatform && entityA != null){
             contact.isEnabled = entityA[Physic].body.linearVelocity.y <= 0.0001f
         }
-        if (fixtureA.isRangeAttackFixture && fixtureB.isDynamicBody){
-            contact.isEnabled = false
-        }
+
 
     }
 

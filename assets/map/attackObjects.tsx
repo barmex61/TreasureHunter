@@ -295,6 +295,7 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="7" y="12">
     <properties>
+     <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="rangeAttackFixture"/>
     </properties>
     <polygon points="0,1 11,1 13,-1 13,-4 0,-4"/>
@@ -469,10 +470,11 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="13" y="5">
     <properties>
+     <property name="density" type="float" value="2"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="rangeAttackFixture"/>
     </properties>
-    <polygon points="0,0 -8,0 -10,2 -10,4 -8,6 0,6"/>
+    <polygon points="0,0 -10,0 -10,2 -10,4 -10,6 0,6"/>
    </object>
   </objectgroup>
  </tile>

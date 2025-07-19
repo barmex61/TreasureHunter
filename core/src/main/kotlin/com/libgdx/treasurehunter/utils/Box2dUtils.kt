@@ -133,9 +133,7 @@ fun ellipseFixtureDef(mapObject: EllipseMapObject) : FixtureDef {
             shape = CircleShape().apply {
                 position = vec2(ellipseX + ellipseW / 2f ,ellipseY + ellipseH /2f)
                 radius = if (sensorCircleRadius == 0f) ellipseW / 2f else sensorCircleRadius
-                density = 0f
             }
-            this.isSensor = isSensor
         }
     }else{
         val numVertices = 20
@@ -151,7 +149,6 @@ fun ellipseFixtureDef(mapObject: EllipseMapObject) : FixtureDef {
         FixtureDef().apply {
             shape = ChainShape().apply {
                 createLoop(vertices)
-                density = 0f
             }
         }
     }

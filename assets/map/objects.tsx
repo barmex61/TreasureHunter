@@ -19,18 +19,21 @@
   <objectgroup draworder="index" id="3">
    <object id="20" x="24" y="16" width="16" height="16">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="hitbox"/>
     </properties>
    </object>
    <object id="26" x="25" y="18">
     <properties>
+     <property name="density" type="float" value="1.75"/>
      <property name="userData" value="bodyFixture"/>
     </properties>
     <polygon points="0,0 0,12 2,13 12.8125,13 14,12 14,0"/>
    </object>
    <object id="27" x="29" y="30">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="footFixture"/>
     </properties>
@@ -168,20 +171,23 @@
   </properties>
   <image source="../graphics/objects/captain_clown.png" width="64" height="40"/>
   <objectgroup draworder="index" id="2">
-   <object id="21" x="24" y="16" width="16" height="16">
+   <object id="24" x="24" y="16" width="16" height="16">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="hitbox"/>
     </properties>
    </object>
-   <object id="22" x="25" y="18">
+   <object id="25" x="25" y="18">
     <properties>
+     <property name="density" type="float" value="1.75"/>
      <property name="userData" value="bodyFixture"/>
     </properties>
-    <polygon points="0,0 0,12 2,13 12.8125,13 14,12 14,0"/>
+    <polygon points="0,0 0,13 14,13 14,0"/>
    </object>
-   <object id="23" x="29" y="30">
+   <object id="26" x="29" y="30">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="footFixture"/>
     </properties>
@@ -211,12 +217,14 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="27" y="13" width="20" height="16">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="hitbox"/>
     </properties>
    </object>
    <object id="5" x="25" y="8" width="22" height="22">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="radius" type="float" value="4"/>
      <property name="userData" value="sensorFixture"/>
@@ -225,12 +233,14 @@
    </object>
    <object id="8" x="28" y="15">
     <properties>
+     <property name="density" type="float" value="3"/>
      <property name="userData" value="bodyFixture"/>
     </properties>
-    <polygon points="0,0 0,10 3,12 15,12 18,10 18,0"/>
+    <polygon points="0,0 0,12 18,12 18,0"/>
    </object>
    <object id="9" x="33" y="25">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="footFixture"/>
     </properties>
@@ -265,12 +275,14 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="9" y="7" width="17" height="20">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="hitbox"/>
     </properties>
    </object>
    <object id="4" x="7" y="6" width="22" height="22">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="radius" type="float" value="4"/>
      <property name="userData" value="sensorFixture"/>
@@ -279,12 +291,14 @@
    </object>
    <object id="6" x="10" y="9">
     <properties>
+     <property name="density" type="float" value="2"/>
      <property name="userData" value="bodyFixture"/>
     </properties>
-    <polygon points="0,0 0,16 0.9375,17 14.0625,17 15,16 15,0"/>
+    <polygon points="0,0 0,17 15,17 15,0"/>
    </object>
    <object id="8" x="13" y="24">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="footFixture"/>
     </properties>
@@ -314,12 +328,14 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="10" y="10" width="14" height="18">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="hitbox"/>
     </properties>
    </object>
    <object id="4" x="6" y="7" width="22" height="22">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="radius" type="float" value="4"/>
      <property name="userData" value="sensorFixture"/>
@@ -328,12 +344,14 @@
    </object>
    <object id="10" x="11" y="13">
     <properties>
+     <property name="density" type="float" value="1.25"/>
      <property name="userData" value="bodyFixture"/>
     </properties>
     <polygon points="0,0 0,11 3,14 10,14 12,11 12,0"/>
    </object>
    <object id="11" x="14" y="25">
     <properties>
+     <property name="density" type="float" value="0"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="footFixture"/>
     </properties>
@@ -395,12 +413,14 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="BARREL"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="isFixedRotation" type="bool" value="false"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
   <image source="../graphics/objects/barrel.png" width="26" height="30"/>
   <objectgroup draworder="index" id="2">
    <object id="3" x="5" y="3">
     <properties>
+     <property name="density" type="float" value="1.75"/>
      <property name="userData" value="barrel"/>
     </properties>
     <polygon points="0,0 -4,6 -4,19 0,25 15,25 19,18 19,6 15,0"/>
@@ -414,6 +434,7 @@
    <property name="entityTags" propertytype="EntityTags" value=""/>
    <property name="gameObject" propertytype="GameObject" value="BOX"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="isFixedRotation" type="bool" value="false"/>
    <property name="itemsInside" type="int" value="1"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
@@ -425,7 +446,7 @@
      <property name="friction" type="float" value="0.5"/>
      <property name="userData" value="box"/>
     </properties>
-    <polygon points="0,1 0,17 1.8125,18 23.875,18 25,17 25,1 23.875,0 1.0625,0"/>
+    <polygon points="0,18 25,18 25,0 0,0"/>
    </object>
   </objectgroup>
  </tile>

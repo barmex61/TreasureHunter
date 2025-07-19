@@ -95,7 +95,7 @@ class AttackMetaSystem(
             attackType = attackMetaData.attackType
         )
         if (collideWithWall && attackHandler is RangeAttackHandler) {
-            attackHandler.collideWithWall(body, attackMetaData, entity)
+            attackHandler.collideWithWall(body, attackMeta, entity)
         }
     }
 }
@@ -336,11 +336,15 @@ class RangeAttackHandler(
 
     fun collideWithWall(
         body: Body,
-        attackMetaData: AttackMetaData,
+        attackMeta: AttackMeta,
         entity: Entity,
     ) {
-        when (attackMetaData.gameObject) {
+        attackMeta.collidedWithWall = false
+        when (attackMeta.attackMetaData.gameObject) {
             GameObject.WOOD_SPIKE -> {
+                if (body.linearVelocity != Vector2.Zero && body.gravityScale != 1f) {
+                    body.linearVelocity = vec2(0f, 0f)
+                }
                 body.gravityScale = 1F
             }
 

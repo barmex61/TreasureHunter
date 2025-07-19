@@ -101,10 +101,12 @@ class TiledMapService(
 
         val bodyType = tile.property<String>("bodyType", "StaticBody")
         val gravityScale = tile.property<Float>("gravityScale", 1f)
+        val isFixedRotation = tile.property("isFixedRotation", true)
+
         val rotation = mapObject.rotation
         val x = mapObject.x * UNIT_SCALE
         val y = mapObject.y * UNIT_SCALE
-        val body = physicWorld.createBody(BodyType.valueOf(bodyType), vec2(x, y), rotation == 0f).apply {
+        val body = physicWorld.createBody(BodyType.valueOf(bodyType), vec2(x, y), isFixedRotation).apply {
             this.gravityScale = gravityScale
             this.setTransform(this.position, -rotation * MathUtils.degreesToRadians)
         }
@@ -141,7 +143,7 @@ class TiledMapService(
 
     private fun spawnStaticObject(mapObject: MapObject, x: Int, y: Int) {
         val body = physicWorld.createBody(StaticBody, vec2(x.toFloat(), y.toFloat()))
-        val fixtureDefUserData = fixtureDefinitionOf(mapObject, true)
+        val fixtureDefUserData = fixtureDefinitionOf(mapObject,false)
         body.createFixtures(listOf(fixtureDefUserData))
     }
 
