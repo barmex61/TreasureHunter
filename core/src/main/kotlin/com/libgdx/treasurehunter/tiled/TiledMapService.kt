@@ -127,6 +127,7 @@ class TiledMapService(
             configureMove(it, tile)
             configureJump(it, tile, gameObject)
             configureChest(it, tile,mapObject)
+            configureBreakable(it,tile, mapObject )
             configureState(it, tile, world, physicWorld, assetHelper)
             configureDamage(it, tile)
             configureInventory(it, gameObject)

@@ -74,6 +74,7 @@ class AnimationSystem (
             setRegion(gdxAnim.getKeyFrame(animData.timer))
             setAlpha(alpha?:sprite.color.a)
             setFlip(flipX,false)
+            setScale(sprite.scaleX,sprite.scaleY)
         }
         setFlipX(entity.getOrNull(Move),sprite)
     }

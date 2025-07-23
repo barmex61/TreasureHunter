@@ -37,12 +37,15 @@ class JumpSystem(
     override fun onTickEntity(entity: Entity) {
         val jumpComp = entity[Jump]
         val (body,_) = entity[Physic]
-        var (maxHeight,lowerXY,wantsJump,doubleJump,yImpulse) = entity[Jump]
+        val (maxHeight,lowerXY,upperXY,wantsJump,doubleJump,yImpulse) = entity[Jump]
         if (!wantsJump ) return
         val bodyPosition = body.position
         val jumpRectLowerXY = bodyPosition + lowerXY
-        JUMP_DEBUG_RECT.set(jumpRectLowerXY.x -0.06f,jumpRectLowerXY.y,0.12f,0.12f)
-        physicWorld.query(jumpRectLowerXY.x -0.06f,jumpRectLowerXY.y + 0.05f,jumpRectLowerXY.x + 0.12f,jumpRectLowerXY.y + 0.12f) { collisionFixture ->
+        val jumpRectUpperXY = bodyPosition + upperXY
+        val rectWidth = jumpRectUpperXY.x - jumpRectLowerXY.x
+        val rectHeight = jumpRectUpperXY.y - jumpRectLowerXY.y
+        JUMP_DEBUG_RECT.set(jumpRectLowerXY.x ,jumpRectLowerXY.y,rectWidth,rectHeight)
+        physicWorld.query(jumpRectLowerXY.x,jumpRectLowerXY.y ,jumpRectUpperXY.x,jumpRectUpperXY.y) { collisionFixture ->
             if (!collisionFixture.isSensor && entity != collisionFixture.entity && !collisionFixture.isRangeAttackFixture){
                 jump(entity,jumpComp,body,yImpulse)
                 return@query false

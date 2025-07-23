@@ -1,7 +1,5 @@
 package com.libgdx.treasurehunter.enums
 
-import com.libgdx.treasurehunter.utils.ColorSettings
-
 data class ShaderEffectData(
     val saturation: Float,
     val brightness: Float,
@@ -22,8 +20,7 @@ enum class InterpolateChannels{
     GREEN,BLUE,RED
 }
 enum class ShaderEffect(
-    val shaderEffectData: ShaderEffectData,
-    val isContinuous : Boolean = false
+    val shaderEffectData: ShaderEffectData
 ) {
     EVENING(
         ShaderEffectData(
@@ -171,38 +168,65 @@ enum class ShaderEffect(
         )
 
     ),
-    SWORD_GREEN_EFFECT(
+    GREEN_EFFECT(
         ShaderEffectData(
-            saturation = 1.2f,
-            brightness = 1.3f,
+            saturation = 0.9f,
+            brightness = 1.1f,
             contrast = 1.2f,
             redTint = 0.6f,
-            greenTint = 1.7f,
+            greenTint = 1.4f,
             blueTint = 0.6f
         ),
-        isContinuous = true
     ),
-    SWORD_BLUE_EFFECT(
+    BLUE_EFFECT(
         ShaderEffectData(
-            saturation = 1.3f,
-            brightness = 1.4f,
-            contrast = 1.3f,
-            redTint = 0.6f,
-            greenTint = 0.6f,
-            blueTint = 1.7f
+            saturation = 1.8f,
+            brightness = 1.1f,
+            contrast = 1.5f,
+            redTint = 0.5f,
+            greenTint = 0.5f,
+            blueTint = 1.6f
         ),
-        isContinuous = true
     ),
-    SWORD_RED_EFFECT(
+    RED_EFFECT(
         ShaderEffectData(
-            saturation = 1.4f,
-            brightness = 1.5f,
+            saturation = 1.1f,
+            brightness = 1f,
             contrast = 1.4f,
             redTint = 1.7f,
-            greenTint = 0.6f,
-            blueTint = 0.6f
+            greenTint = 0.3f,
+            blueTint = 0.3f
         ),
-        isContinuous = true
+    ),
+    BROWN_EFFECT(
+        ShaderEffectData(
+            saturation = 0.3f,
+            brightness = 1f,
+            contrast = 0.8f,
+            redTint = 0.8f,
+            greenTint = 0.5f,
+            blueTint = 0.4f
+        ),
+    ),
+    YELLOW_EFFECT(
+        ShaderEffectData(
+            saturation = 0.85f,
+            brightness = 1f,
+            contrast = 0.85f,
+            redTint = 0.95f,
+            greenTint = 0.95f,
+            blueTint = 0f
+        ),
+    ),
+    GRAY_EFFECT(
+        ShaderEffectData(
+            saturation = 0.5f,
+            brightness = 1f,
+            contrast = 0.8f,
+            redTint = 0.7f,
+            greenTint = 0.7f,
+            blueTint = 0.7f
+        ),
     ),
     HELMET_EFFECT(
         ShaderEffectData(
@@ -213,7 +237,6 @@ enum class ShaderEffect(
             greenTint = 1.2f,
             blueTint = 1.2f ,
         ),
-        isContinuous = true
     ),
     BOOTS_EFFECT(
         ShaderEffectData(
@@ -224,7 +247,6 @@ enum class ShaderEffect(
             greenTint = 1.3f,
             blueTint = 0.7f
         ),
-        isContinuous = true
 
     ),
     ARMOR_EFFECT(
@@ -237,6 +259,5 @@ enum class ShaderEffect(
             blueTint = 0.9f,
             amplitude = 0.3f
         ),
-        isContinuous = true
     );
 }

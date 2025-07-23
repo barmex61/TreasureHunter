@@ -26,15 +26,14 @@ enum class SwordState : EntityState<StateEntity.SwordEntity> {
     },
 
     RESPAWN {
-        var respawnTimer = 2f
-        override fun enter(entity: StateEntity.SwordEntity) {
-            respawnTimer = 2f
 
+        override fun enter(entity: StateEntity.SwordEntity) {
+            entity.respawnTimer = 2f
         }
 
         override fun update(entity: StateEntity.SwordEntity) {
-            respawnTimer -= Gdx.graphics.deltaTime
-            if (respawnTimer <= 0f) {
+            entity.respawnTimer -= Gdx.graphics.deltaTime
+            if (entity.respawnTimer <= 0f) {
 
                 entity.state(IDLE)
                 entity.alpha = 1f

@@ -24,6 +24,7 @@ import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.Remove
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.ecs.components.ThrowState
 import com.libgdx.treasurehunter.ecs.systems.AnimationSystem.Companion.setFlipX
@@ -118,7 +119,7 @@ sealed class AttackHandler(
         if (attackMetaData.attackDestroyTime <= 0f || (isFixtureInitialized && body.fixtureList.isEmpty)) {
             with(world) {
                 entity.configure {
-                    it += EntityTag.REMOVE
+                    it += Remove()
                 }
             }
             attackMetaData.attackDestroyTime = attackMetaData.baseAttackDestroyTime
@@ -239,7 +240,7 @@ class MeleeAttackHandler(
     ): List<FixtureDefUserData>? {
         val offset = if (ownerFlipX) attackType.attackOffset.cpy() else vec2(
             attackType.attackOffset.x * -1f,
-            0.15f
+            attackType.attackOffset.y
         )
         val effectOffset =
             if (ownerFlipX) vec2(offset.x - graphic.sprite.width, offset.y) else offset

@@ -1,12 +1,9 @@
 package com.libgdx.treasurehunter.state
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode
-import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
-import com.badlogic.gdx.physics.box2d.BodyDef
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
@@ -15,7 +12,6 @@ import com.github.quillraven.fleks.Family
 import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.ecs.components.AiState
 import com.libgdx.treasurehunter.ecs.components.Animation
-import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
@@ -23,39 +19,27 @@ import com.libgdx.treasurehunter.ecs.components.Blink
 import com.libgdx.treasurehunter.ecs.components.Chest
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
-import com.libgdx.treasurehunter.ecs.components.Flash
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Invulnarable
-import com.libgdx.treasurehunter.ecs.components.Item
-import com.libgdx.treasurehunter.ecs.components.ItemData
-import com.libgdx.treasurehunter.ecs.components.Mark
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.Remove
 import com.libgdx.treasurehunter.ecs.components.Ship
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.utils.animation
 import com.libgdx.treasurehunter.ecs.components.State
 import com.libgdx.treasurehunter.enums.AssetHelper
-import com.libgdx.treasurehunter.enums.MarkType
+import com.libgdx.treasurehunter.enums.EffectType
 import com.libgdx.treasurehunter.enums.ParticleType
-import com.libgdx.treasurehunter.enums.ShaderEffect
-import com.libgdx.treasurehunter.enums.ShaderEffectData
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
-import com.libgdx.treasurehunter.tiled.ItemEntry
-import com.libgdx.treasurehunter.tiled.sprite
-import com.libgdx.treasurehunter.utils.Constants.OBJECT_FIXTURES
-import com.libgdx.treasurehunter.utils.FixtureDefUserData
 import com.libgdx.treasurehunter.utils.GameObject
-import com.libgdx.treasurehunter.utils.copy
-import com.libgdx.treasurehunter.utils.createBody
-import com.libgdx.treasurehunter.utils.createFixtures
+import com.libgdx.treasurehunter.utils.createMarkEntity
 import ktx.math.vec2
 import ktx.math.minus
 import kotlin.math.sin
 import com.libgdx.treasurehunter.utils.plus
+import com.libgdx.treasurehunter.utils.spawnItems
 import ktx.app.gdxError
-import ktx.math.random
-import ktx.math.times
 
 
 sealed class StateEntity(
@@ -85,7 +69,7 @@ sealed class StateEntity(
     val body: Body
         get() = this[Physic].body
 
-    val center : Vector2
+    val center: Vector2
         get() = this[Graphic].center
 
     val doAttack: Boolean
@@ -115,6 +99,8 @@ sealed class StateEntity(
     val animType: AnimationType
         get() = this.getOrNull(Animation)?.animationData?.animationType ?: AnimationType.NONE
 
+    var respawnTimer : Float = 2f
+
     fun animation(
         animationType: AnimationType,
         playMode: PlayMode = PlayMode.LOOP,
@@ -136,7 +122,7 @@ sealed class StateEntity(
 
     fun remove() {
         entity.configure {
-            it += EntityTag.REMOVE
+            it += Remove()
         }
     }
 
@@ -163,35 +149,9 @@ sealed class StateEntity(
             }
         }
 
-        fun createMarkEntity(markType: MarkType) {
-            entity.configure { aiEntity ->
-                if (entity hasNo EntityTag.HAS_MARK) {
-                    aiEntity += EntityTag.HAS_MARK
-                    val markPosition = entity[Graphic].center
-                    val gameObjectFromType = markType.toGameObject()
-                    world.entity { markEntity ->
-                        markEntity += Graphic(
-                            sprite(
-                                gameObjectFromType.atlasKey,
-                                AnimationType.IN,
-                                markPosition,
-                                assetHelper,
-                                0f
-                            )
-                        )
-                        markEntity += Animation(
-                            gameObjectFromType.atlasKey, AnimationData(
-                                animationType = AnimationType.IN,
-                                playMode = PlayMode.NORMAL,
-                                frameDuration = 0.2f
-                            )
-                        )
-                        markEntity += Mark(1f, markType.offset, aiEntity)
-                    }
-                }
-            }
+        fun createMarkEntity(effectType: EffectType) {
+            world.createMarkEntity(entity ,assetHelper,effectType,true)
         }
-
     }
 
     class SwordEntity(
@@ -295,7 +255,7 @@ sealed class StateEntity(
         world: World,
         physicWorld: PhysicWorld,
         assetHelper: AssetHelper,
-    ): StateEntity(entity, world, physicWorld, assetHelper){
+    ) : StateEntity(entity, world, physicWorld, assetHelper) {
 
         var isOpened: Boolean
             get() = this[Chest].isOpened
@@ -303,82 +263,45 @@ sealed class StateEntity(
                 this[Chest].isOpened = value
             }
 
-        val openAnimType : AnimationType
+        val openAnimType: AnimationType
             get() {
                 val chest = this[Chest]
-                return when(chest.gameObject){
+                return when (chest.gameObject) {
                     GameObject.CHEST -> AnimationType.OPEN
                     GameObject.CHEST_LOCKED -> if (!chest.isUnlockAnimPlayed) {
                         chest.isUnlockAnimPlayed = true
                         AnimationType.UNLOCK
                     } else AnimationType.REUNLOCK
+
                     else -> gdxError("Unknown chest type: ${chest.gameObject}")
                 }
             }
 
-        val isItemsSpawned : Boolean
+        val isItemsSpawned: Boolean
             get() = this[Chest].isItemsSpawned
 
 
-        var itemAppearInterval : Float
+        var itemAppearInterval: Float
             get() = this[Chest].itemAppearInterval
             set(value) {
                 this[Chest].itemAppearInterval = value
             }
 
-        val closeAnimType : AnimationType
+        val closeAnimType: AnimationType
             get() {
                 val chest = this[Chest]
-                return when(chest.gameObject){
+                return when (chest.gameObject) {
                     GameObject.CHEST -> AnimationType.CLOSE
                     GameObject.CHEST_LOCKED -> AnimationType.LOCK
                     else -> gdxError("Unknown chest type: ${chest.gameObject}")
                 }
             }
 
-        fun spawnItem(){
-            val chest = this[Chest]
+        fun spawnItems() {
+            val chest = entity[Chest]
+            val spawnPosition = center + vec2(0f, 0.5f)
             if (chest.itemsInside.isEmpty()) return
-            chest.itemsInside.forEach { itemEntry ->
-                val gameObject = GameObject.valueOf(itemEntry.type)
-                (1..itemEntry.count).forEach { index ->
-                    world.entity { entity ->
-                        val physicWorld = world.inject<PhysicWorld>()
-                        val fixtureUserData = OBJECT_FIXTURES[gameObject] ?: gdxError("No fixture definition for $gameObject")
-                        val nonSensorFixtures = fixtureUserData.map { it.copy(fixtureDef = it.fixtureDef.copy(isSensor = false)) }
-                        val position = center + vec2(0f,0.5f)
-                        val body = physicWorld.createBody(
-                            BodyDef.BodyType.DynamicBody, position,
-                        ).also { body ->
-                            body.createFixtures(nonSensorFixtures)
-                            body.userData = entity
-                        }
-                        entity += Physic(body)
-                        val itemType = gameObject.toItemType()
-                        entity += Item(ItemData(gameObject.toItemType()))
-                        val shaderEffect = itemType.getItemShaderEffect()
-                        entity += Flash(shaderEffect, 5,0.1f, flashInterval = 0.25f, isContinuous = shaderEffect.isContinuous, shaderEffectData = shaderEffect.shaderEffectData.copy())
-                        entity += Graphic(
-                            sprite(
-                                gameObject.atlasKey,
-                                AnimationType.IDLE,
-                                body.position ,
-                                assetHelper,
-                                0f
-                            )
-                        )
-                        entity += Animation(
-                            gameObject.atlasKey,
-                            AnimationData(
-                                animationType = AnimationType.IDLE,
-                                playMode = PlayMode.LOOP
-                            )
-                        )
-                        val impulse = vec2(body.mass * (-3f..3f).random(), body.mass * (0f..5f).random())
-                        body.applyLinearImpulse(impulse, body.worldCenter, true)
-                    }
-                }
-            }
+            world.spawnItems(chest.itemsInside,spawnPosition)
             chest.itemsInside = emptyList()
             chest.isItemsSpawned = true
         }

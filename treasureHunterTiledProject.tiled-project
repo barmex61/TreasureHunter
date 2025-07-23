@@ -52,7 +52,8 @@
                 "ATTACH_TO_SHIP",
                 "RESPAWNABLE",
                 "ENEMY",
-                "ALLIE"
+                "ALLIE",
+                "BREAKABLE"
             ],
             "valuesAsFlags": true
         },
@@ -118,7 +119,9 @@
                 "CHEST_LOCKED",
                 "BOOTS",
                 "ARMOR",
-                "HELMET"
+                "HELMET",
+                "BARREL_PIECES",
+                "BOX_PIECES"
             ],
             "valuesAsFlags": false
         },

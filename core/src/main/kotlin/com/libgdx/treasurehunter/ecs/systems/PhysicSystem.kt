@@ -17,6 +17,7 @@ import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.AttackMeta
+import com.libgdx.treasurehunter.ecs.components.Breakable
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
@@ -35,11 +36,13 @@ import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.tiled.sprite
 import com.libgdx.treasurehunter.utils.GameObject
+import com.libgdx.treasurehunter.utils.createMarkEntity
 import ktx.math.component1
 import ktx.math.component2
 import ktx.math.div
 import ktx.math.minus
 import ktx.math.plus
+import ktx.math.random
 import ktx.math.vec2
 
 class PhysicSystem (
@@ -93,7 +96,7 @@ class PhysicSystem (
         val (bodyX,bodyY) = body.position
         sprite.apply {
             setPosition(
-                MathUtils.lerp(prevX,bodyX,alpha) + effectOffset.x,
+                MathUtils.lerp(prevX,bodyX,alpha) + effectOffset.x ,
                 MathUtils.lerp(prevY,bodyY,alpha) + effectOffset.y
             )
             rotation =  body.angle * MathUtils.radiansToDegrees
@@ -183,6 +186,8 @@ class PhysicSystem (
         itemEntity.configure {
             it += EntityTag.COLLECTED
         }
+        val collectedEffect = item.itemData.itemType.getEffectType() ?: return
+        world.createMarkEntity(itemEntity,assetHelper,collectedEffect)
     }
 
     private fun handleRangeAttackAndStaticObjectCollision(activeAttackEntity: Entity) {
@@ -230,7 +235,8 @@ class PhysicSystem (
         entityA: Entity,
         entityB: Entity,
         fixtureA: Fixture,
-        fixtureB: Fixture
+        fixtureB: Fixture,
+        contact: Contact
     ) {
         val attackMeta = entityA[AttackMeta]
         if (isDamageCollision(entityA,entityB,fixtureA,fixtureB)){
@@ -238,7 +244,7 @@ class PhysicSystem (
         }
         when{
             fixtureA.isRangeAttackFixture -> handleRangeAttackFixtureCollision(entityA,entityB,fixtureA,fixtureB,attackMeta)
-            fixtureA.isMeleeAttackFixture -> handleMeleeAttackFixtureCollision(entityA,entityB,fixtureA,fixtureB,attackMeta)
+            fixtureA.isMeleeAttackFixture -> handleMeleeAttackFixtureCollision(entityA,entityB,fixtureA,fixtureB,attackMeta, contact )
         }
     }
 
@@ -259,11 +265,25 @@ class PhysicSystem (
         entityB: Entity,
         fixtureA: Fixture,
         fixtureB: Fixture,
-        attackMeta: AttackMeta
+        attackMeta: AttackMeta,
+        contact: Contact
     ) {
-
+        if (isBreakableCollision(entityB)){
+            handleBreakableBeginContact(entityB)
+        }
         if (isKnockBackCollision(fixtureB,entityB)) {
-            handleKnockbackBeginContact(entityB, fixtureB, attackMeta)
+            handleKnockbackBeginContact(entityB, fixtureB, attackMeta, contact )
+        }
+    }
+
+    private fun isBreakableCollision(entityB: Entity): Boolean {
+        return entityB has EntityTag.BREAKABLE && entityB hasNo Invulnarable
+    }
+
+    private fun handleBreakableBeginContact(entityB: Entity) {
+        val breakable = entityB[Breakable]
+        breakable.apply {
+            damageTaken += 1
         }
     }
 
@@ -274,7 +294,8 @@ class PhysicSystem (
     private fun handleKnockbackBeginContact(
         entityB: Entity,
         fixtureB: Fixture,
-        attackMeta: AttackMeta
+        attackMeta: AttackMeta,
+        contact: Contact
     ) {
         val owner = attackMeta.owner
         val attackType = attackMeta.attackMetaData.attackType
@@ -285,9 +306,11 @@ class PhysicSystem (
         val direction = targetBodyPosition - attackBodyPosition
         val knockbackVec = direction.set(direction.x + if (direction.x < 0f) -attackType.knockbackVector.x else attackType.knockbackVector.x , direction.y + attackType.knockbackVector.y)
         val impulse = knockbackVec / (targetMass * 1.75f)
-
+        val targetPointOffset =  vec2(if (direction.x > 0f) (-0.5f..-0.1f).random() else (0.1f..0.5f).random(),
+            if (direction.y > 0f) (-0.5f..-0.1f).random() else (0.1f..0.5f).random()
+            )
         targetBody.setLinearVelocity(0f, 0f)
-        targetBody.applyLinearImpulse(impulse, targetBody.worldCenter, true)
+        targetBody.applyLinearImpulse(impulse, targetBody.worldCenter + targetPointOffset, true)
     }
 
 
@@ -318,8 +341,8 @@ class PhysicSystem (
             isSensorAndPlayerCollision(entityB,fixtureB,fixtureA) -> handleSensorAndPlayerCollision(entityB, entityA ,true)
             isItemCollision(entityA,entityB,fixtureB) -> handleItemBeginContact(entityA,entityB)
             isItemCollision(entityB,entityA,fixtureA) -> handleItemBeginContact(entityB,entityA)
-            isAttackFixtureCollision(entityA,entityB) -> handleAttackFixtureCollision(entityA,entityB,fixtureA,fixtureB)
-            isAttackFixtureCollision(entityB,entityA) -> handleAttackFixtureCollision(entityB,entityA,fixtureB,fixtureA)
+            isAttackFixtureCollision(entityA,entityB) -> handleAttackFixtureCollision(entityA,entityB,fixtureA,fixtureB,contact)
+            isAttackFixtureCollision(entityB,entityA) -> handleAttackFixtureCollision(entityB,entityA,fixtureB,fixtureA,contact)
         }
 
     }
@@ -370,7 +393,7 @@ class PhysicSystem (
                 val position = vec2(jumpRectLowerXY.x - 0.75f,jumpRectLowerXY.y)
                 world.entity{
                     it += Particle(event.particleType,event.owner)
-                    it += Graphic(sprite(GameObject.DUST_PARTICLES.atlasKey, AnimationType.valueOf(event.particleType.name),position  , assetHelper ,0f))
+                    it += Graphic(sprite(GameObject.DUST_PARTICLES.atlasKey, AnimationType.valueOf(event.particleType.name),position  , assetHelper ,0f),GameObject.DUST_PARTICLES.atlasKey)
                     it += Animation(GameObject.DUST_PARTICLES.atlasKey, animationData = AnimationData(
                         animationType = AnimationType.valueOf(event.particleType.name),
                         playMode = com.badlogic.gdx.graphics.g2d.Animation.PlayMode.NORMAL

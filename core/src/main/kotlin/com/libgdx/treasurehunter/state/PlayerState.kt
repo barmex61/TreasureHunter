@@ -5,17 +5,14 @@ import com.badlogic.gdx.graphics.g2d.Animation
 import com.badlogic.gdx.math.MathUtils
 import com.libgdx.treasurehunter.ecs.components.AnimationType
 import com.libgdx.treasurehunter.ecs.components.Attack
-import com.libgdx.treasurehunter.ecs.components.AttackType
-import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.SlotName
-import com.libgdx.treasurehunter.enums.MarkType
+import com.libgdx.treasurehunter.enums.EffectType
 import com.libgdx.treasurehunter.enums.ParticleType
 import com.libgdx.treasurehunter.enums.SoundAsset
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.state.StateEntity.*
-import com.libgdx.treasurehunter.utils.GameObject
 import ktx.math.component1
 import ktx.math.component2
 
@@ -162,7 +159,7 @@ enum class PlayerState : EntityState<PlayerEntity> {
     HIT {
         override fun enter(entity: PlayerEntity) {
             entity.animation(AnimationType.HIT, Animation.PlayMode.NORMAL)
-            entity.createMarkEntity(MarkType.EXCLAMATION_MARK)
+            entity.createMarkEntity(EffectType.EXCLAMATION_MARK)
         }
 
         override fun update(entity: PlayerEntity) {

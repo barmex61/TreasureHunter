@@ -6,6 +6,7 @@ import com.github.quillraven.fleks.World.Companion.family
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.BluePotion
 import com.libgdx.treasurehunter.ecs.components.Flash
+import com.libgdx.treasurehunter.ecs.components.FlashType
 import com.libgdx.treasurehunter.ecs.components.GreenBottle
 import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.ItemData
@@ -59,11 +60,12 @@ class InventorySystem : IteratingSystem(
 
                     }
                     is RedPotion -> {
-                        val life = event.item.owner!!.getOrNull(Life)?:return
+                        val owner = event.item.owner ?: return
+                        val life = owner.getOrNull(Life)?:return
                         if (life.currentLife == life.maxLife) return
                         life.currentLife = (life.currentLife + 1).coerceAtMost(life.maxLife)
-                        event.item.owner!!.configure {
-                            it += Flash(ShaderEffect.HEAL_EFFECT, flashAmount = 2, flashDuration = 0.4f, flashInterval = 0.15f)
+                        owner.configure {
+                            it += Flash(ShaderEffect.HEAL_EFFECT, flashTimer = 1f, flashDuration = 0.4f, flashInterval = 0.15f, flashType = FlashType.BLINK)
                         }
                         inventory.removeItem(event.item)
                     }

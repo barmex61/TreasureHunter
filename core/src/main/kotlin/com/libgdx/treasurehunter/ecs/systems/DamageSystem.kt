@@ -9,6 +9,7 @@ import com.libgdx.treasurehunter.ecs.components.Blink
 import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Flash
+import com.libgdx.treasurehunter.ecs.components.FlashType
 import com.libgdx.treasurehunter.ecs.components.Invulnarable
 import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.State
@@ -35,7 +36,7 @@ class DamageSystem : IteratingSystem(family = family{all(Life,DamageTaken).none(
         entity.configure {
             it += Invulnarable(1f)
             it += Blink(1f,0.075f)
-            it += Flash(shaderEffect = ShaderEffect.HIT_EFFECT, flashAmount = 2, flashDuration = 0.15f, flashInterval = 0.15f)
+            it += Flash(shaderEffect = ShaderEffect.HIT_EFFECT, flashTimer = 1f, flashDuration = 0.15f, flashInterval = 0.15f, flashType = FlashType.BLINK)
         }
 
     }

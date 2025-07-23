@@ -5,7 +5,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.PolygonShape
-import com.badlogic.gdx.utils.Json
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityCreateContext
 import com.github.quillraven.fleks.World
@@ -30,6 +29,7 @@ import com.libgdx.treasurehunter.ecs.components.AnimationData
 import com.libgdx.treasurehunter.ecs.components.Attack
 import com.libgdx.treasurehunter.ecs.components.BlueDiamond
 import com.libgdx.treasurehunter.ecs.components.BluePotion
+import com.libgdx.treasurehunter.ecs.components.Breakable
 import com.libgdx.treasurehunter.ecs.components.Chest
 import com.libgdx.treasurehunter.ecs.components.Damage
 import com.libgdx.treasurehunter.ecs.components.GoldCoin
@@ -59,18 +59,19 @@ import ktx.tiled.property
 import ktx.tiled.propertyOrNull
 
 
-fun sprite(modelName: String, animationType: AnimationType, startPosition : Vector2, assetHelper: AssetHelper, rotation : Float = 0f): Sprite {
+fun sprite(modelName: String, animationType: AnimationType, startPosition : Vector2, assetHelper: AssetHelper, rotation : Float = 0f,scale : Float = 1f,frameIx : Int = 0): Sprite {
     val regionPath = "${modelName}/${animationType.atlasKey}"
     val atlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
     val regions = atlas.findRegions(regionPath) ?:
     gdxError("There are no regions for $modelName and $animationType")
-    val firstFrame = regions.first()
+    val firstFrame = regions[frameIx]
     val w = firstFrame.regionWidth * UNIT_SCALE
     val h = firstFrame.regionHeight * UNIT_SCALE
     return Sprite(firstFrame).apply {
         setPosition(startPosition.x,startPosition.y)
         setSize(w,h)
         setOrigin(0f,0f)
+        setScale(scale,scale)
         this.rotation = -rotation
     }
 }
@@ -110,18 +111,23 @@ fun EntityCreateContext.configureJump(entity: Entity, tile: TiledMapTile,gameObj
     if (jumpHeight > 0f){
         val (body) = entity[Physic]
         val feetFixture = body.fixtureList.first { it.userData == "footFixture" }
-        val chainShape = feetFixture.shape as PolygonShape
+        val polygonShape = feetFixture.shape as PolygonShape
         val lowerXY = vec2(Float.MAX_VALUE, Float.MAX_VALUE)
+        val upperXY = vec2(Float.MIN_VALUE, Float.MIN_VALUE)
         val vertex = vec2()
-        for (i in 0 until chainShape.vertexCount) {
-            chainShape.getVertex(i, vertex)
-            if (vertex.y < lowerXY.y) {
+        for (i in 0 until polygonShape.vertexCount) {
+            polygonShape.getVertex(i, vertex)
+            if ((vertex.y < lowerXY.y) || (vertex.y == lowerXY.y && vertex.x < lowerXY.x)) {
                 lowerXY.y = vertex.y
                 lowerXY.x = vertex.x
             }
+            if ((vertex.y > upperXY.y) || (vertex.y == upperXY.y && vertex.x > upperXY.x)) {
+                upperXY.y = vertex.y
+                upperXY.x = vertex.x
+            }
         }
 
-        entity += Jump(jumpHeight,lowerXY , jumpSoundAsset = gameObject.toJumpSoundAsset() )
+        entity += Jump(jumpHeight,lowerXY ,upperXY, jumpSoundAsset = gameObject.toJumpSoundAsset() )
     }
 }
 
@@ -176,6 +182,22 @@ fun EntityCreateContext.configureChest(entity: Entity, tile: TiledMapTile,mapObj
     }
     entity[Chest].itemsInside = items
 }
+
+fun EntityCreateContext.configureBreakable(entity: Entity, tile: TiledMapTile,mapObject: TiledMapTileMapObject) {
+    if (entity hasNo EntityTag.BREAKABLE) return
+    val hitCount = mapObject.propertyOrNull<Int>("hitCount") ?: tile.property("hitCount", 2)
+    val itemsCsv = mapObject.propertyOrNull<String>("itemsInside") ?: tile.property("itemsInside") ?: ""
+    val itemsInside = if (itemsCsv.isNotBlank()) {
+        itemsCsv.split(',').mapNotNull { entry ->
+            val parts = entry.split(':')
+            if (parts.size == 2) ItemEntry(parts[0], parts[1].toIntOrNull() ?: 1) else null
+        }
+    } else emptyList()
+
+    entity += Breakable(hitCount = hitCount, itemsInside = itemsInside)
+
+}
+
 
 data class ItemEntry(
     val type : String,

@@ -7,6 +7,7 @@ import com.libgdx.treasurehunter.utils.GameObject
 import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import com.github.quillraven.fleks.Entity
+import com.libgdx.treasurehunter.enums.EffectType
 import com.libgdx.treasurehunter.enums.ShaderEffect
 import com.libgdx.treasurehunter.enums.ShaderEffect.*
 import ktx.app.gdxError
@@ -132,23 +133,25 @@ sealed interface ItemType {
 
     }
 
-    fun getItemShaderEffect(): ShaderEffect = when(this) {
-        is Sword -> SWORD_GREEN_EFFECT
-        is Armor -> ARMOR_EFFECT
-        is Boots -> BOOTS_EFFECT
-        is Helmet -> HELMET_EFFECT
-        is GoldCoin -> ITEM_APPEAR
-        is SilverCoin -> ITEM_APPEAR
-        is Key -> ITEM_APPEAR
-        is BlueDiamond -> ITEM_APPEAR
-        is GreenDiamond -> ITEM_APPEAR
-        is RedDiamond -> ITEM_APPEAR
-        is GoldenSkull -> ITEM_APPEAR
-        is BluePotion -> ITEM_APPEAR
-        is RedPotion -> ITEM_APPEAR
-        is GreenBottle -> ITEM_APPEAR
-        is Map -> ITEM_APPEAR
-        else -> ITEM_APPEAR
+    fun getShaderEffectAndFlashType(): Pair<ShaderEffect, FlashType> = when(this) {
+        is Sword -> Pair(GREEN_EFFECT, FlashType.CONTINUOUS_WAVE)
+        is Armor -> Pair(ARMOR_EFFECT, FlashType.CONTINUOUS_WAVE)
+        is Boots -> Pair(BOOTS_EFFECT, FlashType.CONTINUOUS_WAVE)
+        is Helmet -> Pair(HELMET_EFFECT, FlashType.CONTINUOUS_WAVE)
+        else -> Pair(ITEM_APPEAR, FlashType.BLINK)
+    }
+
+    fun getEffectType() : EffectType? = when(this){
+        is SilverCoin -> EffectType.SILVER_COIN
+        is GoldCoin -> EffectType.GOLD_COIN
+        is BlueDiamond -> EffectType.BLUE_DIAMOND
+        is GreenDiamond -> EffectType.GREEN_DIAMOND
+        is RedDiamond -> EffectType.RED_POTION
+        is Map -> EffectType.MAP
+        is RedPotion -> EffectType.RED_POTION
+        is BluePotion -> EffectType.BLUE_POTION
+        is GoldenSkull -> EffectType.SKULL
+        else -> null
     }
 }
 

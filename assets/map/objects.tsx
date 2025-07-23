@@ -410,10 +410,13 @@
  <tile id="55">
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
+   <property name="entityTags" propertytype="EntityTags" value="BREAKABLE"/>
    <property name="gameObject" propertytype="GameObject" value="BARREL"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="hitCount" type="int" value="6"/>
    <property name="isFixedRotation" type="bool" value="false"/>
+   <property name="itemsInside" value="GOLD_COIN:3,SILVER_COIN:2,SWORD:1"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
   <image source="../graphics/objects/barrel.png" width="26" height="30"/>
@@ -421,6 +424,7 @@
    <object id="3" x="5" y="3">
     <properties>
      <property name="density" type="float" value="1.75"/>
+     <property name="friction" type="float" value="0.7"/>
      <property name="userData" value="barrel"/>
     </properties>
     <polygon points="0,0 -4,6 -4,19 0,25 15,25 19,18 19,6 15,0"/>
@@ -431,11 +435,12 @@
   <properties>
    <property name="animFrameDuration" type="float" value="0.1"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
-   <property name="entityTags" propertytype="EntityTags" value=""/>
+   <property name="entityTags" propertytype="EntityTags" value="BREAKABLE"/>
    <property name="gameObject" propertytype="GameObject" value="BOX"/>
    <property name="hasAnimation" type="bool" value="true"/>
+   <property name="hitCount" type="int" value="4"/>
    <property name="isFixedRotation" type="bool" value="false"/>
-   <property name="itemsInside" type="int" value="1"/>
+   <property name="itemsInside" value="GOLD_COIN:3,SILVER_COIN:2,SWORD:1"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
   </properties>
   <image source="../graphics/objects/box.png" width="28" height="22"/>
@@ -1140,7 +1145,7 @@
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="helmet"/>
     </properties>
-    <polygon points="1,0 -3,3 -4,5 -3,14 8,14 9,5 8,3 4,0"/>
+    <polygon points="1,0 -3,3 -4,5 -4,14 9,14 9,5 8,3 4,0"/>
    </object>
   </objectgroup>
  </tile>

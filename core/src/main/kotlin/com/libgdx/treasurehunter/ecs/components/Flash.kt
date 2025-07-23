@@ -5,16 +5,20 @@ import com.github.quillraven.fleks.ComponentType
 import com.libgdx.treasurehunter.enums.ShaderEffect
 import com.libgdx.treasurehunter.enums.ShaderEffectData
 
+enum class FlashType{
+    ONCE,CONTINUOUS_WAVE,BLINK
+}
+
 data class Flash(
     val shaderEffect: ShaderEffect,
-    var flashAmount : Int,
-    var flashDuration : Float,
+    var flashDuration : Float = 0.2f,
     var flashDurationTimer : Float = flashDuration,
-    val flashInterval : Float,
+    val flashInterval : Float = 0.2f,
     var flashIntervalTimer : Float = flashInterval,
+    var flashTimer : Float = 1f,
     var doFlash : Boolean = true,
-    val isContinuous : Boolean = false,
-    var shaderEffectData : ShaderEffectData? = null,
+    var flashType: FlashType,
+    var shaderEffectData : ShaderEffectData = shaderEffect.shaderEffectData.copy(),
     var timer : Float = 1f,
 ) : Component<Flash> {
     override fun type() = Flash

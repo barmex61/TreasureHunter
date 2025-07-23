@@ -25,7 +25,7 @@ enum class ChestState : EntityState<StateEntity.ChestEntity> {
                     entity.itemAppearInterval = (entity.itemAppearInterval - entity.world.deltaTime).coerceAtLeast(0f)
                 }
                 entity.itemAppearInterval <= 0f && !entity.isItemsSpawned-> {
-                    entity.spawnItem()
+                    entity.spawnItems()
                 }
                 !entity.isOpened -> entity.state(CLOSE)
             }
@@ -42,7 +42,7 @@ enum class ChestState : EntityState<StateEntity.ChestEntity> {
                     entity.itemAppearInterval = (entity.itemAppearInterval - entity.world.deltaTime).coerceAtLeast(0f)
                 }
                 entity.itemAppearInterval <= 0f && !entity.isItemsSpawned -> {
-                    entity.spawnItem()
+                    entity.spawnItems()
                 }
                 entity.isOpened -> entity.state(OPEN)
             }

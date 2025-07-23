@@ -72,7 +72,7 @@ class AttackSystem(
                             )
                             it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity,false)
                             it += Physic(createAttackBody(bottomCenter, it, BodyDef.BodyType.KinematicBody))
-                            it += Graphic(sprite("attack_effect", newAttackMetaData.attackType.attackAnimType,bottomCenter,assetHelper,0f))
+                            it += Graphic(sprite("attack_effect", newAttackMetaData.attackType.attackAnimType,bottomCenter,assetHelper),"attack_effect",)
                         }
                     } else {
                         when (newAttackMetaData.gameObject) {
@@ -126,7 +126,8 @@ class AttackSystem(
                     0f
                 ).also {
                     it.setAlpha(0f)
-                }
+                },
+                newAttackMetaData.gameObject.atlasKey
             )
             it += Animation(
                 newAttackMetaData.gameObject.atlasKey, animationData = AnimationData(
@@ -165,7 +166,8 @@ class AttackSystem(
                 ).also {
                     it.setAlpha(0f)
                 },
-                initialFlipX = true
+                initialFlipX = true,
+                modelName = newAttackMetaData.gameObject.atlasKey
             )
             it += Animation(
                 newAttackMetaData.gameObject.atlasKey, animationData = AnimationData(

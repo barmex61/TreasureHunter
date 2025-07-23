@@ -4,6 +4,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.IteratingSystem
 import com.github.quillraven.fleks.World.Companion.family
 import com.libgdx.treasurehunter.ecs.components.Flash
+import com.libgdx.treasurehunter.ecs.components.FlashType
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.enums.InterpolateChannels
 import kotlin.math.sin
@@ -12,33 +13,51 @@ import kotlin.math.sin
 class FlashSystem : IteratingSystem(family { all(Flash, Graphic) }) {
     override fun onTickEntity(entity: Entity) {
         val flashCmp = entity[Flash]
-        var (shaderEffect, flashAmount, flashDuration, flashDurationTimer,flashInterval,flashIntervalTimer,doFlash,isContinuous,shaderEffectData,timer) = flashCmp
-        if (isContinuous && shaderEffectData != null){
-            timer = (timer + world.deltaTime * shaderEffectData.frequency) % 360f
-            val sin = sin(timer)
-            val centerG = shaderEffect.shaderEffectData.greenTint
-            val centerB = shaderEffect.shaderEffectData.blueTint
-            val centerR = shaderEffect.shaderEffectData.redTint
-            val amplitude = shaderEffectData.amplitude
-
-            val interpolateChannels = shaderEffectData.shaderInterpolateChannels
-            if (InterpolateChannels.RED in interpolateChannels) {
-                shaderEffectData.redTint = centerR + (sin * amplitude)
+        when(flashCmp.flashType){
+            FlashType.CONTINUOUS_WAVE -> {
+                handleContinuousWave( flashCmp)
             }
-            if (InterpolateChannels.GREEN in interpolateChannels) {
-                shaderEffectData.greenTint = centerG + (sin * amplitude)
+            FlashType.BLINK -> {
+                handleBlink(entity, flashCmp)
             }
-            if (InterpolateChannels.BLUE in interpolateChannels) {
-                shaderEffectData.blueTint = centerB + (sin * amplitude)
+            FlashType.ONCE -> {
+                handleOnce()
             }
-            flashCmp.shaderEffectData = shaderEffectData
-            flashCmp.timer = timer
-            return
         }
-        if (flashAmount <= 0){
+    }
+
+    private fun handleContinuousWave(flashCmp : Flash){
+        var (shaderEffect, _, _, _, _, _, _, _,shaderEffectData,timer) = flashCmp
+        timer = (timer + world.deltaTime * shaderEffectData.frequency) % 360f
+        val sin = sin(timer)
+        val centerG = shaderEffect.shaderEffectData.greenTint
+        val centerB = shaderEffect.shaderEffectData.blueTint
+        val centerR = shaderEffect.shaderEffectData.redTint
+        val amplitude = shaderEffectData.amplitude
+
+        val interpolateChannels = shaderEffectData.shaderInterpolateChannels
+        if (InterpolateChannels.RED in interpolateChannels) {
+            shaderEffectData.redTint = centerR + (sin * amplitude)
+        }
+        if (InterpolateChannels.GREEN in interpolateChannels) {
+            shaderEffectData.greenTint = centerG + (sin * amplitude)
+        }
+        if (InterpolateChannels.BLUE in interpolateChannels) {
+            shaderEffectData.blueTint = centerB + (sin * amplitude)
+        }
+        flashCmp.shaderEffectData = shaderEffectData
+        flashCmp.timer = timer
+    }
+
+    private fun handleBlink(entity: Entity,flashCmp: Flash){
+        var (_, flashDuration, flashDurationTimer,flashInterval,flashIntervalTimer,flashTimer,doFlash, _, _, _) = flashCmp
+        flashTimer -= deltaTime
+        if (flashTimer <= 0){
             entity.configure {
                 it -= Flash
             }
+            flashCmp.doFlash = false
+            return
         }
         if (doFlash){
             flashDurationTimer -= deltaTime
@@ -48,7 +67,6 @@ class FlashSystem : IteratingSystem(family { all(Flash, Graphic) }) {
                 flashIntervalTimer -= deltaTime
             }else{
                 doFlash = true
-                flashAmount -= 1
                 flashIntervalTimer = flashInterval
                 flashDurationTimer = flashDuration
             }
@@ -56,8 +74,13 @@ class FlashSystem : IteratingSystem(family { all(Flash, Graphic) }) {
 
         flashCmp.flashIntervalTimer = flashIntervalTimer
         flashCmp.doFlash = doFlash
-        flashCmp.flashAmount = flashAmount
+        flashCmp.flashTimer = flashTimer
         flashCmp.flashDurationTimer = flashDurationTimer
     }
+
+    private fun handleOnce(){
+        return
+    }
+
 
 }

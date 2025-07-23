@@ -13,6 +13,7 @@ import com.libgdx.treasurehunter.ecs.systems.AnimationSystem
 import com.libgdx.treasurehunter.ecs.systems.AttackMetaSystem
 import com.libgdx.treasurehunter.ecs.systems.AttackSystem
 import com.libgdx.treasurehunter.ecs.systems.BlinkSystem
+import com.libgdx.treasurehunter.ecs.systems.BreakableSystem
 import com.libgdx.treasurehunter.ecs.systems.CameraSystem
 import com.libgdx.treasurehunter.ecs.systems.DamageSystem
 import com.libgdx.treasurehunter.ecs.systems.DebugSystem
@@ -22,7 +23,7 @@ import com.libgdx.treasurehunter.ecs.systems.InventorySystem
 import com.libgdx.treasurehunter.ecs.systems.InvulnarableSystem
 import com.libgdx.treasurehunter.ecs.systems.ItemSystem
 import com.libgdx.treasurehunter.ecs.systems.JumpSystem
-import com.libgdx.treasurehunter.ecs.systems.MarkSystem
+import com.libgdx.treasurehunter.ecs.systems.EffectSystem
 import com.libgdx.treasurehunter.ecs.systems.MoveSystem
 import com.libgdx.treasurehunter.ecs.systems.ParticleSystem
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem
@@ -40,7 +41,6 @@ import com.libgdx.treasurehunter.game.inputMultiplexer
 import com.libgdx.treasurehunter.input.KeyboardInputProcessor
 import com.libgdx.treasurehunter.tiled.TiledMapService
 import com.libgdx.treasurehunter.ui.model.GameModel
-import com.libgdx.treasurehunter.ui.model.InventoryModel
 import com.libgdx.treasurehunter.ui.navigation.StageNavigator
 import com.libgdx.treasurehunter.ui.navigation.ViewType
 import com.libgdx.treasurehunter.utils.GamePreferences
@@ -89,8 +89,9 @@ class GameScreen(
             add(AttackSystem())
             add(AttackMetaSystem())
             add(AnimationSystem())
-            add(MarkSystem())
+            add(EffectSystem())
             add(ItemSystem())
+            add(BreakableSystem())
             add(InventorySystem())
             add(JumpSystem())
             add(ParticleSystem())

@@ -51,17 +51,15 @@ enum class GameObject() {
     PADLOCK,
     CHEST_LOCKED,
     SHIP_HELM,
-    DEAD_MARK,
     SWORD,
     HELMET,
     ARMOR,
     BOOTS,
     SWORD_EMBEDDED,
-    INTERROGATION_MARK,
-    EXCLAMATION_MARK,
     SPIKES,
     DUST_PARTICLES,
     WATER,
+    EFFECT,
     GROUND;
     val atlasKey = this.name.lowercase()
     fun toJumpSoundAsset() : SoundAsset {

@@ -93,7 +93,11 @@ class RenderSystem (
         sort(entityComparator)
         forEach { entity ->
             val sprite = entity[Graphic].sprite
-            sprite.color = currentColorSettings.entityColor.copy(alpha = sprite.color.a)
+            sprite.color = currentColorSettings.entityColor.copy(
+                green = sprite.color.g * currentColorSettings.entityColor.g,
+                red = sprite.color.r * currentColorSettings.entityColor.r,
+                blue = sprite.color.b * currentColorSettings.entityColor.b,
+                alpha = sprite.color.a)
             val flashCmp = entity.getOrNull(Flash)
             if (flashCmp != null && flashCmp.doFlash) {
                 spriteBatch.end()

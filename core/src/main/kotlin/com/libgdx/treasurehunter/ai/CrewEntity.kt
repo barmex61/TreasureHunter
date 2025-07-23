@@ -22,6 +22,7 @@ import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.MoveDirection
 import com.libgdx.treasurehunter.ecs.components.Physic
+import com.libgdx.treasurehunter.ecs.components.Remove
 import com.libgdx.treasurehunter.ecs.systems.DebugSystem.Companion.RAY_CAST_POLYLINE
 import com.libgdx.treasurehunter.ecs.systems.PhysicSystem.Companion.isBodyFixture
 import com.libgdx.treasurehunter.game.PhysicWorld
@@ -211,7 +212,7 @@ data class CrewEntity(
 
     fun remove(){
         entity.configure {
-            it += EntityTag.REMOVE
+            it += Remove()
         }
     }
 
