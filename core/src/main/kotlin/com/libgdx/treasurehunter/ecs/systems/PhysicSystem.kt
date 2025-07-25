@@ -30,6 +30,7 @@ import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.Inventory
 import com.libgdx.treasurehunter.ecs.components.Invulnarable
+import com.libgdx.treasurehunter.ecs.components.Remove
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.event.GameEvent
 import com.libgdx.treasurehunter.event.GameEventListener
@@ -288,7 +289,7 @@ class PhysicSystem (
     }
 
     private fun isKnockBackCollision(fixtureB: Fixture,entityB: Entity): Boolean {
-        return fixtureB.body.type == BodyType.DynamicBody && !fixtureB.isSensor && entityB hasNo Item
+        return fixtureB.body.type == BodyType.DynamicBody && !fixtureB.isSensor && entityB hasNo Item && entityB hasNo Remove
     }
 
     private fun handleKnockbackBeginContact(

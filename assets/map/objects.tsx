@@ -10,7 +10,7 @@
    <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="jumpHeight" type="float" value="1.1"/>
-   <property name="life" type="int" value="3"/>
+   <property name="life" type="int" value="10"/>
    <property name="speed" type="float" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
    <property name="timeToMax" type="float" value="3"/>
@@ -164,7 +164,7 @@
    <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="jumpHeight" type="float" value="1.1"/>
-   <property name="life" type="int" value="3"/>
+   <property name="life" type="int" value="10"/>
    <property name="speed" type="float" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
    <property name="timeToMax" type="float" value="3"/>
@@ -503,6 +503,7 @@
   <objectgroup draworder="index" id="2">
    <object id="1" x="8" y="5" width="8" height="15">
     <properties>
+     <property name="friction" type="float" value="0.7"/>
      <property name="isSensor" type="bool" value="true"/>
      <property name="userData" value="key"/>
     </properties>

@@ -23,6 +23,7 @@ sealed class GameEvent {
     data class OnScreenTouchDownEvent(val screenX : Int,val screenY : Int) : GameEvent()
     data class ChestClickedEvent(val dialogText: String,val chestEntity : Entity,val buttonTypes : List<ButtonType> ) : GameEvent()
     data class OpenChestEvent(val chestEntity: Entity) : GameEvent()
+    data class PlayerDeadEvent(val playerEntity : Entity) : GameEvent()
 }
 
 enum class Dialog(val dialogText : String){

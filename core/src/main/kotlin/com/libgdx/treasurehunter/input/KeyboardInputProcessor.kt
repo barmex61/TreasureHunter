@@ -29,6 +29,7 @@ class KeyboardInputProcessor(val world: World,val toggleInventory : () -> Unit) 
     private var playerEntities = with(world) {
         family { all(EntityTag.PLAYER) }
     }
+
     var wantsAttack : Boolean = false
     var cameraDirection : CameraMovement = CameraMovement(0,0)
 

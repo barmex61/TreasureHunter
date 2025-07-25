@@ -32,6 +32,12 @@ class DamageSystem : IteratingSystem(family = family{all(Life,DamageTaken).none(
         } else {
             fireEvent(GameEvent.PlaySoundEvent(SoundAsset.FIERCE_TOOTH_HURT))
         }
+        if (lifeComp.currentLife <= 0){
+            entity.configure {
+                it -= Life
+            }
+            return
+        }
 
         entity.configure {
             it += Invulnarable(1f)

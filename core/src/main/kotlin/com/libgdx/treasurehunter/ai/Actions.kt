@@ -75,7 +75,7 @@ class Wander: Actions(){
             if (spawnPosition.isZero){
                 spawnPosition.set(entity.position)
             }
-            if (moveToPlayer){
+            if (moveToPlayer ){
                 targetPosition.set(
                     entity.playerPosition.x,
                     entity.playerPosition.y,
@@ -93,7 +93,7 @@ class Wander: Actions(){
         }
         entity.moveTo(targetPosition)
 
-        if (moveToPlayer){
+        if (moveToPlayer ){
             if (!entity.isEnemyNearby){
                 return Status.SUCCEEDED
             }
@@ -174,7 +174,7 @@ class TotemIdle : Actions(){
             entity.animation(AnimationType.IDLE, PlayMode.NORMAL, 0.1f)
             return Status.RUNNING
         }
-        if (entity.isEnemyNearby && entity.inRange(entity.playerPosition)){
+        if (entity.isEnemyNearby && entity.playerPosition != null && entity.inRange(entity.playerPosition!!)){
            return Status.SUCCEEDED
         }
 
@@ -247,12 +247,11 @@ class Dead : Actions(){
 
         if (status != Status.RUNNING){
             entity.stop = true
-            entity.animation(AnimationType.DEAD_GROUND,PlayMode.NORMAL, 0.1F)
+            entity.animation(AnimationType.DEAD_GROUND,PlayMode.NORMAL, 0.16F)
             return Status.RUNNING
         }
         if (entity.animationDone){
             entity.remove()
-            return Status.SUCCEEDED
         }
         return Status.RUNNING
     }

@@ -21,6 +21,7 @@ import com.libgdx.treasurehunter.ecs.components.DamageTaken
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.ecs.components.Graphic
 import com.libgdx.treasurehunter.ecs.components.Invulnarable
+import com.libgdx.treasurehunter.ecs.components.Life
 import com.libgdx.treasurehunter.ecs.components.Physic
 import com.libgdx.treasurehunter.ecs.components.Remove
 import com.libgdx.treasurehunter.ecs.components.Ship
@@ -74,7 +75,7 @@ sealed class StateEntity(
 
     val doAttack: Boolean
         get() {
-            var doAttack = this.getOrNull(Attack)?.doAttack ?: return false
+            val doAttack = this.getOrNull(Attack)?.doAttack ?: return false
             return if (doAttack) {
                 this[Attack].doAttack = false
                 true
@@ -84,6 +85,9 @@ sealed class StateEntity(
 
     val isGetHit: Boolean
         get() = getOrNull(DamageTaken) != null && getOrNull(Invulnarable) == null
+
+    val isDeadHit : Boolean
+        get() = getOrNull(Life) == null
 
     var alpha: Float
         get() = this.getOrNull(Graphic)?.sprite?.color?.a ?: 1f
@@ -121,8 +125,11 @@ sealed class StateEntity(
     }
 
     fun remove() {
+
         entity.configure {
-            it += Remove()
+            if (entity hasNo Remove){
+                it += Remove()
+            }
         }
     }
 

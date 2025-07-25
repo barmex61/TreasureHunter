@@ -58,7 +58,7 @@ fun fixtureDefinitionOf(mapObject: MapObject,usePolygonShape : Boolean = false):
     val userData = mapObject.property("userData","")
     val isGround = userData == "ground"
     fixtureDef.apply {
-        friction = mapObject.property("friction",if (isGround) 0.2f else 0f)
+        friction = mapObject.property("friction", 0.2f )
         restitution = mapObject.property("restitution",0f)
         isSensor = mapObject.property("isSensor",false)
         density = mapObject.property("density",1f)

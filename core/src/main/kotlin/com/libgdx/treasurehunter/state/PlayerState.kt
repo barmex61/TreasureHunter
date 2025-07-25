@@ -47,6 +47,7 @@ enum class PlayerState : EntityState<PlayerEntity> {
         override fun update(entity: PlayerEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
+                entity.isDeadHit -> entity.state(DEAD_HIT)
                 entity.isGetHit -> entity.state(HIT)
                 entity.doAttack -> entity.state(ATTACK)
                 linY > EntityState.Companion.TOLERANCE_Y -> entity.state(JUMP)
@@ -77,6 +78,7 @@ enum class PlayerState : EntityState<PlayerEntity> {
             }
             val (linX,linY) = entity.body.linearVelocity
             when{
+                entity.isDeadHit -> entity.state(DEAD_HIT)
                 entity.isGetHit -> entity.state(HIT)
                 entity.doAttack -> entity.state(ATTACK)
                 linY > EntityState.Companion.TOLERANCE_Y -> entity.state(JUMP)
@@ -97,6 +99,7 @@ enum class PlayerState : EntityState<PlayerEntity> {
         override fun update(entity: PlayerEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
+                entity.isDeadHit -> entity.state(DEAD_HIT)
                 entity.isGetHit -> entity.state(HIT)
                 entity.doAttack -> entity.state(ATTACK)
                 linY < -EntityState.Companion.TOLERANCE_Y -> entity.state(FALL)
@@ -119,6 +122,7 @@ enum class PlayerState : EntityState<PlayerEntity> {
         override fun update(entity: PlayerEntity) {
             val (linX,linY) = entity.body.linearVelocity
             when{
+                entity.isDeadHit -> entity.state(DEAD_HIT)
                 entity.isGetHit -> entity.state(HIT)
                 entity.doAttack -> entity.state(ATTACK)
                 linY > EntityState.Companion.TOLERANCE_Y -> entity.state(JUMP)
@@ -142,6 +146,7 @@ enum class PlayerState : EntityState<PlayerEntity> {
             if (entity.isAnimationDone()){
                 val (linX,linY) = entity.body.linearVelocity
                 when{
+                    entity.isDeadHit -> entity.state(DEAD_HIT)
                     entity.isGetHit -> entity.state(HIT)
                     entity.doAttack -> entity.state(ATTACK)
                     linY > EntityState.Companion.TOLERANCE_Y -> entity.state(JUMP)
@@ -166,6 +171,31 @@ enum class PlayerState : EntityState<PlayerEntity> {
             when{
                 entity.doAttack -> entity.state(ATTACK)
                 entity.isAnimationDone() -> entity.state(IDLE)
+            }
+        }
+    },
+
+    DEAD_HIT {
+        override fun enter(entity: PlayerEntity) {
+            GameEventDispatcher.fireEvent(GameEvent.PlayerDeadEvent(entity.entity))
+            entity.animation(AnimationType.DEAD_HIT, Animation.PlayMode.NORMAL,0.16f)
+        }
+
+        override fun update(entity: PlayerEntity) {
+            when{
+                entity.isAnimationDone() -> entity.state(DEAD_GROUND)
+            }
+        }
+    },
+
+    DEAD_GROUND {
+        override fun enter(entity: PlayerEntity) {
+            entity.animation(AnimationType.DEAD_GROUND, Animation.PlayMode.NORMAL,0.16f)
+        }
+
+        override fun update(entity: PlayerEntity) {
+            when{
+                entity.isAnimationDone() -> entity.remove()
             }
         }
     },
