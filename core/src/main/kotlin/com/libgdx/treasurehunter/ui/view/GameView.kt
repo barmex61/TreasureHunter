@@ -17,6 +17,7 @@ import com.libgdx.treasurehunter.ui.model.InventoryModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import ktx.actors.alpha
 import ktx.actors.onClick
@@ -46,7 +47,7 @@ class GameView(
     private val coroutineExceptionHandler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, throwable ->
             Gdx.app.postRunnable {
-                gdxError(throwable)
+                gdxError("throwable $throwable message ${throwable.message} cause ${throwable.cause} localized ${throwable.localizedMessage}")
             }
         }
     private var playerLifeBar: Image? = null
@@ -75,9 +76,8 @@ class GameView(
         setFillParent(true)
         verticalGroup {
             align(Align.topLeft)
-            expand()
             padLeft(15.0f)
-            padTop(25.0f)
+            padTop(15.0f)
             columnAlign(Align.topLeft)
             it.grow()
             this@GameView.playerLifeBarStack = stack {}
@@ -107,13 +107,11 @@ class GameView(
             }
         }
         this.enemyVerticalGroup = verticalGroup {
-            expand()
-            align(Align.top)
+            align(Align.topLeft)
             columnAlign(Align.top)
             padTop(15f)
             it.grow()
-            it.minSize(10f, -1f)
-            it.maxSize(130f, -1f)
+
         }
         add().grow()
 
@@ -127,8 +125,6 @@ class GameView(
         add().grow()
         verticalGroup {
             align(Align.bottomRight)
-            expand()
-            fill()
             padRight(25.0f)
             padBottom(25.0f)
             it.grow()
@@ -147,29 +143,35 @@ class GameView(
 
         coroutineScope.launch(coroutineExceptionHandler) {
             launch {
-                gameModel.playerLife.collect { playerEntityLife ->
-                    if (previousPlayerMaxLife != playerEntityLife.maxLife) {
-                        updatePlayerStack(playerEntityLife.maxLife, playerEntityLife.entity)
-                        previousPlayerMaxLife = playerEntityLife.maxLife
+                gameModel.playerLife.filter { it.entity != Entity.NONE }
+                    .collect { playerEntityLife ->
+                        if (previousPlayerMaxLife != playerEntityLife.maxLife) {
+                            updatePlayerStack(
+                                playerEntityLife.maxLife,
+                                playerEntityLife.entity,
+                                playerEntityLife.entityIcon
+                            )
+                            previousPlayerMaxLife = playerEntityLife.maxLife
+                        }
+                        playerLifeBar?.let {
+                            it += Actions.scaleTo(
+                                playerEntityLife.currentLife / playerEntityLife.maxLife.toFloat(),
+                                1f,
+                                0.4f,
+                                Interpolation.smooth
+                            )
+                        }
                     }
-                    playerLifeBar?.let {
-                        it += Actions.scaleTo(
-                            playerEntityLife.currentLife / playerEntityLife.maxLife.toFloat(),
-                            1f,
-                            0.4f,
-                            Interpolation.smooth
-                        )
-                    }
-                }
             }
 
 
             launch {
-                gameModel.enemyLife.collect { enemyEntityLife ->
+                gameModel.enemyLife.filter { it.entity != Entity.NONE }.collect { enemyEntityLife ->
                     updateEnemyStack(
                         enemyEntityLife.currentLife,
                         enemyEntityLife.maxLife,
-                        enemyEntityLife.entity
+                        enemyEntityLife.entity,
+                        enemyEntityLife.entityIcon
                     )
                 }
             }
@@ -201,52 +203,63 @@ class GameView(
         }
     }
 
-    private fun updateEnemyStack(currentLife: Int, maxLife: Int, enemyEntity: Entity) {
+    private fun updateEnemyStack(
+        currentLife: Int,
+        maxLife: Int,
+        enemyEntity: Entity,
+        enemyIcon: String,
+    ) {
         val enemyLifeStacks = enemyVerticalGroup.children.filterIsInstance<Stack>()
-        val stackEntities: List<Entity> = enemyLifeStacks.map { stack ->
-            stack.userObject as Entity
-        }
+        val stackEntities: List<Entity> =
+            enemyLifeStacks.map { stack -> stack.userObject as Entity }
+        var enemyStack: Stack?
+        var lifeBarImage: Image? = null
+
         if (enemyEntity !in stackEntities || enemyLifeStacks.isEmpty()) {
-            var lifeBarImage: Image? = null
-            enemyVerticalGroup.addActor(stack {
+            val newStack = stack {
                 userObject = enemyEntity
                 addActor(
                     this@GameView.barHorizontalGroup(
                         maxLife,
-                        "pink_star_icon",
+                        enemyIcon,
                         false
                     ) { img ->
                         lifeBarImage = img
                     })
-            })
+            }
+            enemyVerticalGroup.addActor(newStack)
+            enemyStack = newStack
             lifeBarImage?.let { enemyLifeBarMap[enemyEntity] = it }
-        }
-        if (enemyEntity in stackEntities) {
-
+        } else {
             val index = stackEntities.indexOf(enemyEntity)
-            val enemyStack = enemyLifeStacks[index]
-            enemyLifeBarMap[enemyEntity]?.let { barImage ->
-                val scale = currentLife / maxLife.toFloat()
-                barImage.clearActions()
-                enemyStack.clearActions()
-                barImage += Actions.scaleTo(scale, 1f, 0.4f, Interpolation.smooth)
-                enemyStack.addAction(
-                    Actions.sequence(
+            enemyStack = enemyLifeStacks[index]
+            lifeBarImage = enemyLifeBarMap[enemyEntity]
+        }
+
+        lifeBarImage?.let { barImage ->
+            val scale = currentLife / maxLife.toFloat()
+            barImage.clearActions()
+            enemyStack.clearActions()
+            barImage += Actions.scaleTo(scale, 1f, 0.4f, Interpolation.smooth)
+            enemyStack.addAction(
+                Actions.sequence(
+                    Actions.fadeIn(0.25f),
                     Actions.delay(1.5f),
                     Actions.fadeOut(0.4f),
                     Actions.run {
                         enemyVerticalGroup.removeActor(enemyStack)
                         enemyLifeBarMap.remove(enemyEntity)
                     }
-                ))
-            }
+                )
+            )
         }
     }
 
-    private fun updatePlayerStack(maxLife: Int, playerEntity: Entity) {
+    private fun updatePlayerStack(maxLife: Int, playerEntity: Entity, playerIcon: String) {
         playerLifeBarStack.apply {
             clearChildren()
-            addActor(barHorizontalGroup(maxLife, "captain_clown_icon", true){img ->
+
+            addActor(barHorizontalGroup(maxLife, playerIcon, true) { img ->
                 if (this@GameView.playerLifeBar == null) this@GameView.playerLifeBar = img
             })
             userObject = playerEntity
@@ -261,8 +274,6 @@ class GameView(
         onLifeBarImageCreated: ((Image) -> Unit)? = null,
     ): KContainer<Actor> =
         container {
-            size(100f, 29f)
-            prefSize(100f, 20f)
             horizontalGroup {
                 space(3f)
                 val barType = when (length) {
@@ -284,11 +295,11 @@ class GameView(
                         "life_bars_big_bars_4"
                     )
                 }
-                image(entityIcon)
+                if (entityIcon.isNotBlank()) image(entityIcon)
                 stack {
                     horizontalGroup {
                         image(startBarImage)
-                        (1..(length - 2).coerceAtMost(3)).forEach { index ->
+                        (1..(length - 2).coerceAtMost(if (isPlayer) 3 else 5)).forEach { index ->
                             image(midBarImage)
                         }
                         image(endBarImage)
@@ -296,7 +307,7 @@ class GameView(
                     }
                     container {
                         fillX()
-                        val padL = when(barType){
+                        val padL = when (barType) {
                             BarType.MEDIUM -> 14f
                             BarType.BIG -> 16f
                         }

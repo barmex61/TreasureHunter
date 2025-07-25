@@ -178,13 +178,13 @@ class TiledMapService(
             world: com.github.quillraven.fleks.World,
             gameObject: GameObject? = null,
         ) = with(world) {
-            val snapshot = world.snapshot()[entity] ?: return@with
+            /*val snapshot = world.snapshot()[entity] ?: return@with
             val components = snapshot.components.mapNotNull { it::class.simpleName }.toMutableList()
             if (gameObject != null) components.add(gameObject.name)
             Gdx.app.log(
                 "EntityDebug",
                 "Entity ${entity.id} components: ${components.joinToString(", ")}"
-            )
+            ) */
         }
 
     }

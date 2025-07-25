@@ -208,7 +208,7 @@
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
    <property name="jumpHeight" type="float" value="1.1"/>
-   <property name="life" type="int" value="3"/>
+   <property name="life" type="int" value="8"/>
    <property name="speed" type="int" value="1"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
    <property name="timeToMax" type="float" value="2"/>
@@ -265,7 +265,7 @@
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
    <property name="jumpHeight" type="float" value="2"/>
-   <property name="life" type="int" value="3"/>
+   <property name="life" type="int" value="2"/>
    <property name="resistance" type="int" value="0"/>
    <property name="speed" type="int" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
@@ -319,7 +319,7 @@
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
    <property name="jumpHeight" type="float" value="2"/>
-   <property name="life" type="int" value="3"/>
+   <property name="life" type="int" value="4"/>
    <property name="speed" type="int" value="3"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
    <property name="timeToMax" type="float" value="2"/>
@@ -344,7 +344,7 @@
    </object>
    <object id="10" x="11" y="13">
     <properties>
-     <property name="density" type="float" value="1.25"/>
+     <property name="density" type="float" value="2.25"/>
      <property name="userData" value="bodyFixture"/>
     </properties>
     <polygon points="0,0 0,11 3,14 10,14 12,11 12,0"/>

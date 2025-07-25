@@ -118,8 +118,8 @@ class GameScreen(
     override fun show() {
         inputMultiplexer.addProcessor(keyboardInputProcessor)
         registerGameEventListeners()
-        fireEvent(GameEvent.MapChangeEvent(assetHelper[MapAssets.MAP1]))
         stageNavigator.changeStageView(ViewType.GAME)
+        fireEvent(GameEvent.MapChangeEvent(assetHelper[MapAssets.MAP1]))
     }
 
     override fun render(delta: Float) {

@@ -6,6 +6,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.event.GameEvent.EntityLifeChangeEvent
 import com.libgdx.treasurehunter.event.GameEventDispatcher.fireEvent
+import com.libgdx.treasurehunter.tiled.TiledMapService.Companion.logEntity
 import com.libgdx.treasurehunter.utils.GameObject
 
 data class Life(
@@ -14,12 +15,13 @@ data class Life(
     var isDead : Boolean = false,
     val owner : Entity,
 ) : Component <Life> {
-    var isPlayer : Boolean = false
-    var entityIcon : String = ""
+    var isPlayer : Boolean? = null
+    var entityIcon : String? = null
     var currentLife : Int = maxLife
         set(value) {
             field = value
-            fireEvent(EntityLifeChangeEvent(currentLife,maxLife,owner,isPlayer,entityIcon))
+            println("Current LifeChanged")
+            fireLifeChangeEvent(entityIcon,isPlayer)
         }
 
     override fun World.onAdd(entity: Entity) {
@@ -31,7 +33,15 @@ data class Life(
             GameObject.CRABBY.atlasKey -> "crabby_icon"
             GameObject.FIERCE_TOOTH.atlasKey -> "fierce_tooth_icon"
             GameObject.PINK_STAR.atlasKey -> "pink_star_icon"
-            else -> ""
+            else -> null
+        }
+        println("Entity Icon $entityIcon")
+        if (isPlayer == true) fireLifeChangeEvent(entityIcon,isPlayer)
+    }
+
+    private fun fireLifeChangeEvent(entityIcon: String?, isPlayer: Boolean?) {
+        if (entityIcon != null && isPlayer != null){
+            fireEvent(EntityLifeChangeEvent(currentLife,maxLife,owner,isPlayer,entityIcon))
         }
     }
     override fun type() = Life
