@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="129">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="24" height="10" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="130">
  <properties>
   <property name="ambientMusic" value="music/sea_sounds.wav"/>
   <property name="mapDisplayMode" propertytype="MapDisplayMode" value="DAY"/>
@@ -122,6 +122,6 @@
     <property name="hitCount" type="int" value="2"/>
    </properties>
   </object>
-  <object id="127" gid="134" x="331" y="155" width="72" height="32"/>
+  <object id="129" gid="135" x="676" y="90" width="34" height="30"/>
  </objectgroup>
 </map>

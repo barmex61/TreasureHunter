@@ -1,5 +1,6 @@
 package com.libgdx.treasurehunter.ui.model
 
+import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.ecs.components.EntityTag
 import com.libgdx.treasurehunter.event.GameEvent
@@ -8,22 +9,22 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.concurrent.Flow
 
 data class EntityLife(
+    val entity: Entity,
     val currentLife : Int,
-    val maxLife : Int
+    val maxLife : Int,
+    val entityIcon : String
 )
 
-class GameModel(
-    world: World
-): GameEventListener{
-    private val playerEntities = world.family { all(EntityTag.PLAYER) }
-    val playerLife  = MutableStateFlow(EntityLife(0,0))
+class GameModel: GameEventListener{
+    val playerLife  = MutableStateFlow(EntityLife(Entity.NONE,0,0,""))
+    val enemyLife = MutableStateFlow(EntityLife(Entity.NONE,0,0,""))
     override fun onEvent(event: GameEvent) {
         when(event){
             is GameEvent.EntityLifeChangeEvent->{
-                if (event.entity in playerEntities){
-                    playerLife.value = playerLife.value.copy(currentLife = event.entityLife, maxLife = event.maxLife)
+                if (event.isPlayer){
+                    playerLife.value = playerLife.value.copy(entity = event.entity, currentLife = event.entityLife, maxLife = event.maxLife, entityIcon = event.entityIcon)
                 }else{
-                   // enemyLifeBarScale.value = event.entityLife / event.maxLife.toFloat()
+                    enemyLife.value = enemyLife.value.copy(entity = event.entity, currentLife = event.entityLife, maxLife = event.maxLife,entityIcon = event.entityIcon)
                 }
             }
 

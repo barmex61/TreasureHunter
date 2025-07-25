@@ -105,9 +105,7 @@ class GameScreen(
 
         }
     }
-    private val gameModel = GameModel(world).also {
-        stageNavigator.gameModel = it
-    }
+
     private val tiledMapService by lazy { TiledMapService(physicWorld,world,assetHelper) }
     private val keyboardInputProcessor: KeyboardInputProcessor = KeyboardInputProcessor(world){
         stageNavigator.toggleInventoryView()
@@ -149,7 +147,7 @@ class GameScreen(
 
     private fun registerGameEventListeners() {
         GameEventDispatcher.registerListener(tiledMapService)
-        GameEventDispatcher.registerListener(gameModel)
+        GameEventDispatcher.registerListener(stageNavigator.gameModel)
         world.systems.filterIsInstance<GameEventListener>().forEach { gameEventListener ->
             GameEventDispatcher.registerListener(gameEventListener)
         }
@@ -157,7 +155,7 @@ class GameScreen(
 
     private fun unregisterGameEventListeners() {
         GameEventDispatcher.unRegisterListener(tiledMapService)
-        GameEventDispatcher.unRegisterListener(gameModel)
+        GameEventDispatcher.unRegisterListener(stageNavigator.gameModel)
         world.systems.filterIsInstance<GameEventListener>().forEach { gameEventListener ->
             GameEventDispatcher.unRegisterListener(gameEventListener)
         }

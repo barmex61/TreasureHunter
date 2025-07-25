@@ -39,8 +39,8 @@ enum class TransitionType {
 
 class StageNavigator(
     val stage: Stage,
-    val menuModel: MenuModel? = null,
-    var gameModel: GameModel? = null,
+    val menuModel: MenuModel = MenuModel(),
+    var gameModel: GameModel = GameModel(),
     val gamePreferences: GamePreferences,
     val navigateToScreen : StageNavigator.(ViewType) -> Unit
 ){
@@ -56,7 +56,6 @@ class StageNavigator(
 
         when(viewType){
             ViewType.MENU -> {
-                menuModel?:return
                 stage.actors {
                     menuView(menuModel, stageNavigator = this@StageNavigator){
                         setupInitialState()
@@ -65,9 +64,8 @@ class StageNavigator(
                 }
             }
             ViewType.GAME -> {
-                gameModel?:return
                 stage.actors {
-                    gameView(gameModel!!) {
+                    gameView(gameModel) {
                         setupInitialState()
                         nextView = this
                     }
