@@ -16,7 +16,7 @@ class MoveSystem : IteratingSystem(
     override fun onTickEntity(entity: Entity) {
         val moveComp = entity[Move]
         val physic = entity[Physic]
-        var (isFlipX,direction,current,maxSpeed,timer,timeToMax,_,defaultMax,maxReduceTimer,stop) = moveComp
+        var (isFlipX,direction,current,maxSpeed,timer,_,defaultMax,maxReduceTimer,stop) = moveComp
         if (stop) {
             moveComp.currentSpeed = 0f
             return
@@ -27,10 +27,10 @@ class MoveSystem : IteratingSystem(
             if ((current >0 && direction.isLeftOrDown() )|| (current<0 && direction.isRightOrUp())){
                 timer = 0f
             }
-            timer = (timer + (deltaTime* (1f/timeToMax))).coerceAtMost(1f)
+            timer = (timer + deltaTime).coerceAtMost(1f)
             current = pow50outInterpolation.apply(1f,maxSpeed,timer)
             current *= direction.valueX
-            var moveFlip = direction == MoveDirection.LEFT
+            val moveFlip = direction == MoveDirection.LEFT
             isFlipX = if (entity.getOrNull(Graphic)?.initialFlipX == false) moveFlip else !moveFlip
 
         }else{

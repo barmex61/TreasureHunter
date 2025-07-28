@@ -141,7 +141,7 @@ sealed interface ItemType {
         else -> Pair(ITEM_APPEAR, FlashType.BLINK)
     }
 
-    fun getEffectType() : EffectType? = when(this){
+    fun getCollectedEffectType() : EffectType? = when(this){
         is SilverCoin -> EffectType.SILVER_COIN
         is GoldCoin -> EffectType.GOLD_COIN
         is BlueDiamond -> EffectType.BLUE_DIAMOND

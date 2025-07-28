@@ -207,7 +207,7 @@ data class CrewEntity(
     fun raycast(
         rayCastLength: Vector2,
         shouldFlip: Boolean = true,
-        collideCallback: (isCollidedWithWall: Boolean, diffY: Float) -> Unit,
+        collideCallback: (isCollidedWithWall: Boolean) -> Unit,
     ) {
         val graphic = entity[Graphic]
         val move = entity[Move]
@@ -218,16 +218,14 @@ data class CrewEntity(
         val mirroredRayCast = if (shouldFlip) {
             if (flipX) rayCastLength else vec2(rayCastLength.x * -1f, rayCastLength.y)
         } else rayCastLength
-        var isCollidedWithWall = false
         RAY_CAST_POLYLINE.vertices = floatArrayOf(
             startPosition.x, startPosition.y,
             startPosition.x + mirroredRayCast.x, startPosition.y + mirroredRayCast.y
         )
         physicWorld.rayCast(
             { fixture, vector1, vector2, value ->
-                if (!fixture.isSensor && !fixture.isBodyFixture) {
-                    isCollidedWithWall = true
-                }
+                val isCollidedWithWall = !fixture.isSensor
+                collideCallback(isCollidedWithWall)
                 return@rayCast -1f
             },
             startPosition.x,
@@ -235,7 +233,6 @@ data class CrewEntity(
             startPosition.x + mirroredRayCast.x,
             startPosition.y + mirroredRayCast.y
         )
-        collideCallback(isCollidedWithWall, mirroredRayCast.y)
     }
 
     fun remove() {

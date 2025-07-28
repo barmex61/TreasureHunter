@@ -33,6 +33,7 @@ import com.libgdx.treasurehunter.ecs.components.Invulnarable
 import com.libgdx.treasurehunter.ecs.components.Remove
 import com.libgdx.treasurehunter.enums.AssetHelper
 import com.libgdx.treasurehunter.event.GameEvent
+import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.event.GameEventListener
 import com.libgdx.treasurehunter.game.PhysicWorld
 import com.libgdx.treasurehunter.tiled.sprite
@@ -161,11 +162,13 @@ class PhysicSystem (
 
     //----- HANDLE COLLISIONS -----
     private fun handleDamageBeginContact(damageSource: Entity, damageTarget: Entity) {
-        val (damageAmount,sourceEntity,isContinuous) = damageSource[Damage]
+        val (damageAmount,isCrit,sourceEntity,isContinuous) = damageSource[Damage]
         if (sourceEntity == damageTarget) return
         damageTarget.configure {
-            val damageTakenComp = it.getOrAdd(DamageTaken){ DamageTaken(0,isContinuous) }
+            val damageTakenComp = it.getOrAdd(DamageTaken){ DamageTaken(0,isContinuous,isCrit) }
             damageTakenComp.damageAmount = (damageTakenComp.damageAmount + damageAmount).coerceAtMost(damageAmount)
+            damageTakenComp.isCrit = isCrit
+            damageTakenComp.isContinuous = isContinuous
         }
     }
 
@@ -187,7 +190,7 @@ class PhysicSystem (
         itemEntity.configure {
             it += EntityTag.COLLECTED
         }
-        val collectedEffect = item.itemData.itemType.getEffectType() ?: return
+        val collectedEffect = item.itemData.itemType.getCollectedEffectType() ?: return
         world.createMarkEntity(itemEntity,assetHelper,collectedEffect)
     }
 

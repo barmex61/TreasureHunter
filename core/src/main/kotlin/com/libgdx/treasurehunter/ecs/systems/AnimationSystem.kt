@@ -39,7 +39,7 @@ class AnimationSystem (
 
     override fun onTickEntity(entity: Entity) {
         val animationComp = entity[Animation]
-        val (gameObject, mainAnimationData,flipInit) = animationComp
+        val (modelName, mainAnimationData,flipInit) = animationComp
         val graphic = entity[Graphic]
         val (sprite) = graphic
         val (mainAnimation,timer,mainPlayMode,mainAnimationType,mainFrameDuration) = mainAnimationData

@@ -12,12 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table
 import com.badlogic.gdx.utils.Align
 import com.github.quillraven.fleks.Entity
 import com.libgdx.treasurehunter.event.GameEventDispatcher
+import com.libgdx.treasurehunter.ui.model.DamageText
 import com.libgdx.treasurehunter.ui.model.GameModel
 import com.libgdx.treasurehunter.ui.model.InventoryModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
 import ktx.actors.alpha
 import ktx.actors.onClick
@@ -176,8 +178,19 @@ class GameView(
                 }
             }
 
+            launch {
+                gameModel.damageText.filterNotNull().collect { damageText ->
+                    this@GameView.addActor( DamageTextView(damageText, onDamageTextRemoved = {
+                        this@GameView.removeActor(it)
+                    }))
+                }
+            }
+
         }
     }
+
+
+
 
     fun toggleView(viewClass: KClass<out Actor>) {
         val (actor, isVisible) = when (viewClass) {
@@ -299,7 +312,7 @@ class GameView(
                 stack {
                     horizontalGroup {
                         image(startBarImage)
-                        (1..(length - 2).coerceAtMost(if (isPlayer) 3 else 5)).forEach { index ->
+                        (1..(length - 2).coerceIn(1,if (isPlayer) 3 else 5)).forEach { index ->
                             image(midBarImage)
                         }
                         image(endBarImage)

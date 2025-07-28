@@ -1,6 +1,7 @@
 package com.libgdx.treasurehunter.tiled
 
 import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.maps.MapProperties
 import com.badlogic.gdx.maps.tiled.TiledMapTile
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject
 import com.badlogic.gdx.math.Vector2
@@ -59,56 +60,83 @@ import ktx.tiled.property
 import ktx.tiled.propertyOrNull
 
 
-fun sprite(modelName: String, animationType: AnimationType, startPosition : Vector2, assetHelper: AssetHelper, rotation : Float = 0f,scale : Float = 1f,frameIx : Int = 0): Sprite {
+fun sprite(
+    modelName: String,
+    animationType: AnimationType,
+    startPosition: Vector2,
+    assetHelper: AssetHelper,
+    rotation: Float = 0f,
+    scale: Float = 1f,
+    frameIx: Int = 0,
+): Sprite {
     val regionPath = "${modelName}/${animationType.atlasKey}"
     val atlas = assetHelper[TextureAtlasAssets.GAMEOBJECT]
-    val regions = atlas.findRegions(regionPath) ?:
-    gdxError("There are no regions for $modelName and $animationType")
+    val regions = atlas.findRegions(regionPath)
+        ?: gdxError("There are no regions for $modelName and $animationType")
     val firstFrame = regions[frameIx]
     val w = firstFrame.regionWidth * UNIT_SCALE
     val h = firstFrame.regionHeight * UNIT_SCALE
     return Sprite(firstFrame).apply {
-        setPosition(startPosition.x,startPosition.y)
-        setSize(w,h)
-        setOrigin(0f,0f)
-        setScale(scale,scale)
+        setPosition(startPosition.x, startPosition.y)
+        setSize(w, h)
+        setOrigin(0f, 0f)
+        setScale(scale, scale)
         this.rotation = -rotation
     }
 }
 
-fun EntityCreateContext.configureEntityGraphic(entity: Entity,mapObject: TiledMapTileMapObject,position : Vector2,gameObject: GameObject,assetHelper: AssetHelper,world: World,rotation : Float ){
+fun EntityCreateContext.configureEntityGraphic(
+    entity: Entity,
+    mapObject: TiledMapTileMapObject,
+    position: Vector2,
+    gameObject: GameObject,
+    assetHelper: AssetHelper,
+    world: World,
+    rotation: Float,
+) {
     val tile = mapObject.tile
-    val startAnimType = AnimationType.valueOf(mapObject.propertyOrNull("startAnimType")?:tile.property("startAnimType","NONE"))
-    val hasAnimation = mapObject.propertyOrNull<Boolean>("hasAnimation")?:tile.property("hasAnimation",false)
-    val initialFlipX = tile.property<Boolean>("isFlipped",false)
+    val startAnimType = AnimationType.valueOf(
+        mapObject.propertyOrNull("startAnimType") ?: tile.property("startAnimType", "NONE")
+    )
+    val hasAnimation =
+        mapObject.propertyOrNull<Boolean>("hasAnimation") ?: tile.property("hasAnimation", false)
+    val initialFlipX = tile.property<Boolean>("isFlipped", false)
 
-    entity += Graphic(sprite(gameObject.atlasKey,startAnimType,position,assetHelper,rotation),gameObject.atlasKey,initialFlipX)
-    if (startAnimType != AnimationType.NONE && hasAnimation){
-        configureAnimation(entity,tile,startAnimType,gameObject)
+    entity += Graphic(
+        sprite(gameObject.atlasKey, startAnimType, position, assetHelper, rotation),
+        gameObject.atlasKey,
+        initialFlipX
+    )
+    if (startAnimType != AnimationType.NONE && hasAnimation) {
+        configureAnimation(entity, tile, startAnimType, gameObject)
     }
 }
 
-fun EntityCreateContext.configureAnimation(entity: Entity, tile: TiledMapTile,startAnimType : AnimationType,gameObject: GameObject) {
-    val frameDuration = tile.property<Float>("animFrameDuration",0f)
+fun EntityCreateContext.configureAnimation(
+    entity: Entity,
+    tile: TiledMapTile,
+    startAnimType: AnimationType,
+    gameObject: GameObject,
+) {
+    val frameDuration = tile.property<Float>("animFrameDuration", 0f)
     if (frameDuration == 0f) return
-    entity += Animation(modelName = gameObject.atlasKey, animationData = AnimationData(
-        frameDuration = frameDuration,
-        animationType = startAnimType
-    ))
+    entity += Animation(
+        modelName = gameObject.atlasKey, animationData = AnimationData(
+            frameDuration = frameDuration,
+            animationType = startAnimType
+        )
+    )
 }
 
-fun EntityCreateContext.configureMove(entity: Entity, tile: TiledMapTile){
-    val speed = tile.property<Float>("speed",0f)
-    if (speed > 0f ){
-        val timeToMax = tile.property<Float>("timeToMax",0.1f)
-        entity += Move(timeToMax = timeToMax, maxSpeed = speed)
+fun EntityCreateContext.configureMove(entity: Entity,speed : Float) {
+    if (speed > 0f) {
+        entity += Move( maxSpeed = speed)
     }
 }
 
-fun EntityCreateContext.configureJump(entity: Entity, tile: TiledMapTile,gameObject: GameObject){
-    val jumpHeight = tile.property<Float>("jumpHeight",0f)
+fun EntityCreateContext.configureJump(entity: Entity, jumpHeight : Float, gameObject: GameObject) {
 
-    if (jumpHeight > 0f){
+    if (jumpHeight > 0f) {
         val (body) = entity[Physic]
         val feetFixture = body.fixtureList.first { it.userData == "footFixture" }
         val polygonShape = feetFixture.shape as PolygonShape
@@ -127,35 +155,46 @@ fun EntityCreateContext.configureJump(entity: Entity, tile: TiledMapTile,gameObj
             }
         }
 
-        entity += Jump(jumpHeight,lowerXY ,upperXY, jumpSoundAsset = gameObject.toJumpSoundAsset() )
+        entity += Jump(jumpHeight, lowerXY, upperXY, jumpSoundAsset = gameObject.toJumpSoundAsset())
     }
 }
 
 @Suppress("UNCHECKED_CAST")
-fun EntityCreateContext.configureState(entity: Entity, tile: TiledMapTile, world: World, physicWorld: PhysicWorld, assetHelper: AssetHelper) {
+fun EntityCreateContext.configureState(
+    entity: Entity,
+    tile: TiledMapTile,
+    world: World,
+    physicWorld: PhysicWorld,
+    assetHelper: AssetHelper,
+) {
     val gameObjectStr = tile.property<String>("gameObject", "")
     when (gameObjectStr) {
         GameObject.CAPTAIN_CLOWN.name -> {
             val playerEntity = StateEntity.PlayerEntity(entity, world, physicWorld, assetHelper)
             entity += State(playerEntity, PlayerState.IDLE as EntityState<StateEntity>)
         }
+
         GameObject.CAPTAIN_CLOWN_SWORD.name -> {
             val playerEntity = StateEntity.PlayerEntity(entity, world, physicWorld, assetHelper)
             entity += State(playerEntity, PlayerState.IDLE as EntityState<StateEntity>)
         }
+
         GameObject.SWORD.name -> {
             val swordEntity = StateEntity.SwordEntity(entity, world, physicWorld, assetHelper)
             entity += State(swordEntity, SwordState.IDLE as EntityState<StateEntity>)
         }
+
         GameObject.SHIP.name -> {
             val shipEntity = StateEntity.ShipEntity(entity, world, physicWorld, assetHelper)
             entity += State(shipEntity, ShipState.IDLE as EntityState<StateEntity>)
         }
-        GameObject.CHEST.name ->{
+
+        GameObject.CHEST.name -> {
             val chestEntity = StateEntity.ChestEntity(entity, world, physicWorld, assetHelper)
             entity += State(chestEntity, ChestState.IDLE as EntityState<StateEntity>)
         }
-        GameObject.CHEST_LOCKED.name ->{
+
+        GameObject.CHEST_LOCKED.name -> {
             val chestEntity = StateEntity.ChestEntity(entity, world, physicWorld, assetHelper)
             entity += State(chestEntity, ChestState.IDLE as EntityState<StateEntity>)
         }
@@ -164,29 +203,40 @@ fun EntityCreateContext.configureState(entity: Entity, tile: TiledMapTile, world
     }
 }
 
-fun EntityCreateContext.configureChest(entity: Entity, tile: TiledMapTile,mapObject: TiledMapTileMapObject) {
+fun EntityCreateContext.configureChest(
+    entity: Entity,
+    tile: TiledMapTile,
+    mapObject: TiledMapTileMapObject,
+) {
     val gameObjectStr = tile.property<String>("gameObject", "")
-    entity += when(gameObjectStr){
+    entity += when (gameObjectStr) {
         GameObject.CHEST.name -> {
             Chest(GameObject.valueOf(gameObjectStr))
         }
+
         GameObject.CHEST_LOCKED.name -> {
             Chest(GameObject.valueOf(gameObjectStr), isLocked = true)
         }
+
         else -> return
     }
     val itemsCsv = mapObject.propertyOrNull<String>("itemsInside") ?: return
     val items: List<ItemEntry> = itemsCsv.split(',').mapNotNull { entry ->
         val parts = entry.split(':')
-        if (parts.size != 2) null else ItemEntry(parts[0],parts[1].toIntOrNull()?:1)
+        if (parts.size != 2) null else ItemEntry(parts[0], parts[1].toIntOrNull() ?: 1)
     }
     entity[Chest].itemsInside = items
 }
 
-fun EntityCreateContext.configureBreakable(entity: Entity, tile: TiledMapTile,mapObject: TiledMapTileMapObject) {
+fun EntityCreateContext.configureBreakable(
+    entity: Entity,
+    tile: TiledMapTile,
+    mapObject: TiledMapTileMapObject,
+) {
     if (entity hasNo EntityTag.BREAKABLE) return
     val hitCount = mapObject.propertyOrNull<Int>("hitCount") ?: tile.property("hitCount", 2)
-    val itemsCsv = mapObject.propertyOrNull<String>("itemsInside") ?: tile.property("itemsInside") ?: ""
+    val itemsCsv =
+        mapObject.propertyOrNull<String>("itemsInside") ?: tile.property("itemsInside") ?: ""
     val itemsInside = if (itemsCsv.isNotBlank()) {
         itemsCsv.split(',').mapNotNull { entry ->
             val parts = entry.split(':')
@@ -200,38 +250,39 @@ fun EntityCreateContext.configureBreakable(entity: Entity, tile: TiledMapTile,ma
 
 
 data class ItemEntry(
-    val type : String,
-    val count : Int
+    val type: String,
+    val count: Int,
 )
 
 fun EntityCreateContext.configureEntityTags(
     entity: Entity,
     mapObject: TiledMapTileMapObject,
     tile: TiledMapTile,
-){
-    val entityTags = mapObject.propertyOrNull<String>("entityTags")?:tile.property("entityTags","")
-    if (entityTags.isNotBlank()){
-        val tags = entityTags.split(",").map { splitEntityTag -> EntityTag.valueOf(splitEntityTag)}
+) {
+    val entityTags =
+        mapObject.propertyOrNull<String>("entityTags") ?: tile.property("entityTags", "")
+    if (entityTags.isNotBlank()) {
+        val tags = entityTags.split(",").map { splitEntityTag -> EntityTag.valueOf(splitEntityTag) }
         entity += tags
     }
 
 }
 
-fun EntityCreateContext.configureDamage(entity: Entity, tile: TiledMapTile){
-    val damage = tile.property<Int>("damage",0)
-    if (damage > 0f){
-        entity += Damage(damage = damage, sourceEntity = entity,false)
+fun EntityCreateContext.configureDamage(entity: Entity, tile: TiledMapTile) {
+    val damage = tile.property<Int>("damage", 0)
+    if (damage > 0f) {
+        entity += Damage(damage = damage, sourceEntity = entity, isCrit = false, isContinuous = false)
     }
 }
 
-fun EntityCreateContext.configureInventory(entity: Entity, gameObject: GameObject){
+fun EntityCreateContext.configureInventory(entity: Entity, gameObject: GameObject) {
     if (gameObject == GameObject.CAPTAIN_CLOWN || gameObject == GameObject.CAPTAIN_CLOWN_SWORD) {
-       entity += Inventory(owner = entity)
-    }else return
+        entity += Inventory(owner = entity)
+    } else return
 }
 
-fun EntityCreateContext.configureItem(entity: Entity, gameObject: GameObject){
-    val itemType = when(gameObject){
+fun EntityCreateContext.configureItem(entity: Entity, gameObject: GameObject) {
+    val itemType = when (gameObject) {
         GameObject.SWORD -> Sword(1)
         GameObject.BIG_MAP -> Map(MapType.BIG_MAP)
         GameObject.SMALL_MAP_1 -> Map(MapType.SMALL_MAP_1)
@@ -247,53 +298,70 @@ fun EntityCreateContext.configureItem(entity: Entity, gameObject: GameObject){
         GameObject.GOLDEN_SKULL -> GoldenSkull
         GameObject.BLUE_POTION -> BluePotion
         GameObject.RED_POTION -> RedPotion(1)
-        GameObject.GREEN_BOTTLE-> GreenBottle
+        GameObject.GREEN_BOTTLE -> GreenBottle
         else -> return
     }
     entity += Item(itemData = ItemData(itemType))
 }
 
-fun EntityCreateContext.configureLife(entity: Entity, tile: TiledMapTile){
-    val life = tile.property<Int>("life",0)
-    if (life > 0f){
+fun EntityCreateContext.configureLife(entity: Entity, life : Int) {
+    if (life > 0f) {
         entity += Life(maxLife = life, owner = entity)
     }
 }
 
-fun EntityCreateContext.configureStat(entity: Entity,tile: TiledMapTile){
-    val stat = tile.propertyOrNull<Stat>("stat")
-    if (stat != null){
-        entity += Stat(
-            attack = stat.attack,
-            defense = stat.defense,
-            critChance = stat.critChance,
-            critDamage = stat.critDamage,
-            resistance = stat.resistance
+fun EntityCreateContext.configureStat(entity: Entity, tile: TiledMapTile,gameObject: GameObject) {
+    val statMapProperties = tile.propertyOrNull<MapProperties>("stat") ?: return
+    val attack = statMapProperties.get("attack", Int::class.java)
+    val defence = statMapProperties.get("defence", Int::class.java)
+    val critChance = statMapProperties.get("critChance", Float::class.java)
+    val critDamage = statMapProperties.get("critDamage", Float::class.java)
+    val resistance = statMapProperties.get("resistance", Float::class.java)
+    val jump = statMapProperties.get("jump", Float::class.java)
+    val life = statMapProperties.get("life", Int::class.java)
+    val speed = statMapProperties.get("speed", Float::class.java)
+    entity += Stat(
+        attack = attack,
+        defense = defence,
+        critChance = critChance,
+        critDamage = critDamage,
+        resistance = resistance,
+        speed = speed,
+        jump = jump,
+        life =life
+    )
+    configureJump(entity,jump, gameObject )
+    configureLife(entity,life)
+    configureMove(entity,speed)
+}
+
+fun EntityCreateContext.configureAi(entity: Entity, tile: TiledMapTile, physicWorld: PhysicWorld) {
+    val aiTreePath = tile.property<String>("aiTreePath", "")
+    if (aiTreePath.isNotBlank()) {
+        val aiWanderRadius = tile.property<Float>("circleRadius")
+        entity += AiComponent(
+            treePath = aiTreePath,
+            physicWorld = physicWorld,
+            aiWanderRadius = aiWanderRadius
         )
     }
 }
 
-fun EntityCreateContext.configureAi(entity: Entity, tile: TiledMapTile,physicWorld: PhysicWorld){
-    val aiTreePath = tile.property<String>("aiTreePath","")
-    if (aiTreePath.isNotBlank()){
-        val aiWanderRadius = tile.property<Float>("circleRadius")
-        entity += AiComponent(treePath = aiTreePath, physicWorld = physicWorld, aiWanderRadius = aiWanderRadius)
-    }
-}
-
-fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile){
-    val hasAttack = tile.property<Boolean>("hasAttack",false)
-    val gameObject = GameObject.valueOf(tile.propertyOrNull<String>("gameObject")?: gdxError("gameObject is null $tile"))
-    if (hasAttack){
+fun EntityCreateContext.configureAttack(entity: Entity, tile: TiledMapTile) {
+    val hasAttack = tile.property<Boolean>("hasAttack", false)
+    val gameObject = GameObject.valueOf(
+        tile.propertyOrNull<String>("gameObject") ?: gdxError("gameObject is null $tile")
+    )
+    if (hasAttack) {
         entity += Attack(
             attackMetaData = AttackMetaDataFactory.create(gameObject = gameObject)
         )
     }
 }
 
-fun EntityCreateContext.configureShip(entity: Entity, tile: TiledMapTile){
-    val gameObjectStr = tile.property<String>("gameObject","")
-    if (gameObjectStr == GameObject.SHIP.name){
+fun EntityCreateContext.configureShip(entity: Entity, tile: TiledMapTile) {
+    val gameObjectStr = tile.property<String>("gameObject", "")
+    if (gameObjectStr == GameObject.SHIP.name) {
         entity += Ship()
     }
 }

@@ -73,12 +73,12 @@
   <object id="54" gid="162" x="502" y="159" width="24" height="28"/>
   <object id="58" gid="166" x="611" y="160" width="13" height="17"/>
   <object id="59" gid="167" x="641" y="159" width="16" height="16"/>
-  <object id="67" gid="121" x="325" y="170" width="64" height="40"/>
+  <object id="67" gid="121" x="311" y="151" width="64" height="40"/>
   <object id="69" gid="157" x="160" y="320" width="96" height="32"/>
   <object id="70" gid="157" x="64" y="320" width="96" height="32"/>
   <object id="75" gid="143" x="654" y="191" width="32" height="32">
    <properties>
-    <property name="itemsInside" value="GOLD_COIN:3,SWORD:1"/>
+    <property name="itemsInside" value="SWORD:1:HELMET:1,ARMOR:1,BOOTS:1"/>
    </properties>
   </object>
   <object id="76" gid="143" x="288" y="192" width="32" height="32">

@@ -30,7 +30,6 @@ data class Inventory(
     }
 
     fun removeItem(item: ItemData) {
-        // Aynı itemType'a sahip son item'ı bul ve sil
         val lastIndex = _items.indexOfLast { it.itemType == item.itemType }
         if (lastIndex != -1) {
             _items.removeAt(lastIndex)
@@ -39,7 +38,6 @@ data class Inventory(
     }
 
     fun removeItemByType(itemType: ItemType) {
-        // Belirli bir itemType'ın son item'ını sil
         val lastIndex = _items.indexOfLast { it.itemType == itemType }
         if (lastIndex != -1) {
             _items.removeAt(lastIndex)

@@ -7,13 +7,9 @@
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN_SWORD"/>
-   <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
-   <property name="jumpHeight" type="float" value="1.1"/>
-   <property name="life" type="int" value="10"/>
-   <property name="speed" type="float" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
-   <property name="timeToMax" type="float" value="3"/>
+   <property name="stat" type="class" propertytype="Stat"/>
   </properties>
   <image source="../graphics/objects/captain_clown_sword.png" width="64" height="40"/>
   <objectgroup draworder="index" id="3">
@@ -161,13 +157,13 @@
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="entityTags" propertytype="EntityTags" value="PLAYER"/>
    <property name="gameObject" propertytype="GameObject" value="CAPTAIN_CLOWN"/>
-   <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
-   <property name="jumpHeight" type="float" value="1.1"/>
-   <property name="life" type="int" value="10"/>
-   <property name="speed" type="float" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
-   <property name="timeToMax" type="float" value="3"/>
+   <property name="stat" type="class" propertytype="Stat">
+    <properties>
+     <property name="life" type="int" value="50"/>
+    </properties>
+   </property>
   </properties>
   <image source="../graphics/objects/captain_clown.png" width="64" height="40"/>
   <objectgroup draworder="index" id="2">
@@ -183,7 +179,7 @@
      <property name="density" type="float" value="1.75"/>
      <property name="userData" value="bodyFixture"/>
     </properties>
-    <polygon points="0,0 0,13 14,13 14,0"/>
+    <polygon points="0,0 0,12 1.73913,13 12.3913,13 14,12 14,0"/>
    </object>
    <object id="26" x="29" y="30">
     <properties>
@@ -203,15 +199,16 @@
    <property name="circleRadius" type="float" value="3"/>
    <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="CRABBY"/>
-   <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="jumpHeight" type="float" value="1.1"/>
-   <property name="life" type="int" value="8"/>
-   <property name="speed" type="int" value="1"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
-   <property name="timeToMax" type="float" value="2"/>
+   <property name="stat" type="class" propertytype="Stat">
+    <properties>
+     <property name="attack" type="int" value="2"/>
+     <property name="speed" type="float" value="1.25"/>
+    </properties>
+   </property>
   </properties>
   <image source="../graphics/objects/crabby.png" width="72" height="32"/>
   <objectgroup draworder="index" id="2">
@@ -236,7 +233,7 @@
      <property name="density" type="float" value="3"/>
      <property name="userData" value="bodyFixture"/>
     </properties>
-    <polygon points="0,0 0,12 18,12 18,0"/>
+    <polygon points="0,0 0,10 2,12 15.913,12 18,10 18,0"/>
    </object>
    <object id="9" x="33" y="25">
     <properties>
@@ -252,24 +249,20 @@
   <properties>
    <property name="aiTreePath" value="ai/crew.tree"/>
    <property name="animFrameDuration" type="float" value="0.1"/>
-   <property name="attack" type="int" value="0"/>
    <property name="bodyType" propertytype="BodyType" value="DynamicBody"/>
    <property name="circleRadius" type="float" value="4"/>
-   <property name="critChance" type="float" value="0"/>
-   <property name="critDamage" type="float" value="0"/>
-   <property name="defence" type="int" value="0"/>
    <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="FIERCE_TOOTH"/>
-   <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="jumpHeight" type="float" value="2"/>
-   <property name="life" type="int" value="2"/>
-   <property name="resistance" type="int" value="0"/>
-   <property name="speed" type="int" value="2"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
-   <property name="timeToMax" type="float" value="2"/>
+   <property name="stat" type="class" propertytype="Stat">
+    <properties>
+     <property name="life" type="int" value="5"/>
+     <property name="speed" type="float" value="1.5"/>
+    </properties>
+   </property>
   </properties>
   <image source="../graphics/objects/fierce_tooth.png" width="34" height="30"/>
   <objectgroup draworder="index" id="2">
@@ -294,7 +287,7 @@
      <property name="density" type="float" value="2"/>
      <property name="userData" value="bodyFixture"/>
     </properties>
-    <polygon points="0,0 0,17 15,17 15,0"/>
+    <polygon points="0,0 0,15 2,17 13,17 15,15 15,0"/>
    </object>
    <object id="8" x="13" y="24">
     <properties>
@@ -314,15 +307,15 @@
    <property name="circleRadius" type="float" value="7"/>
    <property name="entityTags" propertytype="EntityTags" value="ENEMY"/>
    <property name="gameObject" propertytype="GameObject" value="PINK_STAR"/>
-   <property name="gravityScale" type="float" value="1"/>
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="jumpHeight" type="float" value="2"/>
-   <property name="life" type="int" value="4"/>
-   <property name="speed" type="int" value="3"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
-   <property name="timeToMax" type="float" value="2"/>
+   <property name="stat" type="class" propertytype="Stat">
+    <properties>
+     <property name="life" type="int" value="4"/>
+    </properties>
+   </property>
   </properties>
   <image source="../graphics/objects/pink_star.png" width="34" height="30"/>
   <objectgroup draworder="index" id="2">
@@ -344,7 +337,7 @@
    </object>
    <object id="10" x="11" y="13">
     <properties>
-     <property name="density" type="float" value="2.25"/>
+     <property name="density" type="float" value="2.75"/>
      <property name="userData" value="bodyFixture"/>
     </properties>
     <polygon points="0,0 0,11 3,14 10,14 12,11 12,0"/>
@@ -905,8 +898,19 @@
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="stat" type="class" propertytype="Stat">
+    <properties>
+     <property name="attack" type="int" value="0"/>
+     <property name="critChance" type="float" value="0.25"/>
+     <property name="critDamage" type="float" value="1.5"/>
+     <property name="defence" type="int" value="3"/>
+     <property name="jump" type="float" value="0"/>
+     <property name="life" type="int" value="8"/>
+     <property name="resistance" type="float" value="5"/>
+     <property name="speed" type="float" value="0"/>
+    </properties>
+   </property>
   </properties>
   <image source="../graphics/objects/totem_head_1.png" width="60" height="32"/>
   <objectgroup draworder="index" id="2">
@@ -948,8 +952,19 @@
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="stat" type="class" propertytype="Stat">
+    <properties>
+     <property name="attack" type="int" value="0"/>
+     <property name="critChance" type="float" value="0.25"/>
+     <property name="critDamage" type="float" value="1.5"/>
+     <property name="defence" type="int" value="3"/>
+     <property name="jump" type="float" value="0"/>
+     <property name="life" type="int" value="8"/>
+     <property name="resistance" type="float" value="5"/>
+     <property name="speed" type="float" value="0"/>
+    </properties>
+   </property>
   </properties>
   <image source="../graphics/objects/totem_head_2.png" width="24" height="32"/>
   <objectgroup draworder="index" id="2">
@@ -979,8 +994,19 @@
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="stat" type="class" propertytype="Stat">
+    <properties>
+     <property name="attack" type="int" value="0"/>
+     <property name="critChance" type="float" value="0.25"/>
+     <property name="critDamage" type="float" value="1.5"/>
+     <property name="defence" type="int" value="3"/>
+     <property name="jump" type="float" value="0"/>
+     <property name="life" type="int" value="8"/>
+     <property name="resistance" type="float" value="5"/>
+     <property name="speed" type="float" value="0"/>
+    </properties>
+   </property>
   </properties>
   <image source="../graphics/objects/totem_head_3.png" width="30" height="32"/>
   <objectgroup draworder="index" id="2">
@@ -1010,8 +1036,19 @@
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="stat" type="class" propertytype="Stat">
+    <properties>
+     <property name="attack" type="int" value="0"/>
+     <property name="critChance" type="float" value="0.25"/>
+     <property name="critDamage" type="float" value="1.5"/>
+     <property name="defence" type="int" value="3"/>
+     <property name="jump" type="float" value="0"/>
+     <property name="life" type="int" value="8"/>
+     <property name="resistance" type="float" value="5"/>
+     <property name="speed" type="float" value="0"/>
+    </properties>
+   </property>
   </properties>
   <image source="../graphics/objects/totem_head_4.png" width="60" height="32"/>
   <objectgroup draworder="index" id="2">
@@ -1042,8 +1079,19 @@
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="stat" type="class" propertytype="Stat">
+    <properties>
+     <property name="attack" type="int" value="0"/>
+     <property name="critChance" type="float" value="0.25"/>
+     <property name="critDamage" type="float" value="1.5"/>
+     <property name="defence" type="int" value="3"/>
+     <property name="jump" type="float" value="0"/>
+     <property name="life" type="int" value="8"/>
+     <property name="resistance" type="float" value="5"/>
+     <property name="speed" type="float" value="0"/>
+    </properties>
+   </property>
   </properties>
   <image source="../graphics/objects/totem_head_5.png" width="24" height="32"/>
   <objectgroup draworder="index" id="2">
@@ -1073,8 +1121,19 @@
    <property name="hasAnimation" type="bool" value="true"/>
    <property name="hasAttack" type="bool" value="true"/>
    <property name="isFlipped" type="bool" value="true"/>
-   <property name="life" type="int" value="5"/>
    <property name="startAnimType" propertytype="StartAnimType" value="IDLE"/>
+   <property name="stat" type="class" propertytype="Stat">
+    <properties>
+     <property name="attack" type="int" value="0"/>
+     <property name="critChance" type="float" value="0.25"/>
+     <property name="critDamage" type="float" value="1.5"/>
+     <property name="defence" type="int" value="3"/>
+     <property name="jump" type="float" value="0"/>
+     <property name="life" type="int" value="8"/>
+     <property name="resistance" type="float" value="5"/>
+     <property name="speed" type="float" value="0"/>
+    </properties>
+   </property>
   </properties>
   <image source="../graphics/objects/totem_head_6.png" width="30" height="32"/>
   <objectgroup draworder="index" id="2">

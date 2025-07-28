@@ -10,6 +10,7 @@ import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.EntityUpdateContext
 import com.github.quillraven.fleks.Family
 import com.github.quillraven.fleks.World
+import com.libgdx.treasurehunter.ecs.components.AiComponent
 import com.libgdx.treasurehunter.ecs.components.AiState
 import com.libgdx.treasurehunter.ecs.components.Animation
 import com.libgdx.treasurehunter.ecs.components.AnimationType
@@ -124,6 +125,7 @@ sealed class StateEntity(
         return@with get(Animation).isAnimationDone()
     }
 
+
     fun remove() {
 
         entity.configure {
@@ -159,6 +161,7 @@ sealed class StateEntity(
         fun createMarkEntity(effectType: EffectType) {
             world.createMarkEntity(entity ,assetHelper,effectType,true)
         }
+
     }
 
     class SwordEntity(

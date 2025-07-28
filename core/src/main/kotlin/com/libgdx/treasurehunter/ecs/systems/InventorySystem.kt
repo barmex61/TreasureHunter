@@ -102,6 +102,7 @@ class InventorySystem : IteratingSystem(
 
         val equippedItem = getter()
         if (equippedItem == null) {
+
             inventory.removeItem(newItem)
             setter(newItem)
         } else {

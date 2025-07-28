@@ -124,8 +124,7 @@ class TiledMapService(
                 rotation
             )
             configureEntityTags(it, mapObject, tile)
-            configureMove(it, tile)
-            configureJump(it, tile, gameObject)
+            configureStat(it, tile,gameObject)
             configureChest(it, tile,mapObject)
             configureBreakable(it,tile, mapObject )
             configureState(it, tile, world, physicWorld, assetHelper)
@@ -133,8 +132,6 @@ class TiledMapService(
             configureInventory(it, gameObject)
             configureItem(it, gameObject)
             configureAttack(it, tile)
-            configureStat(it, tile)
-            configureLife(it, tile)
             configureAi(it, tile, physicWorld)
             configureShip(it, tile)
             logEntity(it, world, gameObject)

@@ -30,7 +30,7 @@ class Idle : Actions(){
 
     override fun execute(): Status {
         if (status != Status.RUNNING){
-            entity.raycast(vec2(0f,-0.5f)) { isCollidedWithWall,diffY ->
+            entity.raycast(vec2(0f,-0.5f)) { isCollidedWithWall->
                 if (isCollidedWithWall && !entity.isJumping){
                     entity.stop = true
                 }
@@ -109,7 +109,7 @@ class Wander: Actions(){
             return Status.SUCCEEDED
         }
         if (raycastTimer >= raycastInterval){
-            entity.raycast(vec2(0.7f,0f)){isCollidedWithWall,_ ->
+            entity.raycast(vec2(0.7f,0f)){isCollidedWithWall ->
                 if (isCollidedWithWall){
                     entity.jump()
                 }

@@ -57,6 +57,7 @@ class AssetHelper : Disposable{
 
     private val assetManager by lazy {
         AssetManager().apply {
+
             setLoader(TiledMap::class.java, TmxMapLoader())
             setLoader(Skin::class.java, FreeTypeSkinLoader(fileHandleResolver))
         }
@@ -67,7 +68,9 @@ class AssetHelper : Disposable{
             assetManager.load<TextureAtlas>(it.path)
         }
         MapAssets.entries.forEach {
-            assetManager.load<TiledMap>(it.path)
+            val parameters = TmxMapLoader.Parameters()
+            parameters.projectFilePath = "treasureHunterTiledProject.tiled-project"
+            assetManager.load<TiledMap>(it.path, parameters = parameters)
         }
         SkinAsset.entries.forEach {
             assetManager.load<Skin>(it.path)

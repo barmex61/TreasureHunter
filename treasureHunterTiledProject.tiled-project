@@ -159,6 +159,60 @@
                 "WIND"
             ],
             "valuesAsFlags": false
+        },
+        {
+            "color": "#ffa0a0a4",
+            "drawFill": true,
+            "id": 10,
+            "members": [
+                {
+                    "name": "attack",
+                    "type": "int",
+                    "value": 1
+                },
+                {
+                    "name": "critChance",
+                    "type": "float",
+                    "value": 0.5
+                },
+                {
+                    "name": "critDamage",
+                    "type": "float",
+                    "value": 2
+                },
+                {
+                    "name": "defence",
+                    "type": "int",
+                    "value": 1
+                },
+                {
+                    "name": "jump",
+                    "type": "float",
+                    "value": 1.1
+                },
+                {
+                    "name": "life",
+                    "type": "int",
+                    "value": 10
+                },
+                {
+                    "name": "resistance",
+                    "type": "float",
+                    "value": 0
+                },
+                {
+                    "name": "speed",
+                    "type": "float",
+                    "value": 2
+                }
+            ],
+            "name": "Stat",
+            "type": "class",
+            "useAs": [
+                "property",
+                "object",
+                "project"
+            ]
         }
     ]
 }

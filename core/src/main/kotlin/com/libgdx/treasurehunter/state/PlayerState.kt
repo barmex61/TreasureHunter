@@ -177,6 +177,7 @@ enum class PlayerState : EntityState<PlayerEntity> {
 
     DEAD_HIT {
         override fun enter(entity: PlayerEntity) {
+            GameEventDispatcher.fireEvent(GameEvent.EquippedItemRemoved(SlotName.SWORD.toString() ,entity.entity))
             GameEventDispatcher.fireEvent(GameEvent.PlayerDeadEvent(entity.entity))
             entity.animation(AnimationType.DEAD_HIT, Animation.PlayMode.NORMAL,0.16f)
         }
@@ -195,7 +196,9 @@ enum class PlayerState : EntityState<PlayerEntity> {
 
         override fun update(entity: PlayerEntity) {
             when{
-                entity.isAnimationDone() -> entity.remove()
+                entity.isAnimationDone() -> {
+                    entity.remove()
+                }
             }
         }
     },

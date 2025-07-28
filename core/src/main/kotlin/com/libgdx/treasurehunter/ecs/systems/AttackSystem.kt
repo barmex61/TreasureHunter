@@ -29,6 +29,7 @@ import com.libgdx.treasurehunter.ecs.components.Item
 import com.libgdx.treasurehunter.ecs.components.ItemType
 import com.libgdx.treasurehunter.ecs.components.Move
 import com.libgdx.treasurehunter.ecs.components.Projectile
+import com.libgdx.treasurehunter.ecs.components.Stat
 import com.libgdx.treasurehunter.ecs.components.Sword
 import com.libgdx.treasurehunter.ecs.components.ThrowState
 import com.libgdx.treasurehunter.state.EntityState
@@ -37,6 +38,7 @@ import com.libgdx.treasurehunter.event.GameEventDispatcher
 import com.libgdx.treasurehunter.factory.AttackMetaDataFactory
 import com.libgdx.treasurehunter.tiled.configureEntityTags
 import com.libgdx.treasurehunter.utils.GameObject
+import ktx.math.random
 
 class AttackSystem(
     private val physicWorld : PhysicWorld = inject(),
@@ -55,7 +57,13 @@ class AttackSystem(
                 if (wantsToAttack) {
                     val attackType = getQueuedAttackType(entity,attackComp.queuedAttackType)
                     attackComp.attackMetaData = AttackMetaDataFactory.create(attackComp.attackMetaData.gameObject,attackType)
-                    val newAttackMetaData = attackComp.attackMetaData.copy()
+                    val stat = entity[Stat]
+                    val isCrit = (0f..1f).random() <= stat.critChance
+                    var attackDamage = stat.attack + attackComp.attackMetaData.attackDamage
+                    if (isCrit) attackDamage = (attackDamage * stat.critDamage).toInt()
+                    val newAttackMetaData = attackComp.attackMetaData.copy(
+                        attackDamage = attackDamage
+                    )
                     attackType?.let {
                         newAttackMetaData.attackType = it
                     }
@@ -70,14 +78,14 @@ class AttackSystem(
                                 isFixtureMirrored = false,
                                 attackMetaData = newAttackMetaData
                             )
-                            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity,false)
+                            it += Damage(damage = newAttackMetaData.attackDamage, isCrit = isCrit, sourceEntity = entity,false)
                             it += Physic(createAttackBody(bottomCenter, it, BodyDef.BodyType.KinematicBody))
                             it += Graphic(sprite("attack_effect", newAttackMetaData.attackType.attackAnimType,bottomCenter,assetHelper),"attack_effect",)
                         }
                     } else {
                         when (newAttackMetaData.gameObject) {
-                            GameObject.SWORD -> handleRangeSwordAttack(entity, center, newAttackMetaData)
-                            GameObject.WOOD_SPIKE -> handleRangeProjectileAttack(entity, center, newAttackMetaData)
+                            GameObject.SWORD -> handleRangeSwordAttack(entity, center, newAttackMetaData,isCrit)
+                            GameObject.WOOD_SPIKE -> handleRangeProjectileAttack(entity, center, newAttackMetaData,isCrit)
                             else -> {
                                 resetAttackComp(attackComp, newAttackMetaData)
                                 return
@@ -106,7 +114,8 @@ class AttackSystem(
     private fun handleRangeSwordAttack(
         entity: Entity,
         center: Vector2,
-        newAttackMetaData : AttackMetaData
+        newAttackMetaData : AttackMetaData,
+        isCrit: Boolean
     ) {
         world.entity {
             it += AttackMeta(
@@ -115,7 +124,7 @@ class AttackSystem(
                 attackMetaData = newAttackMetaData,
                 createFrameIndex = newAttackMetaData.createFrameIndex
             )
-            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity, false)
+            it += Damage(damage = newAttackMetaData.attackDamage, isCrit = isCrit,sourceEntity = entity, false)
             it += Physic(createAttackBody(center, it, BodyDef.BodyType.DynamicBody))
             it += Graphic(
                 sprite(
@@ -145,7 +154,8 @@ class AttackSystem(
     private fun handleRangeProjectileAttack(
         entity: Entity,
         center: Vector2,
-        newAttackMetaData : AttackMetaData
+        newAttackMetaData : AttackMetaData,
+        isCrit : Boolean
     ){
         world.entity {
             it += AttackMeta(
@@ -154,7 +164,7 @@ class AttackSystem(
                 attackMetaData = newAttackMetaData,
                 createFrameIndex = newAttackMetaData.createFrameIndex
             )
-            it += Damage(damage = newAttackMetaData.attackDamage, sourceEntity = entity, false)
+            it += Damage(damage = newAttackMetaData.attackDamage, isCrit = isCrit,sourceEntity = entity, false)
             it += Physic(createAttackBody(center, it, BodyDef.BodyType.DynamicBody))
             it += Graphic(
                 sprite(

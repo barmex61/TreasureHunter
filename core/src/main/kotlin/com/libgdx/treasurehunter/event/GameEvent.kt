@@ -1,6 +1,7 @@
 package com.libgdx.treasurehunter.event
 
 import com.badlogic.gdx.maps.tiled.TiledMap
+import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.libgdx.treasurehunter.ecs.components.ItemData
 import com.libgdx.treasurehunter.enums.ParticleType
@@ -24,6 +25,7 @@ sealed class GameEvent {
     data class ChestClickedEvent(val dialogText: String,val chestEntity : Entity,val buttonTypes : List<ButtonType> ) : GameEvent()
     data class OpenChestEvent(val chestEntity: Entity) : GameEvent()
     data class PlayerDeadEvent(val playerEntity : Entity) : GameEvent()
+    data class EntityDamageTakenEvent(val damageAmount : Int,val isCrit : Boolean,val center : Vector2) : GameEvent()
 }
 
 enum class Dialog(val dialogText : String){

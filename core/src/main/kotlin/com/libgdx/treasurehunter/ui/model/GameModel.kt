@@ -1,5 +1,6 @@
 package com.libgdx.treasurehunter.ui.model
 
+import com.badlogic.gdx.math.Vector2
 import com.github.quillraven.fleks.Entity
 import com.github.quillraven.fleks.World
 import com.libgdx.treasurehunter.ecs.components.EntityTag
@@ -14,10 +15,16 @@ data class EntityLife(
     val maxLife : Int,
     val entityIcon : String
 )
+data class DamageText(
+    val damageAmount : Int,
+    val position : Vector2,
+    val isCrit : Boolean
+)
 
 class GameModel: GameEventListener{
     val playerLife  = MutableStateFlow(EntityLife(Entity.NONE,0,0,""))
     val enemyLife = MutableStateFlow(EntityLife(Entity.NONE,0,0,""))
+    val damageText : MutableStateFlow<DamageText?> = MutableStateFlow(null)
     override fun onEvent(event: GameEvent) {
         when(event){
             is GameEvent.EntityLifeChangeEvent->{
@@ -26,6 +33,9 @@ class GameModel: GameEventListener{
                 }else{
                     enemyLife.value = enemyLife.value.copy(entity = event.entity, currentLife = event.entityLife, maxLife = event.maxLife,entityIcon = event.entityIcon)
                 }
+            }
+            is GameEvent.EntityDamageTakenEvent ->{
+                damageText.value = DamageText(event.damageAmount,event.center,event.isCrit)
             }
 
             else -> Unit

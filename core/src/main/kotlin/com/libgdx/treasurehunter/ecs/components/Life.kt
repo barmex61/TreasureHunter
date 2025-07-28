@@ -20,7 +20,6 @@ data class Life(
     var currentLife : Int = maxLife
         set(value) {
             field = value
-            println("Current LifeChanged")
             fireLifeChangeEvent(entityIcon,isPlayer)
         }
 
